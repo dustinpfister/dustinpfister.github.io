@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Reading files in Hexo | dustinpfister.github.io</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="So now and then I might want to read a file in my hexo working tree that contains data that is needed when generating pages. For example I may have a file in my root name space that contains API acces">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Reading files in Hexo">
+<meta property="og:url" content="https://dustinpfister.github.io/2017/02/13/hexo-readfile/index.html">
+<meta property="og:site_name" content="dustinpfister.github.io">
+<meta property="og:description" content="So now and then I might want to read a file in my hexo working tree that contains data that is needed when generating pages. For example I may have a file in my root name space that contains API acces">
+<meta property="og:updated_time" content="2017-02-14T00:29:52.865Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Reading files in Hexo">
+<meta name="twitter:description" content="So now and then I might want to read a file in my hexo working tree that contains data that is needed when generating pages. For example I may have a file in my root name space that contains API acces">
+  
+    <link rel="alternate" href="/atom.xml" title="dustinpfister.github.io" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">dustinpfister.github.io</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-hexo-readfile" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/13/hexo-readfile/" class="article-date">
+  <time datetime="2017-02-13T18:00:00.000Z" itemprop="datePublished">2017-02-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Hexo/">Hexo</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Reading files in Hexo
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>So now and then I might want to read a file in my hexo working tree that contains data that is needed when generating pages. For example I may have a file in my root name space that contains API access keys that are hidden from git with a .gitignore file. I might be using some API that requires an access key to get data that I used in the build process, so I will want to read that file, and fail gracefully if for some reason it’s not there.</p>
+<a id="more"></a>
+<h1 id="The-Promise"><a href="#The-Promise" class="headerlink" title="The Promise."></a>The Promise.</h1><p>I will want to use a promise, as this is often what is used within hexo, and it is what is needed to do any kind of async thing such as reading a file or making a request.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// the first promise I wrote myself</span></div><div class="line">readFile = <span class="function"><span class="keyword">function</span> (<span class="params">path, filename</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line"> </div><div class="line">        fs.readFile(path + filename, <span class="string">'utf8'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="keyword">if</span> (err) &#123;</div><div class="line"> </div><div class="line">                reject(<span class="string">'Error reading file: '</span> + err);</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            resolve(data);</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h1 id="A-simple-read-file-tag"><a href="#A-simple-read-file-tag" class="headerlink" title="A simple read file tag"></a>A simple read file tag</h1><p>So I might want a tag that I can use to inject data from anywhere in my root namespace into a blogpost.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// read a file from the base dir forward.</span></div><div class="line">hexo.extend.tag.register(<span class="string">'mytags_readfile'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">args</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> filename = args[<span class="number">0</span>];</div><div class="line"> </div><div class="line">    log(<span class="string">'reading file : '</span> + filename);</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> readFile(hexo.base_dir, filename).then(<span class="function"><span class="keyword">function</span> (<span class="params">content</span>) </span>&#123;</div><div class="line"> </div><div class="line">        log(<span class="string">'file read good.'</span>);</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> <span class="string">'&lt;pre&gt;&lt;code&gt;'</span> + content + <span class="string">'&lt;/code&gt;&lt;/pre&gt;'</span>;</div><div class="line">    &#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</div><div class="line"> </div><div class="line">        log(<span class="string">'error reading file'</span>);</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> <span class="string">'&lt;pre&gt;Error reading file '</span> + filename + <span class="string">'&lt;/pre&gt;'</span>;</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;, &#123;</div><div class="line">    <span class="attr">async</span> : <span class="literal">true</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>Here for example I will use it to inject the package.json file from my hexo project.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;% mytags_readfile package.json %&#125;</div></pre></td></tr></table></figure>
+<pre><code>{
+  "name": "hexo_sitesource",
+  "version": "1.0.22",
+  "private": true,
+  "hexo": {
+    "version": "3.2.2"
+  },
+  "dependencies": {
+    "hexo": "^3.2.0",
+    "hexo-generator-archive": "^0.1.4",
+    "hexo-generator-category": "^0.1.3",
+    "hexo-generator-index": "^0.2.0",
+    "hexo-generator-tag": "^0.2.0",
+    "hexo-renderer-ejs": "^0.2.0",
+    "hexo-renderer-stylus": "^0.3.1",
+    "hexo-renderer-marked": "^0.2.10",
+    "hexo-server": "^0.2.0"
+  }
+}</code></pre>
+<h1 id="Geting-an-access-key-or-token-from-my-apikeys-json-file"><a href="#Geting-an-access-key-or-token-from-my-apikeys-json-file" class="headerlink" title="Geting an access key, or token from my apikeys.json file."></a>Geting an access key, or token from my apikeys.json file.</h1><p>With some api’s I must have an access token, or api key of some kind. I would not want to hard code an access key into my source code, and push it to a public reposatory. So I would want to read data from a hidden file to get a key, then use that key to make a request to the api.</p>
+<p>To get started with this first I will want a method to get the key from my hidden apikeys.json file. It will make use of the readFile method I just put togeather.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// get an access key, or token from apikeys.json.</span></div><div class="line">getKey = <span class="function"><span class="keyword">function</span> (<span class="params">apiName</span>) </span>&#123;</div><div class="line"> </div><div class="line">    apiName = apiName || <span class="string">'github'</span>;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line"> </div><div class="line">        readFile(hexo.base_dir, <span class="string">'apikeys.json'</span>).then(<span class="function"><span class="keyword">function</span> (<span class="params">content</span>) </span>&#123;</div><div class="line"> </div><div class="line">            resolve(<span class="built_in">JSON</span>.parse(content)[apiName]);</div><div class="line"> </div><div class="line">        &#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            log(<span class="string">'error getting api key for : '</span> + apiName);</div><div class="line"> </div><div class="line">            reject(<span class="string">''</span>);</div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h1 id="The-Github-tag"><a href="#The-Github-tag" class="headerlink" title="The Github tag"></a>The Github tag</h1><p>This will make a request with a key that I obtained from apikeys.json thanks to my getKey, readFile, and an httpRequest method I found earlier. All of which is in <a href="https://raw.githubusercontent.com/dustinpfister/hexo_sitesource/master/scripts/my-tags.js" target="_blank" rel="external">my-tags.js</a> in my hexo scripts folder.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> formatRepos = <span class="function"><span class="keyword">function</span> (<span class="params">content</span>) </span>&#123;</div><div class="line"> </div><div class="line">    html = <span class="string">'&lt;pre&gt; Here are my repos at github.&lt;br&gt;&lt;br&gt;'</span>;</div><div class="line"> </div><div class="line">    content.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">repo</span>) </span>&#123;</div><div class="line"> </div><div class="line">        html += <span class="string">'&lt;a href=\"'</span> + repo.html_url + <span class="string">'\"&gt;'</span> + repo.name + <span class="string">'&lt;/a&gt;&lt;br&gt;'</span>;</div><div class="line">        html += repo.description + <span class="string">'&lt;br&gt;&lt;br&gt;'</span>;</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> html + <span class="string">'&lt;/pre&gt;'</span>;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// read a file from the base dir forward.</span></div><div class="line">hexo.extend.tag.register(<span class="string">'mytags_github'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">args</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line"> </div><div class="line">        getKey(<span class="string">'github'</span>).then(<span class="function"><span class="keyword">function</span> (<span class="params">key</span>) </span>&#123;</div><div class="line"> </div><div class="line">            resolve(key);</div><div class="line"> </div><div class="line">        &#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            reject(<span class="string">''</span>);</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">key</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> httpRequest(&#123;</div><div class="line"> </div><div class="line">            <span class="attr">host</span> : <span class="string">'api.github.com'</span>,</div><div class="line">            <span class="attr">method</span> : <span class="string">'GET'</span>,</div><div class="line">            <span class="attr">path</span> : <span class="string">'/users/dustinpfister/repos?access_token='</span> + key,</div><div class="line">            <span class="attr">headers</span> : &#123;</div><div class="line">                <span class="string">'user-agent'</span> : <span class="string">'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)'</span></div><div class="line">            &#125;</div><div class="line"> </div><div class="line">        &#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">content</span>) </span>&#123;</div><div class="line"> </div><div class="line">            log(<span class="string">'request is good.'</span>);</div><div class="line"> </div><div class="line">            <span class="keyword">return</span> formatRepos(content);</div><div class="line"> </div><div class="line">        &#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</div><div class="line"> </div><div class="line">            log(<span class="string">'bad request.'</span>);</div><div class="line">            log(err);</div><div class="line"> </div><div class="line">            <span class="keyword">return</span> <span class="string">'&lt;pre&gt;Error getting the data from github &lt;\/pre&gt;'</span>;</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> <span class="string">'&lt;pre&gt;error with the github&lt;/pre&gt;'</span>;</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;, &#123;</div><div class="line">    <span class="attr">async</span> : <span class="literal">true</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>Here it is in action…………</p>
+<pre> Here are my repos at github.<br><br><a href="https://github.com/dustinpfister/bFly" target="_blank" rel="external">bFly</a><br>My submission to the 2013 js13kgames.com competition<br><br><a href="https://github.com/dustinpfister/cityBuilder1500" target="_blank" rel="external">cityBuilder1500</a><br>a city building game<br><br><a href="https://github.com/dustinpfister/clad_clash" target="_blank" rel="external">clad_clash</a><br>A game about ships<br><br><a href="https://github.com/dustinpfister/deglitcher13k" target="_blank" rel="external">deglitcher13k</a><br>null<br><br><a href="https://github.com/dustinpfister/dig" target="_blank" rel="external">dig</a><br>a game about digging in dirt<br><br><a href="https://github.com/dustinpfister/dustinpfister.github.io" target="_blank" rel="external">dustinpfister.github.io</a><br>The github page of dustinpfister<br><br><a href="https://github.com/dustinpfister/em" target="_blank" rel="external">em</a><br>This is for EM<br><br><a href="https://github.com/dustinpfister/firstThreeJS" target="_blank" rel="external">firstThreeJS</a><br>First time playing with three.js<br><br><a href="https://github.com/dustinpfister/foreverStupid" target="_blank" rel="external">foreverStupid</a><br>For the 2015 Buffalo Game Space Game Jam<br><br><a href="https://github.com/dustinpfister/forframe" target="_blank" rel="external">forframe</a><br>Animation by a forFrame basis<br><br><a href="https://github.com/dustinpfister/hex" target="_blank" rel="external">hex</a><br>working some things out with hex grids<br><br><a href="https://github.com/dustinpfister/hexo_sitesource" target="_blank" rel="external">hexo_sitesource</a><br>The source for my github pages website<br><br><a href="https://github.com/dustinpfister/mrSun" target="_blank" rel="external">mrSun</a><br>Mr Sun an HTML5 God Game<br><br><a href="https://github.com/dustinpfister/node_expresssite" target="_blank" rel="external">node_expresssite</a><br>a site made using express<br><br><a href="https://github.com/dustinpfister/openshift_demo" target="_blank" rel="external">openshift_demo</a><br>I am just a simple opensift hello world, pay me no mind.<br><br><a href="https://github.com/dustinpfister/openshift_geopost" target="_blank" rel="external">openshift_geopost</a><br>a simple openshift app i made for a client<br><br><a href="https://github.com/dustinpfister/openshift_scriptbook" target="_blank" rel="external">openshift_scriptbook</a><br>Social media for web programers<br><br><a href="https://github.com/dustinpfister/orbcraft13k" target="_blank" rel="external">orbcraft13k</a><br>My 2014 submission to js13kgames.com<br><br><a href="https://github.com/dustinpfister/pebble" target="_blank" rel="external">pebble</a><br>A platform centered around a virtual currency called "Pebble"<br><br><a href="https://github.com/dustinpfister/pebble_dig" target="_blank" rel="external">pebble_dig</a><br>My first game based on my platform pebble.<br><br><a href="https://github.com/dustinpfister/pebble_processor" target="_blank" rel="external">pebble_processor</a><br>working out some changes to pebble<br><br><a href="https://github.com/dustinpfister/planetHopper" target="_blank" rel="external">planetHopper</a><br>A strategy game about taking over planets<br><br><a href="https://github.com/dustinpfister/popthelockclone" target="_blank" rel="external">popthelockclone</a><br>A clone of the game pop the lock<br><br><a href="https://github.com/dustinpfister/powdered_toast_man_13k" target="_blank" rel="external">powdered_toast_man_13k</a><br>My 2015 submission to js13kgames.com<br><br><a href="https://github.com/dustinpfister/powdered_toast_man_adventures" target="_blank" rel="external">powdered_toast_man_adventures</a><br>will evil never rest?<br><br><a href="https://github.com/dustinpfister/prototype_clicker" target="_blank" rel="external">prototype_clicker</a><br>this will break your mouse.<br><br><a href="https://github.com/dustinpfister/prototype_phaserdemo" target="_blank" rel="external">prototype_phaserdemo</a><br>Trying out phaser<br><br><a href="https://github.com/dustinpfister/prototype_tumbler" target="_blank" rel="external">prototype_tumbler</a><br>A game about picking a lock.<br><br><a href="https://github.com/dustinpfister/prototype_worker" target="_blank" rel="external">prototype_worker</a><br>A module that has to do with people who work for a living.<br><br><a href="https://github.com/dustinpfister/scriptbook" target="_blank" rel="external">scriptbook</a><br>Social Media for those that program the web.<br><br></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/02/13/hexo-readfile/" data-id="ciz4ezhug0000ekv1zarjuyyy" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/02/09/api-fixer/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Automation of an exchange rate table thanks to Fixer.io&#39;s JSONP API</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/tags/automation/" style="font-size: 10px;">automation</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/js/" style="font-size: 20px;">js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/02/13/hexo-readfile/">Reading files in Hexo</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/09/api-fixer/">Automation of an exchange rate table thanks to Fixer.io&#39;s JSONP API</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/04/hexo-tags/">Hexo tags</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

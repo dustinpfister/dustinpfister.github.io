@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Automation of an exchange rate table thanks to Fixer.io&#39;s JSONP API | dustinpfister.github.io</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Lately I was helping a friend of mine prepare for a trip to India. While doing so one of the things she wanted to get done was to type up a table that included US dollar amounts on one column, and the">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Automation of an exchange rate table thanks to Fixer.io's JSONP API">
+<meta property="og:url" content="https://dustinpfister.github.io/2017/02/09/api-fixer/index.html">
+<meta property="og:site_name" content="dustinpfister.github.io">
+<meta property="og:description" content="Lately I was helping a friend of mine prepare for a trip to India. While doing so one of the things she wanted to get done was to type up a table that included US dollar amounts on one column, and the">
+<meta property="og:updated_time" content="2017-02-13T17:27:03.336Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Automation of an exchange rate table thanks to Fixer.io's JSONP API">
+<meta name="twitter:description" content="Lately I was helping a friend of mine prepare for a trip to India. While doing so one of the things she wanted to get done was to type up a table that included US dollar amounts on one column, and the">
+  
+    <link rel="alternate" href="/atom.xml" title="dustinpfister.github.io" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">dustinpfister.github.io</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-api-fixer" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/09/api-fixer/" class="article-date">
+  <time datetime="2017-02-09T18:11:00.000Z" itemprop="datePublished">2017-02-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/api/">api</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Automation of an exchange rate table thanks to Fixer.io&#39;s JSONP API
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Lately I was helping a friend of mine prepare for a trip to India. While doing so one of the things she wanted to get done was to type up a table that included US dollar amounts on one column, and the rupee equivalent in the other.</p>
+<a id="more"></a>
+<p>I have been doing allot of work involving finding ways of automating a great deal of my work flow to help reduce the amount of time I spend on repetitive tasks, so I have more time to spend on the novel stuff. That got me thinking that maybe it would be fun to see if I could automate the process of making her table, for the heck of it, and maybe doing so would be a bit helpful for her. Exchange rates are always jumping up and down, and every time a significant change happens she would have to write the table again.</p>
+<p>So typing up a simple little script that loops over an array of amounts, and multiplies the amount by an exchange rate is pretty darn simple. I love fun little exercises like that, so I put this together in a flash.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> rate = <span class="number">67</span>,</div><div class="line">dollars = [<span class="number">.01</span>,<span class="number">.25</span>,<span class="number">1</span>,<span class="number">5</span>,<span class="number">10</span>,<span class="number">20</span>,<span class="number">50</span>,<span class="number">100</span>,<span class="number">500</span>,<span class="number">100</span>],</div><div class="line">rupees = [];</div><div class="line"> </div><div class="line">dollars.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">amount</span>)</span>&#123;</div><div class="line"> </div><div class="line">    rupees.push(amount * rate);</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(rupees);</div></pre></td></tr></table></figure>
+<p>Then of course it is just a matter of rendering these two parallel arrays into an HTML table. However there is just one problem, she would have to still manually edit the exchange rate value to generate an up to date list. Thats when I thought that there must be some kind of JSONP service that spits out up to date exchange rate values for say US Dollars, and Indian Rupees. After some quick google searches I was able to find a few API’s that do just that. </p>
+<p>Most of the sites that offer this service cost money, or there is a limit on the number of requests per month. Allot of them give current rates up to the second, which is cool. However I thought that maybe there was a free service that updates just once a day, as that would work okay for now. To my satisfaction I was able to find one that was just what I was looking for called <a href="http://fixer.io" target="_blank" rel="external">fixer.io</a></p>
+<p>With fixer if I make a GET request with a url like this.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://api.fixer.io/latest?base=INR;symbols=USD</div></pre></td></tr></table></figure></p>
+<p>fixer will give me this JSON Data.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;<span class="string">"base"</span>:<span class="string">"INR"</span>,<span class="string">"date"</span>:<span class="string">"2017-02-10"</span>,<span class="string">"rates"</span>:&#123;<span class="string">"USD"</span>:<span class="number">0.01494</span>&#125;&#125;</div></pre></td></tr></table></figure>
+<p>There’s my up to date rate, to help make life yet even more lazy. Now I just need to generate a table with that rate and my friend can have an up to date table of rates each time she visits a page, say maybe this one. Yeah that sounds good, why not, I’ll put it here.</p>
+<p><div id="fixer_table"></div></p>
+<script>
+
+// default data
+var defaults = {
+
+    rates : {
+
+        INR : 67.36,
+        USD : 0.01494
+
+    },
+
+    date : '2-8-17'
+
+},
+data = defaults,
+base = 'INR',
+compare = 'USD',
+id = 'fixer_table',
+
+render = function (reverse) {
+
+    var html = '',
+
+    rate,
+
+    amounts = [.01, .05, .10, .25, .5, .75, 1, 2, 5, 10, 20, 50, 67, 100, 150,200,250,500, 750,1000,2000,5000,10000];
+
+    rate = data.rates[compare];
+    if (reverse) {
+
+        rate = 1 / data.rates[compare];
+
+    }
+
+    html += '<p>Date of rate: ' + data.date + '<\/p>';
+
+    html += '<table>';
+
+    if (reverse) {
+
+        html += '<tr><td colspan=\"2\">' + compare + ' to ' + base + ' rate : ' + rate.toFixed(3) + '<\/td><\/tr>';
+        html += '<tr><th>' + compare + '<\/th><th>' + base + '<\/th><\/tr>';
+
+    } else {
+
+        html += '<tr><td colspan=\"2\">' + base + ' to ' + compare + ' rate : ' + rate.toFixed(3) + '<\/td><\/tr>';
+        html += '<tr><th>' + base + '<\/th><th>' + compare + '<\/th><\/tr>';
+
+    }
+
+    amounts.forEach(function (amount) {
+
+        var convert = Number(amount * rate).toFixed(2);
+
+        html += '<tr>';
+        html += '<td>' + amount + '<\/td>';
+        html += '<td>' + convert + '<\/td>';
+        html += '<\/tr>';
+
+    });
+    html += '<\/table>';
+
+    document.getElementById(id).innerHTML += html;
+
+},
+
+// what to do on readystate 4 (status 200 or 0)
+update = function (req) {
+
+    if (req.response) {
+
+        try {
+
+            data = JSON.parse(req.response);
+
+        } catch (e) {
+
+            data = defaults;
+
+        }
+
+    } else {
+
+        data = defaults;
+
+    }
+
+    render(false);
+    render(true);
+
+},
+
+// make a request
+req = new XMLHttpRequest();
+
+// I want JSON from fixer.io with the given base currency
+req.open('get', 'https://api.fixer.io/latest?base=' + base + ';symbols=' + compare);
+
+req.onreadystatechange = function () {
+
+    if (req.readyState === 4) {
+
+        update(req);
+
+    }
+
+};
+
+req.onerror = function (e) {}
+
+req.send();
+
+
+
+</script>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/02/09/api-fixer/" data-id="ciyzwmz450001t0v1qry8g9zn" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JSON/">JSON</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/automation/">automation</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/02/13/hexo-readfile/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Reading files in Hexo
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/02/04/hexo-tags/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hexo tags</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/tags/automation/" style="font-size: 10px;">automation</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/js/" style="font-size: 20px;">js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/02/13/hexo-readfile/">Reading files in Hexo</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/09/api-fixer/">Automation of an exchange rate table thanks to Fixer.io&#39;s JSONP API</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/04/hexo-tags/">Hexo tags</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
