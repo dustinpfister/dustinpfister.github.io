@@ -86,6 +86,7 @@
   });
 
   // Caption
+  // I comment this out for now  ~Dustin Pfister
   /*
   $('.article-entry').each(function(i){
     $(this).find('img').each(function(){
