@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Git hooks. | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Git hooks are scripts that I can place in the hooks folder that resides in the hidden .git folder of a project working tree. Because I use git as my system of source control this is an option that I c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git hooks.">
+<meta property="og:url" content="https://dustinpfister.github.io/2017/03/24/git-hooks/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="Git hooks are scripts that I can place in the hooks folder that resides in the hidden .git folder of a project working tree. Because I use git as my system of source control this is an option that I c">
+<meta property="og:updated_time" content="2017-03-25T16:08:57.298Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git hooks.">
+<meta name="twitter:description" content="Git hooks are scripts that I can place in the hooks folder that resides in the hidden .git folder of a project working tree. Because I use git as my system of source control this is an option that I c">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+<!-- structured data set in post.ejs -->
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "CreativeWork",
+  "about": {
+    "@type": "Blog",
+    "author": {
+      "@type": "Person",
+      "email": "distin.pfister@gmail.com",
+      "givenName": "Dustin",
+      "familyName" : "Pfister",
+      "additionalName": "John",
+      "gender": "Male"
+    }
+  }
+}
+</script>
+<!-- end structured data -->
+
+<article itemscope itemtype="http://schema.org/Blog" id="post-git-hooks" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/24/git-hooks/" class="article-date">
+  <time datetime="2017-03-24T22:15:00.000Z" itemprop="datePublished">2017-03-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/git/">git</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Git hooks.
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>Git hooks are scripts that I can place in the hooks folder that resides in the hidden .git folder of a project working tree. Because I use git as my system of source control this is an option that I can use to help automate tasks. However there are other options for task automation that I prefer, so for the most part I see hooks as a way to enforce compliance with certain standards before being allowed to make a commit to a git folder.</p>
+<a id="more"></a>
+<p>So a simple little hello world “pre-commit” node.js hook might look something like this.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env node</span></div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(<span class="string">'Hey a commit was made.'</span>);</div></pre></td></tr></table></figure>
+<p>I will want to use the node.js shebang at the top of my script to make it clear that the environment i am using is node. In addition I will want to name the file “pre-commit” in the hooks folder if I want a script to run every time I make a commit.</p>
+<p>When it comes to writing a more useful pre-commit hook, I could write something that will check if everything is up to snuff before allowing a commit to be made. The basic idea here is to call a process.exit(1) if something does not look good, therefore keeping me from making a commit until it is resolved.</p>
+<p>For an example of this say I want a simple little script that will check if a setting in a JSON file is set to a value that it should be set to every time I make a commit. Say it is a value that I would change while developing, but would want it to always be set to a certain other value every time I make a commit that will be merged into the master branch.</p>
+<p>So the first thing I would want to do is check if my settings.json is even there at all. Yeah that would all ready be a pretty good reason the throw an error and stop the commit if this where a real project.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env node</span></div><div class="line"> </div><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"> </div><div class="line">fs.readFile(<span class="string">'settings.json'</span>, <span class="string">'utf8'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (err) &#123;</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'Error reading settings.json'</span>);</div><div class="line">        <span class="built_in">console</span>.log(err);</div><div class="line">        process.exit(<span class="number">1</span>);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>So far I have a script that is somewhat useful in that it will not allow for a commit to be made if my settings.json file is not present at all. To make it even more useful I just need to add more functionality to the script such as attempting to read the data in settings.json and throwing an error if there is a problem parsing the data.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env node</span></div><div class="line"> </div><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"> </div><div class="line">fs.readFile(<span class="string">'settings.json'</span>, <span class="string">'utf8'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> settings;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (err) &#123;</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'Error: Problem reading settings.json'</span>);</div><div class="line">        <span class="built_in">console</span>.log(err);</div><div class="line">        process.exit(<span class="number">1</span>);</div><div class="line"> </div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line"> </div><div class="line">            settings = <span class="built_in">JSON</span>.parse(data);</div><div class="line"> 			</div><div class="line">			<span class="keyword">if</span>(settings.mode)&#123;</div><div class="line"> 				</div><div class="line">				<span class="keyword">if</span>(settings.mode === <span class="string">'production'</span>)&#123;</div><div class="line"> 					</div><div class="line">					<span class="built_in">console</span>.log(<span class="string">'Settings mode is production, looking good.'</span>);</div><div class="line">					process.exit(<span class="number">0</span>);</div><div class="line"> </div><div class="line">				&#125;<span class="keyword">else</span>&#123;</div><div class="line">					</div><div class="line">					<span class="built_in">console</span>.log(<span class="string">'Error: the settings mode is not set to production.'</span>);</div><div class="line">					process.exit(<span class="number">1</span>);</div><div class="line"> </div><div class="line">				&#125;				</div><div class="line"> 				</div><div class="line">			&#125;<span class="keyword">else</span>&#123;</div><div class="line"> 				</div><div class="line">				<span class="built_in">console</span>.log(<span class="string">'Error: No mode property in settings!'</span>);</div><div class="line">				process.exit(<span class="number">1</span>);</div><div class="line"> 				</div><div class="line">			&#125;</div><div class="line"> </div><div class="line">        &#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'Error: Parsing JSON data'</span>);</div><div class="line">            process.exit(<span class="number">1</span>);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>This script will only allow a commit if there is a settings.json file, that will parse without issue, and has a mode property that has a value of production. So now you should get the idea, these kinds of scripts are useful for enforcing certain kinds of rules that must be met before a commit can be made. They could also be used to set things up for the next commit as well, saving some time. </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/03/24/git-hooks/" data-id="cj0oejkap0000mkv1knfwtk49" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/automation/">automation</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/03/11/game-dig-hide-methods/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Dig Game - Hide Methods</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/tags/automation/" style="font-size: 15px;">automation</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/games/" style="font-size: 15px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/node-js/" style="font-size: 10px;">node.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/03/24/git-hooks/">Git hooks.</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/11/game-dig-hide-methods/">Dig Game - Hide Methods</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/27/game-money/">Game Money</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/13/hexo-readfile/">Reading files in Hexo</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/09/api-fixer/">Fixer.io JSONP API</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
