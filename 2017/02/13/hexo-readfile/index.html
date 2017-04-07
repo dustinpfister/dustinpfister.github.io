@@ -11,7 +11,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2017/02/13/hexo-readfile/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="So now and then I might want to read a file in my hexo working tree that contains data that is needed when generating pages. For example I may have a file in my root name space that contains API acc">
-<meta property="og:updated_time" content="2017-03-28T23:50:54.396Z">
+<meta property="og:updated_time" content="2017-04-04T12:23:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Reading files in Hexo">
 <meta name="twitter:description" content="So now and then I might want to read a file in my hexo working tree that contains data that is needed when generating pages. For example I may have a file in my root name space that contains API acc">
@@ -119,9 +119,17 @@ ga('send', 'pageview');
 
 <article itemscope itemtype="http://schema.org/Blog" id="post-hexo-readfile" class="article article-type-post" itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/02/13/hexo-readfile/" class="article-date">
+    <a href="/2017/02/13/hexo-readfile/" class="article-date"> Published:
   <time datetime="2017-02-13T18:00:00.000Z" itemprop="datePublished">2017-02-13</time>
 </a>
+
+    <!-- other info (dustin) -->
+    <a href="/2017/02/13/hexo-readfile/" class="article-date"> Modified:
+  <time datetime="2017-04-04T12:23:56.000Z" itemprop="dateModified">2017-04-04</time>
+</a>
+
+    <span class="article-date">V1</span>
+
     
   <div class="article-category">
     <a class="article-category-link" href="/categories/hexo/">hexo</a>
@@ -155,29 +163,30 @@ ga('send', 'pageview');
 <p>Here for example I will use it to inject the package.json file from my hexo project.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;% mytags_readfile package.json %&#125;</div></pre></td></tr></table></figure>
 <pre><code>{
-    "name" : "hexo_sitesource",
-    "version" : "1.0.22",
-    "private" : true,
-    "hexo" : {
-        "version" : "3.2.2"
-    },
-    "scripts" : {
-		
-		"start" : "cd public && node server.js"
-		
-	},
-    "dependencies" : {
-        "hexo" : "^3.2.0",
-        "hexo-generator-archive" : "^0.1.4",
-        "hexo-generator-category" : "^0.1.3",
-        "hexo-generator-index" : "^0.2.0",
-        "hexo-generator-tag" : "^0.2.0",
-        "hexo-renderer-ejs" : "^0.2.0",
-        "hexo-renderer-marked" : "^0.2.10",
-        "hexo-renderer-stylus" : "^0.3.1",
-        "hexo-server" : "^0.2.0",
-        "sitemap" : "^1.11.1"
-    }
+  "name": "hexo_sitesource",
+  "version": "1.0.73",
+  "private": true,
+  "hexo": {
+    "version": "3.2.2"
+  },
+  "scripts": {
+    "start": "cd public && node server.js"
+  },
+  "dependencies": {
+    "hexo": "^3.2.0",
+    "hexo-generator-archive": "^0.1.4",
+    "hexo-generator-category": "^0.1.3",
+    "hexo-generator-index": "^0.2.0",
+    "hexo-generator-tag": "^0.2.0",
+    "hexo-renderer-ejs": "^0.2.0",
+    "hexo-renderer-marked": "^0.2.10",
+    "hexo-renderer-stylus": "^0.3.1",
+    "hexo-server": "^0.2.0",
+    "sitemap": "^1.11.1"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1"
+  }
 }
 </code></pre>
 <h1 id="Geting-an-access-key-or-token-from-my-apikeys-json-file"><a href="#Geting-an-access-key-or-token-from-my-apikeys-json-file" class="headerlink" title="Geting an access key, or token from my apikeys.json file."></a>Geting an access key, or token from my apikeys.json file.</h1><p>With some api’s I must have an access token, or api key of some kind. I would not want to hard code an access key into my source code, and push it to a public reposatory. So I would want to read data from a hidden file to get a key, then use that key to make a request to the api.</p>
@@ -186,11 +195,11 @@ ga('send', 'pageview');
 <h1 id="The-Github-tag"><a href="#The-Github-tag" class="headerlink" title="The Github tag"></a>The Github tag</h1><p>This will make a request with a key that I obtained from apikeys.json thanks to my getKey, readFile, and an httpRequest method I found earlier. All of which is in <a href="https://raw.githubusercontent.com/dustinpfister/hexo_sitesource/master/scripts/my-tags.js" target="_blank" rel="external">my-tags.js</a> in my hexo scripts folder.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> formatRepos = <span class="function"><span class="keyword">function</span> (<span class="params">content</span>) </span>&#123;</div><div class="line"> </div><div class="line">    html = <span class="string">'&lt;pre&gt; Here are my repos at github.&lt;br&gt;&lt;br&gt;'</span>;</div><div class="line"> </div><div class="line">    content.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">repo</span>) </span>&#123;</div><div class="line"> </div><div class="line">        html += <span class="string">'&lt;a href=\"'</span> + repo.html_url + <span class="string">'\"&gt;'</span> + repo.name + <span class="string">'&lt;/a&gt;&lt;br&gt;'</span>;</div><div class="line">        html += repo.description + <span class="string">'&lt;br&gt;&lt;br&gt;'</span>;</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> html + <span class="string">'&lt;/pre&gt;'</span>;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// read a file from the base dir forward.</span></div><div class="line">hexo.extend.tag.register(<span class="string">'mytags_github'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">args</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line"> </div><div class="line">        getKey(<span class="string">'github'</span>).then(<span class="function"><span class="keyword">function</span> (<span class="params">key</span>) </span>&#123;</div><div class="line"> </div><div class="line">            resolve(key);</div><div class="line"> </div><div class="line">        &#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            reject(<span class="string">''</span>);</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">key</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> httpRequest(&#123;</div><div class="line"> </div><div class="line">            <span class="attr">host</span> : <span class="string">'api.github.com'</span>,</div><div class="line">            <span class="attr">method</span> : <span class="string">'GET'</span>,</div><div class="line">            <span class="attr">path</span> : <span class="string">'/users/dustinpfister/repos?access_token='</span> + key,</div><div class="line">            <span class="attr">headers</span> : &#123;</div><div class="line">                <span class="string">'user-agent'</span> : <span class="string">'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)'</span></div><div class="line">            &#125;</div><div class="line"> </div><div class="line">        &#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">content</span>) </span>&#123;</div><div class="line"> </div><div class="line">            log(<span class="string">'request is good.'</span>);</div><div class="line"> </div><div class="line">            <span class="keyword">return</span> formatRepos(content);</div><div class="line"> </div><div class="line">        &#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</div><div class="line"> </div><div class="line">            log(<span class="string">'bad request.'</span>);</div><div class="line">            log(err);</div><div class="line"> </div><div class="line">            <span class="keyword">return</span> <span class="string">'&lt;pre&gt;Error getting the data from github &lt;\/pre&gt;'</span>;</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> <span class="string">'&lt;pre&gt;error with the github&lt;/pre&gt;'</span>;</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;, &#123;</div><div class="line">    <span class="attr">async</span> : <span class="literal">true</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p>Here it is in action…………</p>
-<pre> Here are my repos at github.<br><br><a href="https://github.com/dustinpfister/bFly" target="_blank" rel="external">bFly</a><br>My submission to the 2013 js13kgames.com competition<br><br><a href="https://github.com/dustinpfister/cityBuilder1500" target="_blank" rel="external">cityBuilder1500</a><br>a city building game<br><br><a href="https://github.com/dustinpfister/clad_clash" target="_blank" rel="external">clad_clash</a><br>A game about ships<br><br><a href="https://github.com/dustinpfister/deglitcher13k" target="_blank" rel="external">deglitcher13k</a><br>my 2016 submission to js13k games<br><br><a href="https://github.com/dustinpfister/dustinpfister.github.io" target="_blank" rel="external">dustinpfister.github.io</a><br>The github page of dustinpfister<br><br><a href="https://github.com/dustinpfister/em" target="_blank" rel="external">em</a><br>This is for EM<br><br><a href="https://github.com/dustinpfister/firstThreeJS" target="_blank" rel="external">firstThreeJS</a><br>First time playing with three.js<br><br><a href="https://github.com/dustinpfister/foreverStupid" target="_blank" rel="external">foreverStupid</a><br>For the 2015 Buffalo Game Space Game Jam<br><br><a href="https://github.com/dustinpfister/forframe" target="_blank" rel="external">forframe</a><br>Animation by a forFrame basis<br><br><a href="https://github.com/dustinpfister/game_dig" target="_blank" rel="external">game_dig</a><br>a game about digging in dirt<br><br><a href="https://github.com/dustinpfister/gh-pages-test" target="_blank" rel="external">gh-pages-test</a><br>Testing out the gh-pages branch<br><br><a href="https://github.com/dustinpfister/hex" target="_blank" rel="external">hex</a><br>working some things out with hex grids<br><br><a href="https://github.com/dustinpfister/hexo_sitesource" target="_blank" rel="external">hexo_sitesource</a><br>The source for my github pages website<br><br><a href="https://github.com/dustinpfister/mdfg" target="_blank" rel="external">mdfg</a><br>MarkDown File Generator.<br><br><a href="https://github.com/dustinpfister/mrSun" target="_blank" rel="external">mrSun</a><br>Mr Sun an HTML5 God Game<br><br><a href="https://github.com/dustinpfister/node_expresssite" target="_blank" rel="external">node_expresssite</a><br>a site made using express<br><br><a href="https://github.com/dustinpfister/offgrid" target="_blank" rel="external">offgrid</a><br>Life off the grid<br><br><a href="https://github.com/dustinpfister/openshift_demo" target="_blank" rel="external">openshift_demo</a><br>I am just a simple opensift hello world, pay me no mind.<br><br><a href="https://github.com/dustinpfister/openshift_geopost" target="_blank" rel="external">openshift_geopost</a><br>a simple openshift app i made for a client<br><br><a href="https://github.com/dustinpfister/openshift_scriptbook" target="_blank" rel="external">openshift_scriptbook</a><br>Social media for web programers<br><br><a href="https://github.com/dustinpfister/orbcraft13k" target="_blank" rel="external">orbcraft13k</a><br>My 2014 submission to js13kgames.com<br><br><a href="https://github.com/dustinpfister/pebble" target="_blank" rel="external">pebble</a><br>A platform centered around a virtual currency called "Pebble"<br><br><a href="https://github.com/dustinpfister/pebble_dig" target="_blank" rel="external">pebble_dig</a><br>My first game based on my platform pebble.<br><br><a href="https://github.com/dustinpfister/pebble_processor" target="_blank" rel="external">pebble_processor</a><br>working out some changes to pebble<br><br><a href="https://github.com/dustinpfister/planetHopper" target="_blank" rel="external">planetHopper</a><br>A strategy game about taking over planets<br><br><a href="https://github.com/dustinpfister/popthelockclone" target="_blank" rel="external">popthelockclone</a><br>A clone of the game pop the lock<br><br><a href="https://github.com/dustinpfister/powdered_toast_man_13k" target="_blank" rel="external">powdered_toast_man_13k</a><br>My 2015 submission to js13kgames.com<br><br><a href="https://github.com/dustinpfister/powdered_toast_man_adventures" target="_blank" rel="external">powdered_toast_man_adventures</a><br>will evil never rest?<br><br><a href="https://github.com/dustinpfister/prototype_clicker" target="_blank" rel="external">prototype_clicker</a><br>this will break your mouse.<br><br><a href="https://github.com/dustinpfister/prototype_phaserdemo" target="_blank" rel="external">prototype_phaserdemo</a><br>Trying out phaser<br><br></pre>
+<pre> Here are my repos at github.<br><br><a href="https://github.com/dustinpfister/bFly" target="_blank" rel="external">bFly</a><br>My submission to the 2013 js13kgames.com competition<br><br><a href="https://github.com/dustinpfister/cityBuilder1500" target="_blank" rel="external">cityBuilder1500</a><br>a city building game<br><br><a href="https://github.com/dustinpfister/clad_clash" target="_blank" rel="external">clad_clash</a><br>A game about ships<br><br><a href="https://github.com/dustinpfister/deglitcher13k" target="_blank" rel="external">deglitcher13k</a><br>my 2016 submission to js13k games<br><br><a href="https://github.com/dustinpfister/dustinpfister.github.io" target="_blank" rel="external">dustinpfister.github.io</a><br>The github page of dustinpfister<br><br><a href="https://github.com/dustinpfister/em" target="_blank" rel="external">em</a><br>This is for EM<br><br><a href="https://github.com/dustinpfister/firstThreeJS" target="_blank" rel="external">firstThreeJS</a><br>First time playing with three.js<br><br><a href="https://github.com/dustinpfister/foreverStupid" target="_blank" rel="external">foreverStupid</a><br>For the 2015 Buffalo Game Space Game Jam<br><br><a href="https://github.com/dustinpfister/forframe" target="_blank" rel="external">forframe</a><br>Animation by a forFrame basis<br><br><a href="https://github.com/dustinpfister/game_dig" target="_blank" rel="external">game_dig</a><br>a game about digging in dirt<br><br><a href="https://github.com/dustinpfister/gh-pages-test" target="_blank" rel="external">gh-pages-test</a><br>Testing out the gh-pages branch<br><br><a href="https://github.com/dustinpfister/grunt-postcheck" target="_blank" rel="external">grunt-postcheck</a><br>check out markdown file posts<br><br><a href="https://github.com/dustinpfister/hex" target="_blank" rel="external">hex</a><br>working some things out with hex grids<br><br><a href="https://github.com/dustinpfister/hexo_sitesource" target="_blank" rel="external">hexo_sitesource</a><br>The source for my github pages website<br><br><a href="https://github.com/dustinpfister/mdfg" target="_blank" rel="external">mdfg</a><br>MarkDown File Generator.<br><br><a href="https://github.com/dustinpfister/mrSun" target="_blank" rel="external">mrSun</a><br>Mr Sun an HTML5 God Game<br><br><a href="https://github.com/dustinpfister/node_expresssite" target="_blank" rel="external">node_expresssite</a><br>a site made using express<br><br><a href="https://github.com/dustinpfister/offgrid" target="_blank" rel="external">offgrid</a><br>Life off the grid<br><br><a href="https://github.com/dustinpfister/openshift_demo" target="_blank" rel="external">openshift_demo</a><br>I am just a simple opensift hello world, pay me no mind.<br><br><a href="https://github.com/dustinpfister/openshift_geopost" target="_blank" rel="external">openshift_geopost</a><br>a simple openshift app i made for a client<br><br><a href="https://github.com/dustinpfister/openshift_scriptbook" target="_blank" rel="external">openshift_scriptbook</a><br>Social media for web programers<br><br><a href="https://github.com/dustinpfister/orbcraft13k" target="_blank" rel="external">orbcraft13k</a><br>My 2014 submission to js13kgames.com<br><br><a href="https://github.com/dustinpfister/pebble" target="_blank" rel="external">pebble</a><br>A platform centered around a virtual currency called "Pebble"<br><br><a href="https://github.com/dustinpfister/pebble_dig" target="_blank" rel="external">pebble_dig</a><br>My first game based on my platform pebble.<br><br><a href="https://github.com/dustinpfister/pebble_processor" target="_blank" rel="external">pebble_processor</a><br>working out some changes to pebble<br><br><a href="https://github.com/dustinpfister/planetHopper" target="_blank" rel="external">planetHopper</a><br>A strategy game about taking over planets<br><br><a href="https://github.com/dustinpfister/popthelockclone" target="_blank" rel="external">popthelockclone</a><br>A clone of the game pop the lock<br><br><a href="https://github.com/dustinpfister/powdered_toast_man_13k" target="_blank" rel="external">powdered_toast_man_13k</a><br>My 2015 submission to js13kgames.com<br><br><a href="https://github.com/dustinpfister/powdered_toast_man_adventures" target="_blank" rel="external">powdered_toast_man_adventures</a><br>will evil never rest?<br><br><a href="https://github.com/dustinpfister/prototype_clicker" target="_blank" rel="external">prototype_clicker</a><br>this will break your mouse.<br><br></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2017/02/13/hexo-readfile/" data-id="cj0v4rdcr001j20v1bl9uztco" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2017/02/13/hexo-readfile/" data-id="cj15pqoye001kdov1550y4smj" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li></ul>
@@ -230,7 +239,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node/">node</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li></ul>
     </div>
   </div>
 
@@ -250,7 +259,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10px;">SEO</a> <a href="/tags/automation/" style="font-size: 12.5px;">automation</a> <a href="/tags/blog/" style="font-size: 10px;">blog</a> <a href="/tags/games/" style="font-size: 12.5px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/node-js/" style="font-size: 17.5px;">node.js</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a>
+      <a href="/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10px;">SEO</a> <a href="/tags/automation/" style="font-size: 12.5px;">automation</a> <a href="/tags/blog/" style="font-size: 12.5px;">blog</a> <a href="/tags/games/" style="font-size: 12.5px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/node-js/" style="font-size: 17.5px;">node.js</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a>
     </div>
   </div>
 
@@ -259,7 +268,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
     </div>
   </div>
 
@@ -272,6 +281,14 @@ ga('send', 'pageview');
       <ul>
         
           <li>
+            <a href="/2017/04/05/nodejs-helloworld/">node.js hello world</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/05/blog-volume-quality/">Blog Post volume.</a>
+          </li>
+        
+          <li>
             <a href="/2017/03/29/nodejs-harp/">Node.js powered site generator Harp.</a>
           </li>
         
@@ -281,14 +298,6 @@ ga('send', 'pageview');
         
           <li>
             <a href="/2017/03/27/grunt-versionbump/">Version number bumping with grunt.</a>
-          </li>
-        
-          <li>
-            <a href="/2017/03/26/linux_shebang/">The node.js shebang</a>
-          </li>
-        
-          <li>
-            <a href="/2017/03/24/git-hooks/">Git hooks.</a>
           </li>
         
       </ul>
