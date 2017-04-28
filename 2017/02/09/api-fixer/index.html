@@ -11,7 +11,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2017/02/09/api-fixer/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="Lately I was helping a friend of mine prepare for a trip to India. While doing so one of the things she wanted to get done was to type up a table that included US dollar amounts on one column, and t">
-<meta property="og:updated_time" content="2017-04-04T12:23:54.000Z">
+<meta property="og:updated_time" content="2017-04-28T13:56:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Fixer.io JSON API">
 <meta name="twitter:description" content="Lately I was helping a friend of mine prepare for a trip to India. While doing so one of the things she wanted to get done was to type up a table that included US dollar amounts on one column, and t">
@@ -102,10 +102,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/02/09/api-fixer/" class="article-date"> Modified:
-  <time datetime="2017-04-04T12:23:54.000Z" itemprop="dateModified">2017-04-04</time>
+  <time datetime="2017-04-28T13:56:24.000Z" itemprop="dateModified">2017-04-28</time>
 </a>
 
-    <span class="article-date">V1</span>
+    <span class="article-date">V1.1</span>
 
     
   <div class="article-category">
@@ -133,11 +133,11 @@ ga('send', 'pageview');
 
 <p>Lately I was helping a friend of mine prepare for a trip to India. While doing so one of the things she wanted to get done was to type up a table that included US dollar amounts on one column, and the rupee equivalent in the other.</p>
 <a id="more"></a>
-<p>I have been doing allot of work involving finding ways of automating a great deal of my work flow to help reduce the amount of time I spend on repetitive tasks, so I have more time to spend on the novel stuff. That got me thinking that maybe it would be fun to see if I could automate the process of making her table, for the heck of it, and maybe doing so would be a bit helpful for her. Exchange rates are always jumping up and down, and every time a significant change happens she would have to write the table again.</p>
+<p>I have been developing scripts involving finding ways of automating a great deal of my work flow to help reduce the amount of time I spend on repetitive tasks, so I have more time to spend on the novel stuff. That got me thinking that maybe it would be fun to see if I could automate the process of making her table, for the heck of it, and maybe doing so would be a bit helpful for her. Exchange rates are always jumping up and down, and every time a significant change happens she would have to write the table again.</p>
 <p>So typing up a simple little script that loops over an array of amounts, and multiplies the amount by an exchange rate is pretty darn simple. I love fun little exercises like that, so I put this together in a flash.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> rate = <span class="number">67</span>,</div><div class="line">dollars = [<span class="number">.01</span>,<span class="number">.25</span>,<span class="number">1</span>,<span class="number">5</span>,<span class="number">10</span>,<span class="number">20</span>,<span class="number">50</span>,<span class="number">100</span>,<span class="number">500</span>,<span class="number">100</span>],</div><div class="line">rupees = [];</div><div class="line"> </div><div class="line">dollars.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">amount</span>)</span>&#123;</div><div class="line"> </div><div class="line">    rupees.push(amount * rate);</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(rupees);</div></pre></td></tr></table></figure>
 <p>Then of course it is just a matter of rendering these two parallel arrays into an HTML table. However there is just one problem, she would have to still manually edit the exchange rate value to generate an up to date list. Thats when I thought that there must be some kind of JSONP service that spits out up to date exchange rate values for say US Dollars, and Indian Rupees. After some quick google searches I was able to find a few API’s that do just that. </p>
-<p>Most of the sites that offer this service cost money, or there is a limit on the number of requests per month. Allot of them give current rates up to the second, which is cool. However I thought that maybe there was a free service that updates just once a day, as that would work okay for now. To my satisfaction I was able to find one that was just what I was looking for called <a href="http://fixer.io" target="_blank" rel="external">fixer.io</a></p>
+<p>Most of the sites that offer this service cost money, or there is a limit on the number of requests per month. A lot of them give current rates up to the second, which is cool. However I thought that maybe there was a free service that updates just once a day, as that would work okay for now. To my satisfaction I was able to find one that was just what I was looking for called <a href="http://fixer.io" target="_blank" rel="external">fixer.io</a></p>
 <p>With fixer if I make a GET request with a url like this.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://api.fixer.io/latest?base=INR;symbols=USD</div></pre></td></tr></table></figure></p>
 <p>fixer will give me this JSON Data.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;<span class="string">"base"</span>:<span class="string">"INR"</span>,<span class="string">"date"</span>:<span class="string">"2017-02-10"</span>,<span class="string">"rates"</span>:&#123;<span class="string">"USD"</span>:<span class="number">0.01494</span>&#125;&#125;</div></pre></td></tr></table></figure>
