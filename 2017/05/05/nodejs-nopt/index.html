@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>A very nice option parser for Node.js called nopt | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="So you find yourself writing some kind of Command Line Interface tool with node.js, and as such you want to make it so it will accept some arguments from the command line. Just like that of many other">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A very nice option parser for Node.js called nopt">
+<meta property="og:url" content="https://dustinpfister.github.io/2017/05/05/nodejs-nopt/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="So you find yourself writing some kind of Command Line Interface tool with node.js, and as such you want to make it so it will accept some arguments from the command line. Just like that of many other">
+<meta property="og:updated_time" content="2017-05-06T15:51:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="A very nice option parser for Node.js called nopt">
+<meta name="twitter:description" content="So you find yourself writing some kind of Command Line Interface tool with node.js, and as such you want to make it so it will accept some arguments from the command line. Just like that of many other">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-nopt" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/05/nodejs-nopt/" class="article-date"> Published:
+  <time datetime="2017-05-06T01:19:00.000Z" itemprop="datePublished">2017-05-05</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="<%- url_for(post.path) %>" class="<%= class_name %>">
+  <time datetime="<%= date_xml(post.date) %>" itemprop="datePublished"><%= date(post.date, date_format) %></time>
+</a>
+
+    <span class="article-date">V1.2</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      A very nice option parser for Node.js called nopt
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>So you find yourself writing some kind of <a href="https://en.wikipedia.org/wiki/Command-line_interface" target="_blank" rel="external">Command Line Interface tool</a> with <a href="https://nodejs.org/en/" target="_blank" rel="external">node.js</a>, and as such you want to make it so it will accept some arguments from the command line. Just like that of many other CLI tools that you may be familiar with if you are somewhat POSIX or powerShell savvy. If so you will want to check out <a href="https://www.npmjs.com/package/nopt" target="_blank" rel="external">nopt</a>.</p>
+<a id="more"></a>
+<p>I first noticed nopt when checking out the dependencies for the popular node.js task runner <a href="https://gruntjs.com/" target="_blank" rel="external">grunt</a>. I have gotten into the habit of doing that as a way to become more aware of what is all ready out there in the node.js world, learn how to use it, and break free of the habit of wasting time re-inventing the wheel. Speaking of that I also really like what was written in the README file of the project on that matter:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">If you want to write an option parser, and have it be good, there are</div><div class="line">two ways to do it.  The Right Way, and the Wrong Way.</div><div class="line"></div><div class="line">The Wrong Way is to sit down and write an option parser.  We&apos;ve all done</div><div class="line">that.</div><div class="line"></div><div class="line">The Right Way is to write some complex configurable program with so many</div><div class="line">options that you hit the limit of your frustration just trying to</div><div class="line">manage them all, and defer it with duct-tape solutions until you see</div><div class="line">exactly to the core of the problem, and finally snap and write an</div><div class="line">awesome option parser.</div><div class="line"></div><div class="line">If you want to write an option parser, don&apos;t write an option parser.</div><div class="line">Write a package manager, or a source control system, or a service</div><div class="line">restarter, or an operating system.  You probably won&apos;t end up with a</div><div class="line">good one of those, but if you don&apos;t give up, and you are relentless and</div><div class="line">diligent enough in your procrastination, you may just end up with a very</div><div class="line">nice option parser.</div></pre></td></tr></table></figure>
+<p>If you are a great programmer you understand the reasons why re-inventing the wheel is not completely idiotic. Still it is true that part of being a great programmer is knowing when not to program, and use a very nice option parser that has been written before hand.</p>
+<h2 id="Doing-it-the-wrong-way"><a href="#Doing-it-the-wrong-way" class="headerlink" title="Doing it the wrong way."></a>Doing it the wrong way.</h2><p>So you started developing a CLI tool, and it needs to accept some arguments from the command line, as such you might find yourself throwing together something like this.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line"><span class="keyword">var</span> args = process.argv.slice(<span class="number">2</span>),</div><div class="line"> </div><div class="line">options = &#123;</div><div class="line"> </div><div class="line">    <span class="attr">readOnly</span> : <span class="literal">false</span>,</div><div class="line">    <span class="attr">sourcePath</span> : <span class="string">'.'</span></div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line">args.join().split(<span class="string">'-'</span>).forEach(<span class="function"><span class="keyword">function</span> (<span class="params">arg</span>) </span>&#123;</div><div class="line"> </div><div class="line">    arg = arg.split(<span class="string">','</span>);</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (arg[<span class="number">0</span>] === <span class="string">'r'</span>) &#123;</div><div class="line"> </div><div class="line">        options.readOnly = <span class="literal">true</span>;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (arg[<span class="number">0</span>] === <span class="string">'d'</span>) &#123;</div><div class="line"> </div><div class="line">        options.sourcePath = arg[<span class="number">1</span>];</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(options);</div></pre></td></tr></table></figure>
+<p>If so stop what you are doing now, you are making a mistake. Yes there is a dependency for that you can install, and use right now that will handle this aspect of CLI tool development much better. What is starting to come together in the above example can be called an option parser. It is an important component of any CLI tool. In this post I will be covering the usage of a node.js dependency called nopt.</p>
+<h2 id="Doing-it-the-Correct-way"><a href="#Doing-it-the-Correct-way" class="headerlink" title="Doing it the Correct way."></a>Doing it the Correct way.</h2><p>When testing out any new dependency I start by making a little demo app that uses the dependency in question. So start a new node.js project and do the usual npm int to get your package.json file for the app together then install nopt, and be sure to make it one of the apps dependences in the package.json file.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install nopt --save</div></pre></td></tr></table></figure>
+<p>Now you are ready to handle option parsing the correct way, but first what is option parsing?</p>
+<h2 id="Option-parsing-is-not-so-simple-sometimes"><a href="#Option-parsing-is-not-so-simple-sometimes" class="headerlink" title="Option parsing is not so simple sometimes."></a>Option parsing is not so simple sometimes.</h2><p>Accepting arguments from the command line may strike you as a trivial matter, and to some extent I suppose it is now and then, but sometimes it may not be that trivial with certain projects. You may have a situation that involves hard coded default values in the tool itself, soft coded values in a json file somewhere that can superseded those hard coded defaults, and values that are accepted via the command line.</p>
+<p>When accepting values from the command line, how many possible values can be set via the CLI? Does an option just set a true or false boolean value? Does an option set a native OS, or URL style path? What about number, string, and object values? Can an option set one of several types of modes, from an array of options? Yes this can get a little intense, this is why we use dependences written by people that have been there, and done that.</p>
+<h2 id="The-hard-coded-option-object"><a href="#The-hard-coded-option-object" class="headerlink" title="The hard coded option object"></a>The hard coded option object</h2><p>When putting togtether an advanced CLI tool I would want to have a hard coded option object in the source code of the tool. Whatever the values are for this object are is what will always be used when the tool is used. So if you just call the command by itself it will go by the options defined there alone by default. However the values can be overwritten by properties in an object that is parsed with nopt, as well as from another source such as a json file.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// hard coded defaults</span></div><div class="line">option = &#123;</div><div class="line">    <span class="attr">write</span> : <span class="literal">false</span>,</div><div class="line">    <span class="attr">text</span> : <span class="string">'foobar'</span>,</div><div class="line">    <span class="attr">filename</span> : <span class="string">'textfile'</span>,</div><div class="line">    <span class="attr">path</span> : <span class="string">'./'</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="Soft-coded-arguments"><a href="#Soft-coded-arguments" class="headerlink" title="Soft coded arguments"></a>Soft coded arguments</h2><p>In addition I could make it so the tool always looks for soft coded values in a json file that may exist in certain paths. However getting into that would be off topic, so I will just be covering the idea of superseding hard coded option defaults by way of arguments defined from the CLI.</p>
+<p>nopt takes a look at process.argv, and makes an object with valid keys and corresponding values that can be used to augment my hard coded options object. It is a great way to help make sure that no invalid values ever get set, and to help handle how things should be done in the event of an invalid option when parsing options given from an end user of the tool.</p>
+<h2 id="Invalid-options"><a href="#Invalid-options" class="headerlink" title="Invalid options."></a>Invalid options.</h2><p>It is possible to define an invalid option handler. This will be called in the event that one of the options did not parse properly. Say you have an option that needs to be a number, and only a number. The invaild handler will be called if the string “foo” is given for that option that should be a number.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// invalid argument handler.</span></div><div class="line">nopt.invalidHandler = <span class="function"><span class="keyword">function</span> (<span class="params">key, val, types</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(key + <span class="string">' error, argument ignored.'</span>);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>The handler can be used to just inform the user they gave an invalid option like this example does, or it could be used to keep the program from continuing with whatever it does. It goes without saying that it is a nice feature to have when making an advanced CLI tool project of some kind. Be sure you define the handler before calling the parser.</p>
+<h2 id="Example-App"><a href="#Example-App" class="headerlink" title="Example App"></a>Example App</h2><p>So for a simple example I put together a quick CLI tool that will write a file if a write boolen is true, else it will just log to the console. The name, and location of the file can also be set via arguments that can be set via the command line.</p>
+<p>There are hard coded defaults that can be superseded by the arguments given, and I also have an invalid argument handler in place. Possible arguments, and there corresponding shorthands are also defined.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// example of nopt</span></div><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> nopt = <span class="built_in">require</span>(<span class="string">'nopt'</span>),</div><div class="line">    fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line">    path = <span class="built_in">require</span>(<span class="string">'path'</span>),</div><div class="line">    parsed,</div><div class="line">    prop,</div><div class="line"> </div><div class="line">    <span class="comment">// hard coded defaults</span></div><div class="line">    option = &#123;</div><div class="line">        <span class="attr">write</span> : <span class="literal">false</span>,</div><div class="line">        <span class="attr">text</span> : <span class="string">'foobar'</span>,</div><div class="line">        <span class="attr">filename</span> : <span class="string">'textfile'</span>,</div><div class="line">        <span class="attr">path</span> : <span class="string">'./'</span></div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// set arguments from CLI</span></div><div class="line">    setFromCLI = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// loop over values in the option object</span></div><div class="line">        <span class="keyword">for</span> (prop <span class="keyword">in</span> option) &#123;</div><div class="line"> </div><div class="line">            <span class="comment">// if the property is in the parsed object...</span></div><div class="line">            <span class="keyword">if</span> (parsed[prop] != <span class="literal">undefined</span>) &#123;</div><div class="line"> </div><div class="line">                <span class="comment">// use it</span></div><div class="line">                option[prop] = parsed[prop];</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// write file method that is to be called if option.write is true</span></div><div class="line">    writeFile = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (option.write) &#123;</div><div class="line"> </div><div class="line">            fs.writeFile(</div><div class="line">                path.join(option.path, option.filename + <span class="string">'.txt'</span>),</div><div class="line">                option.text,</div><div class="line">                <span class="string">'utf8'</span>,</div><div class="line">                <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</div><div class="line"> </div><div class="line">                <span class="keyword">if</span> (!err) &#123;</div><div class="line"> </div><div class="line">                    <span class="built_in">console</span>.log(<span class="string">'file written.'</span>);</div><div class="line"> </div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'log only.'</span>);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// invalid argument handler.</span></div><div class="line">    nopt.invalidHandler = <span class="function"><span class="keyword">function</span> (<span class="params">key, val, types</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(key + <span class="string">' error, argument ignored.'</span>);</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// parsed arguments given from command line</span></div><div class="line">    parsed = nopt(</div><div class="line"> </div><div class="line">            <span class="comment">// options</span></div><div class="line">        &#123;</div><div class="line"> </div><div class="line">            <span class="string">"write"</span> : <span class="built_in">Number</span>,</div><div class="line">            <span class="string">"text"</span> : <span class="built_in">String</span>,</div><div class="line">            <span class="string">"filename"</span> : <span class="built_in">String</span>,</div><div class="line">            <span class="string">"path"</span> : path</div><div class="line"> </div><div class="line">        &#125;,</div><div class="line"> </div><div class="line">            <span class="comment">// shorthands</span></div><div class="line">        &#123;</div><div class="line"> </div><div class="line">            <span class="string">"w"</span> : <span class="string">"--write"</span>,</div><div class="line">            <span class="string">"t"</span> : <span class="string">"--text"</span>,</div><div class="line">            <span class="string">"f"</span> : <span class="string">"--filename"</span>,</div><div class="line">            <span class="string">"p"</span> : <span class="string">"--path"</span></div><div class="line"> </div><div class="line">        &#125;,</div><div class="line"> </div><div class="line">            process.argv, <span class="number">2</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// set arguments to options object</span></div><div class="line">    setFromCLI();</div><div class="line"> </div><div class="line">    <span class="comment">// call the writeFile method</span></div><div class="line">    writeFile();</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(option);</div><div class="line">    <span class="built_in">console</span>.log(option.text);</div><div class="line"> </div><div class="line">&#125;</div><div class="line">    ());</div></pre></td></tr></table></figure>
+<p>so then..</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ node cli-example.js -t &quot;example text&quot; -f test-file -w</div></pre></td></tr></table></figure>
+<p>Will result in a file called test-file.txt to be written at the current working path containing the text “example text”. The idea here is that the program will always follow what is written in the option object, one or more corresponding properties in the parsed object will be set to the options object if present. </p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Option parsing can be done in a way that helps to keep the CLI tools that I make more robust, and professional. If it is a tool that will be called from a script in the same fashion each time, then I would say that I would not have to bother with this dependency. If I aim to make a tool that other people use it becomes more more important to use this. It is something that I will most likely use if I start making any kind of project that is called from the command line, and is a little complicated.</p>
+<p>I could get into greater depth about this and cover things like having more than one type for and option, and other features of nopt. Still you get the idea as to why this is a useful project.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/05/05/nodejs-nopt/" data-id="cj2chipz50035nov1l3klz4qm" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/05/02/hexo-sitemap-automation/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hexo site sitemap automation with hexo-generator-sitemap</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 10px;">JSON</a> <a href="/tags/SEO/" style="font-size: 11.67px;">SEO</a> <a href="/tags/automation/" style="font-size: 15px;">automation</a> <a href="/tags/blog/" style="font-size: 13.33px;">blog</a> <a href="/tags/corejs/" style="font-size: 10px;">corejs</a> <a href="/tags/ejs/" style="font-size: 10px;">ejs</a> <a href="/tags/games/" style="font-size: 11.67px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hexo/" style="font-size: 16.67px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10px;">jimp</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/node-js/" style="font-size: 18.33px;">node.js</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/05/05/nodejs-nopt/">A very nice option parser for Node.js called nopt</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/02/hexo-sitemap-automation/">Hexo site sitemap automation with hexo-generator-sitemap</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/28/blog-sitemaps/">Sitemaps</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/17/hexo-theme-start/">Getting started with Hexo Themes</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/14/js-this-keyword/">The this keyword.</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
