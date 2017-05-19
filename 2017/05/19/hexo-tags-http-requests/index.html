@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Making a Hexo.io tag that gets JSON data with an httprequest | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="I have written a post on hexo.io that outlines how to go about making a hexo tag that gets data from an async file read. Sometimes I might want to write a tag that gets data that is to be used to gene">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Making a Hexo.io tag that gets JSON data with an httprequest">
+<meta property="og:url" content="https://dustinpfister.github.io/2017/05/19/hexo-tags-http-requests/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="I have written a post on hexo.io that outlines how to go about making a hexo tag that gets data from an async file read. Sometimes I might want to write a tag that gets data that is to be used to gene">
+<meta property="og:updated_time" content="2017-05-19T20:02:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Making a Hexo.io tag that gets JSON data with an httprequest">
+<meta name="twitter:description" content="I have written a post on hexo.io that outlines how to go about making a hexo tag that gets data from an async file read. Sometimes I might want to write a tag that gets data that is to be used to gene">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-hexo-tags-http-requests" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/19/hexo-tags-http-requests/" class="article-date"> Published:
+  <time datetime="2017-05-19T19:14:57.000Z" itemprop="datePublished">2017-05-19</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2017/05/19/hexo-tags-http-requests/" class="article-date"> Modified:
+  <time datetime="2017-05-19T20:02:02.000Z" itemprop="dateModified">2017-05-19</time>
+</a>
+
+    <span class="article-date">V1.2</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/hexo/">hexo</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Making a Hexo.io tag that gets JSON data with an httprequest
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>I have <a href="/2017/02/13/hexo-readfile/">written a post</a> on <a href="https://hexo.io/" target="_blank" rel="external">hexo.io</a> that outlines how to go about making a hexo tag that gets data from an async file read. Sometimes I might want to write a tag that gets data that is to be used to generate content in a page by way of an async http request.</p>
+<a id="more"></a>
+<h2 id="Is-it-a-good-Idea"><a href="#Is-it-a-good-Idea" class="headerlink" title="Is it a good Idea"></a>Is it a good Idea</h2><p>I am on the fence with this. As of late I like the idea of having separate scripts that can be used to update the actual text of my markdown files, rather than writing a hexo tag. Still I have not yet found, or developed a decent software solution for maintaining a large collection of markdown files. For now it would seem that this approach works okay.</p>
+<p>So in the scripts folder of my hexo project working tree I have a *.js file called “my-tags.js” which is where I register all the hexo tags for use in my blog posts. In there I have this code that is relevant to this process.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'https'</span>),</div><div class="line">fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line"> </div><div class="line">httpRequest = <span class="function"><span class="keyword">function</span> (<span class="params">params, postData</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> req = http.request(params, <span class="function"><span class="keyword">function</span> (<span class="params">res</span>) </span>&#123;</div><div class="line">                <span class="comment">// reject on bad status</span></div><div class="line">                <span class="keyword">if</span> (res.statusCode &lt; <span class="number">200</span> || res.statusCode &gt;= <span class="number">300</span>) &#123;</div><div class="line">                    <span class="keyword">return</span> reject(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'statusCode='</span> + res.statusCode));</div><div class="line">                &#125;</div><div class="line">                <span class="comment">// cumulate data</span></div><div class="line">                <span class="keyword">var</span> body = [];</div><div class="line">                res.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">chunk</span>) </span>&#123;</div><div class="line">                    body.push(chunk);</div><div class="line">                &#125;);</div><div class="line">                <span class="comment">// resolve on end</span></div><div class="line">                res.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">                    <span class="keyword">try</span> &#123;</div><div class="line">                        body = <span class="built_in">JSON</span>.parse(Buffer.concat(body).toString());</div><div class="line">                    &#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">                        reject(e);</div><div class="line">                    &#125;</div><div class="line">                    resolve(body);</div><div class="line">                &#125;);</div><div class="line">            &#125;);</div><div class="line">        <span class="comment">// reject on request error</span></div><div class="line">        req.on(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</div><div class="line">            <span class="comment">// This is not a "Second reject", just a different sort of failure</span></div><div class="line">            reject(err);</div><div class="line">        &#125;);</div><div class="line">        <span class="keyword">if</span> (postData) &#123;</div><div class="line">            req.write(postData);</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// IMPORTANT</span></div><div class="line">        req.end();</div><div class="line">    &#125;);</div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">// log method for this file</span></div><div class="line">log = <span class="function"><span class="keyword">function</span> (<span class="params">mess</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'**********'</span>);</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> mess != <span class="string">'string'</span>) &#123;</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'my-tags: non-string: '</span>);</div><div class="line">        <span class="built_in">console</span>.log(mess);</div><div class="line"> </div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'my-tags : '</span> + mess);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'**********'</span>);</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// async call to fixer</span></div><div class="line">hexo.extend.tag.register(<span class="string">'mytags_fixer'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">args</span>) </span>&#123;</div><div class="line"> </div><div class="line">    log(<span class="string">'making a request...'</span>);</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> httpRequest(&#123;</div><div class="line">        <span class="attr">host</span> : <span class="string">'api.fixer.io'</span>,</div><div class="line">        <span class="attr">method</span> : <span class="string">'GET'</span>,</div><div class="line">        <span class="attr">path</span> : <span class="string">'/latest'</span></div><div class="line">    &#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</div><div class="line"> </div><div class="line">        log(<span class="string">'request is good.'</span>);</div><div class="line"> </div><div class="line">        <span class="comment">// just assume the data is good and go for it, because I feel lucky.</span></div><div class="line"> </div><div class="line">        <span class="keyword">var</span> html = <span class="string">'&lt;p&gt;date of rates: '</span> + data.date + <span class="string">'&lt;\/p&gt;'</span>,</div><div class="line">        rate;</div><div class="line"> </div><div class="line">        <span class="keyword">for</span> (rate <span class="keyword">in</span> data.rates) &#123;</div><div class="line"> </div><div class="line">            html += <span class="string">'&lt;p&gt;'</span> + rate + <span class="string">' : '</span> + data.rates[rate] + <span class="string">'&lt;\/p&gt;'</span>;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> html;</div><div class="line"> </div><div class="line">    &#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</div><div class="line"> </div><div class="line">        log(<span class="string">'bad request.'</span>);</div><div class="line">        log(err);</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> <span class="string">'&lt;p&gt; Error getting data :( &lt;\/p&gt;'</span>;</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;, &#123;</div><div class="line">    <span class="attr">async</span> : <span class="literal">true</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>So I am just registering a <a href="/2017/02/04/hexo-tags/">hexo tag</a>, the only difference is that it is going to have to be an async tag because of the latency with making the request.</p>
+<h2 id="The-result-of-the-tag-use"><a href="#The-result-of-the-tag-use" class="headerlink" title="The result of the tag use"></a>The result of the tag use</h2><p>date of rates: 2017-05-19</p><p>AUD : 1.5031</p><p>BGN : 1.9558</p><p>BRL : 3.7227</p><p>CAD : 1.5169</p><p>CHF : 1.0921</p><p>CNY : 7.7015</p><p>CZK : 26.503</p><p>DKK : 7.4411</p><p>GBP : 0.85908</p><p>HKD : 8.6999</p><p>HRK : 7.439</p><p>HUF : 309.6</p><p>IDR : 14881</p><p>ILS : 4.0087</p><p>INR : 72.202</p><p>JPY : 124.35</p><p>KRW : 1251.5</p><p>MXN : 20.938</p><p>MYR : 4.831</p><p>NOK : 9.3923</p><p>NZD : 1.6227</p><p>PHP : 55.564</p><p>PLN : 4.2005</p><p>RON : 4.5602</p><p>RUB : 63.781</p><p>SEK : 9.7893</p><p>SGD : 1.5509</p><p>THB : 38.422</p><p>TRY : 4.0275</p><p>USD : 1.1179</p><p>ZAR : 14.827</p>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/05/19/hexo-tags-http-requests/" data-id="cj2w882yp0000u4v1qffmjmkf" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JSON/">JSON</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/blog/">blog</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/05/18/api-fixer-progressive-enhancement/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Progressive enhancement of static site structurer, with Hexo, and the Fixer.io JSON API</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.86px;">JSON</a> <a href="/tags/SEO/" style="font-size: 11.43px;">SEO</a> <a href="/tags/automation/" style="font-size: 15.71px;">automation</a> <a href="/tags/blog/" style="font-size: 14.29px;">blog</a> <a href="/tags/canvas/" style="font-size: 10px;">canvas</a> <a href="/tags/corejs/" style="font-size: 10px;">corejs</a> <a href="/tags/ejs/" style="font-size: 10px;">ejs</a> <a href="/tags/games/" style="font-size: 11.43px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hexo/" style="font-size: 17.14px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10px;">jimp</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/node-js/" style="font-size: 18.57px;">node.js</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/05/19/hexo-tags-http-requests/">Making a Hexo.io tag that gets JSON data with an httprequest</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/18/api-fixer-progressive-enhancement/">Progressive enhancement of static site structurer, with Hexo, and the Fixer.io JSON API</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/17/canvas-getting-started/">Getting started with canvas</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/14/nodejs-rimraf/">Deleting a collection of files recursively with rimraf</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/12/js-arrays-are-objects/">JavaScript Arrays are Objects.</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
