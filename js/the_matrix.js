@@ -81,7 +81,7 @@ var Matrix = (function () {
         w : 16,
         forPoint : function () {
 
-            var r = Math.floor(Math.random() * 255),
+            var r = Math.floor(Math.random() * 155) + 100,
             op = Math.random().toFixed(1);
 
             this.color = undefined;

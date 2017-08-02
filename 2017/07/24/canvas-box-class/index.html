@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Making and playing with a simple 2d Box class | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="The concept of a simple 2d Box class is something that I keep coming back to. Because a lot of applications have to do with manipulation of simple 2d areas on a screen, as such having a solid understa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Making and playing with a simple 2d Box class">
+<meta property="og:url" content="https://dustinpfister.github.io/2017/07/24/canvas-box-class/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="The concept of a simple 2d Box class is something that I keep coming back to. Because a lot of applications have to do with manipulation of simple 2d areas on a screen, as such having a solid understa">
+<meta property="og:updated_time" content="2017-07-24T18:51:21.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Making and playing with a simple 2d Box class">
+<meta name="twitter:description" content="The concept of a simple 2d Box class is something that I keep coming back to. Because a lot of applications have to do with manipulation of simple 2d areas on a screen, as such having a solid understa">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-canvas-box-class" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/07/24/canvas-box-class/" class="article-date"> Published:
+  <time datetime="2017-07-24T16:35:47.000Z" itemprop="datePublished">2017-07-24</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2017/07/24/canvas-box-class/" class="article-date"> Modified:
+  <time datetime="2017-07-24T18:51:21.000Z" itemprop="dateModified">2017-07-24</time>
+</a>
+
+    <span class="article-date">V1.2</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/canvas/">canvas</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Making and playing with a simple 2d Box class
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>The concept of a simple 2d Box class is something that I keep coming back to. Because a lot of applications have to do with manipulation of simple 2d areas on a screen, as such having a solid understanding of this aspect of 2d geometry is important.</p>
+<p>Taking the time to make a box class strikes me as something that is a good example of an exercise of sorts that can often progress into an interesting project of some kind. It has helped me gain a better understand of 2d geometry, and also the nature of a class.</p>
+<a id="more"></a>
+<h2 id="The-basic-box-class"><a href="#The-basic-box-class" class="headerlink" title="The basic box class"></a>The basic box class</h2><p>At a minimum a box class should have an x,y,w, and h properties that define the size, and position of the box. A more advanced Box class may have additional properties that have to do with rotation, and current delta values, but for this post I will be keeping it simple. In addition to the basic values that define a box it should also have a few methods that have to do with the manipulation of the box state.</p>
+<p>Maybe something like this:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Box = <span class="function"><span class="keyword">function</span>(<span class="params">op</span>) </span>&#123;</div><div class="line"> </div><div class="line">  op = op === <span class="literal">undefined</span> ? &#123;&#125; : op;</div><div class="line"> </div><div class="line">  <span class="comment">// current position, movement, and heading</span></div><div class="line">  <span class="keyword">this</span>.x = <span class="number">50</span> || op.x; <span class="comment">// x and y position</span></div><div class="line">  <span class="keyword">this</span>.y = <span class="number">50</span> || op.y;</div><div class="line"> </div><div class="line">  <span class="comment">// with and height</span></div><div class="line">  <span class="keyword">this</span>.w = <span class="number">64</span> || op.w;</div><div class="line">  <span class="keyword">this</span>.h = <span class="number">64</span> || op.h;</div><div class="line">  </div><div class="line">  <span class="keyword">this</span>.fillColor = <span class="string">'#ffffff'</span> || op.fillColor;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// move by heading and distance from present state</span></div><div class="line">Box.prototype.moveHD = <span class="function"><span class="keyword">function</span>(<span class="params">heading, distance</span>)</span>&#123;</div><div class="line"> </div><div class="line">    heading = heading || <span class="number">0</span>;</div><div class="line">    distance = distance || <span class="number">0</span>;</div><div class="line">    </div><div class="line">    <span class="keyword">this</span>.x += <span class="built_in">Math</span>.cos(heading) * distance;</div><div class="line">    <span class="keyword">this</span>.y += <span class="built_in">Math</span>.sin(heading) * distance;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// draw the box</span></div><div class="line">Box.prototype.draw = <span class="function"><span class="keyword">function</span>(<span class="params">ctx</span>) </span>&#123;</div><div class="line"> </div><div class="line">  ctx.fillStyle = <span class="keyword">this</span>.fillColor;</div><div class="line">  ctx.fillRect(<span class="keyword">this</span>.x, <span class="keyword">this</span>.y, <span class="keyword">this</span>.w, <span class="keyword">this</span>.h);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="The-moveHD-method"><a href="#The-moveHD-method" class="headerlink" title="The moveHD method"></a>The moveHD method</h2><p>So when it comes to just changing the position of the box there are a great many different ways to go about doing so. Because this is just 2d, any method that changes the position of the box is going to have some kind of impact on the x, and y properties of the box class instance.</p>
+<p>My moveHD method moves the box by allowing me to pass a heading in radians, and a distance from that point. </p>
+<h2 id="Other-movement-method-ideas"><a href="#Other-movement-method-ideas" class="headerlink" title="Other movement method ideas."></a>Other movement method ideas.</h2><p>Because I am taking the time to write my own box class, I can add whatever methods I want to the Class when it comes to changing the box position. I could for example add additional properties to the class such as delta values that store the current rate of change for x that is to be updated by calling an update method.</p>
+<h2 id="The-simple-canvas-demo-app"><a href="#The-simple-canvas-demo-app" class="headerlink" title="The simple canvas demo app"></a>The simple canvas demo app</h2><p>In <a href="/2017/05/17/canvas-getting-started/">the first post</a> that I have made on html5 canvas I have outlined a simple demo app that can be used to get started with a vanilla js canvas project. All my canvas projects end up having at least a main app loop method, a draw method, and some kind of display object(s) that are displayed in the canvas. It also typically contains some kind of way to change the state of what is being displayed in the canvas by way of either an update method, or event handlers.</p>
+<p>I will not go to nuts for this post, I’ll save that for another one in this <a href="/categories/canvas/">canvas collection</a> of mine that I think I will like to develop more. So for not, yes I will just be moving a box across the screen. Still even to do something as simple as that, I will be needing a basic app structure.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// create and inject a canvas</span></div><div class="line">    <span class="keyword">var</span> canvas = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>),</div><div class="line">      ctx = canvas.getContext(<span class="string">'2d'</span>),</div><div class="line"> </div><div class="line">      <span class="comment">// make a new instance of my box class</span></div><div class="line">      bx = <span class="keyword">new</span> Box(),</div><div class="line">      heading = <span class="number">0</span>,</div><div class="line">      </div><div class="line">      setup = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// append to body</span></div><div class="line">        <span class="built_in">document</span>.body.appendChild(canvas);</div><div class="line"> </div><div class="line">        <span class="comment">// set actual matrix size of the canvas</span></div><div class="line">        canvas.width = <span class="number">320</span>;</div><div class="line">        canvas.height = <span class="number">240</span>;</div><div class="line"> </div><div class="line">        loop();</div><div class="line">      &#125;,</div><div class="line"> </div><div class="line">      <span class="comment">// the single draw function</span></div><div class="line">      draw = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// draw a cirlce</span></div><div class="line">        ctx.strokeStyle = <span class="string">'#ffffff'</span>;</div><div class="line"></div><div class="line">       <span class="comment">// draw the current state of the Box class instnace to the context</span></div><div class="line">        bx.draw(ctx);</div><div class="line"> </div><div class="line">      &#125;,</div><div class="line"> </div><div class="line">      <span class="comment">// clear screen</span></div><div class="line">      cls = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// default the canvas to a solid back background</span></div><div class="line">        ctx.fillStyle = <span class="string">'#000000'</span>;</div><div class="line">        ctx.fillRect(<span class="number">0</span>, <span class="number">0</span>, canvas.width, canvas.height);</div><div class="line"> </div><div class="line">      &#125;,</div><div class="line"> </div><div class="line">      <span class="comment">// the loop</span></div><div class="line">      loop = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        requestAnimationFrame(loop);</div><div class="line">        </div><div class="line">        <span class="comment">// use my Box.moveHD method</span></div><div class="line">        bx.moveHD(<span class="number">0</span>,<span class="number">1</span>);</div><div class="line">        </div><div class="line">        <span class="comment">// some basic rules for the box</span></div><div class="line">        <span class="keyword">if</span>(bx.x &gt;= canvas.width)&#123;</div><div class="line">        </div><div class="line">           bx.x = bx.x % canvas.width;</div><div class="line">        </div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        cls();</div><div class="line">        draw();</div><div class="line"> </div><div class="line">      &#125;;</div><div class="line"> </div><div class="line">    setup();</div><div class="line"> </div><div class="line">  &#125;</div><div class="line">  ());</div></pre></td></tr></table></figure>
+<h2 id="Having-some-fun"><a href="#Having-some-fun" class="headerlink" title="Having some fun"></a>Having some fun</h2><p>So now that I have <a href="https://jsfiddle.net/dustinpfister/sdbcLk94/" target="_blank" rel="external">the basic idea working in a jsfiddle</a> maybe I should start doing something fun like making a random heading change on every app loop tick.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// random heading change</span></div><div class="line">heading += (<span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">6</span>) - <span class="number">3</span>) * deg;</div><div class="line"> </div><div class="line"><span class="comment">// use my Box.moveHD method</span></div><div class="line">bx.moveHD(heading, <span class="number">2</span>);</div></pre></td></tr></table></figure>
+<p><div id="app_1" class="blog_app"><br></div></p>
+<script>
+
+var Box = function(op) {
+
+  op = op === undefined ? {} : op;
+
+  // current position, movement, and heading
+  this.x = 100 || op.x; // x and y position
+  this.y = 50 || op.y;
+
+  // with and height
+  this.w = 64 || op.w;
+  this.h = 64 || op.h;
+
+  this.fillColor = '#ffffff' || op.fillColor;
+
+};
+
+// move by heading and distance from present state
+Box.prototype.moveHD = function(heading, distance) {
+
+  heading = heading || 0;
+  distance = distance || 0;
+
+  this.x += Math.cos(heading) * distance;
+  this.y += Math.sin(heading) * distance;
+
+};
+
+// draw the box
+Box.prototype.draw = function(ctx) {
+
+  ctx.fillStyle = this.fillColor;
+  ctx.fillRect(this.x, this.y, this.w, this.h);
+
+};
+
+(function() {
+
+    // create and inject a canvas
+    var canvas = document.createElement('canvas'),
+      ctx = canvas.getContext('2d'),
+
+      bx = new Box(),
+
+      setup = function() {
+
+        // append to body
+        document.getElementById('app_1').appendChild(canvas);
+
+        // set actual matrix size of the canvas
+        canvas.width = 320;
+        canvas.height = 240;
+
+        loop();
+      },
+
+
+      heading = 0,
+      deg = Math.PI / 180,
+      update = function() {
+
+       // random heading change
+        heading +=  (Math.floor(Math.random() * 6) - 3) * deg;
+
+        // use my Box.moveHD method
+        bx.moveHD(heading, 2);
+
+        // some basic rules for the box
+        if (bx.x < 0 - bx.w) {
+
+          bx.x = canvas.width - Math.abs(bx.x) % canvas.width + bx.w;
+
+        }
+
+        if (bx.x > canvas.width) {
+
+          bx.x = bx.x % canvas.width - bx.w;
+
+        }
+
+        if (bx.y < 0 - bx.h) {
+
+          bx.y = canvas.height - Math.abs(bx.y) % canvas.height + bx.h;
+
+        }
+
+        if (bx.y > canvas.height) {
+
+          bx.y = bx.y % canvas.height - bx.h;
+
+        }
+
+      },
+
+      // the single draw function
+      draw = function() {
+
+        // draw a cirlce
+        ctx.strokeStyle = '#ffffff';
+
+        // draw the current state of the Box class instnace to the context
+        bx.draw(ctx);
+
+      },
+
+      // clear screen
+      cls = function() {
+
+        // default the canvas to a solid back background
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      },
+
+      // the loop
+      loop = function() {
+
+        requestAnimationFrame(loop);
+
+        update();
+
+        cls();
+        draw();
+
+      };
+
+    setup();
+
+  }
+  ());
+
+</script>
+
+<p>Maybe not the best example of where things are heading but you get the idea, from here on out it’s all about just paying around with things.</p>
+<h2 id="Where-to-go-from-here"><a href="#Where-to-go-from-here" class="headerlink" title="Where to go from here."></a>Where to go from here.</h2><p>It’s all about the project that I have in mind. Thats what will determine what kind of additional properties and methods I will be adding to the class. With some projects I will need to add sprites, or write methods that will allow for more advanced movement. Whatever the project may be, coming back to the simple old box class is often a good starting point.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/07/24/canvas-box-class/" data-id="cj5ic4yp4003li0v1oxf9v7l1" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/canvas/">canvas</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/08/02/nodejs-js-yaml/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Using yaml in place of JSON in node.js with js-yaml
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/06/25/blog-what-to-write-about/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">What kind of content to write about for a javaScript blog.</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 13.33px;">JSON</a> <a href="/tags/SEO/" style="font-size: 11.67px;">SEO</a> <a href="/tags/automation/" style="font-size: 15px;">automation</a> <a href="/tags/blog/" style="font-size: 15px;">blog</a> <a href="/tags/canvas/" style="font-size: 11.67px;">canvas</a> <a href="/tags/corejs/" style="font-size: 10px;">corejs</a> <a href="/tags/discovery/" style="font-size: 11.67px;">discovery</a> <a href="/tags/ejs/" style="font-size: 10px;">ejs</a> <a href="/tags/games/" style="font-size: 11.67px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hexo/" style="font-size: 16.67px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10px;">jimp</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/node-js/" style="font-size: 18.33px;">node.js</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/08/02/nodejs-js-yaml/">Using yaml in place of JSON in node.js with js-yaml</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/24/canvas-box-class/">Making and playing with a simple 2d Box class</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/25/blog-what-to-write-about/">What kind of content to write about for a javaScript blog.</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/31/nodejs-chalk/">How to style terminal output text with node.js using chalk</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/29/nodejs-big-integer/">Woking with very big numbers in node.js with big-integer</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

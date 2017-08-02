@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Using yaml in place of JSON in node.js with js-yaml | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="YAML is a recursive acronym for YAML Ain’t Markup Language, that is used for data serialization. Often I see it used for configuration files in place of JSON (JavaScript Object Notation), as a means o">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Using yaml in place of JSON in node.js with js-yaml">
+<meta property="og:url" content="https://dustinpfister.github.io/2017/08/02/nodejs-js-yaml/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="YAML is a recursive acronym for YAML Ain’t Markup Language, that is used for data serialization. Often I see it used for configuration files in place of JSON (JavaScript Object Notation), as a means o">
+<meta property="og:updated_time" content="2017-08-02T19:29:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Using yaml in place of JSON in node.js with js-yaml">
+<meta name="twitter:description" content="YAML is a recursive acronym for YAML Ain’t Markup Language, that is used for data serialization. Often I see it used for configuration files in place of JSON (JavaScript Object Notation), as a means o">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-js-yaml" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/08/02/nodejs-js-yaml/" class="article-date"> Published:
+  <time datetime="2017-08-02T19:23:49.000Z" itemprop="datePublished">2017-08-02</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2017/08/02/nodejs-js-yaml/" class="article-date"> Modified:
+  <time datetime="2017-08-02T19:29:47.000Z" itemprop="dateModified">2017-08-02</time>
+</a>
+
+    <span class="article-date">V1.1</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Using yaml in place of JSON in node.js with js-yaml
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p><a href="http://yaml.org/" target="_blank" rel="external">YAML</a> is a recursive acronym for YAML Ain’t Markup Language, that is used for data serialization. Often I see it used for configuration files in place of JSON (JavaScript Object Notation), as a means of soft coding settings. This is the case in <a href="https://hexo.io" target="_blank" rel="external">hexo</a>, for the purpose of configuring settings for hexo itself, as well as the theme that is being used.</p>
+<a id="more"></a>
+<h2 id="Why-use-YAML-over-JSON"><a href="#Why-use-YAML-over-JSON" class="headerlink" title="Why use YAML over JSON?"></a>Why use YAML over JSON?</h2><p>In most cases JSON works just fine, but YAML is used in a wider range of programing environments outside that of javaScript. In addition YAML allows for additional features such as comments. As such it is sometimes used as an alternative to JSON that comes up now and then in node.js projects.</p>
+<p>This post will help you get started with js-yaml as a means of parsing a YAML file into an object that you can then use to soft code you node.js application.</p>
+<h2 id="YAML-file-example"><a href="#YAML-file-example" class="headerlink" title="YAML file example"></a>YAML file example</h2><p>First start with a basic YAML file example such as this.</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Set a username here</span></div><div class="line"><span class="attr">userName:</span> dustin</div><div class="line"> </div><div class="line"><span class="comment"># some config config options</span></div><div class="line">options :</div><div class="line">   displayTime : <span class="literal">true</span></div><div class="line">   displayGreating : <span class="literal">true</span></div></pre></td></tr></table></figure>
+<p>As you can see you can use the number sign to indicate a comment. I am also defining a object called options by just defining some more properties rather than giving a value.</p>
+<h2 id="installing-js-yaml"><a href="#installing-js-yaml" class="headerlink" title="installing js-yaml"></a>installing js-yaml</h2><p>Now that you have an example file to work with you will need a yaml parser to parse the yaml file into a javascript object that can be worked with in the project.</p>
+<p>So start a new node.js test project cd into the folder of it as usual and the add js-yaml to the project.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install js-yaml --save</div></pre></td></tr></table></figure>
+<h2 id="Parsing-YAML-for-use-in-a-node-project"><a href="#Parsing-YAML-for-use-in-a-node-project" class="headerlink" title="Parsing YAML for use in a node project."></a>Parsing YAML for use in a node project.</h2><p>Once you have js-yaml in your node_modules folder working with it is pretty straight forward.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> yaml = <span class="built_in">require</span>(<span class="string">'js-yaml'</span>),</div><div class="line">fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line">fs.readFile(<span class="string">'./config.yml'</span>, <span class="string">'utf8'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e, data</span>) </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">var</span> file;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (e) &#123;</div><div class="line"></div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'config.yml not found.'</span>);</div><div class="line"></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line"></div><div class="line">        file = yaml.safeLoad(data, <span class="string">'utf8'</span>);</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (file.options[<span class="string">'displayGreating'</span>]) &#123;</div><div class="line"></div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'hello '</span> + file.userName);</div><div class="line"></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (file.options[<span class="string">'displayTime'</span>]) &#123;</div><div class="line"></div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'the time is: '</span> + <span class="keyword">new</span> <span class="built_in">Date</span>());</div><div class="line"></div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="Further-reading"><a href="#Further-reading" class="headerlink" title="Further reading"></a>Further reading</h2><p>In this post I will not be going over the full scope of YAML, there are some <a href="http://www.yaml.org/start.html" target="_blank" rel="external">good resources</a> that do just that. This is just another quick post of mine on one of the many <a href="/categories/node-js/">node.js</a> packages I have fiddled around with.</p>
+<!-- notes 
+
+http://stackoverflow.com/questions/1726802/what-is-the-difference-between-yaml-and-json-when-to-prefer-one-over-the-other
+
+
+-->
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/08/02/nodejs-js-yaml/" data-id="cj5venhxp0000esv1wkstabzx" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JSON/">JSON</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/07/24/canvas-box-class/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Making and playing with a simple 2d Box class</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 13.33px;">JSON</a> <a href="/tags/SEO/" style="font-size: 11.67px;">SEO</a> <a href="/tags/automation/" style="font-size: 15px;">automation</a> <a href="/tags/blog/" style="font-size: 15px;">blog</a> <a href="/tags/canvas/" style="font-size: 11.67px;">canvas</a> <a href="/tags/corejs/" style="font-size: 10px;">corejs</a> <a href="/tags/discovery/" style="font-size: 11.67px;">discovery</a> <a href="/tags/ejs/" style="font-size: 10px;">ejs</a> <a href="/tags/games/" style="font-size: 11.67px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hexo/" style="font-size: 16.67px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10px;">jimp</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/node-js/" style="font-size: 18.33px;">node.js</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/08/02/nodejs-js-yaml/">Using yaml in place of JSON in node.js with js-yaml</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/24/canvas-box-class/">Making and playing with a simple 2d Box class</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/25/blog-what-to-write-about/">What kind of content to write about for a javaScript blog.</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/31/nodejs-chalk/">How to style terminal output text with node.js using chalk</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/29/nodejs-big-integer/">Woking with very big numbers in node.js with big-integer</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
