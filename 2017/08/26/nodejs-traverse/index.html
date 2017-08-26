@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Traversing over an object in node.js | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Sometimes I get into a situation in which I may want to loop over all the nodes of a given object. That is I want to traverse, or loop over an object an preform a certain action with certain node valu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Traversing over an object in node.js">
+<meta property="og:url" content="https://dustinpfister.github.io/2017/08/26/nodejs-traverse/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="Sometimes I get into a situation in which I may want to loop over all the nodes of a given object. That is I want to traverse, or loop over an object an preform a certain action with certain node valu">
+<meta property="og:updated_time" content="2017-08-26T19:16:49.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Traversing over an object in node.js">
+<meta name="twitter:description" content="Sometimes I get into a situation in which I may want to loop over all the nodes of a given object. That is I want to traverse, or loop over an object an preform a certain action with certain node valu">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-traverse" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/08/26/nodejs-traverse/" class="article-date"> Published:
+  <time datetime="2017-08-26T19:16:49.000Z" itemprop="datePublished">2017-08-26</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2017/08/26/nodejs-traverse/" class="article-date"> Modified:
+  <time datetime="2017-08-26T19:16:49.000Z" itemprop="dateModified">2017-08-26</time>
+</a>
+
+    <span class="article-date">V1</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Traversing over an object in node.js
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>Sometimes I get into a situation in which I may want to loop over all the nodes of a given object. That is I want to traverse, or loop over an object an preform a certain action with certain node values. I could slap together my own solution, maybe starting with a for in loop that I use in a method that is called recursively. However a much better option would likely be to just go ahead and use <a href="https://www.npmjs.com/package/traverse" target="_blank" rel="external">traverse</a>.</p>
+<a id="more"></a>
+<h2 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h2><p>You know the deal, unless you don’t in which case.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install traverse</div></pre></td></tr></table></figure>
+<h2 id="The-Object"><a href="#The-Object" class="headerlink" title="The Object"></a>The Object</h2><p>So just for the sake of this post I will be starting with the following code for each example.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// to use transverse</span></div><div class="line"><span class="keyword">var</span> traverse = <span class="built_in">require</span>(<span class="string">'traverse'</span>),</div><div class="line"> </div><div class="line"><span class="comment">// the object to walk</span></div><div class="line">foo = &#123;</div><div class="line"> </div><div class="line">    <span class="attr">bar</span> : <span class="string">'foo'</span>,</div><div class="line">    <span class="attr">barfoo</span> : <span class="literal">false</span>,</div><div class="line"> </div><div class="line">    <span class="attr">foobar</span> : &#123;</div><div class="line"> </div><div class="line">        <span class="attr">bar</span> : <span class="string">'foo'</span>,</div><div class="line">        <span class="attr">foo</span> : &#123;</div><div class="line"> </div><div class="line">            <span class="attr">b</span> : <span class="number">41</span>,</div><div class="line">            <span class="attr">a</span> : <span class="number">43</span>,</div><div class="line">            <span class="attr">r</span> : <span class="number">42</span></div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>Each following example will be code that is written after the above code. Notice that the object has a nested object within yet another nested object, in addition one of each primitive is used as a key value (String, Boolen, and Number). Although this is a silly example object, in the wild I come across objects like this all the time, and sometimes I would like to walk over them for some reason.</p>
+<h2 id="forEach-example"><a href="#forEach-example" class="headerlink" title="forEach example"></a>forEach example</h2><p>So I thought I would start off with a simple forEach example.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// walk the object with forEach</span></div><div class="line">traverse(foo).forEach(<span class="function"><span class="keyword">function</span> (<span class="params">node</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (node === <span class="number">42</span>) &#123;</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'The anwser has been found!'</span>);</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'forEach aurgs'</span>);</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'node: '</span> + node); <span class="comment">// the answer</span></div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'path: '</span> + <span class="keyword">this</span>.path.join(<span class="string">'/'</span>)); <span class="comment">// the way to the answer</span></div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>So this works a whole lot like Array.forEach in that it loops over each key value pare of the Object. As you would expect it does not work just the same way because I am looping over just a plain old object rather than an instance of Array. Also via the use of the this keyword I have access to a whole lot of helpful properties when walking over the objest such as this.path, also this.node can be used as an alternative to the node argument.</p>
+<h2 id="Paths-example"><a href="#Paths-example" class="headerlink" title="Paths example"></a>Paths example</h2><p>So there are a lot of useful methods in this dependency that help with what comes to mind when dealing with this certain aspect of node.js development. The Path method for example will return an array of all possible paths in the object which I am sure will come in handy now and then.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> trav = traverse(foo),</div><div class="line"> </div><div class="line"><span class="comment">// grab an array of all paths in the objest</span></div><div class="line">paths = trav.paths();</div><div class="line"> </div><div class="line"><span class="comment">// looping over the array</span></div><div class="line">paths.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">path</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// a path is an array of key values to a certain path</span></div><div class="line">    <span class="built_in">console</span>.log(path);</div><div class="line"> </div><div class="line">    <span class="comment">// the traverse get method excepts a path array</span></div><div class="line">    <span class="built_in">console</span>.log(trav.get(path));</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="reduce-example"><a href="#reduce-example" class="headerlink" title="reduce example"></a>reduce example</h2><p>Okay now for an example using the reduce method, this should be fun.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> trav = traverse(foo),</div><div class="line"> </div><div class="line">obj = trav.reduce(<span class="function"><span class="keyword">function</span> (<span class="params">acc, node</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> ref = acc,</div><div class="line">        self = <span class="keyword">this</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// if the node is a number</span></div><div class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> node === <span class="string">'number'</span>) &#123;</div><div class="line"> </div><div class="line">            <span class="comment">// go over the key path</span></div><div class="line">            <span class="keyword">this</span>.path.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">key, index</span>) </span>&#123;</div><div class="line"> </div><div class="line">                <span class="comment">// are we at the end of the key path?</span></div><div class="line">                <span class="keyword">if</span> (index === self.path.length - <span class="number">1</span>) &#123;</div><div class="line"> </div><div class="line">                    <span class="comment">// then et the node value</span></div><div class="line">                    ref[key] = node;</div><div class="line"> </div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">                    <span class="comment">// else create a new object if we need one</span></div><div class="line">                    <span class="keyword">if</span> (ref[key] === <span class="literal">undefined</span>) &#123;</div><div class="line"> </div><div class="line">                        ref[key] = &#123;&#125;;</div><div class="line"> </div><div class="line">                    &#125;</div><div class="line"> </div><div class="line">                    <span class="comment">// change the ref to the next object in the path</span></div><div class="line">                    ref = ref[key];</div><div class="line"> </div><div class="line">                &#125;</div><div class="line"> </div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">// return the new object being made with reduce</span></div><div class="line">        <span class="keyword">return</span> acc;</div><div class="line"> </div><div class="line">    &#125;, &#123;&#125;);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(obj); <span class="comment">// &#123; foobar: &#123; foo: &#123; b: 41, a: 43, r: 42 &#125; &#125; &#125;</span></div></pre></td></tr></table></figure>
+<p>Reduce can be used to return a new object that is constructed during the process of looping over the contents on the object. Here I am creating a new object that only has the structure of my foo object that contains keys that have numbers.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/08/26/nodejs-traverse/" data-id="cj6toui3m0000v0v1g549jv9g" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/08/18/nodejs-jsmin/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Compressing javascript files with jsmin</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 14.29px;">JSON</a> <a href="/tags/SEO/" style="font-size: 11.43px;">SEO</a> <a href="/tags/animation/" style="font-size: 10px;">animation</a> <a href="/tags/automation/" style="font-size: 15.71px;">automation</a> <a href="/tags/blog/" style="font-size: 15.71px;">blog</a> <a href="/tags/canvas/" style="font-size: 12.86px;">canvas</a> <a href="/tags/corejs/" style="font-size: 10px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 12.86px;">discovery</a> <a href="/tags/ejs/" style="font-size: 10px;">ejs</a> <a href="/tags/games/" style="font-size: 11.43px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hexo/" style="font-size: 17.14px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10px;">jimp</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/node-js/" style="font-size: 18.57px;">node.js</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/08/26/nodejs-traverse/">Traversing over an object in node.js</a>
+          </li>
+        
+          <li>
+            <a href="/2017/08/18/nodejs-jsmin/">Compressing javascript files with jsmin</a>
+          </li>
+        
+          <li>
+            <a href="/2017/08/09/discovery-deterministic-system-getting-started/">Getting started with deterministic systems using javaScript and canvas.</a>
+          </li>
+        
+          <li>
+            <a href="/2017/08/02/nodejs-js-yaml/">Using yaml in place of JSON in node.js with js-yaml</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/24/canvas-box-class/">Making and playing with a simple 2d Box class</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
