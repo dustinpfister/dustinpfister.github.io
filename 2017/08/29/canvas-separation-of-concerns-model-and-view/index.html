@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Separation of concerns, Model and View with HTNML 5 Canvas | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="In my first getting started post on html 5 canvas I made a simple example on how to quickly throw together a canvas project in a way in which I usually do so. If it is something stupid simple things l">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Separation of concerns, Model and View with HTNML 5 Canvas">
+<meta property="og:url" content="https://dustinpfister.github.io/2017/08/29/canvas-separation-of-concerns-model-and-view/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="In my first getting started post on html 5 canvas I made a simple example on how to quickly throw together a canvas project in a way in which I usually do so. If it is something stupid simple things l">
+<meta property="og:updated_time" content="2017-08-30T20:33:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Separation of concerns, Model and View with HTNML 5 Canvas">
+<meta name="twitter:description" content="In my first getting started post on html 5 canvas I made a simple example on how to quickly throw together a canvas project in a way in which I usually do so. If it is something stupid simple things l">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-canvas-separation-of-concerns-model-and-view" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/08/29/canvas-separation-of-concerns-model-and-view/" class="article-date"> Published:
+  <time datetime="2017-08-29T14:23:00.000Z" itemprop="datePublished">2017-08-29</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2017/08/29/canvas-separation-of-concerns-model-and-view/" class="article-date"> Modified:
+  <time datetime="2017-08-30T20:33:10.000Z" itemprop="dateModified">2017-08-30</time>
+</a>
+
+    <span class="article-date">V1.2</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/canvas/">canvas</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Separation of concerns, Model and View with HTNML 5 Canvas
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>In my first <a href="/2017/05/17/canvas-getting-started/">getting started post</a> on html 5 canvas I made a simple example on how to quickly throw together a canvas project in a way in which I usually do so. If it is something stupid simple things like <a href="https://en.wikipedia.org/wiki/Separation_of_concerns" target="_blank" rel="external">separation of concerns</a> does not strike me as something that is that important. However if I do start to put together something that is a little advanced, it does become important as a means of avoiding writing the dreaded spaghetti code.</p>
+<a id="more"></a>
+<p>The main thing of concern it seems is to try to find a way to keep a model independent from a view. That is that<br>you have javaScript that has to do with the state, and manipulation of a model, and a completely separate chuck of JavaScript that renders that model in some way, and then typically some code that ties everything together.</p>
+<p>So I will put together a <a href="https://jsfiddle.net/dustinpfister/mf215hrn/4/" target="_blank" rel="external">jsfiddle</a> and talk about it in detail here.</p>
+<h2 id="The-Model"><a href="#The-Model" class="headerlink" title="The Model"></a>The Model</h2><p>First off is the model this is what makes up the current state of data, and it also might contain some additional code that has to do with it’s storage, retrieval, and manipulation. Yet again maybe not, maybe you might break things down further. The idea here though is to try to break things down into independent parts that may or may not depend on each other.</p>
+<p>In this post I will just work with a hacked over version of what I was dealing with in my first canvas post, that looks like this:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// the object to draw</span></div><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line"> </div><div class="line">  <span class="attr">x</span>: <span class="number">0</span>,</div><div class="line">  <span class="attr">y</span>: <span class="number">0</span>,</div><div class="line">  <span class="attr">radius</span>: <span class="number">50</span>,</div><div class="line">  <span class="attr">frame</span>: <span class="number">0</span>,</div><div class="line">  <span class="attr">maxFrame</span>: <span class="number">100</span>,</div><div class="line">  <span class="attr">per</span> : <span class="number">0</span>,</div><div class="line">  <span class="attr">bias</span> : <span class="number">0</span>,</div><div class="line">  <span class="attr">update</span>: <span class="function"><span class="keyword">function</span>(<span class="params">w, h</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">this</span>.per = <span class="keyword">this</span>.frame / <span class="keyword">this</span>.maxFrame;</div><div class="line">    <span class="keyword">this</span>.bias = <span class="number">1</span> - <span class="built_in">Math</span>.abs(<span class="keyword">this</span>.per - <span class="number">.5</span>) / <span class="number">.5</span>;</div><div class="line"> </div><div class="line">    w = w || <span class="number">640</span>;</div><div class="line">    h = h || <span class="number">480</span>;</div><div class="line"> </div><div class="line">    <span class="keyword">this</span>.x = w / <span class="number">2</span> - <span class="number">100</span> + <span class="number">200</span> * <span class="keyword">this</span>.bias;</div><div class="line">    <span class="keyword">this</span>.y = h / <span class="number">2</span>;</div><div class="line"> </div><div class="line">    <span class="comment">// step frame</span></div><div class="line">    <span class="keyword">this</span>.frame += <span class="number">1</span>;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.frame &gt;= <span class="keyword">this</span>.maxFrame) &#123;</div><div class="line"> </div><div class="line">      <span class="keyword">this</span>.frame = <span class="number">0</span>;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">  &#125;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>In the old post this was part of a whole project all warped together in a signal <a href="https://en.wikipedia.org/wiki/Immediately-invoked_function_expression" target="_blank" rel="external">immediately invoked function expression (IIFE) </a>. However now it is pulled out of that, and is now it’s own little module. References to the canvas have been removed, and replaced with arguments, as doing so is more in line with separating concerns.</p>
+<p>So obj will serve as the model, it’s job is to just simply serve as the storage of the current state of the model, and provide a method that has to do with the manipulation of that model.</p>
+<h2 id="The-View-s"><a href="#The-View-s" class="headerlink" title="The View(s)"></a>The View(s)</h2><p>When you have a given model there is more than one way you can often render data from that model. Yes I can just make a view that displays the current state of the circle, and nothing else. However I can also write a view that displays the current values of all variables concerned, display just a progress bar of two variables concerned, or a whole bunch of things at once.</p>
+<p>As such something like this comes to mind.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj_canvas = &#123;</div><div class="line"> </div><div class="line">  <span class="comment">// draw the object itself</span></div><div class="line">  draw_obj: <span class="function"><span class="keyword">function</span>(<span class="params">obj, canvas, ctx</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// draw a cirlce</span></div><div class="line">    ctx.strokeStyle = <span class="string">'#ffffff'</span>;</div><div class="line">    ctx.beginPath();</div><div class="line">    ctx.arc(</div><div class="line">      obj.x, <span class="comment">// x</span></div><div class="line">      obj.y, <span class="comment">// y</span></div><div class="line">      obj.radius, <span class="comment">// radius</span></div><div class="line">      <span class="number">0</span>, <span class="comment">// start radian</span></div><div class="line">      <span class="built_in">Math</span>.PI * <span class="number">2</span> <span class="comment">// end radian</span></div><div class="line">    );</div><div class="line">    ctx.stroke();</div><div class="line"> </div><div class="line">  &#125;,</div><div class="line"> </div><div class="line">  <span class="comment">// draw a progress and bias bars</span></div><div class="line">  draw_pb: <span class="function"><span class="keyword">function</span>(<span class="params">obj, canvas, ctx,x,y,w,h</span>) </span>&#123;</div><div class="line"> </div><div class="line">      x = x || <span class="number">0</span>;</div><div class="line">      y = y || canvas.height - <span class="number">10</span>;</div><div class="line">      w = w || canvas.width;</div><div class="line">      h = h || <span class="number">10</span>;</div><div class="line"> </div><div class="line">      ctx.fillStyle = <span class="string">'#000000'</span>;</div><div class="line">      ctx.fillRect(x,y,w,h);</div><div class="line">      ctx.fillStyle = <span class="string">'#0000ff'</span>;</div><div class="line"> </div><div class="line">      <span class="comment">// progress</span></div><div class="line">      ctx.fillRect(x,y,w* (obj.frame / obj.maxFrame),h/<span class="number">2</span>);</div><div class="line"> </div><div class="line">      <span class="comment">// bias</span></div><div class="line">      ctx.fillStyle = <span class="string">'#ff0000'</span>;</div><div class="line">      ctx.fillRect(x,y+h/<span class="number">2</span>,w* obj.bias,h/<span class="number">2</span>);</div><div class="line"> </div><div class="line">  &#125;,</div><div class="line"> </div><div class="line">  <span class="comment">// draw info about the object</span></div><div class="line">  draw_info: <span class="function"><span class="keyword">function</span>(<span class="params">obj, canvas, ctx,fs</span>) </span>&#123;</div><div class="line"> </div><div class="line">    fs = fs || <span class="number">15</span>;</div><div class="line"> </div><div class="line">    ctx.strokeStyle = <span class="string">'#00ff00'</span>;</div><div class="line">    ctx.textBaseline = <span class="string">'top'</span>;</div><div class="line">    ctx.font = fs+<span class="string">'px arial'</span>;</div><div class="line">    ctx.strokeText(<span class="string">'obj info: '</span>,<span class="number">10</span>,fs*<span class="number">1</span>);</div><div class="line">    ctx.strokeText(<span class="string">'obj pos: ('</span> + <span class="built_in">Math</span>.floor(obj.x) + <span class="string">','</span> + <span class="built_in">Math</span>.floor(obj.y)+<span class="string">')'</span>,<span class="number">10</span>,fs*<span class="number">2</span>);</div><div class="line">    ctx.strokeText(<span class="string">'frame: '</span> + obj.frame + <span class="string">'/'</span> +obj.maxFrame,<span class="number">10</span>,fs*<span class="number">3</span>);</div><div class="line"> </div><div class="line">  &#125;,</div><div class="line"> </div><div class="line">  <span class="comment">// clear screen</span></div><div class="line">  cls: <span class="function"><span class="keyword">function</span>(<span class="params">canvas, ctx</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// default the canvas to a solid back background</span></div><div class="line">    ctx.fillStyle = <span class="string">'#000000'</span>;</div><div class="line">    ctx.fillRect(<span class="number">0</span>, <span class="number">0</span>, canvas.width, canvas.height);</div><div class="line"> </div><div class="line">  &#125;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>This is just a simple example of what I mean, but maybe a better example would have to do with something 3D. When it comes to 3D objects there is the way that we see them, and the way that they actually exist in space. A cube that is the size of yourself on all sides will appear smaller as it moves away from you, but it does not actually get smaller now does it? Software that has to do with the size, position, and manipulation of the cube can be thought of as a Model, while software that has to do with the display of that cube can be though of as a view. Yes you can do what is typical with the view, and make it so it gets smaller as it moves away from a camera, but you don’t have to, you can design your view any way you want, you can make (or use) more than one with the same Model if you want.</p>
+<h2 id="The-App"><a href="#The-App" class="headerlink" title="The App"></a>The App</h2><p>So for this post I will just be covering the Model and having at least one or more Views, but I will not be getting into Controllers. I am not going there, at least not today. Still I will need something that fills a void when it comes to how this all ties together. So here it is:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// the app</span></div><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// create and inject a canvas</span></div><div class="line">    <span class="keyword">var</span> canvas = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>),</div><div class="line">      ctx = canvas.getContext(<span class="string">'2d'</span>),</div><div class="line"> </div><div class="line">      setup = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// append to body</span></div><div class="line">        <span class="built_in">document</span>.body.appendChild(canvas);</div><div class="line"> </div><div class="line">        <span class="comment">// set actual matrix size of the canvas</span></div><div class="line">        canvas.width = <span class="number">320</span>;</div><div class="line">        canvas.height = <span class="number">240</span>;</div><div class="line"> </div><div class="line">        loop();</div><div class="line">      &#125;,</div><div class="line"> </div><div class="line">      <span class="comment">// the loop</span></div><div class="line">      loop = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        requestAnimationFrame(loop);</div><div class="line"> </div><div class="line">        obj.update(canvas.width, canvas.height);</div><div class="line"> </div><div class="line">        obj_canvas.cls(canvas, ctx);</div><div class="line">        obj_canvas.draw_obj(obj, canvas, ctx);</div><div class="line">        obj_canvas.draw_info(obj, canvas, ctx);</div><div class="line">        obj_canvas.draw_pb(obj, canvas, ctx);</div><div class="line"> </div><div class="line">      &#125;;</div><div class="line"> </div><div class="line">    setup();</div><div class="line"> </div><div class="line">  &#125;</div><div class="line">  ());</div></pre></td></tr></table></figure>
+<p>So now I just have a simple loop that for now will act as a Controller in the <a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller" target="_blank" rel="external">Model View Controller (MVC)</a> software architectural pattern. Just with the View I can have more that one Controller, one that updates a model by way of user input, and another by way of some kind of AI script, but that is a whole other ball of wax.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>The goal I had in mind here was to just express the first step with writing better code when in comes to getting into making canvas projects vanilla js style. If a project is very simple it is not that important to think in modular terms, but as things start to get a little complicated, yes it is a good idea to start breaking things down.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/08/29/canvas-separation-of-concerns-model-and-view/" data-id="cj6zgu1l10000a4v1auu78u7n" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/canvas/">canvas</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/09/02/js-whats-wrong-with-modulo/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          What is wrong with javaScript Modulo?
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/08/26/nodejs-traverse/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Traversing over an object in node.js</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 14.29px;">JSON</a> <a href="/tags/SEO/" style="font-size: 11.43px;">SEO</a> <a href="/tags/animation/" style="font-size: 10px;">animation</a> <a href="/tags/automation/" style="font-size: 15.71px;">automation</a> <a href="/tags/blog/" style="font-size: 15.71px;">blog</a> <a href="/tags/canvas/" style="font-size: 14.29px;">canvas</a> <a href="/tags/corejs/" style="font-size: 11.43px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 12.86px;">discovery</a> <a href="/tags/ejs/" style="font-size: 10px;">ejs</a> <a href="/tags/games/" style="font-size: 11.43px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hexo/" style="font-size: 17.14px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10px;">jimp</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/node-js/" style="font-size: 18.57px;">node.js</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/09/02/js-whats-wrong-with-modulo/">What is wrong with javaScript Modulo?</a>
+          </li>
+        
+          <li>
+            <a href="/2017/08/29/canvas-separation-of-concerns-model-and-view/">Separation of concerns, Model and View with HTNML 5 Canvas</a>
+          </li>
+        
+          <li>
+            <a href="/2017/08/26/nodejs-traverse/">Traversing over an object in node.js</a>
+          </li>
+        
+          <li>
+            <a href="/2017/08/18/nodejs-jsmin/">Compressing javascript files with jsmin</a>
+          </li>
+        
+          <li>
+            <a href="/2017/08/09/discovery-deterministic-system-getting-started/">Getting started with deterministic systems using javaScript and canvas.</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
