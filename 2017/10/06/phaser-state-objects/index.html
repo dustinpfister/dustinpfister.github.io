@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>What to know about the state objects in phaser | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="When getting started with phaser it is important to have a certain foundational understanding of some of the core features of how phaser works, no matter what the project may be you are going to want">
+<meta property="og:type" content="article">
+<meta property="og:title" content="What to know about the state objects in phaser">
+<meta property="og:url" content="https://dustinpfister.github.io/2017/10/06/phaser-state-objects/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="When getting started with phaser it is important to have a certain foundational understanding of some of the core features of how phaser works, no matter what the project may be you are going to want">
+<meta property="og:updated_time" content="2017-10-06T12:48:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="What to know about the state objects in phaser">
+<meta name="twitter:description" content="When getting started with phaser it is important to have a certain foundational understanding of some of the core features of how phaser works, no matter what the project may be you are going to want">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-phaser-state-objects" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/10/06/phaser-state-objects/" class="article-date"> Published:
+  <time datetime="2017-10-06T12:38:00.000Z" itemprop="datePublished">2017-10-06</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2017/10/06/phaser-state-objects/" class="article-date"> Modified:
+  <time datetime="2017-10-06T12:48:26.000Z" itemprop="dateModified">2017-10-06</time>
+</a>
+
+    <span class="article-date">V1</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/phaser/">phaser</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      What to know about the state objects in phaser
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>When getting started with <a href="http://phaser.io" target="_blank" rel="external">phaser</a> it is important to have a certain foundational understanding of some of the core features of how phaser works, no matter what the project may be you are going to want to know a thing or two about State Objects.</p>
+<p>If you are new to phaser you might want to start with <a href="/2017/10/04/phaser-getting-started/">my getting started post</a>, and also there is the StateManager, and the Main Phaser.Game constructor that is of interest also.</p>
+<a id="more"></a>
+<h2 id="The-Most-basic-State-Object"><a href="#The-Most-basic-State-Object" class="headerlink" title="The Most basic State Object"></a>The Most basic State Object</h2><p>A state object can often just be a plain old object that is passed to Phaser.Game when creating an instance of that main constructor function. However it must contain at least one method with a certain key named preload, create, update or render. More about those methods later, but for now a simple State object example:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>, &#123;</div><div class="line"> </div><div class="line">        <span class="attr">create</span> : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'hello world!'</span>);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;);</div></pre></td></tr></table></figure>
+<p>Here I am passing a state object to Phaser.Game after the id of the container element. When I add a state this way it’s key is “default”, and it starts automatically. The Other method it is define one or more states with StateManager.add, in which case the above hello world, can also be written like this:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>);</div><div class="line"></div><div class="line">game.state.add(<span class="string">'default'</span>,&#123;</div><div class="line"></div><div class="line">    <span class="attr">create</span> : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'hello world!'</span>);</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;,<span class="literal">true</span>);</div></pre></td></tr></table></figure>
+<h2 id="game-state-vs-game-state-states"><a href="#game-state-vs-game-state-states" class="headerlink" title="game.state vs game.state.states"></a>game.state vs game.state.states</h2><p>Keep in mind that there is the StateManager, and then one or more State objects. As such game.state is a reference to the StateManager, and game.state.states is the collection of state objects.</p>
+<h2 id="Switching-between-states"><a href="#Switching-between-states" class="headerlink" title="Switching between states"></a>Switching between states</h2><p>When having more than one state I use game.state.start to switch between them.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>);</div><div class="line"> </div><div class="line">game.state.add(<span class="string">'foo'</span>,&#123;</div><div class="line"> </div><div class="line">        <span class="attr">create</span> : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'foo!'</span>);</div><div class="line"> </div><div class="line">            <span class="comment">// starting foo</span></div><div class="line">            game.state.start(<span class="string">'bar'</span>);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">game.state.add(<span class="string">'bar'</span>,&#123;</div><div class="line"> </div><div class="line">        <span class="attr">create</span> : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'bar!'</span>);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">game.state.start(<span class="string">'foo'</span>); <span class="comment">// foo! bar!</span></div></pre></td></tr></table></figure>
+<p>All of my states are in the game.state.states collection</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(game.state.states.foo); <span class="comment">// the foo state</span></div><div class="line"><span class="built_in">console</span>.log(game.state.states.bar); <span class="comment">// the bar state</span></div></pre></td></tr></table></figure>
+<h2 id="The-core-methods"><a href="#The-core-methods" class="headerlink" title="The core methods"></a>The core methods</h2><p>A State object must have at least one core method, lets run over them to know why.</p>
+<h3 id="preload"><a href="#preload" class="headerlink" title="preload"></a>preload</h3><p>The preload method is one of the core methods, and it is called before all other methods except init, but init is not a core method that is totally optional. So as far as the core methods of a State object are concerned it is called first.</p>
+<p>preload is useful if you want to load an asset or two before moving onto the next method. I will not cover a loader in detail in this post because that is a whole other ball of wax. But I will show a quick example of how I write what I call a Boot State.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Boot = &#123;</div><div class="line"> </div><div class="line">    <span class="attr">preload</span> : <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// load a single small assest that will</span></div><div class="line">        <span class="comment">// be used in the main loader State</span></div><div class="line">        game.load.image(<span class="string">'loadingbar'</span>, <span class="string">'/img/loadingbar.png'</span>);</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="attr">create</span> : <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// now that the loadingbar asset is loaded</span></div><div class="line">        <span class="comment">// I can start my actual load state</span></div><div class="line">        game.state.start(<span class="string">'load'</span>);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>The Boot State is where I am just starting things up, and have not even started the loader yet.</p>
+<h3 id="create"><a href="#create" class="headerlink" title="create"></a>create</h3><p>The create method of a State object is called after preload, an before update, and render. This is a good place to create sprites, and do anything else that needs to get done once before proceeding to update.</p>
+<p>If a state just needs to do one thing then move on then it can just have a single create method, like it many of the examples I have shown so far.</p>
+<h3 id="update"><a href="#update" class="headerlink" title="update"></a>update</h3><p>update is what the name implies, it is any logic that needs to be called on each frame tick.</p>
+<h3 id="render"><a href="#render" class="headerlink" title="render"></a>render</h3><p>A render method is sometimes called for, when I want to do some on the fly drawing. Often it is not needed as Phasers game objects render automatically.</p>
+<h2 id="Additional-State-methods"><a href="#Additional-State-methods" class="headerlink" title="Additional State methods"></a>Additional State methods</h2><p>There are a lot of additional methods to cover, these are optional, but come in handy with some states.</p>
+<h3 id="init"><a href="#init" class="headerlink" title="init"></a>init</h3><p>The init method of a State object is useful for defining some code that is to be called before anything is done, even preloading of assets. In addition these kinds of methods have a special importance with the StateManager.start method in which every time to start a new State with StateManager.start I can pass an object that can be used to configure the state.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>I am in the process of writing many posts on phaser, at least ten, but maybe many more than that. The core methods of a State object should have there own posts, and maybe there should even be a post for every method that can be defined for a state object. I have a draft in the works in which I am covering in detail why init State methods are useful. In any case this post Will be revised as my collection of posts grows.</p>
+<p>Happy coding.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/10/06/phaser-state-objects/" data-id="cj8fvub7600063sv1v7t4ewck" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/games/">games</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/phaser/">phaser</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/10/07/phaser-state-loader/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          How to get going with a simple asset loader in phaser
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/10/05/phaser-state-manager/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">What to know about the state manager in phaser</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 13.33px;">JSON</a> <a href="/tags/SEO/" style="font-size: 11.11px;">SEO</a> <a href="/tags/animation/" style="font-size: 10px;">animation</a> <a href="/tags/automation/" style="font-size: 14.44px;">automation</a> <a href="/tags/blog/" style="font-size: 15.56px;">blog</a> <a href="/tags/canvas/" style="font-size: 13.33px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.33px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 12.22px;">discovery</a> <a href="/tags/ejs/" style="font-size: 10px;">ejs</a> <a href="/tags/games/" style="font-size: 14.44px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hexo/" style="font-size: 16.67px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10px;">jimp</a> <a href="/tags/jquery/" style="font-size: 13.33px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/lodash/" style="font-size: 17.78px;">lodash</a> <a href="/tags/node-js/" style="font-size: 18.89px;">node.js</a> <a href="/tags/phaser/" style="font-size: 13.33px;">phaser</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/10/07/phaser-state-loader/">How to get going with a simple asset loader in phaser</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/06/phaser-state-objects/">What to know about the state objects in phaser</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/05/phaser-state-manager/">What to know about the state manager in phaser</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/04/phaser-getting-started/">Getting started with phaser for HTML 5 game development</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/03/jquery-prototype-add/">A jQuery.prototype.add method example</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
