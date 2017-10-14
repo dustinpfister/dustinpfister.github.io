@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Whats cool about init methods in Phaser State objects. | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Because of the relationship with initialization methods of State Objects and the start method of the StateManager in phaser, it occurred to me that this is something that needs it’s own post.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Whats cool about init methods in Phaser State objects.">
+<meta property="og:url" content="https://dustinpfister.github.io/2017/10/10/phaser-state-objects-init-method/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="Because of the relationship with initialization methods of State Objects and the start method of the StateManager in phaser, it occurred to me that this is something that needs it’s own post.">
+<meta property="og:updated_time" content="2017-10-10T17:17:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Whats cool about init methods in Phaser State objects.">
+<meta name="twitter:description" content="Because of the relationship with initialization methods of State Objects and the start method of the StateManager in phaser, it occurred to me that this is something that needs it’s own post.">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-phaser-state-objects-init-method" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/10/10/phaser-state-objects-init-method/" class="article-date"> Published:
+  <time datetime="2017-10-10T17:16:00.000Z" itemprop="datePublished">2017-10-10</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2017/10/10/phaser-state-objects-init-method/" class="article-date"> Modified:
+  <time datetime="2017-10-10T17:17:29.000Z" itemprop="dateModified">2017-10-10</time>
+</a>
+
+    <span class="article-date">V1</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/phaser/">phaser</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Whats cool about init methods in Phaser State objects.
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>Because of the relationship with initialization methods of State Objects and the start method of the StateManager in <a href="http://phaser.io" target="_blank" rel="external">phaser</a>, it occurred to me that this is something that needs it’s own post.</p>
+<a id="more"></a>
+<h2 id="Some-background"><a href="#Some-background" class="headerlink" title="Some background"></a>Some background</h2><p>So if you do not know a thing or two about phaser you might want to read <a href="/categories/phaser/">some of my other posts</a>, or glance over the <a href="http://phaser.io/docs/2.6.2/index" target="_blank" rel="external">official API DOCS</a> on the topic before hand, this post mainly has to do with State Objects, and there relationship with the StateManager in Phaser. So some background knowledge on State machines in phaser would be needed before hand.</p>
+<h2 id="A-quick-demo-that-will-help-understand-why-init-methods-are-cool"><a href="#A-quick-demo-that-will-help-understand-why-init-methods-are-cool" class="headerlink" title="A quick demo that will help understand why init methods are cool"></a>A quick demo that will help understand why init methods are cool</h2><p>So I would like to put together a real example, but making a game is something that takes a while, for for the sake of this post I will just throw together a stupid demo that is just some circles moving around a center point.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>);</div><div class="line"> </div><div class="line">game.state.add(<span class="string">'circles'</span>,</div><div class="line"> </div><div class="line">    <span class="comment">// so I want to place some stuff in a closure</span></div><div class="line">    (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> conf,</div><div class="line">        rOff = <span class="number">0</span>,</div><div class="line">        i = <span class="number">0</span>,</div><div class="line">        circles,</div><div class="line"> </div><div class="line">        setCircle = <span class="function"><span class="keyword">function</span> (<span class="params">cr, ci, rOff</span>) </span>&#123;</div><div class="line">            <span class="keyword">var</span> r;</div><div class="line"> </div><div class="line">            rOff = rOff || <span class="number">0</span>;</div><div class="line"> </div><div class="line">            r = <span class="built_in">Math</span>.PI * <span class="number">2</span> / conf.count * ci + rOff;</div><div class="line">            cr.x = conf.cx + <span class="built_in">Math</span>.cos(r) * conf.radius,</div><div class="line">            cr.y = conf.cy + <span class="built_in">Math</span>.sin(r) * conf.radius</div><div class="line"> </div><div class="line">        &#125;;</div><div class="line"> </div><div class="line">        <span class="comment">// the State object that will get returned</span></div><div class="line">        <span class="keyword">return</span> &#123;</div><div class="line"> </div><div class="line">            <span class="comment">// so here is the init method</span></div><div class="line">            init : <span class="function"><span class="keyword">function</span> (<span class="params">opt</span>) </span>&#123;</div><div class="line"> </div><div class="line">                <span class="keyword">var</span> prop,</div><div class="line"> </div><div class="line">                <span class="comment">// the defaults</span></div><div class="line">                defaults = &#123;</div><div class="line"> </div><div class="line">                    <span class="attr">count</span> : <span class="number">3</span>,</div><div class="line">                    <span class="attr">cx</span> : <span class="number">160</span>,</div><div class="line">                    <span class="attr">cy</span> : <span class="number">120</span>,</div><div class="line">                    <span class="attr">size</span> : <span class="number">32</span>,</div><div class="line">                    <span class="attr">radius</span> : <span class="number">64</span>,</div><div class="line">                    <span class="attr">color</span> : <span class="number">0x00ff00</span></div><div class="line"> </div><div class="line">                &#125;;</div><div class="line"> </div><div class="line">                opt = opt || &#123;&#125;;</div><div class="line"> </div><div class="line">                <span class="comment">// apply defaults to anything that is missing</span></div><div class="line">                <span class="keyword">for</span> (prop <span class="keyword">in</span> defaults) &#123;</div><div class="line"> </div><div class="line">                    <span class="keyword">if</span> (opt[prop] === <span class="literal">undefined</span>) &#123;</div><div class="line"> </div><div class="line">                        opt[prop] = defaults[prop];</div><div class="line"> </div><div class="line">                    &#125;</div><div class="line"> </div><div class="line">                &#125;</div><div class="line"> </div><div class="line">                <span class="comment">// ref opt to the variable that will be shared across methods.</span></div><div class="line">                conf = opt;</div><div class="line"> </div><div class="line">            &#125;,</div><div class="line"> </div><div class="line">            <span class="comment">// the create method</span></div><div class="line">            create : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">                <span class="keyword">var</span> ci = <span class="number">0</span>,</div><div class="line">                r,</div><div class="line">                cir;</div><div class="line"> </div><div class="line">                <span class="comment">// set up the circles based on conf settings</span></div><div class="line">                circles = [];</div><div class="line">                <span class="keyword">while</span> (ci &lt; conf.count) &#123;</div><div class="line"> </div><div class="line">                    cir = game.add.graphics(<span class="number">0</span>, <span class="number">0</span>);</div><div class="line"> </div><div class="line">                    cir.beginFill(conf.color);</div><div class="line">                    cir.drawCircle(<span class="number">0</span>, <span class="number">0</span>, conf.size);</div><div class="line">                    cir.endFill();</div><div class="line"> </div><div class="line">                    setCircle(cir, ci);</div><div class="line"> </div><div class="line">                    circles.push(cir);</div><div class="line"> </div><div class="line">                    ci += <span class="number">1</span>;</div><div class="line"> </div><div class="line">                &#125;</div><div class="line"> </div><div class="line">            &#125;,</div><div class="line"> </div><div class="line">            <span class="comment">// showtime</span></div><div class="line">            update : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">                <span class="keyword">var</span> ci = <span class="number">0</span>;</div><div class="line"> </div><div class="line">                rOff = <span class="built_in">Math</span>.PI * <span class="number">2</span> / <span class="number">100</span> * i;</div><div class="line">                <span class="keyword">while</span> (ci &lt; conf.count) &#123;</div><div class="line"> </div><div class="line">                    setCircle(circles[ci], ci, rOff);</div><div class="line"> </div><div class="line">                    ci += <span class="number">1</span>;</div><div class="line">                &#125;</div><div class="line"> </div><div class="line">                i++;</div><div class="line">                <span class="keyword">if</span> (i &gt;= <span class="number">100</span>) &#123;</div><div class="line"> </div><div class="line">                    i = <span class="number">0</span>;</div><div class="line"> </div><div class="line">                &#125;</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">        &#125;;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line">        ()));</div><div class="line"> </div><div class="line"><span class="comment">// start with default settings</span></div><div class="line">game.state.start(<span class="string">'circles'</span>);</div></pre></td></tr></table></figure>
+<p>When I call game.state.start with just the key of the state, the demo will go by everything I put in the defaults object I defined in the init method, but as you can see the method accepts an argument. This argument can be used to set some different settings other than the default.</p>
+<h2 id="The-param-argument-of-StateManager-start"><a href="#The-param-argument-of-StateManager-start" class="headerlink" title="The param argument of StateManager.start"></a>The param argument of StateManager.start</h2><p>What makes init methods cool is that I can bass a config object of sorts to a state every time I start the state. </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// start with default settings</span></div><div class="line">game.state.start(<span class="string">'circles'</span>, <span class="literal">true</span>, <span class="literal">true</span>, &#123;</div><div class="line"></div><div class="line">    <span class="attr">count</span> : <span class="number">8</span>,</div><div class="line">    <span class="attr">size</span> : <span class="number">16</span>,</div><div class="line">    <span class="attr">color</span> : <span class="number">0x00afff</span></div><div class="line"></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>This will change some of the default values and make the demo behave different.</p>
+<h2 id="real-examples"><a href="#real-examples" class="headerlink" title="real examples"></a>real examples</h2><p>A real example would be having a game state that accepts an object in its init method that can set up the game in a way that would otherwise me a new game. This is why init methods come in handy, mainly I use them with my main game states in this way.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>There are of course the core methods of state objects in phaser, but in some states an init method is called for as a means to set things up in a certain way before anything else is done.</p>
+<p>happy coding.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/10/10/phaser-state-objects-init-method/" data-id="cj8oxg0oh00dpc4v1ym0yl9bh" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/games/">games</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/phaser/">phaser</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/10/11/phaser-main-game-constructor/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          The Phaser main game object, and the Phaser.Game constructor.
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/10/07/phaser-state-loader/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">How to get going with a simple asset loader in phaser</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 13px;">JSON</a> <a href="/tags/SEO/" style="font-size: 11px;">SEO</a> <a href="/tags/animation/" style="font-size: 10px;">animation</a> <a href="/tags/automation/" style="font-size: 14px;">automation</a> <a href="/tags/blog/" style="font-size: 15px;">blog</a> <a href="/tags/canvas/" style="font-size: 13px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 12px;">discovery</a> <a href="/tags/ejs/" style="font-size: 10px;">ejs</a> <a href="/tags/games/" style="font-size: 18px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hexo/" style="font-size: 16px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10px;">jimp</a> <a href="/tags/jquery/" style="font-size: 13px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/lodash/" style="font-size: 17px;">lodash</a> <a href="/tags/node-js/" style="font-size: 19px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17px;">phaser</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/10/14/phaser-text/">Basic text in phaser</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/13/phaser-gameobj-input-keyboard/">Using the keyboard in phaser via game.input.keyboad</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/13/phaser-gameobj-input/">An overview of the main phaser input manager via game.input</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/12/phaser-spritesheets/">Getting started with sprite sheets in phaser.</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/12/phaser-input-mousepointer/">The mouse pointer in phaser</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
