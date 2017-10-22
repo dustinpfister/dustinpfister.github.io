@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Getting started with multi touch in phaser with the pointers array. | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="The pointers array in phaser will contain an array of pointer objects for each non mouse pointer object. This can be useful for working on any project that may involve multi touch. It can be thought o">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Getting started with multi touch in phaser with the pointers array.">
+<meta property="og:url" content="https://dustinpfister.github.io/2017/10/19/phaser-input-pointers/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="The pointers array in phaser will contain an array of pointer objects for each non mouse pointer object. This can be useful for working on any project that may involve multi touch. It can be thought o">
+<meta property="og:updated_time" content="2017-10-20T14:52:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Getting started with multi touch in phaser with the pointers array.">
+<meta name="twitter:description" content="The pointers array in phaser will contain an array of pointer objects for each non mouse pointer object. This can be useful for working on any project that may involve multi touch. It can be thought o">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-phaser-input-pointers" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/10/19/phaser-input-pointers/" class="article-date"> Published:
+  <time datetime="2017-10-19T14:53:00.000Z" itemprop="datePublished">2017-10-19</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2017/10/19/phaser-input-pointers/" class="article-date"> Modified:
+  <time datetime="2017-10-20T14:52:42.000Z" itemprop="dateModified">2017-10-20</time>
+</a>
+
+    <span class="article-date">V1.4</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/phaser/">phaser</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Getting started with multi touch in phaser with the pointers array.
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>The pointers array in phaser will contain an array of <a href="/2017/10/17/phaser-input-pointer-objects/">pointer objects</a> for each non mouse pointer object. This can be useful for working on any project that may involve multi touch. It can be thought of as an alternative to the pointer1, pointer2, pointer3, etc objects available via <a href="/2017/10/13/phaser-gameobj-input/">game.input</a>.</p>
+<a id="more"></a>
+<h2 id="Quickly-getting-started-with-the-pointers-array"><a href="#Quickly-getting-started-with-the-pointers-array" class="headerlink" title="Quickly getting started with the pointers array"></a>Quickly getting started with the pointers array</h2><p>One way to quickly know what is going on with the current status of the pointers array is by using the pointer debug method.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">640</span>, <span class="number">480</span>, Phaser.AUTO, <span class="string">'gamearea'</span>, &#123;</div><div class="line"> </div><div class="line">    <span class="attr">render</span> : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// show what is going on with the pointers array.</span></div><div class="line">        game.input.pointers.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">pointer</span>) </span>&#123;</div><div class="line"> </div><div class="line">            game.debug.pointer(pointer);</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="Using-game-input-addPointer-to-increase-the-length-of-the-pointers-array"><a href="#Using-game-input-addPointer-to-increase-the-length-of-the-pointers-array" class="headerlink" title="Using game.input.addPointer to increase the length of the pointers array"></a>Using game.input.addPointer to increase the length of the pointers array</h2><p>By default there are only two pointer objects in the pointers array, if You want to make a project that makes use of more pointers you will want to use the addPointer method to do so.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">640</span>, <span class="number">480</span>, Phaser.AUTO, <span class="string">'gamearea'</span>, &#123;</div><div class="line"> </div><div class="line">        <span class="attr">create</span> : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">// pointer1, and pointer2 exist by default</span></div><div class="line">            <span class="built_in">console</span>.log(game.input.pointers.length); <span class="comment">// 2</span></div><div class="line"> </div><div class="line">            game.input.addPointer(); <span class="comment">// add pointer3</span></div><div class="line">            game.input.addPointer(); <span class="comment">// add pointer4</span></div><div class="line">            game.input.addPointer(); <span class="comment">// add pointer5</span></div><div class="line">            <span class="built_in">console</span>.log(game.input.pointers.length); <span class="comment">// 5</span></div><div class="line"> </div><div class="line">        &#125;,</div><div class="line"> </div><div class="line">        <span class="attr">render</span> : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            game.input.pointers.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">pointer</span>) </span>&#123;</div><div class="line"> </div><div class="line">                game.debug.pointer(pointer);</div><div class="line"> </div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;);</div></pre></td></tr></table></figure>
+<h2 id="Max-Pointers"><a href="#Max-Pointers" class="headerlink" title="Max Pointers"></a>Max Pointers</h2><p>As of this writing I am using phaser 2.8.8, and the max amount of pointers allow appears to be 10. I can not see a need for there to be more than that, so I would say that is an adequate ceiling for it.</p>
+<h2 id="Comparison-with-pointer1-pointer2-pointer3-ect"><a href="#Comparison-with-pointer1-pointer2-pointer3-ect" class="headerlink" title="Comparison with pointer1, pointer2, pointer3, ect"></a>Comparison with pointer1, pointer2, pointer3, ect</h2><p>There are a number of properties in the game.input object that contain references to the latest pointer object for a certain touch in multi touch. That is if just one finger is on the screen then what is going on with it can be found at game.input.pointer1, if there are two fingers, and you want to do something involving that data, then game.input.pointer2 is of interest.</p>
+<p>This is basically just a different way of accessing the same data in that game.input.pointer1 is the same thing as game.input.pointers[0].</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">640</span>, <span class="number">480</span>, Phaser.AUTO, <span class="string">'gamearea'</span>, </div><div class="line"> </div><div class="line">    &#123;</div><div class="line"> </div><div class="line">        <span class="attr">create</span> : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="keyword">var</span> bx = game.add.graphics(<span class="number">0</span>, <span class="number">0</span>);</div><div class="line"> </div><div class="line">            bx.beginFill(<span class="number">0x00ff00</span>);</div><div class="line">            bx.drawCircle(<span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>);</div><div class="line">            bx.endFill();</div><div class="line"> </div><div class="line">        &#125;,</div><div class="line"> </div><div class="line">        <span class="attr">render</span> : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="keyword">var</span> bx = game.world.children[<span class="number">0</span>];</div><div class="line"> </div><div class="line">            <span class="comment">// setting x via pointers array</span></div><div class="line">            bx.x = game.input.pointers[<span class="number">0</span>].x;</div><div class="line"> </div><div class="line">            <span class="comment">// setting y via pointer1</span></div><div class="line">            bx.y = game.input.pointer1.y;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">);</div></pre></td></tr></table></figure>
+<p>So both options are provided, which you use depends on your coding style.</p>
+<h2 id="Multi-touch-example"><a href="#Multi-touch-example" class="headerlink" title="Multi touch example"></a>Multi touch example</h2><p>So for full working quick example of the use of the pointers array in phaser I thought I would put together something where the position of a display object is effected by the number of active pointers there are.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">640</span>, <span class="number">480</span>, Phaser.AUTO, <span class="string">'gamearea'</span>, &#123;</div><div class="line"> </div><div class="line">        <span class="attr">create</span> : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">// a display object that will be effected</span></div><div class="line">            <span class="keyword">var</span> avg = game.add.graphics(<span class="number">-100</span>, <span class="number">0</span>);</div><div class="line">            avg.beginFill(<span class="number">0x00ff00</span>);</div><div class="line">            avg.drawCircle(<span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>);</div><div class="line">            avg.endFill();</div><div class="line"> </div><div class="line">            <span class="comment">// add a third pointer</span></div><div class="line">            game.input.addPointer();</div><div class="line"> </div><div class="line">            <span class="comment">// maybe even a forth</span></div><div class="line">            game.input.addPointer();</div><div class="line"> </div><div class="line">        &#125;,</div><div class="line"> </div><div class="line">        <span class="attr">render</span> : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">// grabbing a ref to the display object this way</span></div><div class="line">            <span class="keyword">var</span> avg = game.world.children[<span class="number">0</span>],</div><div class="line"> </div><div class="line">            <span class="comment">// points is short for the pointer array</span></div><div class="line">            points = game.input.pointers;</div><div class="line"> </div><div class="line">            <span class="comment">// set some default values for the display object</span></div><div class="line">            avg.x = <span class="number">0</span>;</div><div class="line">            avg.y = <span class="number">0</span>;</div><div class="line"> </div><div class="line">            <span class="comment">// the data object of a display object comes in handy for things like this</span></div><div class="line">            avg.data.activeCount = <span class="number">0</span>;</div><div class="line"> </div><div class="line">            <span class="comment">// loop over all pointers</span></div><div class="line">            points.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">pointer</span>) </span>&#123;</div><div class="line"> </div><div class="line">                <span class="comment">// is the pointer active?</span></div><div class="line">                <span class="keyword">if</span> (pointer.active) &#123;</div><div class="line"> </div><div class="line">                    <span class="comment">// if so count it as part of the average</span></div><div class="line">                    avg.x += pointer.x;</div><div class="line">                    avg.y += pointer.y;</div><div class="line">                    avg.data.activeCount += <span class="number">1</span>;</div><div class="line"> </div><div class="line">                &#125;</div><div class="line"> </div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">            <span class="comment">// divide the sum over count of values for average</span></div><div class="line">            avg.x /= avg.data.activeCount;</div><div class="line">            avg.y /= avg.data.activeCount;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;);</div></pre></td></tr></table></figure>
+<p>Whats nice about the pointers array is that it there to begin with when it comes to doing anything that involves looping over all pointer objects. Keep in mind that if you do not use the active property to weed out any inactive pointers, then values from the latest objects will be used.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>So the pointers array is one of two options in game.input to use when it comes to doing something involving multi touch.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/10/19/phaser-input-pointers/" data-id="cj8zzgsdc00001ov1ddanuhu7" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/games/">games</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/phaser/">phaser</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/10/20/lodash_throttle/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          The lodash _.throttle method.
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/10/17/phaser-input-pointer-objects/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Working with pointer objects in phaser.</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.73px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.91px;">SEO</a> <a href="/tags/animation/" style="font-size: 10px;">animation</a> <a href="/tags/automation/" style="font-size: 13.64px;">automation</a> <a href="/tags/blog/" style="font-size: 14.55px;">blog</a> <a href="/tags/canvas/" style="font-size: 12.73px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.73px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.82px;">discovery</a> <a href="/tags/ejs/" style="font-size: 10px;">ejs</a> <a href="/tags/games/" style="font-size: 18.18px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hexo/" style="font-size: 15.45px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10px;">jimp</a> <a href="/tags/jquery/" style="font-size: 12.73px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/lodash/" style="font-size: 16.36px;">lodash</a> <a href="/tags/node-js/" style="font-size: 19.09px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.27px;">phaser</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/10/21/phaser-graphics/">Working with on the fly graphics in phaser</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/20/lodash_throttle/">The lodash _.throttle method.</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/19/phaser-input-pointers/">Getting started with multi touch in phaser with the pointers array.</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/17/phaser-input-pointer-objects/">Working with pointer objects in phaser.</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/15/phaser-scale-fullscreen/">Starting and stopping full screen in phaser.</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
