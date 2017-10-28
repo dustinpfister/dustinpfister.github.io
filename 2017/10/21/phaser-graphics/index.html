@@ -11,7 +11,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2017/10/21/phaser-graphics/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="In my effort to make a great series of posts on phaser, it is only a matter of time until I started writing on how to make on the fly graphics in phaser. This is something that I often want to do in t">
-<meta property="og:updated_time" content="2017-10-22T00:22:26.000Z">
+<meta property="og:updated_time" content="2017-10-22T17:49:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Working with on the fly graphics in phaser">
 <meta name="twitter:description" content="In my effort to make a great series of posts on phaser, it is only a matter of time until I started writing on how to make on the fly graphics in phaser. This is something that I often want to do in t">
@@ -54,6 +54,9 @@ ga('send', 'pageview');
 }
 </script>
 <!-- end structured data -->
+  
+  <script src="/js/phaser-2.6.2.min.js"></script>
+  
 </head>
 
 <body>
@@ -105,10 +108,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/10/21/phaser-graphics/" class="article-date"> Modified:
-  <time datetime="2017-10-22T00:22:26.000Z" itemprop="dateModified">2017-10-21</time>
+  <time datetime="2017-10-22T17:49:00.000Z" itemprop="dateModified">2017-10-22</time>
 </a>
 
-    <span class="article-date">V1.3</span>
+    <span class="article-date">V1.5</span>
 
     
   <div class="article-category">
@@ -134,7 +137,8 @@ ga('send', 'pageview');
         <p>In my effort to make a <a href="/categories/phaser/">great series of posts</a> on <a href="http://phaser.io/" target="_blank" rel="external">phaser</a>, it is only a matter of time until I started writing on how to make on the fly graphics in phaser. This is something that I often want to do in the early stages of a project where I just want to know the location of what will eventually be a sprite, or even a project with no external assets which can happen sometimes with something pretty simple.</p>
 <p>So this will be a quick how to get started with graphics in phaser post, but also a review of the most important methods and properties with Graphics.</p>
 <a id="more"></a>
-<h2 id="This-is-not-a-getting-started-with-phaser-or-javaScript-post"><a href="#This-is-not-a-getting-started-with-phaser-or-javaScript-post" class="headerlink" title="This is not a getting started with phaser or javaScript post"></a>This is not a getting started with phaser or javaScript post</h2><p>I have my <a href="/2017/10/04/phaser-getting-started/">getting started post on phaser</a>, and I assume you have a decent degree of knowledge of javaScript. Now that is out of the way lets get to the point.</p>
+
+<h2 id="If new to Phaser"><a href="#If-new-to-Phaser" class="headerlink" title="If new to Phaser"></a>If new to Phaser</h2><p>If you are new to phaser you might want to check out my post on <a href="/2017/10/04/phaser-getting-started/">getting started with phaser</a>, I also assume that you have at least some knowlage of html, css, and javaScript as I do not have any posts on how to get up to speed with that at this time. This is my standard <a href="/2017/02/04/hexo-tags/">hexo tag</a> for all <a href="/categories/phaser/">phaser posts</a></p>
 <h2 id="A-phaser-graphics-hello-world-example-Graphics-drawCircle"><a href="#A-phaser-graphics-hello-world-example-Graphics-drawCircle" class="headerlink" title="A phaser graphics hello world example (Graphics.drawCircle)"></a>A phaser graphics hello world example (Graphics.drawCircle)</h2><p>I often start off my posts by giving a quick, simple hello world example of how to get started with something, then everything else is often just different mutations of that example . For graphics I went with just drawing a circle in the center of the canvas. So this will also be an example of the <a href="http://phaser.io/docs/2.6.2/Phaser.Graphics.html#drawCircle" target="_blank" rel="external">Graphics.drawCircle</a> method.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>, &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// create method</span></div><div class="line">        create : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">// add a graphics object to the world</span></div><div class="line">            <span class="keyword">var</span> cir = game.add.graphics(game.world.centerX, game.world.centerY);</div><div class="line"> </div><div class="line">            <span class="comment">// make it a green circle</span></div><div class="line">            cir.beginFill(<span class="number">0x00ff00</span>);</div><div class="line">            cir.drawCircle(<span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>);</div><div class="line">            cir.endFill();</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p>Calling game.add.graphics will return an instance of <a href="http://phaser.io/docs/2.6.2/Phaser.Graphics.html" target="_blank" rel="external">Graphics</a>, which has many properties and methods for making on the fly graphics. Here we are just starting with Graphics.beginFill, Graphics.drawCircle, and Graphics.endFill.</p>
@@ -145,6 +149,8 @@ ga('send', 'pageview');
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>, &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// create method</span></div><div class="line">        create : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">// add a graphics object to the world</span></div><div class="line">            <span class="keyword">var</span> cir = game.add.graphics(game.world.centerX, game.world.centerY);</div><div class="line"> </div><div class="line">            <span class="comment">// make it a red rectangle</span></div><div class="line">            cir.beginFill(<span class="number">0xff0000</span>);</div><div class="line">            cir.drawRect(<span class="number">-50</span>, <span class="number">-50</span>, <span class="number">100</span>,<span class="number">100</span>);</div><div class="line">            cir.endFill();</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <h2 id="Drawing-lines-With-Graphics-moveTo-and-Graphics-lineTo"><a href="#Drawing-lines-With-Graphics-moveTo-and-Graphics-lineTo" class="headerlink" title="Drawing lines With Graphics.moveTo, and Graphics.lineTo"></a>Drawing lines With Graphics.moveTo, and Graphics.lineTo</h2><p>Drawing lines is pretty easy, it just involves a certain combination of calls to moveTo, and line to. I use moveTo to just move the drawing position, and lineTo t actually draw a line.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>, &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// create method</span></div><div class="line">        create : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">// add a graphics object to the world</span></div><div class="line">            <span class="keyword">var</span> gra = game.add.graphics(game.world.centerX, game.world.centerY);</div><div class="line"> </div><div class="line">            <span class="comment">// make it a red rectangle</span></div><div class="line">            gra.lineStyle(<span class="number">3</span>, <span class="number">0xff0000</span>);</div><div class="line"> </div><div class="line">            <span class="comment">// start by moving to a point</span></div><div class="line">            gra.moveTo(<span class="number">0</span>, <span class="number">0</span>);</div><div class="line">            gra.lineTo(<span class="number">100</span>, <span class="number">0</span>);</div><div class="line">            gra.lineTo(<span class="number">100</span>, <span class="number">100</span>);</div><div class="line">            gra.lineTo(<span class="number">0</span>, <span class="number">0</span>);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;);</div></pre></td></tr></table></figure>
+<h2 id="Working-with-polygons-with-Graphics-drawPolygon"><a href="#Working-with-polygons-with-Graphics-drawPolygon" class="headerlink" title="Working with polygons with Graphics.drawPolygon"></a>Working with polygons with Graphics.drawPolygon</h2><p>Check out my <a href="/2017/10/22/phaser-graphics-polygon/">full post on working with polygons</a> in phaser. When it comes to working with Graphics.drawPolygon it is all about how you make an array of points first, then it is just a matter of passing that array to the method.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>, </div><div class="line">&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// create method</span></div><div class="line">        create : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">// add a graphics object to the world</span></div><div class="line">            <span class="keyword">var</span> gra = game.add.graphics(game.world.centerX, game.world.centerY);</div><div class="line"> </div><div class="line">            gra.lineStyle(<span class="number">3</span>, <span class="number">0x00ff00</span>);</div><div class="line">            gra.drawPolygon([<span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>, <span class="number">0</span>, <span class="number">100</span>,<span class="number">100</span>, <span class="number">0</span>, <span class="number">0</span>]);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">);</div></pre></td></tr></table></figure>
 <h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>There is a lot to cover with graphics in phaser, this post alone is not going to do it justice, hopefully it has helped you getting started if you did not know how before hand. I will be updating this post, as well as a whole lot more of them as my work on phaser continues.</p>
 
       
@@ -160,6 +166,15 @@ ga('send', 'pageview');
   
     
 <nav id="article-nav">
+  
+    <a href="/2017/10/22/phaser-graphics-lineto/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Playing with lines in phaser with Graphics.lineTo
+        
+      </div>
+    </a>
   
   
     <a href="/2017/10/20/lodash_throttle/" id="article-nav-older" class="article-nav-link-wrap">
@@ -223,23 +238,23 @@ ga('send', 'pageview');
       <ul>
         
           <li>
-            <a href="/2017/10/21/phaser-graphics/">Working with on the fly graphics in phaser</a>
+            <a href="/2017/10/28/phaser-line/">The Phaser Line constructor</a>
           </li>
         
           <li>
-            <a href="/2017/10/20/lodash_throttle/">The lodash _.throttle method.</a>
+            <a href="/2017/10/27/phaser-math-distance/">Finding the distance between two points in Phaser</a>
           </li>
         
           <li>
-            <a href="/2017/10/19/phaser-input-pointers/">Getting started with multi touch in phaser with the pointers array.</a>
+            <a href="/2017/10/26/phaser-components-events/">The Phaser events component, setting up event handlers for Sprites and Graphics</a>
           </li>
         
           <li>
-            <a href="/2017/10/17/phaser-input-pointer-objects/">Working with pointer objects in phaser.</a>
+            <a href="/2017/10/24/phaser-inputhandler-draggable/">Making game display objects draggable in phaser</a>
           </li>
         
           <li>
-            <a href="/2017/10/15/phaser-scale-fullscreen/">Starting and stopping full screen in phaser.</a>
+            <a href="/2017/10/23/phaser-components-input-enabled/">The Phaser inputEnabled component for use on Sprites, Graphics, ect</a>
           </li>
         
       </ul>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Finding the distance between two points in Phaser | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="In Phaser there is a Math object like that of the Math object in core javaScript. There are a few methods there that come in handy, one of which is a usual suspects in most projects that is used to fi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Finding the distance between two points in Phaser">
+<meta property="og:url" content="https://dustinpfister.github.io/2017/10/27/phaser-math-distance/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="In Phaser there is a Math object like that of the Math object in core javaScript. There are a few methods there that come in handy, one of which is a usual suspects in most projects that is used to fi">
+<meta property="og:updated_time" content="2017-10-28T19:11:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Finding the distance between two points in Phaser">
+<meta name="twitter:description" content="In Phaser there is a Math object like that of the Math object in core javaScript. There are a few methods there that come in handy, one of which is a usual suspects in most projects that is used to fi">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <script src="/js/phaser-2.6.2.min.js"></script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-phaser-math-distance" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/10/27/phaser-math-distance/" class="article-date"> Published:
+  <time datetime="2017-10-27T16:17:00.000Z" itemprop="datePublished">2017-10-27</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2017/10/27/phaser-math-distance/" class="article-date"> Modified:
+  <time datetime="2017-10-28T19:11:22.000Z" itemprop="dateModified">2017-10-28</time>
+</a>
+
+    <span class="article-date">V1.4</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/phaser/">phaser</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Finding the distance between two points in Phaser
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>In <a href="http://phaser.io/" target="_blank" rel="external">Phaser</a> there is a Math object like that of the Math object in core javaScript. There are a few methods there that come in handy, one of which is a usual suspects in most projects that is used to find the distance between two points. That is the 2d distance formula that can be found at Phaser.Math.distance.</p>
+<a id="more"></a>
+<p><div id="gamearea" style="width:320px;height:240px;margin-left:auto;margin-right:auto;"></div></p>
+<script>
+var game = new Phaser.Game(320, 240, Phaser.AUTO, 'gamearea', {
+
+        // create method
+        create : function () {
+
+            var one = game.add.graphics(game.world.centerX, game.world.centerY),
+            text = game.add.text(10, 10, '', {
+                    fill : '#ffffff',
+                    font : '15px courier'
+                });
+
+            one.beginFill(0xff0000);
+            one.drawCircle(0, 0, 25);
+            one.endFill();
+
+            var two = game.add.graphics(100, 50);
+            two.beginFill(0x00ff00);
+            two.drawCircle(0, 0, 25);
+            two.endFill();
+
+            two.data = {
+
+                a : 0,
+                aMax : 1000,
+                radius : 100,
+
+                amount : -100,
+                over : 50,
+                done : 0,
+
+                // no mathematical modulo?
+
+                modulo : function (x, m) {
+
+                    return (x % m + m) % m;
+
+                },
+
+                update : function (gra) {
+
+                    var r;
+
+                    this.a += 1;
+
+                    this.a = this.modulo(this.a, this.aMax);
+
+                    r = Math.PI * 2 / this.aMax * this.a;
+
+                    gra.x = game.world.centerX + Math.cos(r) * this.radius;
+                    gra.y = game.world.centerY + Math.sin(r) * this.radius;
+
+                    if (this.done < this.over) {
+
+                        var delta = this.amount / this.over;
+
+                        this.radius += delta;
+
+                        this.done += 1;
+
+                    } else {
+
+                        if (this.radius <= 0) {
+
+                            this.radius = 0;
+                            this.amount = 100 * Math.random();
+
+                        } else {
+
+                            this.amount = -this.radius;
+
+                        }
+
+                        this.over = 10 + Math.floor(Math.random() * 490);
+                        //this.over = Math.floor(Math.random() * 950) + 50;
+                        this.done = 0;
+
+                    }
+
+                    //gra.x = this.modulo(gra.x, game.world.width);
+                    //gra.y = this.modulo(gra.y, game.world.height);
+
+                }
+
+            };
+
+            console.log(Phaser.Math);
+
+            //console.log(Phaser.Math.distance(one.x, one.y, two.x, two.y));
+
+        },
+
+        // the update method will be called on each tick
+        update : function () {
+
+            var text = game.world.children[1],
+            one = game.world.children[0],
+            two = game.world.children[2];
+
+            two.data.update(two);
+
+            text.text = 'distance: ' + Phaser.Math.distance(one.x, one.y, two.x, two.y).toFixed(2);
+
+        }
+
+    });
+</script>
+
+
+<h2 id="If new to Phaser"><a href="#If-new-to-Phaser" class="headerlink" title="If new to Phaser"></a>If new to Phaser</h2><p>If you are new to phaser you might want to check out my post on <a href="/2017/10/04/phaser-getting-started/">getting started with phaser</a>, I also assume that you have at least some knowlage of html, css, and javaScript as I do not have any posts on how to get up to speed with that at this time. This is my standard <a href="/2017/02/04/hexo-tags/">hexo tag</a> for all <a href="/categories/phaser/">phaser posts</a> where I want to inform readers that this is not a post for beginers.</p>
+<h2 id="The-basic-example"><a href="#The-basic-example" class="headerlink" title="The basic example"></a>The basic example</h2><p>If I am using phaser as a dependency there is no need for a quick refresher for how to write the 2d distance formula, it’s right there in Phasers Math Object. To use it I gave it four arguments that are the x, and y positions of both points concerned.</p>
+<p>So anywhere in my project I can find distance like this.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(Phaser.Math.distance(<span class="number">0</span>,<span class="number">0</span>,<span class="number">100</span>,<span class="number">25</span>)); <span class="comment">// 103.07764064044152</span></div></pre></td></tr></table></figure>
+<h2 id="A-more-advanced-Phaser-Math-distance-example-using-some-graphics"><a href="#A-more-advanced-Phaser-Math-distance-example-using-some-graphics" class="headerlink" title="A more advanced Phaser.Math.distance example using some graphics"></a>A more advanced Phaser.Math.distance example using some graphics</h2><p>So I put togather a quick demo for this one method involving two Graphics display objects.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>, &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// create method</span></div><div class="line">        create : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="keyword">var</span> one = game.add.graphics(game.world.centerX, game.world.centerY),</div><div class="line">            text = game.add.text(<span class="number">10</span>, <span class="number">10</span>, <span class="string">''</span>, &#123;</div><div class="line">                    <span class="attr">fill</span> : <span class="string">'#ffffff'</span>,</div><div class="line">                    <span class="attr">font</span> : <span class="string">'15px courier'</span></div><div class="line">                &#125;);</div><div class="line"> </div><div class="line">            one.beginFill(<span class="number">0xff0000</span>);</div><div class="line">            one.drawCircle(<span class="number">0</span>, <span class="number">0</span>, <span class="number">25</span>);</div><div class="line">            one.endFill();</div><div class="line"> </div><div class="line">            <span class="keyword">var</span> two = game.add.graphics(<span class="number">100</span>, <span class="number">50</span>);</div><div class="line">            two.beginFill(<span class="number">0x00ff00</span>);</div><div class="line">            two.drawCircle(<span class="number">0</span>, <span class="number">0</span>, <span class="number">25</span>);</div><div class="line">            two.endFill();</div><div class="line"> </div><div class="line">            two.data = &#123;</div><div class="line"> </div><div class="line">                <span class="attr">a</span> : <span class="number">0</span>,</div><div class="line">                <span class="attr">aMax</span> : <span class="number">1000</span>,</div><div class="line">                <span class="attr">radius</span> : <span class="number">100</span>,</div><div class="line"> </div><div class="line">                <span class="attr">amount</span> : <span class="number">-100</span>,</div><div class="line">                <span class="attr">over</span> : <span class="number">50</span>,</div><div class="line">                <span class="attr">done</span> : <span class="number">0</span>,</div><div class="line"> </div><div class="line">                <span class="comment">// no mathematical modulo?</span></div><div class="line"> </div><div class="line">                modulo : <span class="function"><span class="keyword">function</span> (<span class="params">x, m</span>) </span>&#123;</div><div class="line"> </div><div class="line">                    <span class="keyword">return</span> (x % m + m) % m;</div><div class="line"> </div><div class="line">                &#125;,</div><div class="line"> </div><div class="line">                <span class="attr">update</span> : <span class="function"><span class="keyword">function</span> (<span class="params">gra</span>) </span>&#123;</div><div class="line"> </div><div class="line">                    <span class="keyword">var</span> r;</div><div class="line"> </div><div class="line">                    <span class="keyword">this</span>.a += <span class="number">1</span>;</div><div class="line"> </div><div class="line">                    <span class="keyword">this</span>.a = <span class="keyword">this</span>.modulo(<span class="keyword">this</span>.a, <span class="keyword">this</span>.aMax);</div><div class="line"> </div><div class="line">                    r = <span class="built_in">Math</span>.PI * <span class="number">2</span> / <span class="keyword">this</span>.aMax * <span class="keyword">this</span>.a;</div><div class="line"> </div><div class="line">                    gra.x = game.world.centerX + <span class="built_in">Math</span>.cos(r) * <span class="keyword">this</span>.radius;</div><div class="line">                    gra.y = game.world.centerY + <span class="built_in">Math</span>.sin(r) * <span class="keyword">this</span>.radius;</div><div class="line"> </div><div class="line">                    <span class="keyword">if</span> (<span class="keyword">this</span>.done &lt; <span class="keyword">this</span>.over) &#123;</div><div class="line"> </div><div class="line">                        <span class="keyword">var</span> delta = <span class="keyword">this</span>.amount / <span class="keyword">this</span>.over;</div><div class="line"> </div><div class="line">                        <span class="keyword">this</span>.radius += delta;</div><div class="line"> </div><div class="line">                        <span class="keyword">this</span>.done += <span class="number">1</span>;</div><div class="line"> </div><div class="line">                    &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">                        <span class="keyword">if</span> (<span class="keyword">this</span>.radius &lt;= <span class="number">0</span>) &#123;</div><div class="line"> </div><div class="line">                            <span class="keyword">this</span>.radius = <span class="number">0</span>;</div><div class="line">                            <span class="keyword">this</span>.amount = <span class="number">100</span> * <span class="built_in">Math</span>.random();</div><div class="line"> </div><div class="line">                        &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">                            <span class="keyword">this</span>.amount = -<span class="keyword">this</span>.radius;</div><div class="line"> </div><div class="line">                        &#125;</div><div class="line"> </div><div class="line">                        <span class="keyword">this</span>.over = <span class="number">10</span> + <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">490</span>);</div><div class="line">                        <span class="keyword">this</span>.done = <span class="number">0</span>;</div><div class="line"> </div><div class="line">                    &#125;</div><div class="line"> </div><div class="line">                &#125;</div><div class="line"> </div><div class="line">            &#125;;</div><div class="line"> </div><div class="line">        &#125;,</div><div class="line"> </div><div class="line">        <span class="comment">// the update method will be called on each tick</span></div><div class="line">        update : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="keyword">var</span> text = game.world.children[<span class="number">1</span>],</div><div class="line">            one = game.world.children[<span class="number">0</span>],</div><div class="line">            two = game.world.children[<span class="number">2</span>];</div><div class="line"> </div><div class="line">            two.data.update(two);</div><div class="line"> </div><div class="line">            <span class="comment">// display the current distnace between the two</span></div><div class="line">            text.text = <span class="string">'distance: '</span> + Phaser.Math.distance(one.x, one.y, two.x, two.y).toFixed(<span class="number">2</span>);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;);</div></pre></td></tr></table></figure>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>The distance between two points comes up all the time in my projects. As I learn more about phaser I am happy to know that this is a great project to know a thing or two about. When it comes to making projects vanilla js style I can not tell you how many times I end up fishing for the distance formula, trying to remember how to write it yet again, but now it is always there for me within phaser, along with almost everything else I could want.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/10/27/phaser-math-distance/" data-id="cj9a3xdbz00039wv1c4wka6v4" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/games/">games</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/phaser/">phaser</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/10/28/phaser-line/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          The Phaser Line constructor
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/10/26/phaser-components-events/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">The Phaser events component, setting up event handlers for Sprites and Graphics</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.73px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.91px;">SEO</a> <a href="/tags/animation/" style="font-size: 10px;">animation</a> <a href="/tags/automation/" style="font-size: 13.64px;">automation</a> <a href="/tags/blog/" style="font-size: 14.55px;">blog</a> <a href="/tags/canvas/" style="font-size: 12.73px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.73px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.82px;">discovery</a> <a href="/tags/ejs/" style="font-size: 10px;">ejs</a> <a href="/tags/games/" style="font-size: 18.18px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hexo/" style="font-size: 15.45px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10px;">jimp</a> <a href="/tags/jquery/" style="font-size: 12.73px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/lodash/" style="font-size: 16.36px;">lodash</a> <a href="/tags/node-js/" style="font-size: 19.09px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.27px;">phaser</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/10/28/phaser-line/">The Phaser Line constructor</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/27/phaser-math-distance/">Finding the distance between two points in Phaser</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/26/phaser-components-events/">The Phaser events component, setting up event handlers for Sprites and Graphics</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/24/phaser-inputhandler-draggable/">Making game display objects draggable in phaser</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/23/phaser-components-input-enabled/">The Phaser inputEnabled component for use on Sprites, Graphics, ect</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

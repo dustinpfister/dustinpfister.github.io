@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>The Phaser events component, setting up event handlers for Sprites and Graphics | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="The events component in phaser adds event handers to a display object such as onInputDown, and onDragStop. I just need to enable them with certain booleans, and I am ready to go with handing input for">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Phaser events component, setting up event handlers for Sprites and Graphics">
+<meta property="og:url" content="https://dustinpfister.github.io/2017/10/26/phaser-components-events/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="The events component in phaser adds event handers to a display object such as onInputDown, and onDragStop. I just need to enable them with certain booleans, and I am ready to go with handing input for">
+<meta property="og:updated_time" content="2017-10-26T18:23:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The Phaser events component, setting up event handlers for Sprites and Graphics">
+<meta name="twitter:description" content="The events component in phaser adds event handers to a display object such as onInputDown, and onDragStop. I just need to enable them with certain booleans, and I am ready to go with handing input for">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <script src="/js/phaser-2.6.2.min.js"></script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-phaser-components-events" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/10/26/phaser-components-events/" class="article-date"> Published:
+  <time datetime="2017-10-26T13:25:00.000Z" itemprop="datePublished">2017-10-26</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2017/10/26/phaser-components-events/" class="article-date"> Modified:
+  <time datetime="2017-10-26T18:23:00.000Z" itemprop="dateModified">2017-10-26</time>
+</a>
+
+    <span class="article-date">V1.6</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/phaser/">phaser</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      The Phaser events component, setting up event handlers for Sprites and Graphics
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>The events component in phaser adds event handers to a display object such as onInputDown, and onDragStop. I just need to enable them with certain booleans, and I am ready to go with handing input for a certain display object in a project. This post will be a general overview of how to get going with the events display object component.</p>
+<a id="more"></a>
+<p><div id="gamearea" style="width:320px;height:240px;margin-left:auto;margin-right:auto;"></div></p>
+<script>
+var game = (function () {
+
+    // a model
+    var model = {
+
+        // some model values
+        current : 'rest',
+        lastUpdate : new Date(),
+        size : 45,
+        deltaSize : 1,
+
+        dragCount : 0,
+
+        // rest state
+        rest : {
+
+            sizeLow : 40,
+            sizeHi : 50,
+            rate : 120,
+            color : 0x808080
+
+        },
+
+        over : {
+
+            sizeLow : 40,
+            sizeHi : 50,
+            rate : 120,
+            color : 0x008080
+
+        },
+
+        // down state
+        down : {
+
+            sizeLow : 50,
+            sizeHi : 60,
+            rate : 60,
+            color : 0x008000
+
+        },
+
+        // drag state
+        drag : {
+
+            sizeLow : 70,
+            sizeHi : 80,
+            rate : 30,
+            color : 0x00ff00
+
+        },
+
+        // update the model
+        update : function () {
+
+            var now = new Date(),
+            cur = this[this.current];
+
+            if (now - this.lastUpdate >= cur.rate) {
+
+                this.size += this.deltaSize;
+
+                if (this.size >= cur.sizeHi) {
+
+                    this.size = cur.sizeHi;
+                    this.deltaSize = -1;
+
+                }
+
+                if (this.size <= cur.sizeLow) {
+
+                    this.size = cur.sizeLow;
+                    this.deltaSize = 1;
+
+                }
+
+                this.lastUpdate = now;
+            }
+
+        },
+
+        // draw the model with the given Graphics Disp Object
+        draw : function (gra) {
+
+            var cur = this[this.current];
+
+            // main circle
+            gra.clear();
+            gra.beginFill(cur.color);
+            gra.drawCircle(0, 0, this.size, this.size);
+            gra.endFill();
+
+        },
+
+        checkBounds : function (gra) {
+
+            if (gra.x < gra.width / 2) {
+
+                gra.x = gra.width / 2;
+
+            }
+
+            if (gra.x > game.world.width - gra.width / 2) {
+
+                gra.x = game.world.width - gra.width / 2;
+
+            }
+
+            if (gra.y < gra.height / 2) {
+
+                gra.y = gra.height / 2;
+
+            }
+
+            if (gra.y > game.world.height - gra.height / 2) {
+
+                gra.y = game.world.height - gra.height / 2;
+
+            }
+
+        }
+
+    };
+
+    return new Phaser.Game(320, 240, Phaser.AUTO, 'gamearea', {
+
+        // create method
+        create : function () {
+
+            var gra = game.add.graphics(game.world.centerX, game.world.centerY),
+            text = game.add.text(5, 5, '', {
+                    fill : '#ffffff',
+                    font : '15px courier'
+                });
+
+            //drawCircle(gra);
+
+            // prevent context menu on long press, or right click
+            game.canvas.oncontextmenu = function (e) {
+                e.preventDefault();
+            }
+
+            // enable input for the Graphics Display Object
+            // this will add an instance of inputHanddler at gra.input
+            // some event handlers at gra.events will now work like
+            // gra.events.onInputDown
+            gra.inputEnabled = true;
+
+            // enable draggable events like gra.events.onDragStart
+            gra.input.draggable = true;
+            console.log(gra.input.draggable);
+
+            gra.events.onDragStart.add(function (gra) {
+
+                console.log('Drag start.');
+
+                model.current = 'down';
+
+            });
+
+            gra.events.onDragUpdate.add(function (gra) {
+
+                console.log('Drag update.');
+
+                if (model.dragCount >= 5) {
+
+                    model.current = 'drag';
+
+                }
+                model.dragCount += 1;
+
+                model.checkBounds(gra);
+
+            });
+
+            gra.events.onDragStop.add(function (gra) {
+
+                console.log('Drag stop.');
+
+                //model.current = 'rest';
+
+                model.dragCount = 0;
+
+            });
+
+            // add a single handler for onInputDown
+            gra.events.onInputDown.add(function (gra) {
+
+                //console.log('down');
+
+                model.current = 'down';
+
+            });
+
+            // add a single handler for onInputDown
+            gra.events.onInputUp.add(function (gra) {
+
+                console.log('up');
+
+                model.current = 'rest';
+
+                console.log(game.input.mousePointer);
+                console.log(gra);
+
+            });
+
+            gra.events.onInputOver.add(function (gra) {
+
+                console.log('over');
+
+                model.current = 'over';
+
+            });
+
+            gra.events.onInputOut.add(function (gra) {
+
+                console.log('out');
+
+                model.current = 'rest';
+
+            });
+
+        },
+
+        // the update method will be called on each tick
+        update : function () {
+
+            var gra = game.world.children[0],
+            text = game.world.children[1];
+
+            //text.text = gra.events;
+
+
+            //drawCircle(gra);
+
+            model.draw(gra);
+
+            model.update();
+
+        }
+
+    },true);
+
+}
+    ());
+
+</script>
+
+
+<h2 id="If new to Phaser"><a href="#If-new-to-Phaser" class="headerlink" title="If new to Phaser"></a>If new to Phaser</h2><p>If you are new to phaser you might want to check out my post on <a href="/2017/10/04/phaser-getting-started/">getting started with phaser</a>, I also assume that you have at least some knowlage of html, css, and javaScript as I do not have any posts on how to get up to speed with that at this time. This is my standard <a href="/2017/02/04/hexo-tags/">hexo tag</a> for all <a href="/categories/phaser/">phaser posts</a> where I want to inform readers that this is not a post for beginers.</p>
+<h2 id="A-basic-example-of-usage-of-the-events-component"><a href="#A-basic-example-of-usage-of-the-events-component" class="headerlink" title="A basic example of usage of the events component"></a>A basic example of usage of the events component</h2><p>Although The events component is there to work with off the bat there are some boolean values that need to be set true in order for any of them to work. So a basic example will involve at least a single display object that has both the events, and input components (Sprites, Graphics). This display object will have it’s input handler enabled by setting the inputEnabled boolean true, at which point a few event handlers will now work such as onInputDown.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>, </div><div class="line"> </div><div class="line">    &#123;</div><div class="line"> </div><div class="line">        <span class="attr">create</span> : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">// making a graphics display object object</span></div><div class="line">            <span class="keyword">var</span> gra = game.add.graphics(game.world.centerX, game.world.centerY),</div><div class="line"> </div><div class="line">            <span class="comment">// draw method for the object</span></div><div class="line">            draw = <span class="function"><span class="keyword">function</span> (<span class="params">color, size</span>) </span>&#123;</div><div class="line"> </div><div class="line">                color = color || <span class="number">0xff0000</span>;</div><div class="line">                size = size || <span class="number">75</span>;</div><div class="line"> </div><div class="line">                gra.clear();</div><div class="line">                gra.beginFill(color);</div><div class="line">                gra.drawRect(-size / <span class="number">2</span>, -size / <span class="number">2</span>, size, size);</div><div class="line">                gra.endFill();</div><div class="line"> </div><div class="line">            &#125;;</div><div class="line"> </div><div class="line">            <span class="comment">// make sure input is enambed for the object</span></div><div class="line">            gra.inputEnabled = <span class="literal">true</span>;</div><div class="line"> </div><div class="line">            <span class="comment">// now I can set some event handlers</span></div><div class="line">            gra.events.onInputDown.add(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">                draw(<span class="number">0x00ff00</span>, <span class="number">150</span>);</div><div class="line"> </div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">            gra.events.onInputUp.add(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">                draw();</div><div class="line"> </div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">            draw();</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">);</div></pre></td></tr></table></figure>
+<p>I use the add method for a certain event handler such as onInputDown to add a single event handler to an array of methods that are to be called for that handler. That is because onInputDown is an instance of Phasers Signal Constructor, and as such works similarly to addEventListener in vanilla js, in the sense that I can have more than one callback for a certain event.</p>
+<h2 id="Be-sure-to-set-inputEnabled-to-true"><a href="#Be-sure-to-set-inputEnabled-to-true" class="headerlink" title="Be sure to set inputEnabled to true"></a>Be sure to set inputEnabled to true</h2><p>The events object is there to play with no matter what, but I will want to set inputEnabled true or else none of them will work. This also sets up an instance of inputHandler for the display object. Be sure to check out the post I wrote on <a href="/2017/10/23/phaser-components-input-enabled/">inputEnabled</a> component.</p>
+<h2 id="onInutDown"><a href="#onInutDown" class="headerlink" title="onInutDown"></a>onInutDown</h2><p>This is a handler that will fire when a mouse click, or touch start event occurs on the sprite, graphics or other display object. This event fires just once, and will not fire over, and over again after a pause like some other handlers.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">gra.events.onInputDown.add(<span class="function"><span class="keyword">function</span> (<span class="params">dispObj, pointer</span>) </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">// the display object (in this case gra)</span></div><div class="line">    <span class="built_in">console</span>.log(dispObj);</div><div class="line"></div><div class="line">    <span class="comment">// the pointer object of the mouse, or touch</span></div><div class="line">    <span class="built_in">console</span>.log(pointer);</div><div class="line"></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>The method that I give to the add method of the event handler will receive a reference to the relevant display object (in this post I am using <a href="/2017/10/21/phaser-graphics/">Graphics</a> rather than sprites), and a reference to a <a href="/2017/10/17/phaser-input-pointer-objects/">pointer object</a>.</p>
+<h2 id="onInputUp"><a href="#onInputUp" class="headerlink" title="onInputUp"></a>onInputUp</h2><p>Same as onInputDown, but if fires when the mouse button is release, or a touch event has ended.</p>
+<h2 id="onInputOver-and-onInputOut"><a href="#onInputOver-and-onInputOut" class="headerlink" title="onInputOver, and onInputOut"></a>onInputOver, and onInputOut</h2><p>These are additional handlers in the events object that are fired when a mouse cursor is hovering over the display object, and when it leaves, which is useful for desktop projects.</p>
+<h2 id="Getting-started-with-drag-events"><a href="#Getting-started-with-drag-events" class="headerlink" title="Getting started with drag events"></a>Getting started with drag events</h2><p>In order to get started with drag events in addition to setting the inputEnabled bool to true, there is also an additional bool to set true in the inputHandler of the display object at gra.input.draggable.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// make some graphics</span></div><div class="line"><span class="keyword">var</span> gra = game.add.graphics(<span class="number">0</span>,<span class="number">0</span>);</div><div class="line"> </div><div class="line">gra.beginFill(<span class="number">0x00ff00</span>);</div><div class="line">gra.drawRect(<span class="number">0</span>,<span class="number">0</span>,<span class="number">50</span>,<span class="number">50</span>);</div><div class="line">gra.endFill();</div><div class="line"> </div><div class="line"><span class="comment">// enable input for the graphics</span></div><div class="line">gra.inputEnabled = <span class="literal">true</span>;</div><div class="line"> </div><div class="line"><span class="comment">// make the graphics draggable</span></div><div class="line">gra.input.draggable = <span class="literal">true</span>;</div></pre></td></tr></table></figure>
+<p>Be sure to check out my <a href="/2017/10/24/phaser-inputhandler-draggable/">post on draggable</a> input in phaser. To know a bit more about what is need to know with the inputHander, this post will cover more about the events involved.</p>
+<h2 id="onDragStart-onDragUpdate-and-onDragEnd"><a href="#onDragStart-onDragUpdate-and-onDragEnd" class="headerlink" title="onDragStart, onDragUpdate, and onDragEnd"></a>onDragStart, onDragUpdate, and onDragEnd</h2><p>Any drag event will involve a mouse click down, movement of the mouse, and then release of the mouse button, or a similar situation involving a touch screen. Reslulting in dragStart, dragUpdate, and dragEnd events.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>, </div><div class="line"> </div><div class="line">    &#123;</div><div class="line"> </div><div class="line">        <span class="attr">create</span> : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">// making a graphics display object object</span></div><div class="line">            <span class="keyword">var</span> gra = game.add.graphics(game.world.centerX, game.world.centerY),</div><div class="line">            info = game.add.text(<span class="number">0</span>, <span class="number">0</span>, <span class="string">''</span>, &#123;</div><div class="line">                    <span class="attr">fill</span> : <span class="string">'#ffffff'</span></div><div class="line">                &#125;),</div><div class="line"> </div><div class="line">            <span class="comment">// draw method for the object</span></div><div class="line">            draw = <span class="function"><span class="keyword">function</span> (<span class="params">color, size</span>) </span>&#123;</div><div class="line"> </div><div class="line">                color = color || <span class="number">0xff0000</span>;</div><div class="line">                size = size || <span class="number">75</span>;</div><div class="line"> </div><div class="line">                gra.clear();</div><div class="line">                gra.beginFill(color);</div><div class="line">                gra.drawRect(-size / <span class="number">2</span>, -size / <span class="number">2</span>, size, size);</div><div class="line">                gra.endFill();</div><div class="line"> </div><div class="line">            &#125;;</div><div class="line"> </div><div class="line">            <span class="comment">// make sure input is enabled for the object</span></div><div class="line">            gra.inputEnabled = <span class="literal">true</span>;</div><div class="line"> </div><div class="line">            <span class="comment">// we also want to enable dragging</span></div><div class="line">            gra.input.draggable = <span class="literal">true</span>;</div><div class="line"> </div><div class="line">            <span class="comment">// what to do when the drag starts</span></div><div class="line">            gra.events.onDragStart.add(<span class="function"><span class="keyword">function</span> (<span class="params">gra</span>) </span>&#123;</div><div class="line"> </div><div class="line">                gra.data.ticks = <span class="number">0</span>;</div><div class="line"> </div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">            <span class="comment">// what to do as the drag moves</span></div><div class="line">            gra.events.onDragUpdate.add(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">                <span class="keyword">if</span> (<span class="keyword">typeof</span> gra.data.ticks === <span class="string">'number'</span>) &#123;</div><div class="line"> </div><div class="line">                    gra.data.ticks += <span class="number">1</span>;</div><div class="line"> </div><div class="line">                    info.text = gra.data.ticks;</div><div class="line"> </div><div class="line">                &#125;</div><div class="line"> </div><div class="line">                info.x = gra.x;</div><div class="line">                info.y = gra.y;</div><div class="line"> </div><div class="line">                draw();</div><div class="line"> </div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">            <span class="comment">// what to do when the drag stops</span></div><div class="line">            gra.events.onDragStop.add(<span class="function"><span class="keyword">function</span> (<span class="params">gra</span>) </span>&#123;</div><div class="line"> </div><div class="line">                gra.data.ticks = <span class="number">0</span>;</div><div class="line">                info.text = <span class="string">''</span>;</div><div class="line">                draw();</div><div class="line"> </div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">            draw();</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">);</div></pre></td></tr></table></figure>
+<p>It is important to Keep in mind that the dragUpdate handler seems to fire before the dragStart handler, so if I use dragStart to set something up, it might not be there the first time dragUpdate fires.</p>
+<h2 id="Preventing-the-context-menu-from-showing-up-with-preventDefault"><a href="#Preventing-the-context-menu-from-showing-up-with-preventDefault" class="headerlink" title="Preventing the context menu from showing up with preventDefault"></a>Preventing the context menu from showing up with preventDefault</h2><p>A context menu may show up when I long press, or right click a projects canvas element, there is of course the preventDefault bool that can called. A reference to the canvas element can be found at game.canvas where something like this can be done:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// prevent context menu on long press, or right click</span></div><div class="line">game.canvas.oncontextmenu = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">    e.preventDefault();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>The events component is very useful for quickly getting started with input involving display objects. As time goes on I may update this post to reference other posts on phaser display object components as time goes by.</p>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/10/26/phaser-components-events/" data-id="cj98mv47x00019ov14pwgkd0h" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/games/">games</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/phaser/">phaser</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/10/27/phaser-math-distance/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Finding the distance between two points in Phaser
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/10/24/phaser-inputhandler-draggable/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Making game display objects draggable in phaser</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.73px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.91px;">SEO</a> <a href="/tags/animation/" style="font-size: 10px;">animation</a> <a href="/tags/automation/" style="font-size: 13.64px;">automation</a> <a href="/tags/blog/" style="font-size: 14.55px;">blog</a> <a href="/tags/canvas/" style="font-size: 12.73px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.73px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.82px;">discovery</a> <a href="/tags/ejs/" style="font-size: 10px;">ejs</a> <a href="/tags/games/" style="font-size: 18.18px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hexo/" style="font-size: 15.45px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10px;">jimp</a> <a href="/tags/jquery/" style="font-size: 12.73px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/lodash/" style="font-size: 16.36px;">lodash</a> <a href="/tags/node-js/" style="font-size: 19.09px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.27px;">phaser</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/10/28/phaser-line/">The Phaser Line constructor</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/27/phaser-math-distance/">Finding the distance between two points in Phaser</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/26/phaser-components-events/">The Phaser events component, setting up event handlers for Sprites and Graphics</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/24/phaser-inputhandler-draggable/">Making game display objects draggable in phaser</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/23/phaser-components-input-enabled/">The Phaser inputEnabled component for use on Sprites, Graphics, ect</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

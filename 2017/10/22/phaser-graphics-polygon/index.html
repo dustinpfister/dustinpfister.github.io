@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Working with arrays of points, and polygons in phaser | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="When working with on the fly graphics in phaser, there might come a time in which i might want to do something with a collection of points that form a shape, or drawing, or polygon. In this post I wil">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Working with arrays of points, and polygons in phaser">
+<meta property="og:url" content="https://dustinpfister.github.io/2017/10/22/phaser-graphics-polygon/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="When working with on the fly graphics in phaser, there might come a time in which i might want to do something with a collection of points that form a shape, or drawing, or polygon. In this post I wil">
+<meta property="og:updated_time" content="2017-10-23T15:56:27.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Working with arrays of points, and polygons in phaser">
+<meta name="twitter:description" content="When working with on the fly graphics in phaser, there might come a time in which i might want to do something with a collection of points that form a shape, or drawing, or polygon. In this post I wil">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <script src="/js/phaser-2.6.2.min.js"></script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-phaser-graphics-polygon" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/10/22/phaser-graphics-polygon/" class="article-date"> Published:
+  <time datetime="2017-10-22T13:37:00.000Z" itemprop="datePublished">2017-10-22</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2017/10/22/phaser-graphics-polygon/" class="article-date"> Modified:
+  <time datetime="2017-10-23T15:56:27.000Z" itemprop="dateModified">2017-10-23</time>
+</a>
+
+    <span class="article-date">V1.6</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/phaser/">phaser</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Working with arrays of points, and polygons in phaser
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>When working with on the fly graphics in <a href="http://phaser.io/" target="_blank" rel="external">phaser</a>, there might come a time in which i might want to do something with a collection of points that form a shape, or drawing, or polygon. In this post I will be writing about how to make on the fly shapes without using any external assets in phaser.</p>
+<a id="more"></a>
+<!-- demo app -->
+<p><div id="gamearea" style="width:320px;height:240px;margin-left:auto;margin-right:auto;"></div></p>
+<script>
+
+// Poly Model Example
+var PM = (function () {
+
+    var api = {
+
+        pointCount : 10,
+
+        // the points
+        points : [],
+
+        // parallel array of delta values for the points
+        data : [],
+
+        // set the staring status of points
+        setPoints : function () {
+
+            // current point index
+            var pi = 0,
+            data;
+
+            this.points = [];
+
+            // set the values for each point
+            this.setData();
+            while (pi < this.pointCount) {
+
+                data = this.data[pi];
+
+                // push x first, then y
+                this.points.push(Math.floor(Math.cos(data.radian) * data.radius));
+                this.points.push(Math.floor(y = Math.sin(data.radian) * data.radius));
+
+                pi += 1;
+
+            }
+
+            // push first point at the end
+            this.points.push(this.points[0]);
+            this.points.push(this.points[1]);
+
+        },
+
+        forAll : function (func) {
+
+            var i = 0,
+            api;
+            while (i < this.pointCount) {
+
+                api = {
+
+                    i : i,
+                    xi : i * 2,
+                    yi : i * 2 + 1,
+                    data : this.data[i],
+                    points : this.points,
+                    pointCount : this.pointCount
+
+                };
+
+                api.x = api.points[api.xi];
+                api.y = api.points[api.yi];
+
+                func.call(api, api.x, api.y);
+
+                i += 1;
+            }
+
+        },
+
+        // set data values
+        setData : function () {
+
+            var i = 0;
+
+            this.data = [];
+            while (i < this.pointCount) {
+
+                this.data.push({
+
+                    radius : 80,
+                    radian : Math.PI * 2 / this.pointCount * i,
+                    deltaRadius : 1 - Math.floor(Math.random() * 2) * 2,
+                    radiusMin : 70 - Math.floor(Math.random() * 30),
+                    radiusMax : 90 + Math.floor(Math.random() * 30),
+                    rate : 33 + Math.floor(66 * Math.random()),
+                    lastTime : new Date(),
+                    prop : Math.random() * .25 + .25
+
+                });
+
+                i += 1;
+
+            }
+
+        },
+
+        update : function () {
+
+            var i = 0,
+            roll,
+            now,
+            data;
+            while (i < this.pointCount) {
+
+                data = this.data[i];
+
+                now = new Date();
+                roll = Math.random();
+
+                if (roll < data.prop) {
+
+                    data.rate = 33 + Math.floor(66 * Math.random())
+
+                }
+
+                if (now - data.lastTime >= data.rate) {
+
+                    data.radius += data.deltaRadius;
+
+                    if (data.radius <= data.radiusMin) {
+
+                        data.radius = data.radiusMin;
+                        data.deltaRadius = 1;
+
+                    }
+
+                    if (data.radius >= data.radiusMax) {
+
+                        data.radius = data.radiusMax;
+                        data.deltaRadius = -1;
+
+                    }
+
+                    this.points[i * 2] = Math.cos(data.radian) * data.radius;
+                    this.points[i * 2 + 1] = Math.sin(data.radian) * data.radius;
+
+                    data.lastTime = now;
+                }
+
+                i += 1;
+
+            }
+
+            // splice out the last point
+            // and set it to the first point
+            this.points.splice(this.points.length - 2, 1, this.points[0]);
+            this.points.splice(this.points.length - 1, 1, this.points[1]);
+
+        }
+
+    };
+
+    return api;
+
+}
+    ());
+
+var game = new Phaser.Game(320, 240, Phaser.AUTO, 'gamearea', {
+
+        // create method
+        create : function () {
+
+            PM.setPoints();
+
+            var back = game.add.graphics(game.world.centerX, game.world.centerY);
+
+            back.lineStyle(3, 000000, .4);
+
+            PM.forAll(function (x, y) {
+
+                back.moveTo(Math.cos(this.data.radian) * this.data.radiusMin,
+                    Math.sin(this.data.radian) * this.data.radiusMin);
+                back.lineTo(
+
+                    Math.cos(this.data.radian) * this.data.radiusMax,
+                    Math.sin(this.data.radian) * this.data.radiusMax);
+
+            });
+
+            // add a graphics object to the world
+            var gra = game.add.graphics(game.world.centerX, game.world.centerY);
+
+        },
+
+        update : function () {
+
+            var gra = game.world.children[1];
+
+            gra.clear();
+
+            PM.update();
+
+            gra.lineStyle(6, 0x000000);
+
+            gra.drawPolygon(PM.points);
+
+            gra.lineStyle(2, 0xffffff);
+
+            gra.drawPolygon(PM.points);
+        }
+
+    }, true);
+
+</script>
+
+
+<h2 id="If new to Phaser"><a href="#If-new-to-Phaser" class="headerlink" title="If new to Phaser"></a>If new to Phaser</h2><p>If you are new to phaser you might want to check out my post on <a href="/2017/10/04/phaser-getting-started/">getting started with phaser</a>, I also assume that you have at least some knowlage of html, css, and javaScript as I do not have any posts on how to get up to speed with that at this time. This is my standard <a href="/2017/02/04/hexo-tags/">hexo tag</a> for all <a href="/categories/phaser/">phaser posts</a> where I want to inform readers that this is not a post for beginers.</p>
+<h2 id="A-Graphics-drawPolygon-example"><a href="#A-Graphics-drawPolygon-example" class="headerlink" title="A Graphics.drawPolygon example"></a>A Graphics.drawPolygon example</h2><p>I often start a post off with a simple example of what I will be writing about in more detail in post. As such here is a quick, simple example of use for <a href="http://phaser.io/docs/2.6.2/Phaser.Graphics.html#drawPolygon" target="_blank" rel="external">Graphics.drawPolygon</a> in phaser.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>, </div><div class="line">&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// create method</span></div><div class="line">        create : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">// add a graphics object to the world</span></div><div class="line">            <span class="keyword">var</span> gra = game.add.graphics(game.world.centerX, game.world.centerY);</div><div class="line"> </div><div class="line">            gra.lineStyle(<span class="number">3</span>, <span class="number">0x00ff00</span>);</div><div class="line">            gra.drawPolygon([<span class="number">0</span>, <span class="number">-100</span>, <span class="number">100</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>,<span class="number">-50</span>,<span class="number">100</span>,<span class="number">-50</span>,<span class="number">50</span>,<span class="number">-100</span>,<span class="number">50</span>,<span class="number">-100</span>,<span class="number">-50</span>,<span class="number">-50</span>,<span class="number">-50</span>,<span class="number">-50</span>,<span class="number">-100</span>,<span class="number">0</span>,<span class="number">-100</span>]);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">);</div></pre></td></tr></table></figure>
+<p>Here I just made a very bad drawing of an arrow, but you should get the basic idea. You need create a Graphics Display Object, set a style for it, and then pass an array of points to it that follow the simple formula of:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> x = pointIndex * <span class="number">2</span>,</div><div class="line">y = pointIndex * <span class="number">2</span> + <span class="number">1</span>;</div></pre></td></tr></table></figure>
+<h2 id="Arrays-of-points"><a href="#Arrays-of-points" class="headerlink" title="Arrays of points"></a>Arrays of points</h2><p>How would you go about having an array of points in javaScript? Would you store an array of objects that have x, and y properties? Would you have an array of arrays where the first element is x, and the second element is y? Or would you just have a linear array of numbers that follow a certain formula?</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> ptFormat1 = [&#123;<span class="attr">x</span>:<span class="number">10</span>,<span class="attr">y</span>:<span class="number">20</span>&#125;,&#123;<span class="attr">x</span>:<span class="number">25</span>,<span class="attr">y</span>:<span class="number">-50</span>&#125;], <span class="comment">// Array of objects</span></div><div class="line">ptFormat2 = [[<span class="number">10</span>,<span class="number">20</span>],[<span class="number">25</span>,<span class="number">-50</span>]], <span class="comment">// Array of arrays</span></div><div class="line">ptFormat3 = [<span class="number">10</span>,<span class="number">20</span>,<span class="number">25</span>,<span class="number">-50</span>];  <span class="comment">// Formula (this is what we use in phaser)</span></div></pre></td></tr></table></figure>
+<p>Well regardless of how you might think with this in phaser just a single linear array is used, so whenever you want to feed some points to a method like Graphics.drawPolygon this is the format the array of points should be in.</p>
+<h2 id="Generating-a-points-array"><a href="#Generating-a-points-array" class="headerlink" title="Generating a points array"></a>Generating a points array</h2><p>So when it comes to making a shape in phaser I want to think in terms of of an array of numbers that are the x, and y values of each point.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> points = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> pCT = <span class="number">10</span>, <span class="comment">// point count</span></div><div class="line">    p = [], <span class="comment">// points array to be returned</span></div><div class="line">    pi = <span class="number">0</span>; <span class="comment">// current point index</span></div><div class="line"> </div><div class="line">    <span class="keyword">while</span> (pi &lt; pCT) &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// set some radian, and radius values for each point</span></div><div class="line">        <span class="keyword">var</span> ra = <span class="built_in">Math</span>.PI * <span class="number">2</span> / pCT * pi,</div><div class="line">        ri = <span class="number">75</span> + <span class="built_in">Math</span>.random() * <span class="number">25</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// push x first, then y</span></div><div class="line">        p.push(<span class="built_in">Math</span>.cos(ra) * ri);</div><div class="line">        p.push(y = <span class="built_in">Math</span>.sin(ra) * ri);</div><div class="line"> </div><div class="line">        pi += <span class="number">1</span>;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// push first point at the end</span></div><div class="line">    p.push(p[<span class="number">0</span>]);</div><div class="line">    p.push(p[<span class="number">1</span>]);</div><div class="line"> </div><div class="line">    <span class="comment">// return the points</span></div><div class="line">    <span class="keyword">return</span> p;</div><div class="line"> </div><div class="line">&#125;</div><div class="line">    ());</div><div class="line"> </div><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>, </div><div class="line"> </div><div class="line">&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// create method</span></div><div class="line">        create : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">// add a graphics object to the world</span></div><div class="line">            <span class="keyword">var</span> gra = game.add.graphics(game.world.centerX, game.world.centerY);</div><div class="line"> </div><div class="line">            gra.lineStyle(<span class="number">3</span>, <span class="number">0x00ff00</span>);</div><div class="line">            gra.drawPolygon(points);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">);</div></pre></td></tr></table></figure>
+<h2 id="Add-Phaser-Graphics-display-Object"><a href="#Add-Phaser-Graphics-display-Object" class="headerlink" title="Add Phaser Graphics display Object"></a>Add Phaser Graphics display Object</h2><p>Once I have an array of points to pass to the polygon method, the next step is the add method of the main game object that is used to create a new graphics display object via game.add.graphics(x,y). This is what I call first in my create method to get a new graphics display object that will contain the drawPolygon method, along with a bunch of other useful stuff.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> gra = game.add.graphics(game.world.centerX, game.world.centerY);</div></pre></td></tr></table></figure>
+<h2 id="Setting-Graphics-line-Style-in-phaser"><a href="#Setting-Graphics-line-Style-in-phaser" class="headerlink" title="Setting Graphics line Style in phaser"></a>Setting Graphics line Style in phaser</h2><p>Another important method to know of is the graphics lineStyle method, this is what to use to style lines that are used to draw polygons, and anything else in the graphic that involves drawing a line. This is a method in which I pass lineWidth, color, and alpha too in order to set line style.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gra.lineStyle(<span class="number">3</span>,<span class="number">0x00ff00</span>,<span class="number">.8</span>);</div></pre></td></tr></table></figure>
+<p>this sets a lineWidth of 3, a lineColor of green, and an lineAlpha (or transparent) value of .8. Of course Alternatively I can directly set those values by setting each property independently as well.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">gra.lineWidth = <span class="number">3</span>;</div><div class="line">gra.lineColor = <span class="number">0x00ff00</span>;</div><div class="line">gra.lineAlpha = <span class="number">.8</span>;</div></pre></td></tr></table></figure>
+<p>Looking at the source code is may be generally better to use the lineStyle method as it also runs some checks on the currentPath</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>I hope this post has helped you gain a better understanding of how to work with polyGons in phaser. If you liked this post you might want to check out my <a href="/categories/phaser/">many other posts</a> on phaser. Because this post is not graphics my post on <a href="/2017/10/21/phaser-graphics/">Graphics in general</a> in phaser might be of specific interest.</p>
+<p>in any case have fun working (or playing), with phaser.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/10/22/phaser-graphics-polygon/" data-id="cj92w8bix0001hov1vvw7k77o" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/games/">games</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/phaser/">phaser</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/10/23/phaser-components-input-enabled/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          The Phaser inputEnabled component for use on Sprites, Graphics, ect
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/10/22/phaser-graphics-lineto/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Playing with lines in phaser with Graphics.lineTo</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.73px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.91px;">SEO</a> <a href="/tags/animation/" style="font-size: 10px;">animation</a> <a href="/tags/automation/" style="font-size: 13.64px;">automation</a> <a href="/tags/blog/" style="font-size: 14.55px;">blog</a> <a href="/tags/canvas/" style="font-size: 12.73px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.73px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.82px;">discovery</a> <a href="/tags/ejs/" style="font-size: 10px;">ejs</a> <a href="/tags/games/" style="font-size: 18.18px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hexo/" style="font-size: 15.45px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10px;">jimp</a> <a href="/tags/jquery/" style="font-size: 12.73px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/lodash/" style="font-size: 16.36px;">lodash</a> <a href="/tags/node-js/" style="font-size: 19.09px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.27px;">phaser</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/10/28/phaser-line/">The Phaser Line constructor</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/27/phaser-math-distance/">Finding the distance between two points in Phaser</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/26/phaser-components-events/">The Phaser events component, setting up event handlers for Sprites and Graphics</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/24/phaser-inputhandler-draggable/">Making game display objects draggable in phaser</a>
+          </li>
+        
+          <li>
+            <a href="/2017/10/23/phaser-components-input-enabled/">The Phaser inputEnabled component for use on Sprites, Graphics, ect</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
