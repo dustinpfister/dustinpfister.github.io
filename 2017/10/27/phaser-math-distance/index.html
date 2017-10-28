@@ -11,7 +11,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2017/10/27/phaser-math-distance/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="In Phaser there is a Math object like that of the Math object in core javaScript. There are a few methods there that come in handy, one of which is a usual suspects in most projects that is used to fi">
-<meta property="og:updated_time" content="2017-10-28T19:11:22.000Z">
+<meta property="og:updated_time" content="2017-10-28T22:00:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Finding the distance between two points in Phaser">
 <meta name="twitter:description" content="In Phaser there is a Math object like that of the Math object in core javaScript. There are a few methods there that come in handy, one of which is a usual suspects in most projects that is used to fi">
@@ -108,10 +108,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/10/27/phaser-math-distance/" class="article-date"> Modified:
-  <time datetime="2017-10-28T19:11:22.000Z" itemprop="dateModified">2017-10-28</time>
+  <time datetime="2017-10-28T22:00:11.000Z" itemprop="dateModified">2017-10-28</time>
 </a>
 
-    <span class="article-date">V1.4</span>
+    <span class="article-date">V1.5</span>
 
     
   <div class="article-category">
@@ -136,115 +136,6 @@ ga('send', 'pageview');
       
         <p>In <a href="http://phaser.io/" target="_blank" rel="external">Phaser</a> there is a Math object like that of the Math object in core javaScript. There are a few methods there that come in handy, one of which is a usual suspects in most projects that is used to find the distance between two points. That is the 2d distance formula that can be found at Phaser.Math.distance.</p>
 <a id="more"></a>
-<p><div id="gamearea" style="width:320px;height:240px;margin-left:auto;margin-right:auto;"></div></p>
-<script>
-var game = new Phaser.Game(320, 240, Phaser.AUTO, 'gamearea', {
-
-        // create method
-        create : function () {
-
-            var one = game.add.graphics(game.world.centerX, game.world.centerY),
-            text = game.add.text(10, 10, '', {
-                    fill : '#ffffff',
-                    font : '15px courier'
-                });
-
-            one.beginFill(0xff0000);
-            one.drawCircle(0, 0, 25);
-            one.endFill();
-
-            var two = game.add.graphics(100, 50);
-            two.beginFill(0x00ff00);
-            two.drawCircle(0, 0, 25);
-            two.endFill();
-
-            two.data = {
-
-                a : 0,
-                aMax : 1000,
-                radius : 100,
-
-                amount : -100,
-                over : 50,
-                done : 0,
-
-                // no mathematical modulo?
-
-                modulo : function (x, m) {
-
-                    return (x % m + m) % m;
-
-                },
-
-                update : function (gra) {
-
-                    var r;
-
-                    this.a += 1;
-
-                    this.a = this.modulo(this.a, this.aMax);
-
-                    r = Math.PI * 2 / this.aMax * this.a;
-
-                    gra.x = game.world.centerX + Math.cos(r) * this.radius;
-                    gra.y = game.world.centerY + Math.sin(r) * this.radius;
-
-                    if (this.done < this.over) {
-
-                        var delta = this.amount / this.over;
-
-                        this.radius += delta;
-
-                        this.done += 1;
-
-                    } else {
-
-                        if (this.radius <= 0) {
-
-                            this.radius = 0;
-                            this.amount = 100 * Math.random();
-
-                        } else {
-
-                            this.amount = -this.radius;
-
-                        }
-
-                        this.over = 10 + Math.floor(Math.random() * 490);
-                        //this.over = Math.floor(Math.random() * 950) + 50;
-                        this.done = 0;
-
-                    }
-
-                    //gra.x = this.modulo(gra.x, game.world.width);
-                    //gra.y = this.modulo(gra.y, game.world.height);
-
-                }
-
-            };
-
-            console.log(Phaser.Math);
-
-            //console.log(Phaser.Math.distance(one.x, one.y, two.x, two.y));
-
-        },
-
-        // the update method will be called on each tick
-        update : function () {
-
-            var text = game.world.children[1],
-            one = game.world.children[0],
-            two = game.world.children[2];
-
-            two.data.update(two);
-
-            text.text = 'distance: ' + Phaser.Math.distance(one.x, one.y, two.x, two.y).toFixed(2);
-
-        }
-
-    });
-</script>
-
 
 <h2 id="If new to Phaser"><a href="#If-new-to-Phaser" class="headerlink" title="If new to Phaser"></a>If new to Phaser</h2><p>If you are new to phaser you might want to check out my post on <a href="/2017/10/04/phaser-getting-started/">getting started with phaser</a>, I also assume that you have at least some knowlage of html, css, and javaScript as I do not have any posts on how to get up to speed with that at this time. This is my standard <a href="/2017/02/04/hexo-tags/">hexo tag</a> for all <a href="/categories/phaser/">phaser posts</a> where I want to inform readers that this is not a post for beginers.</p>
 <h2 id="The-basic-example"><a href="#The-basic-example" class="headerlink" title="The basic example"></a>The basic example</h2><p>If I am using phaser as a dependency there is no need for a quick refresher for how to write the 2d distance formula, it’s right there in Phasers Math Object. To use it I gave it four arguments that are the x, and y positions of both points concerned.</p>

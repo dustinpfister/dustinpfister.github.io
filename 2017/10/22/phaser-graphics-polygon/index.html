@@ -11,7 +11,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2017/10/22/phaser-graphics-polygon/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="When working with on the fly graphics in phaser, there might come a time in which i might want to do something with a collection of points that form a shape, or drawing, or polygon. In this post I wil">
-<meta property="og:updated_time" content="2017-10-23T15:56:27.000Z">
+<meta property="og:updated_time" content="2017-10-28T22:00:10.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Working with arrays of points, and polygons in phaser">
 <meta name="twitter:description" content="When working with on the fly graphics in phaser, there might come a time in which i might want to do something with a collection of points that form a shape, or drawing, or polygon. In this post I wil">
@@ -108,10 +108,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/10/22/phaser-graphics-polygon/" class="article-date"> Modified:
-  <time datetime="2017-10-23T15:56:27.000Z" itemprop="dateModified">2017-10-23</time>
+  <time datetime="2017-10-28T22:00:10.000Z" itemprop="dateModified">2017-10-28</time>
 </a>
 
-    <span class="article-date">V1.6</span>
+    <span class="article-date">V1.7</span>
 
     
   <div class="article-category">
@@ -136,215 +136,6 @@ ga('send', 'pageview');
       
         <p>When working with on the fly graphics in <a href="http://phaser.io/" target="_blank" rel="external">phaser</a>, there might come a time in which i might want to do something with a collection of points that form a shape, or drawing, or polygon. In this post I will be writing about how to make on the fly shapes without using any external assets in phaser.</p>
 <a id="more"></a>
-<!-- demo app -->
-<p><div id="gamearea" style="width:320px;height:240px;margin-left:auto;margin-right:auto;"></div></p>
-<script>
-
-// Poly Model Example
-var PM = (function () {
-
-    var api = {
-
-        pointCount : 10,
-
-        // the points
-        points : [],
-
-        // parallel array of delta values for the points
-        data : [],
-
-        // set the staring status of points
-        setPoints : function () {
-
-            // current point index
-            var pi = 0,
-            data;
-
-            this.points = [];
-
-            // set the values for each point
-            this.setData();
-            while (pi < this.pointCount) {
-
-                data = this.data[pi];
-
-                // push x first, then y
-                this.points.push(Math.floor(Math.cos(data.radian) * data.radius));
-                this.points.push(Math.floor(y = Math.sin(data.radian) * data.radius));
-
-                pi += 1;
-
-            }
-
-            // push first point at the end
-            this.points.push(this.points[0]);
-            this.points.push(this.points[1]);
-
-        },
-
-        forAll : function (func) {
-
-            var i = 0,
-            api;
-            while (i < this.pointCount) {
-
-                api = {
-
-                    i : i,
-                    xi : i * 2,
-                    yi : i * 2 + 1,
-                    data : this.data[i],
-                    points : this.points,
-                    pointCount : this.pointCount
-
-                };
-
-                api.x = api.points[api.xi];
-                api.y = api.points[api.yi];
-
-                func.call(api, api.x, api.y);
-
-                i += 1;
-            }
-
-        },
-
-        // set data values
-        setData : function () {
-
-            var i = 0;
-
-            this.data = [];
-            while (i < this.pointCount) {
-
-                this.data.push({
-
-                    radius : 80,
-                    radian : Math.PI * 2 / this.pointCount * i,
-                    deltaRadius : 1 - Math.floor(Math.random() * 2) * 2,
-                    radiusMin : 70 - Math.floor(Math.random() * 30),
-                    radiusMax : 90 + Math.floor(Math.random() * 30),
-                    rate : 33 + Math.floor(66 * Math.random()),
-                    lastTime : new Date(),
-                    prop : Math.random() * .25 + .25
-
-                });
-
-                i += 1;
-
-            }
-
-        },
-
-        update : function () {
-
-            var i = 0,
-            roll,
-            now,
-            data;
-            while (i < this.pointCount) {
-
-                data = this.data[i];
-
-                now = new Date();
-                roll = Math.random();
-
-                if (roll < data.prop) {
-
-                    data.rate = 33 + Math.floor(66 * Math.random())
-
-                }
-
-                if (now - data.lastTime >= data.rate) {
-
-                    data.radius += data.deltaRadius;
-
-                    if (data.radius <= data.radiusMin) {
-
-                        data.radius = data.radiusMin;
-                        data.deltaRadius = 1;
-
-                    }
-
-                    if (data.radius >= data.radiusMax) {
-
-                        data.radius = data.radiusMax;
-                        data.deltaRadius = -1;
-
-                    }
-
-                    this.points[i * 2] = Math.cos(data.radian) * data.radius;
-                    this.points[i * 2 + 1] = Math.sin(data.radian) * data.radius;
-
-                    data.lastTime = now;
-                }
-
-                i += 1;
-
-            }
-
-            // splice out the last point
-            // and set it to the first point
-            this.points.splice(this.points.length - 2, 1, this.points[0]);
-            this.points.splice(this.points.length - 1, 1, this.points[1]);
-
-        }
-
-    };
-
-    return api;
-
-}
-    ());
-
-var game = new Phaser.Game(320, 240, Phaser.AUTO, 'gamearea', {
-
-        // create method
-        create : function () {
-
-            PM.setPoints();
-
-            var back = game.add.graphics(game.world.centerX, game.world.centerY);
-
-            back.lineStyle(3, 000000, .4);
-
-            PM.forAll(function (x, y) {
-
-                back.moveTo(Math.cos(this.data.radian) * this.data.radiusMin,
-                    Math.sin(this.data.radian) * this.data.radiusMin);
-                back.lineTo(
-
-                    Math.cos(this.data.radian) * this.data.radiusMax,
-                    Math.sin(this.data.radian) * this.data.radiusMax);
-
-            });
-
-            // add a graphics object to the world
-            var gra = game.add.graphics(game.world.centerX, game.world.centerY);
-
-        },
-
-        update : function () {
-
-            var gra = game.world.children[1];
-
-            gra.clear();
-
-            PM.update();
-
-            gra.lineStyle(6, 0x000000);
-
-            gra.drawPolygon(PM.points);
-
-            gra.lineStyle(2, 0xffffff);
-
-            gra.drawPolygon(PM.points);
-        }
-
-    }, true);
-
-</script>
-
 
 <h2 id="If new to Phaser"><a href="#If-new-to-Phaser" class="headerlink" title="If new to Phaser"></a>If new to Phaser</h2><p>If you are new to phaser you might want to check out my post on <a href="/2017/10/04/phaser-getting-started/">getting started with phaser</a>, I also assume that you have at least some knowlage of html, css, and javaScript as I do not have any posts on how to get up to speed with that at this time. This is my standard <a href="/2017/02/04/hexo-tags/">hexo tag</a> for all <a href="/categories/phaser/">phaser posts</a> where I want to inform readers that this is not a post for beginers.</p>
 <h2 id="A-Graphics-drawPolygon-example"><a href="#A-Graphics-drawPolygon-example" class="headerlink" title="A Graphics.drawPolygon example"></a>A Graphics.drawPolygon example</h2><p>I often start a post off with a simple example of what I will be writing about in more detail in post. As such here is a quick, simple example of use for <a href="http://phaser.io/docs/2.6.2/Phaser.Graphics.html#drawPolygon" target="_blank" rel="external">Graphics.drawPolygon</a> in phaser.</p>

@@ -11,7 +11,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2017/10/22/phaser-graphics-lineto/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="I have made a post on graphics in general in phaser and as such I spent some time playing with Graphics.lineTo, and Graphics.moveTo when it comes to drawing lines in phaser. Because there is a great d">
-<meta property="og:updated_time" content="2017-10-26T22:14:30.000Z">
+<meta property="og:updated_time" content="2017-10-28T22:00:10.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Playing with lines in phaser with Graphics.lineTo">
 <meta name="twitter:description" content="I have made a post on graphics in general in phaser and as such I spent some time playing with Graphics.lineTo, and Graphics.moveTo when it comes to drawing lines in phaser. Because there is a great d">
@@ -108,10 +108,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/10/22/phaser-graphics-lineto/" class="article-date"> Modified:
-  <time datetime="2017-10-26T22:14:30.000Z" itemprop="dateModified">2017-10-26</time>
+  <time datetime="2017-10-28T22:00:10.000Z" itemprop="dateModified">2017-10-28</time>
 </a>
 
-    <span class="article-date">V1.2</span>
+    <span class="article-date">V1.3</span>
 
     
   <div class="article-category">
@@ -136,150 +136,6 @@ ga('send', 'pageview');
       
         <p>I have <a href="/2017/10/21/phaser-graphics/">made a post on graphics in general</a> in phaser and as such I spent some time playing with Graphics.lineTo, and Graphics.moveTo when it comes to drawing lines in phaser. Because there is a great deal that can be done with lines, and graphics I thought that this needs a post of it’s own. This post will mostly be about use examples of lineTo in <a href="http://phaser.io/" target="_blank" rel="external">phaser</a>.</p>
 <a id="more"></a>
-<p><div id="gamearea" style="width:320px;height:240px;margin-left:auto;margin-right:auto;"></div></p>
-<script>
-
-var game = new Phaser.Game(320, 240, Phaser.AUTO, 'gamearea', {
-
-        // create method
-        create : function () {
-
-            // add a graphics object to the world
-            var gra = game.add.graphics(0, 0);
-
-            // making an interesting data object for this one
-            gra.data = {
-
-                maxLines : 20,
-                maxSets : 4,
-                lines : [],
-                sx : 0,
-                sy : game.world.height / 2,
-
-                drawCount : 2,
-                lastTime : new Date(),
-                rate : 150,
-
-                genLines : function () {
-
-                    var i,
-                    sx,
-                    sy,
-                    ex,
-                    ey,
-                    line,
-                    h = game.world.height,
-                    hh = h / 2,
-                    range = h / 2,
-                    setI = 0;
-
-                    this.lines = [];
-
-                    // make line sets
-                    while (setI < this.maxSets) {
-
-                        i = 0;
-                        sx = this.sx;
-                        sy = this.sy;
-
-                        // gen lines for current set
-                        while (i < this.maxLines) {
-
-                            range = hh * (i / this.maxLines);
-
-                            ex = game.world.width / this.maxLines * (i + 1);
-                            ey = Math.random() * range + (hh - range / 2);
-
-                            line = new Phaser.Line(sx, sy, ex, ey);
-
-                            this.lines.push(line);
-
-                            sx = ex;
-                            sy = ey;
-
-                            i += 1;
-                        }
-
-                        setI += 1;
-
-                    }
-
-                },
-
-                update : function () {
-
-                    var now = new Date();
-
-                    if (now - this.lastTime >= this.rate) {
-
-                        this.drawCount += 1;
-
-                        if (this.drawCount >= this.lines.length) {
-
-                            this.drawCount = 1;
-
-                            this.genLines();
-
-                        }
-
-                        this.lastTime = now;
-                    }
-
-                },
-
-                // draw to the given graphics object
-                draw : function (gra) {
-
-                    var i = 0,
-                    len = this.drawCount,
-                    //setI,
-                    per,
-                    line;
-
-                    gra.clear();
-
-                    gra.lineStyle(5, 0x000000);
-                    while (i < len) {
-
-                        line = this.lines[i];
-
-                        //setI = Math.floor(i / this.maxLines);
-
-                        per = i / (len - 1);
-
-                        gra.lineAlpha = 1 - per;
-
-                        // start by moving to a point
-                        gra.moveTo(line.start.x, line.start.y);
-
-                        // draw a line
-                        gra.lineTo(line.end.x, line.end.y);
-
-                        i += 1;
-                    }
-
-                }
-
-            };
-
-            gra.data.genLines();
-
-            gra.data.draw(gra);
-
-        },
-
-        update : function () {
-
-            var gra = game.world.children[0];
-
-            gra.data.update();
-            gra.data.draw(gra);
-
-        }
-
-    }, true);
-</script>
-
 
 <h2 id="If new to Phaser"><a href="#If-new-to-Phaser" class="headerlink" title="If new to Phaser"></a>If new to Phaser</h2><p>If you are new to phaser you might want to check out my post on <a href="/2017/10/04/phaser-getting-started/">getting started with phaser</a>, I also assume that you have at least some knowlage of html, css, and javaScript as I do not have any posts on how to get up to speed with that at this time. This is my standard <a href="/2017/02/04/hexo-tags/">hexo tag</a> for all <a href="/categories/phaser/">phaser posts</a> where I want to inform readers that this is not a post for beginers.</p>
 <h2 id="Getting-started-with-lines-in-phaser-with-lineStyle-moveTo-and-lineTo"><a href="#Getting-started-with-lines-in-phaser-with-lineStyle-moveTo-and-lineTo" class="headerlink" title="Getting started with lines in phaser with lineStyle, moveTo, and lineTo"></a>Getting started with lines in phaser with lineStyle, moveTo, and lineTo</h2><p>To draw A line I first need to make a <a href="http://phaser.io/docs/2.6.2/Phaser.Graphics.html" target="_blank" rel="external">Graphics</a> display object via game.add.graphics to work with, once I have that I will want to set some style for the line so that I can see it if the background is black, because the default color for lines is also black, to do that I use <a href="http://phaser.io/docs/2.6.2/Phaser.Graphics.html#lineStyle" target="_blank" rel="external">Graphics.lineStyle</a> to set the style. Then it is just a matter of using <a href="http://phaser.io/docs/2.6.2/Phaser.Graphics.html#moveTo" target="_blank" rel="external">Graphics.moveTo</a> to move to a certain point, relative to the display object position, and then use <a href="http://phaser.io/docs/2.6.2/Phaser.Graphics.html#lineTo" target="_blank" rel="external">Graphics.lineTo</a> to actually draw a line.</p>
