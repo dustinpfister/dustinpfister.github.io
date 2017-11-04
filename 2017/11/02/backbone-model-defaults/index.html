@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Setting default values for a Model in backbone.js | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="This will be a quick post on how to set, and work with default values in backbone. It sometimes just involves placing a defaults object of key and value pares, but things can become a little more comp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Setting default values for a Model in backbone.js">
+<meta property="og:url" content="https://dustinpfister.github.io/2017/11/02/backbone-model-defaults/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="This will be a quick post on how to set, and work with default values in backbone. It sometimes just involves placing a defaults object of key and value pares, but things can become a little more comp">
+<meta property="og:updated_time" content="2017-11-02T19:54:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Setting default values for a Model in backbone.js">
+<meta name="twitter:description" content="This will be a quick post on how to set, and work with default values in backbone. It sometimes just involves placing a defaults object of key and value pares, but things can become a little more comp">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <script src="/js/phaser-2.6.2.min.js"></script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-backbone-model-defaults" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/02/backbone-model-defaults/" class="article-date"> Published:
+  <time datetime="2017-11-02T13:37:00.000Z" itemprop="datePublished">2017-11-02</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2017/11/02/backbone-model-defaults/" class="article-date"> Modified:
+  <time datetime="2017-11-02T19:54:48.000Z" itemprop="dateModified">2017-11-02</time>
+</a>
+
+    <span class="article-date">V1.4</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/backbone/">backbone</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Setting default values for a Model in backbone.js
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>This will be a quick post on how to set, and work with <a href="http://backbonejs.org/#Model-defaults" target="_blank" rel="external">default values in backbone</a>. It sometimes just involves placing a defaults object of key and value pares, but things can become a little more complicated if you have a set method in the model.</p>
+<a id="more"></a>
+<h2 id="What-to-know-before-hand"><a href="#What-to-know-before-hand" class="headerlink" title="What to know before hand"></a>What to know before hand</h2><p>This is an advanced post on how to set up defaults for backbone Models, be sure to check out my <a href="/2017/11/02/backbone-model/">Main post on Models</a> if you want to know more about them in general. Also I you are new to backbone you will want to check out my <a href="/2017/11/01/backbone-getting-started/">getting start post</a> on backbone as well.</p>
+<h2 id="The-Need-for-defaults"><a href="#The-Need-for-defaults" class="headerlink" title="The Need for defaults"></a>The Need for defaults</h2><p>When creating a new instance of a Model, I might pass an object that will set some attributes for that Models State, but maybe not, or maybe just a few values and not all of them. For any one or more values that are not set with the object that I give during the Models creation, there should be a hard coded default value that the constructor falls back onto. This is why it is wise to have a defaults object, or a function that creates one each time I make a new instance of the Model.</p>
+<h2 id="Set-defaults-with-an-object"><a href="#Set-defaults-with-an-object" class="headerlink" title="Set defaults with an object"></a>Set defaults with an object</h2><p>The simplest way to set some defaults might be to just have a defaults object as part of the Model that is created with Backbone.Model.extend.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Item = Backbone.Model.extend(</div><div class="line"> </div><div class="line">    &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// some defaults</span></div><div class="line">        defaults : &#123;</div><div class="line">            <span class="attr">title</span> : <span class="string">'unknown'</span>,</div><div class="line">            <span class="attr">done</span> : <span class="literal">false</span>,</div><div class="line">            <span class="attr">time</span> : <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="number">0</span>) <span class="comment">// and old date (more later)</span></div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line">);</div><div class="line"> </div><div class="line"><span class="keyword">var</span> blank = <span class="keyword">new</span> Item();</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(blank.get(<span class="string">'title'</span>)); <span class="comment">// 'unknown'</span></div><div class="line"> </div><div class="line"><span class="keyword">var</span> book = <span class="keyword">new</span> Item(&#123;<span class="attr">title</span>:<span class="string">'A tree grows in brooklyn'</span>&#125;);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(book.get(<span class="string">'title'</span>)); <span class="comment">// 'A tree grows in brooklyn'</span></div></pre></td></tr></table></figure>
+<h2 id="Set-Model-defaults-with-a-function"><a href="#Set-Model-defaults-with-a-function" class="headerlink" title="Set Model defaults with a function"></a>Set Model defaults with a function</h2><p>For the most part setting some defaults with an object will work just fine, but it is true that objects are referenced, and not copied in javaScript. As long as the fact that all instances of the Model using the same object is not a problem, then there is nothing to worry about, unless it is a problem. In which case a function can be used in place of a plain old object that will return a new object each time.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Item = Backbone.Model.extend(</div><div class="line"> </div><div class="line">    &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// some defaults set with a function</span></div><div class="line">        defaults : <span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">// return a new object</span></div><div class="line">            <span class="keyword">return</span> &#123;</div><div class="line"> </div><div class="line">                <span class="attr">title</span> : <span class="string">'unknown'</span>,</div><div class="line">                <span class="attr">done</span> : <span class="literal">false</span>,</div><div class="line">                <span class="attr">time</span> : <span class="keyword">new</span> <span class="built_in">Date</span>() <span class="comment">// set the current date each time</span></div><div class="line"> </div><div class="line">            &#125;;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">);</div><div class="line"> </div><div class="line"><span class="keyword">var</span> now = <span class="keyword">new</span> Item();</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(now.get(<span class="string">'time'</span>)); <span class="comment">// the time now</span></div><div class="line"> </div><div class="line"><span class="keyword">var</span> func = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> later = <span class="keyword">new</span> Item();</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(later.get(<span class="string">'time'</span>)); <span class="comment">// a time three seconds later</span></div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line">setTimeout(func,<span class="number">3000</span>);</div></pre></td></tr></table></figure>
+<p>Using a function will allow for dynamic defaults. This can be used in place of more complex methods of doing this, such as defining a custom constructor method.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>backbone handles this aspect of making, and maintaining a Model well. It did not take me to log to get up to speed on how to do this, and I am moving on to more advanced aspects of MVC development with backbone.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/11/02/backbone-model-defaults/" data-id="cj9ils5ph0006h4v11p6zcypj" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/backbone/">backbone</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/11/02/backbone-model-extend/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Making a new backbone Model with Backbone.Model.extend
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/11/02/backbone-model/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">A general overview of Models in backbone.js</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.73px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.91px;">SEO</a> <a href="/tags/animation/" style="font-size: 10px;">animation</a> <a href="/tags/automation/" style="font-size: 13.64px;">automation</a> <a href="/tags/backbone/" style="font-size: 14.55px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.55px;">blog</a> <a href="/tags/canvas/" style="font-size: 12.73px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.73px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.82px;">discovery</a> <a href="/tags/ejs/" style="font-size: 10px;">ejs</a> <a href="/tags/games/" style="font-size: 18.18px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hexo/" style="font-size: 15.45px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10px;">jimp</a> <a href="/tags/jquery/" style="font-size: 12.73px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/lodash/" style="font-size: 16.36px;">lodash</a> <a href="/tags/node-js/" style="font-size: 19.09px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.27px;">phaser</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/11/04/backbone-view-extend/">A Backbone.View.extend example</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/02/backbone-model-set/">Why you want to use the set method to change Model state values in backbone.</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/02/backbone-model-constructor/">Making a custom backbone model constructor</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/02/backbone-model-extend/">Making a new backbone Model with Backbone.Model.extend</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/02/backbone-model-defaults/">Setting default values for a Model in backbone.js</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
