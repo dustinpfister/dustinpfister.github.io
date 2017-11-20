@@ -11,7 +11,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2017/05/31/nodejs-chalk/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="When making any kind of node.js project that may involve output to the command line interface, it may be desired to style that output, for the sake of adding emphases, or just to make it look nice. Ma">
-<meta property="og:updated_time" content="2017-09-30T23:09:32.000Z">
+<meta property="og:updated_time" content="2017-11-13T19:31:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="How to style terminal output text with node.js using chalk">
 <meta name="twitter:description" content="When making any kind of node.js project that may involve output to the command line interface, it may be desired to style that output, for the sake of adding emphases, or just to make it look nice. Ma">
@@ -108,10 +108,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/05/31/nodejs-chalk/" class="article-date"> Modified:
-  <time datetime="2017-09-30T23:09:32.000Z" itemprop="dateModified">2017-09-30</time>
+  <time datetime="2017-11-13T19:31:28.000Z" itemprop="dateModified">2017-11-13</time>
 </a>
 
-    <span class="article-date">V1.3</span>
+    <span class="article-date">V1.4</span>
 
     
   <div class="article-category">
@@ -135,15 +135,59 @@ ga('send', 'pageview');
     <div class="article-entry" itemprop="text">
       
         <p>When making any kind of node.js project that may involve output to the command line interface, it may be desired to style that output, for the sake of adding emphases, or just to make it look nice. Many CLI tools make use of color, for one reason or another, so if you want to add color to the output of you node.js CLI tools, you might want to check out <a href="https://www.npmjs.com/package/chalk" target="_blank" rel="external">chalk</a>.</p>
+<p>When I first wrote this post back in may I was using chalk 1.1.3, but as of this writing the latest version is now 2.3.0 as such there are a few new features, and some things just still work the same as aways.</p>
 <a id="more"></a>
 <h1 id="The-Chalk-Hello-world-app"><a href="#The-Chalk-Hello-world-app" class="headerlink" title="The Chalk Hello world app."></a>The Chalk Hello world app.</h1><p>Getting started with chalk is real simple, after adding it to your project with the usual</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install chalk --save</div></pre></td></tr></table></figure>
 <p>Throwing together a simple hello world that should demonstrate it’s capability can be as simple as this.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> chalk = <span class="built_in">require</span>(<span class="string">'chalk'</span>);</div><div class="line"> </div><div class="line"><span class="keyword">if</span> (chalk.supportsColor) &#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log( chalk.blue(<span class="string">'yes your terminal supports color, this text should be blue.'</span>) );</div><div class="line"> </div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'sorry the terminal does not support color.'</span>);</div><div class="line"> </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> chalk = <span class="built_in">require</span>(<span class="string">'chalk'</span>);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log( chalk.red(<span class="string">'hello world this is red terminal text!'</span>) );</div></pre></td></tr></table></figure>
+<h2 id="Color-Style-methods"><a href="#Color-Style-methods" class="headerlink" title="Color Style methods"></a>Color Style methods</h2><p>there are some 16 options in chalk when it comes to just setting a text color by calling one of the methods that is a color name, like so:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> chalk = <span class="built_in">require</span>(<span class="string">'chalk'</span>);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log( chalk.red(<span class="string">'red'</span>) );</div><div class="line"><span class="built_in">console</span>.log( chalk.blue(<span class="string">'blue'</span>) );</div><div class="line"><span class="built_in">console</span>.log( chalk.green(<span class="string">'green'</span>) );</div><div class="line"><span class="built_in">console</span>.log( chalk.magenta(<span class="string">'magenta'</span>) );</div></pre></td></tr></table></figure>
+<p>The full list of color options is as follows:</p>
+<ul>
+<li>red</li>
+<li>green</li>
+<li>yellow</li>
+<li>blue</li>
+<li>magenta</li>
+<li>cyan</li>
+<li>white</li>
+<li>gray</li>
+<li>redBright</li>
+<li>greenBright</li>
+<li>yellowBright</li>
+<li>blueBright</li>
+<li>magentaBright</li>
+<li>cyanBright</li>
+<li>whiteBright</li>
+</ul>
+<h2 id="Background-color-style-methods"><a href="#Background-color-style-methods" class="headerlink" title="Background color style methods"></a>Background color style methods</h2><p>Sometimes I might want to have a certain background color for the terminal text when making my CLI tool, and just have the plain old white foreground color. This can be done with the background style methods.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> chalk = <span class="built_in">require</span>(<span class="string">'chalk'</span>);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log( chalk.bgRed(<span class="string">'red'</span>) );</div><div class="line"><span class="built_in">console</span>.log( chalk.bgBlue(<span class="string">'blue'</span>) );</div><div class="line"><span class="built_in">console</span>.log( chalk.bgGreen(<span class="string">'green'</span>) );</div><div class="line"><span class="built_in">console</span>.log( chalk.bgMagenta(<span class="string">'magenta'</span>) );</div></pre></td></tr></table></figure>
+<p>The full list of options is the same as with foreground colors, I just need to to ad ‘bg’ to the front of the name and capitalize the name of the color.</p>
+<h2 id="Modifier-methods"><a href="#Modifier-methods" class="headerlink" title="Modifier methods"></a>Modifier methods</h2><p>there are some methods for logging text with certain text styles, such as bold, and underline. The support for these is mixed underline for example does not seem to work in windows 10 cmd.exe, and nothing with chalk works in cygwin64 terminal in windows as it has a color level of 0 there.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> chalk = <span class="built_in">require</span>(<span class="string">'chalk'</span>);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(chalk.bold(<span class="string">'bold'</span>));</div><div class="line"><span class="built_in">console</span>.log(chalk.underline(<span class="string">'bold'</span>));</div></pre></td></tr></table></figure>
+<ul>
+<li>reset</li>
+<li>bold</li>
+<li>dim</li>
+<li>italic</li>
+<li>underline (not working in windows 10 cmd.exe)</li>
+<li>inverse</li>
+<li>hidden</li>
+<li>strikethrough</li>
+<li>visible (Text is emitted only if enabled)</li>
+</ul>
+<h2 id="Color-level-and-color-support-of-the-terminal"><a href="#Color-level-and-color-support-of-the-terminal" class="headerlink" title="Color level, and color support of the terminal."></a>Color level, and color support of the terminal.</h2><p>There is a boolean where if true it means that color is supported at least at some level higher than that of 0. In windows 10 cmd.exe just seems to support level 1 which is just 16 colors, so even if the terminal supports true color assume its not there.</p>
+<p>For the most part I only need a few colors anyway.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> chalk = <span class="built_in">require</span>(<span class="string">'chalk'</span>);</div><div class="line"> </div><div class="line"><span class="keyword">if</span> (chalk.supportsColor) &#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(chalk.blue(<span class="string">'yes your terminal supports color, this text should be blue.'</span>));</div><div class="line"> </div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'sorry the terminal does not support color.'</span>);</div><div class="line"> </div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="comment">// the color level (0 - 3)</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">'color level: '</span> + chalk.level);</div></pre></td></tr></table></figure>
 <p>As you may have gathered you can use the supportsColor property of chalk to find out if the terminal that you are using supports color in the first place or not.</p>
 <h2 id="Defining-your-own-style"><a href="#Defining-your-own-style" class="headerlink" title="Defining your own style"></a>Defining your own style</h2><p>You can use a chainable API to define a custom style, and set it to a variable, like so.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> chalk = <span class="built_in">require</span>(<span class="string">'chalk'</span>),</div><div class="line"> </div><div class="line">myStyle = chalk.bold.green;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(myStyle(<span class="string">'This is my term text style'</span>));</div></pre></td></tr></table></figure>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Thats all, chalk is a nice little dependency that can be used to quickly add color to a CLI tool of yours.</p>
+<h2 id="Using-the-hex-method-to-set-color"><a href="#Using-the-hex-method-to-set-color" class="headerlink" title="Using the hex method to set color"></a>Using the hex method to set color</h2><p>It is possible to set text color using a hex method. In the case of the terminal not supporting a certain color, it will be scaled down to whatever is close. That makes it a great choice allowing for more advanced control over terminal color, while still working okay if the terminal only supports 16 colors.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> chalk = <span class="built_in">require</span>(<span class="string">'chalk'</span>);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(chalk.hex(<span class="string">'#ff0000'</span>)(<span class="string">'This is red text set via a hex value'</span>));</div></pre></td></tr></table></figure>
+<h2 id="Using-an-RGB-value"><a href="#Using-an-RGB-value" class="headerlink" title="Using an RGB value"></a>Using an RGB value</h2><p>This method works the same way as hex, only I can pass some dec values in place of a hex string.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> chalk = <span class="built_in">require</span>(<span class="string">'chalk'</span>);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(chalk.rgb(<span class="number">255</span>,<span class="number">0</span>,<span class="number">0</span>)(<span class="string">'This is red text set via a rgb value'</span>));</div></pre></td></tr></table></figure>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>I have been following the development of chalk for some time now, it’s a fun little dependency for setting terminal color to help add emphasis for things like error messages. The go to solution for adding stylish text to CLI tools in node.js for sure.</p>
 <p>Be sure to check out my many other <a href="/categories/node-js/">posts on node.js and npm packages</a>.</p>
 
       
@@ -209,7 +253,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/JSON/" style="font-size: 12.73px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.91px;">SEO</a> <a href="/tags/animation/" style="font-size: 10px;">animation</a> <a href="/tags/automation/" style="font-size: 13.64px;">automation</a> <a href="/tags/backbone/" style="font-size: 14.55px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.45px;">blog</a> <a href="/tags/canvas/" style="font-size: 12.73px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.73px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.82px;">discovery</a> <a href="/tags/ejs/" style="font-size: 10px;">ejs</a> <a href="/tags/games/" style="font-size: 18.18px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hexo/" style="font-size: 15.45px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10px;">jimp</a> <a href="/tags/jquery/" style="font-size: 12.73px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/lodash/" style="font-size: 16.36px;">lodash</a> <a href="/tags/node-js/" style="font-size: 19.09px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.27px;">phaser</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+      <a href="/tags/JSON/" style="font-size: 12.31px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.77px;">SEO</a> <a href="/tags/animation/" style="font-size: 10px;">animation</a> <a href="/tags/automation/" style="font-size: 13.85px;">automation</a> <a href="/tags/backbone/" style="font-size: 14.62px;">backbone</a> <a href="/tags/blog/" style="font-size: 16.15px;">blog</a> <a href="/tags/canvas/" style="font-size: 12.31px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.08px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.54px;">discovery</a> <a href="/tags/ejs/" style="font-size: 10px;">ejs</a> <a href="/tags/games/" style="font-size: 18.46px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hexo/" style="font-size: 15.38px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10px;">jimp</a> <a href="/tags/jquery/" style="font-size: 12.31px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.54px;">linux</a> <a href="/tags/lodash/" style="font-size: 16.92px;">lodash</a> <a href="/tags/node-js/" style="font-size: 19.23px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.69px;">phaser</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
     </div>
   </div>
 
@@ -231,23 +275,23 @@ ga('send', 'pageview');
       <ul>
         
           <li>
-            <a href="/2017/11/06/nodejs-html-to-json/">Converting html code to a JavaScript object in node.js with html-to-json</a>
+            <a href="/2017/11/19/nodejs-marked/">Parsing markdown to html, or plain text with marked.js</a>
           </li>
         
           <li>
-            <a href="/2017/11/05/nodejs-node-dir/">Looping over a bunch of files in Node.js with node-dir</a>
+            <a href="/2017/11/17/lodash_merge/">_.merge in lodash as a means to recursively merge down objects.</a>
           </li>
         
           <li>
-            <a href="/2017/11/04/backbone-view-extend/">A Backbone.View.extend example</a>
+            <a href="/2017/11/14/nodejs-mkdirp/">Making a path that may or may not be there in node.js thanks to mkdirp</a>
           </li>
         
           <li>
-            <a href="/2017/11/02/backbone-model-set/">Why you want to use the set method to change Model state values in backbone.</a>
+            <a href="/2017/11/14/nodejs-object-merge/">Merging two or more objects down on top of each other in node.js using object-merge</a>
           </li>
         
           <li>
-            <a href="/2017/11/02/backbone-model-constructor/">Making a custom backbone model constructor</a>
+            <a href="/2017/11/13/linux-nodejs-cli-tools-getting-started/">Getting started making a CLI tool with node.js</a>
           </li>
         
       </ul>

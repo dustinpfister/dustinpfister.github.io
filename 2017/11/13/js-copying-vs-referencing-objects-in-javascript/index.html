@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Copying vs referencing Objects in javaScript, and the many ways to copy them. | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="I have been cranking out posts on lodash as of late, and have come to make a post on _.cloneDeep which can be used to deep clone objects in javaScript if I am using lodash. As such A thought occurred">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Copying vs referencing Objects in javaScript, and the many ways to copy them.">
+<meta property="og:url" content="https://dustinpfister.github.io/2017/11/13/js-copying-vs-referencing-objects-in-javascript/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="I have been cranking out posts on lodash as of late, and have come to make a post on _.cloneDeep which can be used to deep clone objects in javaScript if I am using lodash. As such A thought occurred">
+<meta property="og:updated_time" content="2017-11-13T17:45:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Copying vs referencing Objects in javaScript, and the many ways to copy them.">
+<meta name="twitter:description" content="I have been cranking out posts on lodash as of late, and have come to make a post on _.cloneDeep which can be used to deep clone objects in javaScript if I am using lodash. As such A thought occurred">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <script src="/js/phaser-2.6.2.min.js"></script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-js-copying-vs-referencing-objects-in-javascript" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/13/js-copying-vs-referencing-objects-in-javascript/" class="article-date"> Published:
+  <time datetime="2017-11-13T16:35:00.000Z" itemprop="datePublished">2017-11-13</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2017/11/13/js-copying-vs-referencing-objects-in-javascript/" class="article-date"> Modified:
+  <time datetime="2017-11-13T17:45:42.000Z" itemprop="dateModified">2017-11-13</time>
+</a>
+
+    <span class="article-date">V1.1</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/js/">js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Copying vs referencing Objects in javaScript, and the many ways to copy them.
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>I have been cranking out <a href="/categories/lodash/">posts on lodash</a> as of late, and have come to make a <a href="/2017/11/13/lodash_clonedeep/">post on _.cloneDeep</a> which can be used to deep clone objects in javaScript if I am using <a href="https://lodash.com/" target="_blank" rel="external">lodash</a>. As such A thought occurred that maybe I should write a post on the deal with refencing vs copying objects in javaScript, and cover a bunch of ways to go about making a copy of an object.</p>
+<a id="more"></a>
+<h2 id="Referencing-objects"><a href="#Referencing-objects" class="headerlink" title="Referencing objects"></a>Referencing objects</h2><p>By default whenever I have a situation in which I have an object assigned to a variable it is a reference to that object.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> ref = &#123;<span class="attr">x</span>:<span class="number">32</span>,<span class="attr">y</span>:<span class="number">50</span>&#125;,</div><div class="line"> </div><div class="line"><span class="comment">// this makes a refence to the object,</span></div><div class="line"><span class="comment">// it does not copy it.</span></div><div class="line">pt = ref;</div><div class="line"> </div><div class="line"><span class="comment">// as such any change will effect the reference object</span></div><div class="line">pt.x = <span class="number">0</span>;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(ref.x); <span class="comment">// 0;</span></div></pre></td></tr></table></figure>
+<p>In many cases this is actual what I want, but some times I want to work with a copy. As such I need some kind of way to make a copy (or clone) of an object. Sometimes just a simple shallow clone of the object will work, other times I have an object with objects in it, and as such I will want to deep clone that object.</p>
+<h2 id="Copying-objects-and-the-for-in-method-of-doing-it"><a href="#Copying-objects-and-the-for-in-method-of-doing-it" class="headerlink" title="Copying objects, and the for in method of doing it."></a>Copying objects, and the for in method of doing it.</h2><p>One common way to go about copying an object is to use a for in loop.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// and example object to copy</span></div><div class="line"><span class="keyword">var</span> ref = &#123;</div><div class="line">    <span class="attr">x</span>: <span class="number">32</span>,</div><div class="line">    <span class="attr">y</span>: <span class="number">50</span></div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">// a simple forInClone shallow cone method</span></div><div class="line">forInClone = <span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> n = &#123;&#125;,</div><div class="line">    prop;</div><div class="line"> </div><div class="line">    <span class="keyword">for</span> (prop <span class="keyword">in</span> obj) &#123;</div><div class="line"> </div><div class="line">        n[prop] = obj[prop];</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> n;</div><div class="line"> </div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">// works</span></div><div class="line">pt = forInClone(ref);</div><div class="line"> </div><div class="line">pt.x = <span class="number">0</span>;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(ref.x); <span class="comment">// 32</span></div></pre></td></tr></table></figure>
+<p>This will work okay, as long as I don’t need a deep cone of the object in which case it will not work okay, as it just copy’s the keys of the object to a new object. Never the less many clone methods work just like this in some fashon, and it is often called a shallow clone of an object.</p>
+<h2 id="Deep-Cloning-with-a-for-in-loop"><a href="#Deep-Cloning-with-a-for-in-loop" class="headerlink" title="Deep Cloning with a for in loop"></a>Deep Cloning with a for in loop</h2><p>So when in a situation when I need to not just have a shallo copy of an object, but a full copy of the object, and all objects in it, I need some kind of deep clone method.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// and example object to copy</span></div><div class="line"><span class="keyword">var</span> ref = &#123;</div><div class="line">    <span class="attr">x</span>: <span class="number">32</span>,</div><div class="line">    <span class="attr">y</span>: <span class="number">50</span>,</div><div class="line">    <span class="attr">delta</span> : &#123;  <span class="comment">// now we have an object in an object</span></div><div class="line">        x : <span class="number">-1</span>,</div><div class="line">        <span class="attr">y</span>: <span class="number">5</span></div><div class="line">    &#125;</div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">// a deep clone method using for in</span></div><div class="line">forInCloneDeep = <span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> n = &#123;&#125;,</div><div class="line">    prop;</div><div class="line"> </div><div class="line">    <span class="keyword">for</span> (prop <span class="keyword">in</span> obj) &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// if a primitive just copy</span></div><div class="line">        n[prop] = obj[prop];</div><div class="line"> </div><div class="line">        <span class="comment">// if an object clone that too.</span></div><div class="line">        <span class="keyword">if</span>(<span class="keyword">typeof</span> obj[prop] === <span class="string">'object'</span>)&#123;</div><div class="line"> </div><div class="line">            n[prop] = forInCloneDeep(obj[prop]);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> n;</div><div class="line"> </div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">// works</span></div><div class="line">pt = forInCloneDeep(ref);</div><div class="line"> </div><div class="line">pt.delta.x = <span class="number">0</span>;</div><div class="line">pt.delta.y = <span class="number">0</span>;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(ref.delta.x); <span class="comment">// -1</span></div><div class="line"><span class="built_in">console</span>.log(pt.delta.x); <span class="comment">// 0</span></div></pre></td></tr></table></figure>
+<p>This will work okay, but one problem that comes to mind right off that bat is what happens when I feed this method an object with a circular reference in it. That will of course result in an infinite loop. </p>
+<h2 id="Deep-Cloning-Objects-with-recursive-references-in-them-with-a-for-in-loop"><a href="#Deep-Cloning-Objects-with-recursive-references-in-them-with-a-for-in-loop" class="headerlink" title="Deep Cloning Objects with recursive references in them with a for in loop"></a>Deep Cloning Objects with recursive references in them with a for in loop</h2><p>It is possible to make a reference to an object within the same object which is common occurrence in javaScript. When making a clone of an object should these references be with the new object, or the old one? Although there might be exceptions, I can only think that most of the time I would want those reference to be pointing to the new object I am making.</p>
+<p>So to fix my clone method I am making here, I would just want to test if a key value is a reference to the object, and if so make the reference.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// and example object to copy</span></div><div class="line"><span class="keyword">var</span> ref = &#123;</div><div class="line">    <span class="attr">x</span>: <span class="number">32</span>,</div><div class="line">    <span class="attr">y</span>: <span class="number">50</span>,</div><div class="line">    <span class="attr">delta</span> : &#123;  <span class="comment">// now we have an object in an object</span></div><div class="line">        x : <span class="number">-1</span>,</div><div class="line">        <span class="attr">y</span>: <span class="number">5</span></div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line">ref.ref = ref; <span class="comment">// oh boy, look out!</span></div><div class="line"> </div><div class="line"><span class="keyword">var</span> forInCloneDeep = <span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> n = &#123;&#125;,</div><div class="line">    prop;</div><div class="line"> </div><div class="line">    <span class="keyword">for</span> (prop <span class="keyword">in</span> obj) &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// if a primitive just copy</span></div><div class="line">        n[prop] = obj[prop];</div><div class="line"> </div><div class="line">        <span class="comment">// if an object clone that too.</span></div><div class="line">        <span class="keyword">if</span>(<span class="keyword">typeof</span> obj[prop] === <span class="string">'object'</span>)&#123;</div><div class="line"> </div><div class="line">           <span class="comment">// is this a reference to the object itself?</span></div><div class="line">           <span class="keyword">if</span>(obj[prop] === obj)&#123;</div><div class="line"> </div><div class="line">                <span class="comment">// then make the reference, but to the new object</span></div><div class="line">                <span class="comment">// and don't even try to clone it.</span></div><div class="line">                n[prop] = n;</div><div class="line"> </div><div class="line">            &#125;<span class="keyword">else</span>&#123;</div><div class="line"> </div><div class="line">                <span class="comment">// we should be able to do this safe</span></div><div class="line">                n[prop] = forInCloneDeep(obj[prop]);</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> n;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="Object-assign"><a href="#Object-assign" class="headerlink" title="Object.assign"></a>Object.assign</h2><p>I never really got into ES2015+, Still I guess it is time to get current. As such If I am in a situation in which I do not care much about backward compatibility there is of course <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign" target="_blank" rel="external">Object.assign</a>.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> ref = &#123;</div><div class="line">    <span class="attr">x</span>: <span class="number">32</span>,</div><div class="line">    <span class="attr">y</span>: <span class="number">50</span>,</div><div class="line">    <span class="attr">delta</span> : &#123;  <span class="comment">// now we have an object in an object</span></div><div class="line">        x : <span class="number">-1</span>,</div><div class="line">        <span class="attr">y</span>: <span class="number">5</span></div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line">ref.ref = ref; <span class="comment">// oh boy, look out!</span></div><div class="line"> </div><div class="line"><span class="keyword">let</span> copy = <span class="built_in">Object</span>.assign(&#123;&#125;,ref);</div><div class="line"> </div><div class="line">copy.x = <span class="number">0</span>;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(copy.x); <span class="comment">// 0</span></div><div class="line"><span class="built_in">console</span>.log(ref.x); <span class="comment">// 32</span></div></pre></td></tr></table></figure>
+<h2 id="Cloning-with-lodash"><a href="#Cloning-with-lodash" class="headerlink" title="Cloning with lodash"></a>Cloning with lodash</h2><p>As I have mention earlier I have written some posts on how to clone with lodash. As such I will provide some links to my posts on <a href="/2017/10/02/lodash_clone/">_.clone</a>, and <a href="/2017/11/13/lodash_clonedeep/">_.cloneDeep</a>.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> copy = _.clone(obj); <span class="comment">// shallow copy</span></div><div class="line"><span class="keyword">var</span> fullCopy = _.cloneDeep(obj); <span class="comment">// full deep copy</span></div></pre></td></tr></table></figure>
+<p>Using something like lodash to clone might be the best option still these days. I know that there are some nice features in EX2015+ for cloning built into the browser itself these days, but I am the kind of person that worries about my code breaking when someone visits my project with an older browser. It’s still nice to have a method in something that will work on modern browsers, and also that older platform that most people still use.</p>
+<h2 id="Cloning-with-JSON-parse-and-JSON-stringify"><a href="#Cloning-with-JSON-parse-and-JSON-stringify" class="headerlink" title="Cloning with JSON.parse, and JSON.stringify"></a>Cloning with JSON.parse, and JSON.stringify</h2><p>This one is pretty simple, as long as I am always dealing with a client that has JSON which is most browsers in use these days.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> copy = <span class="built_in">JSON</span>.parse(<span class="built_in">JSON</span>.stringify(obj));</div><div class="line"><span class="string">`</span></div></pre></td></tr></table></figure>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Cloning of objects can become somewhat intense, but there are many solutions, and just a few concepts that needs to be remembered. All solutions involve shallow cloning, and or deep cloning. There is also the matter of having the prototype chain merged down or not, but that often just involves making a new instance of the class that is being used.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/11/13/js-copying-vs-referencing-objects-in-javascript/" data-id="cj9ygrig700004gv1bo3bgqu2" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/blog/">blog</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/corejs/">corejs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lodash/">lodash</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/11/13/linux-nodejs-cli-tools-getting-started/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Getting started making a CLI tool with node.js
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/11/13/lodash_clonedeep/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Making copy&#39;s of objects in an array with the lodash _.cloneDeep method.</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.31px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.77px;">SEO</a> <a href="/tags/animation/" style="font-size: 10px;">animation</a> <a href="/tags/automation/" style="font-size: 13.85px;">automation</a> <a href="/tags/backbone/" style="font-size: 14.62px;">backbone</a> <a href="/tags/blog/" style="font-size: 16.15px;">blog</a> <a href="/tags/canvas/" style="font-size: 12.31px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.08px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.54px;">discovery</a> <a href="/tags/ejs/" style="font-size: 10px;">ejs</a> <a href="/tags/games/" style="font-size: 18.46px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hexo/" style="font-size: 15.38px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10px;">jimp</a> <a href="/tags/jquery/" style="font-size: 12.31px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.54px;">linux</a> <a href="/tags/lodash/" style="font-size: 16.92px;">lodash</a> <a href="/tags/node-js/" style="font-size: 19.23px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.69px;">phaser</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/11/19/nodejs-marked/">Parsing markdown to html, or plain text with marked.js</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/17/lodash_merge/">_.merge in lodash as a means to recursively merge down objects.</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/14/nodejs-mkdirp/">Making a path that may or may not be there in node.js thanks to mkdirp</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/14/nodejs-object-merge/">Merging two or more objects down on top of each other in node.js using object-merge</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/13/linux-nodejs-cli-tools-getting-started/">Getting started making a CLI tool with node.js</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Parsing markdown to html, or plain text with marked.js | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="These days I have been playing around more with a node.js project I am familiar with called marked. This is a package that can be used to parse markdown into html, in addition it is possible to define">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Parsing markdown to html, or plain text with marked.js">
+<meta property="og:url" content="https://dustinpfister.github.io/2017/11/19/nodejs-marked/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="These days I have been playing around more with a node.js project I am familiar with called marked. This is a package that can be used to parse markdown into html, in addition it is possible to define">
+<meta property="og:updated_time" content="2017-11-20T02:05:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Parsing markdown to html, or plain text with marked.js">
+<meta name="twitter:description" content="These days I have been playing around more with a node.js project I am familiar with called marked. This is a package that can be used to parse markdown into html, in addition it is possible to define">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <script src="/js/phaser-2.6.2.min.js"></script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-marked" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/19/nodejs-marked/" class="article-date"> Published:
+  <time datetime="2017-11-20T00:25:00.000Z" itemprop="datePublished">2017-11-19</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2017/11/19/nodejs-marked/" class="article-date"> Modified:
+  <time datetime="2017-11-20T02:05:30.000Z" itemprop="dateModified">2017-11-19</time>
+</a>
+
+    <span class="article-date">V1</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Parsing markdown to html, or plain text with marked.js
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>These days I have been playing around more with a <a href="https://nodejs.org/en/" target="_blank" rel="external">node.js</a> project I am familiar with called <a href="https://www.npmjs.com/package/marked" target="_blank" rel="external">marked</a>. This is a package that can be used to parse markdown into html, in addition it is possible to define a custom renderer that can be used to render out plain text, or some other standard other than html. In any case it is a great little package for doing that sort of thing, so it’s wort a post for sure.</p>
+<a id="more"></a>
+<h2 id="Getting-started-with-marked"><a href="#Getting-started-with-marked" class="headerlink" title="Getting started with marked"></a>Getting started with marked</h2><p>I assume that you know the basics when working with an npm package, but even so you might still want to know the name of the package to feed to npm right? So here it is:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># npm install marked --save</div></pre></td></tr></table></figure>
+<p>Once installed in a new project folder I made an index.js file and did this:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> marked = <span class="built_in">require</span>(<span class="string">'marked'</span>);</div><div class="line"><span class="built_in">console</span>.log(marked(<span class="string">'#hello world of mark down!'</span>));</div></pre></td></tr></table></figure>
+<p>Will give me the following when called from the CLI</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ node index</div><div class="line">&lt;h1 id=&quot;hello-world-of-mark-down-&quot;&gt;hello world of mark down!&lt;/h1&gt;</div></pre></td></tr></table></figure>
+<h2 id="Using-a-custom-renderer-for-marked-to-not-render-links"><a href="#Using-a-custom-renderer-for-marked-to-not-render-links" class="headerlink" title="Using a custom renderer for marked to not render links."></a>Using a custom renderer for marked to not render links.</h2><p>There are some npm projects that can be used to do this such as <a href="https://www.npmjs.com/package/remove-markdown" target="_blank" rel="external">remove-markdown</a>, but it is possible to format the output of marked in many different ways, including plain text, buy writing a custom render.</p>
+<p>One step in parsing to plain text is to just render the text of a hyper link, and not add an anchor element in the output.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> marked = <span class="built_in">require</span>(<span class="string">'marked'</span>),</div><div class="line"> </div><div class="line"><span class="comment">// return a custom renderer for marked.</span></div><div class="line">render_unlink = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> render = <span class="keyword">new</span> marked.Renderer();</div><div class="line"> </div><div class="line">    render.link = <span class="function"><span class="keyword">function</span> (<span class="params">href, title, text</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// render link text in a way that is appropriate</span></div><div class="line">        <span class="comment">// for a medium that is not a computer connected</span></div><div class="line">        <span class="comment">// to the Internet</span></div><div class="line">        <span class="keyword">return</span> text + <span class="string">' ( link to: '</span> + href + <span class="string">' )'</span>;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> render;</div><div class="line"> </div><div class="line">&#125;,</div><div class="line"> </div><div class="line">md = <span class="string">'this is some example markdown with [a link](github.com).'</span>;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(marked(md));</div><div class="line"><span class="comment">// &lt;p&gt;this is some example markdown with &lt;a href="github.com"&gt;a link&lt;/a&gt;.&lt;/p&gt;</span></div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(marked(md, &#123;</div><div class="line">        <span class="attr">renderer</span>: render_unlink()</div><div class="line">    &#125;));</div><div class="line"><span class="comment">// &lt;p&gt;this is some example markdown with a link ( link to: github.com ).&lt;/p&gt;</span></div></pre></td></tr></table></figure>
+<p>So here I am making a custom render that renders links differently, I could have it just render the text, or do anything I want really. As You would expect this can be done for a number of elements, including paragraph, and heading elements.</p>
+<h2 id="rendering-to-plain-text"><a href="#rendering-to-plain-text" class="headerlink" title="rendering to plain text"></a>rendering to plain text</h2><p>Rendering to plain text, or in any manner that I want is just a matter of overwriting the render methods by passing a custom renderer.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> marked = <span class="built_in">require</span>(<span class="string">'marked'</span>),</div><div class="line"> </div><div class="line"><span class="comment">// &amp;#63; to ? helper</span></div><div class="line">htmlEscapeToText = <span class="function"><span class="keyword">function</span> (<span class="params">text</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> text.replace(<span class="regexp">/\&amp;\#[0-9]*;|&amp;amp;/g</span>, <span class="function"><span class="keyword">function</span> (<span class="params">escapeCode</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (escapeCode.match(<span class="regexp">/amp/</span>)) &#123;</div><div class="line"> </div><div class="line">            <span class="keyword">return</span> <span class="string">'&amp;'</span>;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> <span class="built_in">String</span>.fromCharCode(escapeCode.match(<span class="regexp">/[0-9]+/</span>));</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">// return a custom renderer for marked.</span></div><div class="line">render_plain = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> render = <span class="keyword">new</span> marked.Renderer();</div><div class="line"> </div><div class="line">    <span class="comment">// render just the text of a link</span></div><div class="line">    render.link = <span class="function"><span class="keyword">function</span> (<span class="params">href, title, text</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> text;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// render just the text of a paragraph</span></div><div class="line">    render.paragraph = <span class="function"><span class="keyword">function</span> (<span class="params">text</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> htmlEscapeToText(text)+<span class="string">'\r\n'</span>;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// render just the text of a heading element, but indecate level</span></div><div class="line">    render.heading = <span class="function"><span class="keyword">function</span> (<span class="params">text, level</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> level + <span class="string">' ) '</span> + text;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// render nothing for images</span></div><div class="line">    render.image = <span class="function"><span class="keyword">function</span> (<span class="params">href, title, text</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> <span class="string">''</span>;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> render;</div><div class="line"> </div><div class="line">&#125;,</div><div class="line"> </div><div class="line">md = <span class="string">'# This is the markdown! \r\n it can have [links](github.com), and images \r\n![the image](foo.png)'</span>;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(marked(md));</div><div class="line"><span class="comment">/*</span></div><div class="line">&lt;h1 id="this-is-the-markdown-"&gt;This is the markdown!&lt;/h1&gt;</div><div class="line">&lt;p&gt; it can have &lt;a href="github.com"&gt;links&lt;/a&gt;, and images</div><div class="line">&lt;img src="foo.png" alt="the image"&gt;&lt;/p&gt;</div><div class="line">*/</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(marked(md, &#123;</div><div class="line">        <span class="attr">renderer</span>: render_plain()</div><div class="line">    &#125;));</div><div class="line"> </div><div class="line"><span class="comment">// 1 ) This is the markdown! it can have links, and images</span></div></pre></td></tr></table></figure>
+<p>For any method not specified the hard coded method will be used resulting in html being rendered. The full list of methods can be found in <a href="https://github.com/chjj/marked/blob/master/README.md" target="_blank" rel="external">the readme</a></p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Marked is a great project that has helped me a great deal with getting into text processing. I will update, and expand on this post as I work more with the current project I am working on now that makes use of marked.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/11/19/nodejs-marked/" data-id="cja7jvoo60003ugv1qbw043st" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/11/17/lodash_merge/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">_.merge in lodash as a means to recursively merge down objects.</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.31px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.77px;">SEO</a> <a href="/tags/animation/" style="font-size: 10px;">animation</a> <a href="/tags/automation/" style="font-size: 13.85px;">automation</a> <a href="/tags/backbone/" style="font-size: 14.62px;">backbone</a> <a href="/tags/blog/" style="font-size: 16.15px;">blog</a> <a href="/tags/canvas/" style="font-size: 12.31px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.08px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.54px;">discovery</a> <a href="/tags/ejs/" style="font-size: 10px;">ejs</a> <a href="/tags/games/" style="font-size: 18.46px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hexo/" style="font-size: 15.38px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10px;">jimp</a> <a href="/tags/jquery/" style="font-size: 12.31px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.54px;">linux</a> <a href="/tags/lodash/" style="font-size: 16.92px;">lodash</a> <a href="/tags/node-js/" style="font-size: 19.23px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.69px;">phaser</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/11/19/nodejs-marked/">Parsing markdown to html, or plain text with marked.js</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/17/lodash_merge/">_.merge in lodash as a means to recursively merge down objects.</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/14/nodejs-mkdirp/">Making a path that may or may not be there in node.js thanks to mkdirp</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/14/nodejs-object-merge/">Merging two or more objects down on top of each other in node.js using object-merge</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/13/linux-nodejs-cli-tools-getting-started/">Getting started making a CLI tool with node.js</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

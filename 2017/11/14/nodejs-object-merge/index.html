@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Merging two or more objects down on top of each other in node.js using object-merge | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="When making any kind of CLI tool, or project with node.js I am often faced with a situation in witch I need to merge down two or more objects into one, and do so recursively. Although there might be a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Merging two or more objects down on top of each other in node.js using object-merge">
+<meta property="og:url" content="https://dustinpfister.github.io/2017/11/14/nodejs-object-merge/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="When making any kind of CLI tool, or project with node.js I am often faced with a situation in witch I need to merge down two or more objects into one, and do so recursively. Although there might be a">
+<meta property="og:updated_time" content="2017-11-17T17:57:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Merging two or more objects down on top of each other in node.js using object-merge">
+<meta name="twitter:description" content="When making any kind of CLI tool, or project with node.js I am often faced with a situation in witch I need to merge down two or more objects into one, and do so recursively. Although there might be a">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <script src="/js/phaser-2.6.2.min.js"></script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-object-merge" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/14/nodejs-object-merge/" class="article-date"> Published:
+  <time datetime="2017-11-14T17:05:00.000Z" itemprop="datePublished">2017-11-14</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2017/11/14/nodejs-object-merge/" class="article-date"> Modified:
+  <time datetime="2017-11-17T17:57:08.000Z" itemprop="dateModified">2017-11-17</time>
+</a>
+
+    <span class="article-date">V1.2</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Merging two or more objects down on top of each other in node.js using object-merge
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>When making any kind of CLI tool, or project with node.js I am often faced with a situation in witch I need to merge down two or more objects into one, and do so recursively. Although there might be a method in a framework I am using, or maybe even something native that is getting added in, to help with this, and just this I have quickly found that the npm package <a href="https://www.npmjs.com/package/object-merge" target="_blank" rel="external">object-merge</a> works great for this.</p>
+<a id="more"></a>
+<h2 id="Installing"><a href="#Installing" class="headerlink" title="Installing"></a>Installing</h2><p>Because it is an npm package I can get started with it my just typing npm install as always.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install object-merge --save</div></pre></td></tr></table></figure>
+<h2 id="Use-example"><a href="#Use-example" class="headerlink" title="Use example"></a>Use example</h2><p>The situation I get in often involves having an object that contains hard coded default values, values that are parsed from the command line using something like <a href="/2017/05/05/nodejs-nopt/">nopt</a>, and maybe even some values from a json file.</p>
+<p>As such I might want my CLI tool to treat what is given from the command line as what comes first and foremost, then fall back to what is in JSON, and finally go with what is hard coded last to make an options object that contains the actual set of options that will be used.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">var merge = require(&apos;object-merge&apos;);</div><div class="line"> </div><div class="line">// hard coded defaults</div><div class="line">var defaults = &#123;</div><div class="line"> </div><div class="line">    source: &apos;./source&apos;,</div><div class="line">    target: &apos;./build&apos;,</div><div class="line">    recursive: false,</div><div class="line">    writeFiles: &#123;</div><div class="line"> </div><div class="line">        active: false,</div><div class="line">        sizes: [32]</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;,</div><div class="line"> </div><div class="line">// values from JSON</div><div class="line">fromJSON = &#123;</div><div class="line"> </div><div class="line">    source: &apos;./html&apos;,</div><div class="line">    recursive: true,</div><div class="line">    writeFiles: &#123;</div><div class="line"> </div><div class="line">        active: true,</div><div class="line">        sizes: [32, 64, 128, 320]</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;,</div><div class="line"> </div><div class="line">// values parsed from CLI</div><div class="line">fromCLI = &#123;</div><div class="line"> </div><div class="line">    writeFiles: &#123;</div><div class="line"> </div><div class="line">        active: false</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line">options =  merge(defaults,fromJSON,fromCLI);</div><div class="line"> </div><div class="line">console.log(options);</div><div class="line">/*</div><div class="line">*   &#123; source: &apos;./html&apos;,</div><div class="line">*   target: &apos;./build&apos;,</div><div class="line">*   recursive: true,</div><div class="line">*   writeFiles: &#123; active: false, sizes: [ 32, 64, 128, 320 ] &#125; &#125;</div><div class="line">*/</div></pre></td></tr></table></figure>
+<h2 id="Comparison-with-Object-assign"><a href="#Comparison-with-Object-assign" class="headerlink" title="Comparison with Object.assign"></a>Comparison with Object.assign</h2><p>I know I write my code examples in an ES5 style, but of course I am ware that there are many methods that do things like this in modern standards of javaScript, but Object.assign is not one of them. It copies keys over, it does not merge down recursively.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(merge(defaults,fromJSON,fromCLI));</div><div class="line"><span class="comment">/*</span></div><div class="line">*   &#123; source: './html',</div><div class="line">*   target: './build',</div><div class="line">*   recursive: true,</div><div class="line">*   writeFiles: &#123; active: false, sizes: [ 32, 64, 128, 320 ] &#125; &#125;</div><div class="line">*/</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.assign(defaults,fromJSON,fromCLI));</div><div class="line"><span class="comment">/*</span></div><div class="line">*   &#123; source: './html',</div><div class="line">*   target: './build',</div><div class="line">*   recursive: true,</div><div class="line">*   writeFiles: &#123; active: false &#125; &#125;</div><div class="line">*/</div></pre></td></tr></table></figure>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Thats it for now, it seems like object-merge is a solid solution from merging down one or more objects, but I would not say it is the end all be all.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/11/14/nodejs-object-merge/" data-id="cj9zwc7f70000s0v11vsa234k" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/blog/">blog</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/11/14/nodejs-mkdirp/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Making a path that may or may not be there in node.js thanks to mkdirp
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/11/13/linux-nodejs-cli-tools-getting-started/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Getting started making a CLI tool with node.js</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.31px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.77px;">SEO</a> <a href="/tags/animation/" style="font-size: 10px;">animation</a> <a href="/tags/automation/" style="font-size: 13.85px;">automation</a> <a href="/tags/backbone/" style="font-size: 14.62px;">backbone</a> <a href="/tags/blog/" style="font-size: 16.15px;">blog</a> <a href="/tags/canvas/" style="font-size: 12.31px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.08px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.54px;">discovery</a> <a href="/tags/ejs/" style="font-size: 10px;">ejs</a> <a href="/tags/games/" style="font-size: 18.46px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hexo/" style="font-size: 15.38px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10px;">jimp</a> <a href="/tags/jquery/" style="font-size: 12.31px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.54px;">linux</a> <a href="/tags/lodash/" style="font-size: 16.92px;">lodash</a> <a href="/tags/node-js/" style="font-size: 19.23px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.69px;">phaser</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/11/19/nodejs-marked/">Parsing markdown to html, or plain text with marked.js</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/17/lodash_merge/">_.merge in lodash as a means to recursively merge down objects.</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/14/nodejs-mkdirp/">Making a path that may or may not be there in node.js thanks to mkdirp</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/14/nodejs-object-merge/">Merging two or more objects down on top of each other in node.js using object-merge</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/13/linux-nodejs-cli-tools-getting-started/">Getting started making a CLI tool with node.js</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
