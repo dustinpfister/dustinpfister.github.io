@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>The deal with the angular.js factory service | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="I am still somewhat new with angular.js, but I have been working hard on making a lot of cool demos, and apps with in in my test_angular project. When first starting out I would have logic in my contr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The deal with the angular.js factory service">
+<meta property="og:url" content="https://dustinpfister.github.io/2017/12/16/angular-factory/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="I am still somewhat new with angular.js, but I have been working hard on making a lot of cool demos, and apps with in in my test_angular project. When first starting out I would have logic in my contr">
+<meta property="og:updated_time" content="2017-12-17T19:24:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The deal with the angular.js factory service">
+<meta name="twitter:description" content="I am still somewhat new with angular.js, but I have been working hard on making a lot of cool demos, and apps with in in my test_angular project. When first starting out I would have logic in my contr">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <script src="/js/phaser-2.6.2.min.js"></script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-angular-factory" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/16/angular-factory/" class="article-date"> Published:
+  <time datetime="2017-12-16T15:02:00.000Z" itemprop="datePublished">2017-12-16</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2017/12/16/angular-factory/" class="article-date"> Modified:
+  <time datetime="2017-12-17T19:24:53.000Z" itemprop="dateModified">2017-12-17</time>
+</a>
+
+    <span class="article-date">V1.2</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/angular/">angular</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      The deal with the angular.js factory service
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>I am still somewhat new with angular.js, but I have been working hard on making a lot of cool demos, and apps with in in my test_angular project. When first starting out I would have logic in my controllers, which is not what they are for, they should be thin. In addition I would keep writing some of my modules in my old vanilla js manner, which works of course, but I am using angular so I should do something that makes my modules angular like. One way to do this is to use a Factory, It is one of three ways to make what is called a service in angular speak.</p>
+<a id="more"></a>
+<h2 id="Basic-Angular-Modules-Factory-Example"><a href="#Basic-Angular-Modules-Factory-Example" class="headerlink" title="Basic Angular Modules Factory Example"></a>Basic Angular Modules Factory Example</h2><p>So to get started understating factory’s and why they are awesome, lets start with a real basic and easy to understand example.</p>
+<h3 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h3><p>With the html I will just have a single div element with the usual ng-app directive to bootstrap the module that I will call <em>app</em>, and a single controller that I will call <em>fact-control</em></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-app</span>=<span class="string">"app"</span> <span class="attr">ng-controller</span>=<span class="string">"fact-control"</span> &gt;</span></div><div class="line"> </div><div class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>mess: &#123;&#123;mess&#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"> </div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="JS"><a href="#JS" class="headerlink" title="JS"></a>JS</h3><p>With the javaScript I will of course have my <em>app</em> module, and also my factory that I will call <em>Fact</em> that will be used in my controller <em>fact-control</em>.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> app = angular.module(<span class="string">'app'</span>, []);</div><div class="line"> </div><div class="line">app.factory(<span class="string">'Fact'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line"> </div><div class="line">        <span class="attr">mess</span>: <span class="string">'I am a factory'</span></div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line">app.controller(<span class="string">'fact-control'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">$scope, Fact</span>) </span>&#123;</div><div class="line"> </div><div class="line">    $scope.mess = Fact.mess</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>Right off the bat there are three things that are great about this:</p>
+<ul>
+<li>My object that contains a message value to display is not stored in a controller.</li>
+<li>I can separate everything into separate into three JavaScript files as long as they are loaded in a linear order, breaking down what might eventually become a complex application.</li>
+<li>I can define my own services that can be used in controllers, and other services like that of $scope, and $http.</li>
+</ul>
+<h2 id="And-now-for-something-more-interesting"><a href="#And-now-for-something-more-interesting" class="headerlink" title="And now for something more interesting"></a>And now for something more interesting</h2><p>In the basic example I am just returning an object literal with a simple message. For a more interesting use case example I thought I might throw something together involving the use of <a href="https://dustinpfister.github.io/2017/02/09/api-fixer/">fixer.io</a>.</p>
+<p>For my view I will have it display the latest exchange rates form fixer.io, or in the event it fails for some reason hard coded data in a service called <em>Fixer</em>.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-app</span>=<span class="string">"app"</span> <span class="attr">ng-controller</span>=<span class="string">"fact-control"</span> &gt;</span></div><div class="line"> </div><div class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Fixer data rates.<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>Date of data: &#123;&#123;time&#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"> </div><div class="line">    <span class="tag">&lt;<span class="name">ul</span>&gt;</span></div><div class="line"> </div><div class="line">        <span class="tag">&lt;<span class="name">li</span> <span class="attr">ng-repeat</span>=<span class="string">"r in rates"</span>&gt;</span>&#123;&#123;r.key&#125;&#125; : &#123;&#123;r.rate&#125;&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line"> </div><div class="line">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div><div class="line"> </div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>The service will then use $http to get the latest JSON, and in the event that it fails to do so, use a hard coded object in the service in place of the latest data.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> app = angular.module(<span class="string">'app'</span>, []);</div><div class="line"> </div><div class="line">app.factory(<span class="string">'Fixer'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">$http</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// get the latest fixer.io data</span></div><div class="line">        latest: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="keyword">return</span> $http.get(<span class="string">'https://api.fixer.io/latest'</span>)</div><div class="line"> </div><div class="line">        &#125;,</div><div class="line"> </div><div class="line">        <span class="comment">// use hard coded fixer.io data in this *.js</span></div><div class="line">        hardCoded: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="keyword">return</span> &#123;</div><div class="line">                <span class="string">"data"</span>: &#123;</div><div class="line">                    <span class="string">"base"</span>: <span class="string">"EUR"</span>,</div><div class="line">                    <span class="string">"date"</span>: <span class="string">"2017-12-15"</span>,</div><div class="line">                    <span class="string">"rates"</span>: &#123;</div><div class="line">                        <span class="string">"AUD"</span>: <span class="number">1.5382</span>,</div><div class="line">                        <span class="string">"BGN"</span>: <span class="number">1.9558</span>,</div><div class="line">                        <span class="string">"BRL"</span>: <span class="number">3.9171</span>,</div><div class="line">                        <span class="string">"CAD"</span>: <span class="number">1.507</span>,</div><div class="line">                        <span class="string">"CHF"</span>: <span class="number">1.1669</span>,</div><div class="line">                        <span class="string">"CNY"</span>: <span class="number">7.8022</span>,</div><div class="line">                        <span class="string">"CZK"</span>: <span class="number">25.678</span>,</div><div class="line">                        <span class="string">"DKK"</span>: <span class="number">7.4443</span>,</div><div class="line">                        <span class="string">"GBP"</span>: <span class="number">0.88253</span>,</div><div class="line">                        <span class="string">"HKD"</span>: <span class="number">9.2223</span>,</div><div class="line">                        <span class="string">"HRK"</span>: <span class="number">7.5465</span>,</div><div class="line">                        <span class="string">"HUF"</span>: <span class="number">313.43</span>,</div><div class="line">                        <span class="string">"IDR"</span>: <span class="number">16029</span>,</div><div class="line">                        <span class="string">"ILS"</span>: <span class="number">4.1634</span>,</div><div class="line">                        <span class="string">"INR"</span>: <span class="number">75.608</span>,</div><div class="line">                        <span class="string">"JPY"</span>: <span class="number">132.45</span>,</div><div class="line">                        <span class="string">"KRW"</span>: <span class="number">1284.7</span>,</div><div class="line">                        <span class="string">"MXN"</span>: <span class="number">22.628</span>,</div><div class="line">                        <span class="string">"MYR"</span>: <span class="number">4.8163</span>,</div><div class="line">                        <span class="string">"NOK"</span>: <span class="number">9.7828</span>,</div><div class="line">                        <span class="string">"NZD"</span>: <span class="number">1.6803</span>,</div><div class="line">                        <span class="string">"PHP"</span>: <span class="number">59.528</span>,</div><div class="line">                        <span class="string">"PLN"</span>: <span class="number">4.2167</span>,</div><div class="line">                        <span class="string">"RON"</span>: <span class="number">4.6332</span>,</div><div class="line">                        <span class="string">"RUB"</span>: <span class="number">69.504</span>,</div><div class="line">                        <span class="string">"SEK"</span>: <span class="number">9.9583</span>,</div><div class="line">                        <span class="string">"SGD"</span>: <span class="number">1.5897</span>,</div><div class="line">                        <span class="string">"THB"</span>: <span class="number">38.375</span>,</div><div class="line">                        <span class="string">"TRY"</span>: <span class="number">4.5603</span>,</div><div class="line">                        <span class="string">"USD"</span>: <span class="number">1.1806</span>,</div><div class="line">                        <span class="string">"ZAR"</span>: <span class="number">15.781</span></div><div class="line">                    &#125;</div><div class="line">                &#125;,</div><div class="line">                <span class="string">"status"</span>: <span class="number">200</span>,</div><div class="line">                <span class="string">"config"</span>: &#123;</div><div class="line">                    <span class="string">"method"</span>: <span class="string">"GET"</span>,</div><div class="line">                    <span class="string">"transformRequest"</span>: [<span class="literal">null</span>],</div><div class="line">                    <span class="string">"transformResponse"</span>: [<span class="literal">null</span>],</div><div class="line">                    <span class="string">"jsonpCallbackParam"</span>: <span class="string">"callback"</span>,</div><div class="line">                    <span class="string">"url"</span>: <span class="string">"https://api.fixer.io/latest"</span>,</div><div class="line">                    <span class="string">"headers"</span>: &#123;</div><div class="line">                        <span class="string">"Accept"</span>: <span class="string">"application/json, text/plain, */*"</span></div><div class="line">                    &#125;</div><div class="line">                &#125;,</div><div class="line">                <span class="string">"statusText"</span>: <span class="string">""</span>,</div><div class="line">                <span class="string">"xhrStatus"</span>: <span class="string">"complete"</span></div><div class="line">            &#125;;</div><div class="line"> </div><div class="line">        &#125;,</div><div class="line"> </div><div class="line">        <span class="comment">// format the given fixer.io data</span></div><div class="line">        format: <span class="function"><span class="keyword">function</span> (<span class="params">fixerData</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="keyword">let</span> keys = <span class="built_in">Object</span>.keys(fixerData.data.rates);</div><div class="line"> </div><div class="line">            <span class="keyword">return</span> &#123;</div><div class="line"> </div><div class="line">                <span class="attr">rates</span>: keys.map(<span class="function"><span class="keyword">function</span> (<span class="params">key, i</span>) </span>&#123;</div><div class="line"> </div><div class="line">                    <span class="keyword">return</span> &#123;</div><div class="line"> </div><div class="line">                        <span class="attr">key</span>: key,</div><div class="line">                        <span class="attr">rate</span>: fixerData.data.rates[key]</div><div class="line"> </div><div class="line">                    &#125;</div><div class="line"> </div><div class="line">                &#125;),</div><div class="line"> </div><div class="line">                <span class="attr">time</span>: fixerData.data.date</div><div class="line"> </div><div class="line">            &#125;;</div><div class="line"> </div><div class="line">        &#125;,</div><div class="line"> </div><div class="line">        <span class="attr">latestFormatted</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="keyword">var</span> self = <span class="keyword">this</span>;</div><div class="line"> </div><div class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line"> </div><div class="line">                <span class="comment">// first use latest and resolve or reject</span></div><div class="line">                <span class="keyword">return</span> self.latest().then(<span class="function"><span class="keyword">function</span> (<span class="params">latest</span>) </span>&#123;</div><div class="line"> </div><div class="line">                    <span class="built_in">console</span>.log(<span class="string">'yes'</span>);</div><div class="line">                    <span class="built_in">console</span>.log(latest);</div><div class="line"> </div><div class="line">                    <span class="comment">// resolve with the latest data</span></div><div class="line">                    resolve(latest);</div><div class="line"> </div><div class="line">                &#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">                    <span class="built_in">console</span>.log(<span class="string">'no'</span>);</div><div class="line">                    reject(e);</div><div class="line"> </div><div class="line">                &#125;);</div><div class="line"> </div><div class="line">            &#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">latest</span>) </span>&#123;</div><div class="line"> </div><div class="line">                <span class="comment">// format and return the latest</span></div><div class="line">                <span class="keyword">return</span> self.format(latest);</div><div class="line"> </div><div class="line">            &#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">                <span class="comment">// format and return hard coded data</span></div><div class="line">                <span class="keyword">return</span> self.format(self.hardCoded());</div><div class="line"> </div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line"><span class="comment">// look how clean my controller is!</span></div><div class="line">app.controller(<span class="string">'fact-control'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">$scope, Fixer</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> setValues = <span class="function"><span class="keyword">function</span> (<span class="params">fix</span>) </span>&#123;</div><div class="line"> </div><div class="line">        $scope.time = fix.time;</div><div class="line">        $scope.rates = fix.rates;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// set values with latest, or hardcoded fixer.io data rates</span></div><div class="line">    Fixer.latestFormatted().then(<span class="function"><span class="keyword">function</span> (<span class="params">fix</span>) </span>&#123;</div><div class="line"> </div><div class="line">        setValues(fix);</div><div class="line">        $scope.$apply();</div><div class="line"> </div><div class="line">    &#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params">fix</span>) </span>&#123;</div><div class="line"> </div><div class="line">        setValues(fix);</div><div class="line">        $scope.$apply();</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>The idea here is to pull logic away from controllers, and into a place where it belongs. I also find this as a nice way to go about working with a lot of modules at once. I can make a whole bunch of services with module.factory. Some of which may stand alone, others might depend on something, you get the idea.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/12/16/angular-factory/" data-id="cjbb5vx830000rov1jde9zex8" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/angular/">angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hapi/">hapi</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/12/15/angular-bootstrap/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">The Bootstraping phase in Angular, ng-app, and angular.bootstarp</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.31px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.77px;">SEO</a> <a href="/tags/angular/" style="font-size: 12.31px;">angular</a> <a href="/tags/animation/" style="font-size: 10px;">animation</a> <a href="/tags/automation/" style="font-size: 13.85px;">automation</a> <a href="/tags/backbone/" style="font-size: 14.62px;">backbone</a> <a href="/tags/blog/" style="font-size: 16.15px;">blog</a> <a href="/tags/canvas/" style="font-size: 13.08px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.08px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.54px;">discovery</a> <a href="/tags/ejs/" style="font-size: 10px;">ejs</a> <a href="/tags/games/" style="font-size: 18.46px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.62px;">hapi</a> <a href="/tags/hexo/" style="font-size: 15.38px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.77px;">jimp</a> <a href="/tags/jquery/" style="font-size: 12.31px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.54px;">linux</a> <a href="/tags/lodash/" style="font-size: 16.92px;">lodash</a> <a href="/tags/node-js/" style="font-size: 19.23px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.69px;">phaser</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/12/16/angular-factory/">The deal with the angular.js factory service</a>
+          </li>
+        
+          <li>
+            <a href="/2017/12/15/angular-bootstrap/">The Bootstraping phase in Angular, ng-app, and angular.bootstarp</a>
+          </li>
+        
+          <li>
+            <a href="/2017/12/14/angular-controllers/">Controllers in angular</a>
+          </li>
+        
+          <li>
+            <a href="/2017/12/13/angular-getting-started/">Getting started with angular.js</a>
+          </li>
+        
+          <li>
+            <a href="/2017/12/11/nodejs-natural-language-facility/">Natural language analyses tool for node.js called natural</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
