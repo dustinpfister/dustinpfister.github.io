@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Using fs-extra as a drop in replacement for the built in node.js file system module | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="For the most part the built in node.js file system module works just fine by itself. However it can be a bit lacking. As such I find myself adding in projects like mkdirp, and rimraf to pring about fu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Using fs-extra as a drop in replacement for the built in node.js file system module">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/01/08/nodejs-fs-extra/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="For the most part the built in node.js file system module works just fine by itself. However it can be a bit lacking. As such I find myself adding in projects like mkdirp, and rimraf to pring about fu">
+<meta property="og:updated_time" content="2018-01-08T21:09:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Using fs-extra as a drop in replacement for the built in node.js file system module">
+<meta name="twitter:description" content="For the most part the built in node.js file system module works just fine by itself. However it can be a bit lacking. As such I find myself adding in projects like mkdirp, and rimraf to pring about fu">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <script src="/js/phaser-2.6.2.min.js"></script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-fs-extra" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/08/nodejs-fs-extra/" class="article-date"> Published:
+  published: <time datetime="2018-01-08T13:44:00.000Z" itemprop="datePublished">2018-01-08</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/01/08/nodejs-fs-extra/" class="article-date"> Modified:
+  <time datetime="2018-01-08T21:09:00.000Z" itemprop="dateModified">2018-01-08</time>
+</a>
+
+    <span class="article-date">V1.9</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Using fs-extra as a drop in replacement for the built in node.js file system module
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>For the most part the <a href="https://nodejs.org/api/fs.html" target="_blank" rel="external">built in node.js file system module</a> works just fine by itself. However it can be a bit lacking. As such I find myself adding in projects like <a href="/2017/11/14/nodejs-mkdirp/">mkdirp</a>, and <a href="/2017/05/14/nodejs-rimraf/">rimraf</a> to pring about functionality that I often think should be a part of the module. Also as of node 8.x it would seem that many of the methods do not return promises as an alterative to using callbacks, becuase of that I often find myself wrting methods, or using some kind of project like <a href="/2017/12/02/nodejs-bluebird/">bluebird</a> to <a href="http://bluebirdjs.com/docs/api/promise.promisify.html" target="_blank" rel="external">promisify the methods</a> in the fs module.</p>
+<a id="more"></a>
+<p>To solve these problems and much more there is an npm package called <a href="https://www.npmjs.com/package/fs-extra" target="_blank" rel="external">fs-extra</a>. This is a great project, that can be used as a drop in replacement for the built in node.js file system module.</p>
+<h2 id="The-deal-with-the-node-fs-module"><a href="#The-deal-with-the-node-fs-module" class="headerlink" title="The deal with the node fs module"></a>The deal with the node fs module</h2><p>So a basic example of the file system module in node.js might look something like this:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"> </div><div class="line"><span class="comment">// I can still use async fs methods like normal</span></div><div class="line">fs.readFile(<span class="string">'README.md'</span>, <span class="string">'utf-8'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e, data</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'using the built in node js module to read a file: '</span>);</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (e) &#123;</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(e);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(data);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>In many simple projects this might work just fine, but as a project grows more complex, it can quickly lead to what many refer to as call back hell. That is a situation in which there are many nested call backs inside of each other, that ends up making it hard to read, maintain, and catch problems like if erros are not being handled well.</p>
+<p>One way to avoid call back hell if of course to use promises.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// If I want to use promises I have to do something like this:</span></div><div class="line"><span class="keyword">let</span> readFile = <span class="function"><span class="keyword">function</span> (<span class="params">uri, encoding</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">let</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"> </div><div class="line">    encoding = encoding || <span class="string">'binary'</span>;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (!uri) &#123;</div><div class="line"> </div><div class="line">            reject(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'no uri given'</span>));</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        fs.readFile(uri, encoding, <span class="function"><span class="keyword">function</span> (<span class="params">e, data</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="keyword">if</span> (e) &#123;</div><div class="line"> </div><div class="line">                reject(e);</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            resolve(data);</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// Now I can use promises with js</span></div><div class="line">readFile(<span class="string">'README.md'</span>,<span class="string">'utf-8'</span>).then(<span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'using my readFile method that makes use of promises: '</span>);</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(data);</div><div class="line"> </div><div class="line">&#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(e)</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>This is a neater way of doing the same thing that call backs to when it comes to asyn tasks, and the promises can also be chained together as well. I can return another promise within the function that I pass to then, that does another async task, making my code neat, compartmentalized, and easy to follow.</p>
+<p>However there should be some kind of module that does all of this for me, so I do not have to keep rewriting, or copying and past methods like the readFile method in the above example. This is one of the things that fs-extra can take care of for me.</p>
+<h2 id="install-fs-extra"><a href="#install-fs-extra" class="headerlink" title="install fs-extra"></a>install fs-extra</h2><p>Install fs extra like any other node.js project by calling npm install, and making sure to use –save to add it to the package.json file of the project. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install fs-extra --save</div></pre></td></tr></table></figure>
+<p>In this case I am making yet another one of my test project folders for the sake of a blog post like this that I will be <a href="https://github.com/dustinpfister/test_fs_extra" target="_blank" rel="external">making public on my github account</a>.</p>
+<p>There are also some additional projects that are closely associated with fs-extra, but I will be getting to those later.</p>
+<h2 id="fs-extra-gives-me-file-system-methods-that-return-promises"><a href="#fs-extra-gives-me-file-system-methods-that-return-promises" class="headerlink" title="fs-extra gives me file system methods that return promises"></a>fs-extra gives me file system methods that return promises</h2><p>For me this is one of the best reasons why to consider adding in fs-extra to a node.js project. Each node.js file system module now returns a promise when it is used as a replacement for fs, out of the box.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> fs = <span class="built_in">require</span>(<span class="string">'fs-extra'</span>);</div><div class="line"> </div><div class="line"><span class="comment">// now I don't have to write my readFile method each time</span></div><div class="line"><span class="comment">// I can just install fs-extra</span></div><div class="line">fs.readFile(<span class="string">'README.md'</span>,<span class="string">'utf-8'</span>).then(<span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(data);</div><div class="line"> </div><div class="line">&#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(e)</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>However I can still use my callbacks also if for some reason I want it to, so it still works with older code that I have not updated to make use of promises in place of overuse of call backs.</p>
+<h2 id="lets-take-a-look-at-some-of-the-methods"><a href="#lets-take-a-look-at-some-of-the-methods" class="headerlink" title="lets take a look at some of the methods."></a>lets take a look at some of the methods.</h2><p>fs-extra does more than just make it so the methods I all ready use return promises, it also adds a whole bunch more methods to the file system api that are pretty useful. For a full list there is the <a href="https://github.com/jprichardson/node-fs-extra/blob/master/README.md#methods" target="_blank" rel="external">readme of the project</a>, however I will also be covering some of the most important ones here as well.</p>
+<h3 id="fs-copy-method-to-copy-files-recursively"><a href="#fs-copy-method-to-copy-files-recursively" class="headerlink" title="fs.copy method to copy files recursively"></a>fs.copy method to copy files recursively</h3><p>On method that seems to not be there in the node.js module, is a decent method for copying files. There is fs.copyFile(<a href="https://nodejs.org/api/fs.html#fs_fs_copyfile_src_dest_flags_callback" target="_blank" rel="external">https://nodejs.org/api/fs.html#fs_fs_copyfile_src_dest_flags_callback</a>), but what if I want to copy a complex file system structure that contains many nested files, and paths, recursively? Also what if the target folder is not there? Am i going to get a nasty error, or is the method going to make it for me?</p>
+<p>I could write a solution that makes use of projects like mkdirp(/2017/11/14/nodejs-mkdirp/), and node-dir, and spend a good hour of my life or longer putting just one little method togetaher to do it, or I could just use the copy method that fs-extra gives me.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> fs = <span class="built_in">require</span>(<span class="string">'fs-extra'</span>);</div><div class="line"> </div><div class="line">fs.copy(<span class="string">'source'</span>, <span class="string">'target'</span>).then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'copyed source folder!'</span>);</div><div class="line"> </div><div class="line">&#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(e);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>This copies a source folder over to a target, and if the target is not there it makes it for me. Wow that was fast, I like it when I get things like this out of the way in a flash so I can more on to more important things.</p>
+<h2 id="fs-emptyDir"><a href="#fs-emptyDir" class="headerlink" title="fs.emptyDir"></a>fs.emptyDir</h2><p>This is another method that comes to mide that I mighbt use now and then with some projects. It will empty a path of it’s contents, and if it is not there it will create it. A common task if I am making some kind of project that makes a whole bunch of files in a certian target folder, and I want to make sure that it is empty before the project starts building files.</p>
+<p>Check this out for example:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> fs = <span class="built_in">require</span>(<span class="string">'fs-extra'</span>);</div><div class="line"> </div><div class="line">fs.emptyDir(<span class="string">'target'</span>).then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'target should be there, and empty'</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// lets check</span></div><div class="line">    <span class="keyword">return</span> fs.readdir(<span class="string">'target'</span>);</div><div class="line"> </div><div class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">files</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'the files in target:'</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// should be an empty array</span></div><div class="line">    <span class="built_in">console</span>.log(files); <span class="comment">// []</span></div><div class="line"> </div><div class="line">&#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(e);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>This demo will check for the folder target, if it is not there it will make it. It then reads the dir and spits back an array of files in the dir, which should be an empty array, and of course it is. This is also a great example of why promises rock, I can do many async tasks one after another like this.</p>
+<h2 id="fs-ensureDir"><a href="#fs-ensureDir" class="headerlink" title="fs.ensureDir"></a>fs.ensureDir</h2><p>This is a very helpful method that will make a dir if it is not there to begin with. I have <a href="/2017/11/14/nodejs-mkdirp/">written a post on the npm package mkdirp</a> that does the same thing as a stand alone project. however now it seems like it might be better to just use fs-extra to get this functionality, along with so much more.</p>
+<h2 id="fs-move"><a href="#fs-move" class="headerlink" title="fs.move"></a>fs.move</h2><p>This method can be used to move files, and even full paths from one place to another. It appears that there is no native move method in the node.js file system module, so this is a nice addition.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> fs = <span class="built_in">require</span>(<span class="string">'fs-extra'</span>),</div><div class="line"> </div><div class="line">source = process.argv[<span class="number">2</span>],</div><div class="line">target = process.argv[<span class="number">3</span>];</div><div class="line"> </div><div class="line"><span class="keyword">let</span> check = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (source &amp;&amp; target) &#123;</div><div class="line"> </div><div class="line">            resolve();</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        reject(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'must give a source and target in that order:'</span>));</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line">check().then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> fs.move(source, target);</div><div class="line"> </div><div class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'moved source to target:'</span>);</div><div class="line"> </div><div class="line">&#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(e.message);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="Walking-or-looping-over-a-dir-with-klaw"><a href="#Walking-or-looping-over-a-dir-with-klaw" class="headerlink" title="Walking or looping over a dir with klaw"></a>Walking or looping over a dir with klaw</h2><p>This was removed from fs-extra in 2.x and placed in it’s own project called <a href="https://www.npmjs.com/package/klaw" target="_blank" rel="external">klaw</a>. So for that feature I now need to install another package.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install klaw --save</div></pre></td></tr></table></figure>
+<p>Also if I want to do something with piping, I will want to install <a href="https://www.npmjs.com/package/through2" target="_blank" rel="external">through2</a>.  This is just a tiny little project that has to do with streams.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install through2 --save</div></pre></td></tr></table></figure>
+<p>Walking over a path is simple enough then. I just need to give it the path and then add some events for data, which will be called for each file, or folder. </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> klaw = <span class="built_in">require</span>(<span class="string">'klaw'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"> </div><div class="line">klaw(<span class="string">'source'</span>).on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'**********'</span>);</div><div class="line">    <span class="built_in">console</span>.log(item.path);</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'dir: '</span> + item.stats.isDirectory());</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'**********'</span>);</div><div class="line"> </div><div class="line">&#125;).on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'done'</span>);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>Whats real cool compared to node-dir is that it grabs the stats for me and gives it to me in the item. That saves me another step, as I often do want to grap file stats.</p>
+<h2 id="piping-with-klaw-and-through2"><a href="#piping-with-klaw-and-through2" class="headerlink" title="piping with klaw, and through2"></a>piping with klaw, and through2</h2><p>There will come may times that i will want to filter files bases on file extension, if the filename fits a given pattern, or meets some other kind of criteria such as file size. To do this I will want to use a pipe, and to work with that I will want to install through2 on top of klaw, and fs-extra.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> klaw = <span class="built_in">require</span>(<span class="string">'klaw'</span>),</div><div class="line">through2 = <span class="built_in">require</span>(<span class="string">'through2'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"> </div><div class="line">klaw(<span class="string">'source'</span>)</div><div class="line">.pipe(through2.obj(<span class="function"><span class="keyword">function</span> (<span class="params">item, enc, next</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// match only items that have a *.txt extenstion</span></div><div class="line">        <span class="keyword">if</span> (item.path.match(<span class="regexp">/.txt$/</span>)) &#123;</div><div class="line">            <span class="keyword">this</span>.push(item);</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        next();</div><div class="line">    &#125;))</div><div class="line">.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// just txt files</span></div><div class="line">    <span class="built_in">console</span>.log(path.basename(item.path));</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>pipe just needs what is returned by through2.obj, and the method that I give throgh2.obj is where I define my logic that can be used to filter out files I do not want. Anything I do what I just push to an array that can be referenced by the this keyword. Then I can use data events like normal, on the filtered results.</p>
+<h2 id="Walking-or-looping-over-a-dir-with-node-dir"><a href="#Walking-or-looping-over-a-dir-with-node-dir" class="headerlink" title="Walking or looping over a dir with node-dir"></a>Walking or looping over a dir with node-dir</h2><p>There is another project I have found called <a href="/2017/11/05/nodejs-node-dir/">node-dir</a>, that can also be used to loop over the contents of a folder as well..</p>
+<h2 id="conclusion"><a href="#conclusion" class="headerlink" title="conclusion"></a>conclusion</h2><p>There are a lot of projects like this on npmjs, for example there is a similar project that is used by hexo called <a href="https://www.npmjs.com/package/hexo-fs" target="_blank" rel="external">hexo-fs</a> that also augments the file system api in node.js. However this is by far the best one I have worked with so far. I have really been getting into promises lately also, and I am loving them, as such this is a package I will most likely be using more so in the future with my various projects.</p>
+<p>The best thing about this project is that it keeps me from having to install a whole bunch of little projects that all do one, little thing. As far as I can tell, it looks like this might cover everything when it comes to working with the file system. </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/01/08/nodejs-fs-extra/" data-id="cjcf7yfvr000180v1uo8ypxf9" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/01/09/nodejs-stylus/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Generate stylus to css using the npm package stylus
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/01/05/hexo-helpers/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Using hexo helpers to inject html in a theme</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.67px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.67px;">angular</a> <a href="/tags/animation/" style="font-size: 10px;">animation</a> <a href="/tags/automation/" style="font-size: 13.33px;">automation</a> <a href="/tags/backbone/" style="font-size: 14px;">backbone</a> <a href="/tags/blog/" style="font-size: 16.67px;">blog</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.67px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.33px;">discovery</a> <a href="/tags/ejs/" style="font-size: 12px;">ejs</a> <a href="/tags/games/" style="font-size: 18.67px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 16px;">hapi</a> <a href="/tags/hexo/" style="font-size: 15.33px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.67px;">jimp</a> <a href="/tags/jquery/" style="font-size: 12px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.33px;">linux</a> <a href="/tags/lodash/" style="font-size: 17.33px;">lodash</a> <a href="/tags/node-js/" style="font-size: 19.33px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18px;">phaser</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/01/11/nodejs-jsdom/">Client side javascript in a node.js environment using jsdom</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/10/nodejs-axios/">Using the axios promise based http client in node.js.</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/09/nodejs-stylus/">Generate stylus to css using the npm package stylus</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/08/nodejs-fs-extra/">Using fs-extra as a drop in replacement for the built in node.js file system module</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/05/hexo-helpers/">Using hexo helpers to inject html in a theme</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

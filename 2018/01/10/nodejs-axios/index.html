@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Using the axios promise based http client in node.js. | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Axios is a javaScript promise based http client for node.js, and the browser. making requests with axios is pretty simple, however if need be I can still set all relevant options like headers, and url">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Using the axios promise based http client in node.js.">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/01/10/nodejs-axios/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="Axios is a javaScript promise based http client for node.js, and the browser. making requests with axios is pretty simple, however if need be I can still set all relevant options like headers, and url">
+<meta property="og:updated_time" content="2018-01-11T20:22:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Using the axios promise based http client in node.js.">
+<meta name="twitter:description" content="Axios is a javaScript promise based http client for node.js, and the browser. making requests with axios is pretty simple, however if need be I can still set all relevant options like headers, and url">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <script src="/js/phaser-2.6.2.min.js"></script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-axios" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/10/nodejs-axios/" class="article-date"> Published:
+  published: <time datetime="2018-01-10T15:25:00.000Z" itemprop="datePublished">2018-01-10</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/01/10/nodejs-axios/" class="article-date"> Modified:
+  <time datetime="2018-01-11T20:22:09.000Z" itemprop="dateModified">2018-01-11</time>
+</a>
+
+    <span class="article-date">V1.4</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Using the axios promise based http client in node.js.
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>Axios is a javaScript promise based http client for node.js, and the browser. making requests with axios is pretty simple, however if need be I can still set all relevant options like headers, and url parameters. In short it is yet another way to make get, and post requests to a server on the web somewhere via scripting http.</p>
+<a id="more"></a>
+<h2 id="Getting-started"><a href="#Getting-started" class="headerlink" title="Getting started"></a>Getting started</h2><p>Of course I assume you have a decent understanding of javaScript, node.js, and git as this is not a post intended for beginners of web development.</p>
+<p>As with all my projects where I am just testing something out for the first time, I created a folder called test_axios, cd into it, do an npm init, and install what I am testing out via npm install. In this test folder on top of using axios, I am also using <a href="/2017/11/28/nodejs-cheerio/">cheerio</a> to help work with html that I am grabbing at.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ mkdir test_axios</div><div class="line">$ cd test_axios</div><div class="line">$ npm init</div><div class="line">$ npm install axios</div></pre></td></tr></table></figure>
+<p>If you want you can also just clone in the demos I am making here with git as I have placed the <a href="https://github.com/dustinpfister/test_axios" target="_blank" rel="external">test folder on my github account</a>.</p>
+<p>So you can just clone in the folder, cd into it, and run the basic demo I made like this:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ git clone https://github.com/dustinpfister/test_axios</div><div class="line">$ cd test_axios</div><div class="line">$ node basic</div></pre></td></tr></table></figure></p>
+<h2 id="Using-axios-as-a-client-side-library"><a href="#Using-axios-as-a-client-side-library" class="headerlink" title="Using axios as a client side library"></a>Using axios as a client side library</h2><p>Axios is a javascript library that works the same way in both a server side, as well as client side environment. In the npm package the axios.js file that will work in both environments is in the dist folder. In my test project I just copyed and pasted what is there to a name space in the public html folder to be used in my client side demos of this project.</p>
+<h2 id="Basic-use-case-of-axios-node-js-GET-example-with-no-options"><a href="#Basic-use-case-of-axios-node-js-GET-example-with-no-options" class="headerlink" title="Basic use case of axios (node.js GET example with no options)"></a>Basic use case of axios (node.js GET example with no options)</h2><p>For by basic example I am using axios to get the html of the webpage <a href="https://www.google.com" target="_blank" rel="external">https://www.google.com</a>, then loading the html into cheerio to help get the href attributes and inner text of each link.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> axios = <span class="built_in">require</span>(<span class="string">'axios'</span>),</div><div class="line">cheerio = <span class="built_in">require</span>(<span class="string">'cheerio'</span>);</div><div class="line"> </div><div class="line">axios.get(<span class="string">'http://www.google.com/'</span>).then(<span class="function"><span class="keyword">function</span> (<span class="params">html</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">let</span> $ = cheerio.load(html.data);</div><div class="line"> </div><div class="line">    <span class="comment">// loop all links</span></div><div class="line">    $(<span class="string">'a'</span>).each(<span class="function"><span class="keyword">function</span> (<span class="params">i, span</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">let</span> href = $(<span class="keyword">this</span>).attr(<span class="string">'href'</span>),</div><div class="line">        text = $(<span class="keyword">this</span>).text();</div><div class="line"> </div><div class="line">        <span class="comment">// log the inner text, and the href of the link</span></div><div class="line">        <span class="built_in">console</span>.log(text + <span class="string">' : '</span> + href);</div><div class="line"> </div><div class="line">    &#125;)</div><div class="line"> </div><div class="line">&#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(e);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>So right off the bat axios strikes me as one of the best options for making get requests. That is pretty simple, and easy to remember. This is of course just a get request I am making for a public web page, but don’t worry when it comes to doing something more complicated everything I need is there.</p>
+<h2 id="Setting-up-a-simple-server"><a href="#Setting-up-a-simple-server" class="headerlink" title="Setting up a simple server"></a>Setting up a simple server</h2><p>For this project I experimented with making a server from the ground up, which I something I do now and then rather than installing <a href="https://www.npmjs.com/package/hapi" target="_blank" rel="external">hapi</a>, or <a href="https://www.npmjs.com/package/express" target="_blank" rel="external">express</a>.</p>
+<p>So this is not something that I would use in production, just a custom hack job that I made while experimenting with axios.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>),</div><div class="line">fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>),</div><div class="line">url = <span class="built_in">require</span>(<span class="string">'url'</span>),</div><div class="line">port = process.argv[<span class="number">2</span>] || <span class="number">8080</span>,</div><div class="line">dir_public = <span class="string">'public'</span>;</div><div class="line"> </div><div class="line"><span class="keyword">let</span> forMethod = &#123;</div><div class="line"> </div><div class="line">    <span class="attr">get</span>: <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">let</span> ext = path.extname(req.url).toLowerCase(),</div><div class="line">        uri = path.join(dir_public, req.url);</div><div class="line"> </div><div class="line">        <span class="comment">// if no ext then assume index.html of path</span></div><div class="line">        <span class="keyword">if</span> (!ext) &#123;</div><div class="line"> </div><div class="line">            uri = path.join(dir_public, req.url, <span class="string">'index.html'</span>);</div><div class="line">            ext = <span class="string">'.html'</span>;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        fs.readFile(uri, <span class="string">'utf-8'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e, data</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="keyword">if</span> (e) &#123;</div><div class="line"> </div><div class="line">                res.writeHead(<span class="number">500</span>);</div><div class="line">                res.end(e.message);</div><div class="line"> </div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">                <span class="comment">// default mime to html</span></div><div class="line">                <span class="keyword">let</span> mime = <span class="string">'text/html'</span>;</div><div class="line">                <span class="comment">// set plain text for *.js</span></div><div class="line">                mime = ext === <span class="string">'.js'</span> ? <span class="string">'text/plain'</span> : mime;</div><div class="line"> </div><div class="line">                res.setHeader(<span class="string">'Content-Type'</span>, mime);</div><div class="line">                res.writeHead(<span class="number">200</span>);</div><div class="line">                res.end(data, <span class="string">'utf-8'</span>);</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="attr">post</span>: <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">let</span> body = <span class="string">''</span>,</div><div class="line">        query = url.parse(req.url, <span class="literal">true</span>).query;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (query) &#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(query);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        req.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">chunk</span>) </span>&#123;</div><div class="line"> </div><div class="line">            body += chunk;</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">        req.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">// parse what should be JSON</span></div><div class="line">            body = <span class="built_in">JSON</span>.parse(body);</div><div class="line"> </div><div class="line">            <span class="keyword">if</span> (body.iwant) &#123;</div><div class="line"> </div><div class="line">                <span class="keyword">if</span> (body.iwant === <span class="string">'theanwser'</span>) &#123;</div><div class="line"> </div><div class="line">                    res.end(<span class="string">'42'</span>);</div><div class="line"> </div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">                    res.end(<span class="string">'sorry'</span>);</div><div class="line"> </div><div class="line">                &#125;</div><div class="line"> </div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">                res.end(<span class="string">'sorry'</span>);</div><div class="line"> </div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="keyword">let</span> server = http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">let</span> method = forMethod[req.method.toLowerCase()];</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (method) &#123;</div><div class="line"> </div><div class="line">            method(req, res);</div><div class="line"> </div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">            res.end(<span class="string">'unsupported method'</span>);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">server.listen(port, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'check it on : '</span> + port);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>It’s a bit crude, but I just wanted something in place for this test project when it comes to using axios as a way to make requests from a browser.</p>
+<h2 id="The-public-folder"><a href="#The-public-folder" class="headerlink" title="The public folder"></a>The public folder</h2><p>For the purpose of this test project I quickly threw together a simple static website that I coded by hand. When the server script is started I can visit the site and test out my demos with my server.</p>
+<p>The public folder just contains a main index.html, and two demos do far for making get requests, and post requests from the browser.</p>
+<h2 id="Simple-post-example-client"><a href="#Simple-post-example-client" class="headerlink" title="Simple post example (client)"></a>Simple post example (client)</h2><p>For a post request example I just made a project where I make a post request to the server, and get a response if the text matches a certain something.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>test_axios<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Post example: <span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">hr</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>simple post example<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/js/axios.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">            <span class="keyword">var</span> send = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">                <span class="keyword">var</span> el = <span class="built_in">document</span>.getElementById(<span class="string">'text'</span>),</div><div class="line">                text = el.value;</div><div class="line">                axios.post(<span class="string">'/'</span>,&#123;<span class="attr">iwant</span>: text&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</div><div class="line">                    <span class="built_in">console</span>.log(res.data);</div><div class="line">                    <span class="built_in">document</span>.getElementById(<span class="string">'out'</span>).innerHTML = res.data;</div><div class="line">                &#125;);</div><div class="line">            &#125;;</div><div class="line">        <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">span</span>&gt;</span>I want: <span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">"text"</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">value</span>=<span class="string">"theanwser"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"send"</span> <span class="attr">onclick</span>=<span class="string">"send()"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span> =<span class="string">"out"</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="Url-parameters"><a href="#Url-parameters" class="headerlink" title="Url parameters"></a>Url parameters</h2><p>Working with Url parameter is as simple as just giving an object with key value pairs rather than a sting that looks like this:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/?foo=bar&amp;anwser=42</div></pre></td></tr></table></figure>
+<p>Although if you want to to it that way then it can just be appended to the url property given.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">axios(&#123;</div><div class="line"> </div><div class="line">    <span class="attr">method</span>: <span class="string">'post'</span>,</div><div class="line">    <span class="attr">url</span>: <span class="string">'/'</span>,</div><div class="line">    <span class="attr">params</span>: &#123;</div><div class="line"> </div><div class="line">        <span class="attr">sort</span>: <span class="string">'date'</span></div><div class="line"> </div><div class="line">    &#125;,</div><div class="line">    <span class="attr">data</span>: &#123;</div><div class="line"> </div><div class="line">        <span class="attr">iwant</span>: <span class="string">'theanwser'</span></div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">res</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(res);</div><div class="line"> </div><div class="line">&#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(e);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>If you want a quick solution for parsing the url parameters back into an object on the server side check out url.parse in the <a href="https://nodejs.org/api/url.html" target="_blank" rel="external">built in node.js url module</a>.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Axios is a good solution for making requests from a node.js, and browser environment. In the future I might update this post to cover some more advanced examples. This is a great project, it deserves a great post.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/01/10/nodejs-axios/" data-id="cjcf7yfuw000080v1gfeokpm4" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/01/11/nodejs-jsdom/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Client side javascript in a node.js environment using jsdom
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/01/09/nodejs-stylus/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Generate stylus to css using the npm package stylus</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.67px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.67px;">angular</a> <a href="/tags/animation/" style="font-size: 10px;">animation</a> <a href="/tags/automation/" style="font-size: 13.33px;">automation</a> <a href="/tags/backbone/" style="font-size: 14px;">backbone</a> <a href="/tags/blog/" style="font-size: 16.67px;">blog</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.67px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.33px;">discovery</a> <a href="/tags/ejs/" style="font-size: 12px;">ejs</a> <a href="/tags/games/" style="font-size: 18.67px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 16px;">hapi</a> <a href="/tags/hexo/" style="font-size: 15.33px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.67px;">jimp</a> <a href="/tags/jquery/" style="font-size: 12px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.33px;">linux</a> <a href="/tags/lodash/" style="font-size: 17.33px;">lodash</a> <a href="/tags/node-js/" style="font-size: 19.33px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18px;">phaser</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/01/11/nodejs-jsdom/">Client side javascript in a node.js environment using jsdom</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/10/nodejs-axios/">Using the axios promise based http client in node.js.</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/09/nodejs-stylus/">Generate stylus to css using the npm package stylus</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/08/nodejs-fs-extra/">Using fs-extra as a drop in replacement for the built in node.js file system module</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/05/hexo-helpers/">Using hexo helpers to inject html in a theme</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Client side javascript in a node.js environment using jsdom | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="There comes a time now and then that I need to work with html in a server side, node.js environment. I have wrriten about a very helpful project called cheerio that works well if I just want to grab a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Client side javascript in a node.js environment using jsdom">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/01/11/nodejs-jsdom/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="There comes a time now and then that I need to work with html in a server side, node.js environment. I have wrriten about a very helpful project called cheerio that works well if I just want to grab a">
+<meta property="og:updated_time" content="2018-01-14T20:04:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Client side javascript in a node.js environment using jsdom">
+<meta name="twitter:description" content="There comes a time now and then that I need to work with html in a server side, node.js environment. I have wrriten about a very helpful project called cheerio that works well if I just want to grab a">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <script src="/js/phaser-2.6.2.min.js"></script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-jsdom" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/11/nodejs-jsdom/" class="article-date"> Published:
+  published: <time datetime="2018-01-11T21:32:00.000Z" itemprop="datePublished">2018-01-11</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/01/11/nodejs-jsdom/" class="article-date"> Modified:
+  <time datetime="2018-01-14T20:04:22.000Z" itemprop="dateModified">2018-01-14</time>
+</a>
+
+    <span class="article-date">V1.5</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Client side javascript in a node.js environment using jsdom
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>There comes a time now and then that I need to work with html in a server side, node.js environment. I have wrriten about a very helpful project called <a href="https://www.npmjs.com/package/cheerio" target="_blank" rel="external">cheerio</a> that works well if I just want to grab at something liek a link, or maybe make some kind of edit to html. However cheerio is not an actual emulation of a browser environment. There are other projects that aim to actually emulate an actual usable browser environment for the purpose of getting client side apparitions to work in a node.js project server side. The npm package <a href="https://www.npmjs.com/package/jsdom" target="_blank" rel="external">jsdom</a> is one such project, and as such this post will be about how to use jsdom to bring a browser environment to node.</p>
+<a id="more"></a>
+<p>Basic example of jsdom</p>
+<p>For a basic example of using jsdom I started with with a hard coded html string, and loaded it with the constructor that is exported by the jsdom module. What is returned by the jsdom constructor is something that I quickly found to be just like that of the DOM that I am familiar with when it comes to working within a browser environment. </p>
+<p>I was able to quickly, and easily get the innerHTML of an element in the very same fashion. SOmething that I would expect from a project that aims to emulate a browser environment in a node.js environment. </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> jsdom = <span class="built_in">require</span>(<span class="string">'jsdom'</span>).JSDOM,</div><div class="line"> </div><div class="line"><span class="comment">// some hard coded html</span></div><div class="line">html = <span class="string">''</span>+</div><div class="line"><span class="string">'&lt;!DOCTYPE html&gt;'</span>+</div><div class="line">    <span class="string">'&lt;html&gt;'</span>+</div><div class="line">    <span class="string">'&lt;head&gt;'</span>+</div><div class="line">        <span class="string">'&lt;title&gt;Blank&lt;/title&gt;'</span>+</div><div class="line">    <span class="string">'&lt;/head&gt;'</span>+</div><div class="line">    <span class="string">'&lt;body&gt;'</span>+</div><div class="line">        <span class="string">'&lt;p&gt;Hello World&lt;/p&gt;'</span>+</div><div class="line">    <span class="string">'&lt;/body&gt;'</span>+</div><div class="line"><span class="string">'&lt;/html&gt;'</span>,</div><div class="line"> </div><div class="line"><span class="comment">// get the dom by calling the jsdom constructor, and giving it the html</span></div><div class="line">dom = <span class="keyword">new</span> jsdom(html),</div><div class="line"> </div><div class="line"><span class="comment">// get the window object @ dom.window</span></div><div class="line"><span class="built_in">window</span> = dom.window,</div><div class="line"> </div><div class="line"><span class="comment">// now just do whatever, just like in the browser</span></div><div class="line">el = <span class="built_in">window</span>.document.querySelectorAll(<span class="string">'p'</span>)[<span class="number">0</span>];</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(el.innerHTML); <span class="comment">// hello World</span></div></pre></td></tr></table></figure>
+<p>So far it seems like this project might be just what I had in mind when it comes to having a way to run client side code headless on a server.</p>
+<h2 id="Running-a-script-tag-with-jsdom"><a href="#Running-a-script-tag-with-jsdom" class="headerlink" title="Running a script tag with jsdom"></a>Running a script tag with jsdom</h2><p>So this is what really sets jsdom apart from other projects like cheerio, which is a great project, it’s just that it is really just good for transversing over html content, and maybe making an edit or two. Jsdom can actually run most client side scripts headless.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> jsdom = <span class="built_in">require</span>(<span class="string">'jsdom'</span>).JSDOM,</div><div class="line"> </div><div class="line"><span class="comment">// some hard coded html</span></div><div class="line">html = <span class="string">''</span>+</div><div class="line"><span class="string">'&lt;!DOCTYPE html&gt;'</span>+</div><div class="line">    <span class="string">'&lt;script&gt;'</span>+</div><div class="line">        <span class="string">'console.log(\'I am a script tag.\');'</span> +</div><div class="line">    <span class="string">'&lt;/script&gt;'</span>;</div><div class="line"> </div><div class="line"><span class="comment">// logs 'I am a script tag' in the console.</span></div><div class="line"><span class="keyword">new</span> jsdom(html,&#123; <span class="attr">runScripts</span>: <span class="string">'dangerously'</span> &#125;);</div></pre></td></tr></table></figure>
+<h2 id="Don’t-expect-everything-to-work"><a href="#Don’t-expect-everything-to-work" class="headerlink" title="Don’t expect everything to work."></a>Don’t expect everything to work.</h2><p>Do not expect everything to work, at least not out of the box.</p>
+<p>For one thing scripts will not just run by default, as you can see in the example I need to set the value ‘dangerously’ to the property ‘runScripts’ in a config object that I pass to the jsdom constructor. As you might expect this is done for security reasons when loading content from untrusted sources, but if you are justing testing things out with your own work, and you know what everything does it is of course not an issue.</p>
+<p>In addition to scripts not just working by default without giving the proper runScripts value, many thing will not work without additional modules, other things might work but in a pretend only kind of fashion. Anything that has to do with canvas will for instance not render, because there is nothing to render to if we are going headless. There is still a way to get this working with jsdom, if for some reason you want to, but it involves the use of additional projects.</p>
+<h2 id="Running-an-external-html-file-and-it’s-sub-resources"><a href="#Running-an-external-html-file-and-it’s-sub-resources" class="headerlink" title="Running an external html file, and it’s sub resources."></a>Running an external html file, and it’s sub resources.</h2><p>If I want to run a client side app that exists as something in a *.html file I can attept to load it using jsdoms fromFile method. When doing so I might often have external resources that are referenced from the *.html file such as external scripts, and other assets. To make use that jsdom is making use of everything that is referenced from the *.html file I will want to pass some options to the method, on top of the path to the file.</p>
+<p>So I set up a public html folder, and placed the following index.html file at the root name space.<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>External file<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">h1</span>&gt;</span>I am an external file<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'I am a script tag on the index.html file'</span>);</div><div class="line">        <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">        <span class="comment">&lt;!-- here is a line to a sub resource --&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"sub.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>I also placed a sub.js file at root as well, and linked to it in the html.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> n = <span class="number">40</span> + <span class="number">2</span>;</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'I am a sub resource, the answer is : '</span> + n);</div></pre></td></tr></table></figure>
+<p>And to make use of all this i made a from_file.js demo that I will call from the command line.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> jsdom = <span class="built_in">require</span>(<span class="string">'jsdom'</span>).JSDOM,</div><div class="line"> </div><div class="line"><span class="comment">// the file I will be loading</span></div><div class="line">uri = <span class="string">'public/index.html'</span>,</div><div class="line"> </div><div class="line"><span class="comment">// the options that I will be giving to jsdom</span></div><div class="line">options = &#123;</div><div class="line">    <span class="attr">runScripts</span>: <span class="string">'dangerously'</span>,</div><div class="line">    <span class="attr">resources</span>: <span class="string">"usable"</span></div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// load from an external file</span></div><div class="line">jsdom.fromFile(uri, options).then(<span class="function"><span class="keyword">function</span> (<span class="params">dom</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">let</span> <span class="built_in">window</span> = dom.window,</div><div class="line">    <span class="built_in">document</span> = <span class="built_in">window</span>.document;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="built_in">document</span>.querySelectorAll(<span class="string">'h1'</span>)[<span class="number">0</span>].innerHTML);</div><div class="line"> </div><div class="line">&#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(e);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>This worked as expected just fine, but of course it is not at all a real application. The resources that can be loaded also include iframes, stylesheets, and images on top of external scripts.</p>
+<h2 id="Add-something-to-window-before-html-is-parsed"><a href="#Add-something-to-window-before-html-is-parsed" class="headerlink" title="Add something to window before html is parsed."></a>Add something to window before html is parsed.</h2><p>Jsdom allows for me to define some things before html is parsed to populate the document.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> jsdom = <span class="built_in">require</span>(<span class="string">'jsdom'</span>).JSDOM,</div><div class="line"> </div><div class="line"><span class="comment">// the options that I will be giving to jsdom</span></div><div class="line">options = &#123;</div><div class="line">    <span class="attr">runScripts</span>: <span class="string">'dangerously'</span>,</div><div class="line">    <span class="attr">resources</span>: <span class="string">"usable"</span>,</div><div class="line">    <span class="attr">beforeParse</span>: <span class="function"><span class="keyword">function</span> (<span class="params">window</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="built_in">window</span>.foo = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'bar'</span>);</div><div class="line"> </div><div class="line">        &#125;;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// bar</span></div><div class="line"><span class="keyword">let</span> dom = <span class="keyword">new</span> jsdom(<span class="string">'&lt;script&gt;foo()&lt;\/script&gt;'</span>,options);</div></pre></td></tr></table></figure>
+<p>This can be used to implement something that might not be there if I take the time to do it.</p>
+<h2 id="Canvas-support"><a href="#Canvas-support" class="headerlink" title="Canvas support"></a>Canvas support</h2><p>If I want to do something with canvas in jsdom is looks like I have to install some additional software. Not only do I need to install an additional npm package called juts simply canvas, I also need to install some additional software at the lower level as well, something called Cairo. As of this writing I have not done so, however if interested in doing this I would start by checking out <a href="https://www.npmjs.com/package/canvas" target="_blank" rel="external">canvas on npmjs</a>.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>js-dom is the most powerful project that I have come across so far that can be used to do this sort of thing in a node.js environment. If I use this project in more of my projects I will likely update this content, and write a few more posts on the subject.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/01/11/nodejs-jsdom/" data-id="cjcf7yfw6000380v1etp85lu6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/01/10/nodejs-axios/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Using the axios promise based http client in node.js.</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.67px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.67px;">angular</a> <a href="/tags/animation/" style="font-size: 10px;">animation</a> <a href="/tags/automation/" style="font-size: 13.33px;">automation</a> <a href="/tags/backbone/" style="font-size: 14px;">backbone</a> <a href="/tags/blog/" style="font-size: 16.67px;">blog</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.67px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.33px;">discovery</a> <a href="/tags/ejs/" style="font-size: 12px;">ejs</a> <a href="/tags/games/" style="font-size: 18.67px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 16px;">hapi</a> <a href="/tags/hexo/" style="font-size: 15.33px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.67px;">jimp</a> <a href="/tags/jquery/" style="font-size: 12px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.33px;">linux</a> <a href="/tags/lodash/" style="font-size: 17.33px;">lodash</a> <a href="/tags/node-js/" style="font-size: 19.33px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18px;">phaser</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/01/11/nodejs-jsdom/">Client side javascript in a node.js environment using jsdom</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/10/nodejs-axios/">Using the axios promise based http client in node.js.</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/09/nodejs-stylus/">Generate stylus to css using the npm package stylus</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/08/nodejs-fs-extra/">Using fs-extra as a drop in replacement for the built in node.js file system module</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/05/hexo-helpers/">Using hexo helpers to inject html in a theme</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
