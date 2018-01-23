@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Threading in node.js with the cluster module | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="JavaScript has a reputation of being a single threaded language, for the most part it is if I only take into consideration core javaScript by itself. However when taking into account the full breath o">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Threading in node.js with the cluster module">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/01/18/nodejs-cluster/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="JavaScript has a reputation of being a single threaded language, for the most part it is if I only take into consideration core javaScript by itself. However when taking into account the full breath o">
+<meta property="og:updated_time" content="2018-01-19T17:27:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Threading in node.js with the cluster module">
+<meta name="twitter:description" content="JavaScript has a reputation of being a single threaded language, for the most part it is if I only take into consideration core javaScript by itself. However when taking into account the full breath o">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <script src="/js/phaser-2.6.2.min.js"></script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-cluster" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/18/nodejs-cluster/" class="article-date"> Published:
+  published: <time datetime="2018-01-18T15:18:00.000Z" itemprop="datePublished">2018-01-18</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/01/18/nodejs-cluster/" class="article-date"> Modified:
+  <time datetime="2018-01-19T17:27:44.000Z" itemprop="dateModified">2018-01-19</time>
+</a>
+
+    <span class="article-date">V1.3</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Threading in node.js with the cluster module
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>JavaScript has a reputation of being a single threaded language, for the most part it is if I only take into consideration core javaScript by itself. However when taking into account the full breath of what there is to work with in client side javaScript, as well as a node.js environment, it would appear that javaScripts reputation of being single threaded language is wrong, or at best a half truth.</p>
+<p>In client side javaScript there is of course <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API" target="_blank" rel="external">webworker</a> which to some extent can be used to achieve threading in client side javaScript. Yes there are some limitations as doing anything with the DOM can only be done in the main thread, not the webworker context. However this post is about <a href="https://nodejs.org/api/cluster.html" target="_blank" rel="external">the cluster module</a> in a node.js environment.</p>
+<a id="more"></a>
+<h2 id="What-is-threading"><a href="#What-is-threading" class="headerlink" title="What is threading?"></a>What is threading?</h2><p>So a computer might have a single processor, and this single processor might only have a single core. On a system like this threading can be achieved by way of time slicing, that is switching between instructions very fast giving the illusion that they are being executed in parallel.</p>
+<p>On modern computers a computer might have more than one processor, and each processor might have more than one core. On a system like this time slicing could be done, however true parallel exaction of instructions can be achieved as well.</p>
+<p>As I understand it, threads are part of what makes up a process that runs on an operating system. There can be one or more threads per process, and then more than one process running on the operating system of a computer. All the threads might be running on the same core by way of time slicing, or on separate cores in parallel.</p>
+<h2 id="Why-do-so-many-people-say-javaScript-is-single-threaded-are-they-wrong"><a href="#Why-do-so-many-people-say-javaScript-is-single-threaded-are-they-wrong" class="headerlink" title="Why do so many people say javaScript is single threaded, are they wrong?"></a>Why do so many people say javaScript is single threaded, are they wrong?</h2><p>Maybe, maybe not, for me it looks like a bit of a half truth, and of course it depends on the environment. In any javaScript environment if I stick to core javaScript by itself, using just setInterval, and setTimeout only by themselves, then I what I am making is very much single threaded. However modern client side javaScript there is webworker, and in node.js there is the cluster module that can be used to pull of something that can be considered more in line with true threading.</p>
+<p>In client side javaScrpt something that is written in core javaScript can be offloaded into a web worker, but anything that has to do with the DOM is still very much single threaded. </p>
+<p>When it comes to server side javaScript there are ways of taking advantage of a computers many cores. This post will be covering use of the cluster module which can be used to fork a script for each core on the system. In addition there is the child-process module as well that can be used to launch anything that exists on the operating system, such as another script with node.js, or any other CLI tool written in any language for that matter, including tools that tack advantage of multi core systems.</p>
+<h2 id="How-can-true-threading-be-done-with-javaScript-in-node-js"><a href="#How-can-true-threading-be-done-with-javaScript-in-node-js" class="headerlink" title="How can true threading be done with javaScript in node.js?"></a>How can true threading be done with javaScript in node.js?</h2><p>There are two built in modules that are of interest which are:</p>
+<ul>
+<li><a href="">The child-process module</a></li>
+<li><a href="">The cluster module.</a></li>
+</ul>
+<p>The child-process module is what can be used to run a command on the operating system, it can be some other software tool written in another language, or another script launched with node.js, in ether case it will run as it’s own independent process separate from the main script that launched it.</p>
+<p>This post however is on the cluster module that can be used to fork a single script into more than one process.</p>
+<h2 id="Basic-example-of-the-node-js-cluster-module"><a href="#Basic-example-of-the-node-js-cluster-module" class="headerlink" title="Basic example of the node.js cluster module"></a>Basic example of the node.js cluster module</h2><p>For a basic usage example I made a script that launches a fork for every core on the system that it runs, and each fork just counts to ten, and kills itself. Another useful core module in node.js is the os module that gives me information about the system that the node.js script is running on.</p>
+<p>So I made a basic.js file in a test folder that looks like this:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// using the node.js built in cluster module</span></div><div class="line"><span class="keyword">let</span> cluster = <span class="built_in">require</span>(<span class="string">'cluster'</span>),</div><div class="line"> </div><div class="line"><span class="comment">// also using the node.js built in os (operating system) module</span></div><div class="line">os = <span class="built_in">require</span>(<span class="string">'os'</span>),</div><div class="line"> </div><div class="line"><span class="comment">// I can get a list of the systems cpus like this:</span></div><div class="line">cpus = os.cpus(),</div><div class="line"> </div><div class="line"><span class="comment">// standard start message</span></div><div class="line">startmess = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">let</span> pid = process.pid,</div><div class="line">    processType = cluster.isMaster ? <span class="string">'Master'</span> : <span class="string">'Worker'</span>,</div><div class="line">    worker = cluster.worker || &#123;</div><div class="line">        <span class="attr">id</span>: <span class="number">0</span></div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(processType + <span class="string">' started on pid: '</span> + pid + <span class="string">' worker.id: '</span> + worker.id);</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// if this is the master</span></div><div class="line"><span class="keyword">if</span> (cluster.isMaster) &#123;</div><div class="line"> </div><div class="line">    startmess();</div><div class="line"> </div><div class="line">    <span class="comment">// fork this script for each cpu</span></div><div class="line">    <span class="keyword">let</span> i = <span class="number">0</span>,</div><div class="line">    len = cpus.length;</div><div class="line">    <span class="keyword">while</span> (i &lt; len) &#123;</div><div class="line"> </div><div class="line">        cluster.fork();</div><div class="line"> </div><div class="line">        i += <span class="number">1</span>;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// on exit</span></div><div class="line">    cluster.on(<span class="string">'exit'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">worker, code, sig</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'he\'s dead Jim'</span>);</div><div class="line">        <span class="built_in">console</span>.log(worker.id);</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">    <span class="comment">// else it is a fork</span></div><div class="line">    startmess();</div><div class="line"> </div><div class="line">    <span class="keyword">let</span> c = <span class="number">0</span>,</div><div class="line">    rate = <span class="number">1000</span>,</div><div class="line">    lt = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">    worker = cluster.worker;</div><div class="line"> </div><div class="line">    <span class="comment">// end process after 1 sec</span></div><div class="line">    setInterval(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'worker # : '</span> + worker.id + <span class="string">' : '</span> + c);</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (c === <span class="number">10</span>) &#123;</div><div class="line"> </div><div class="line">            cluster.worker.kill();</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        c += <span class="number">1</span>;</div><div class="line"> </div><div class="line">    &#125;, <span class="number">100</span>);</div><div class="line"> </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>As you can see I am still using setInterval to call a function more than once, but it is being used in it’s own separate process launched with cluster.fork, so it is not the same thing as just emulating threading which would be the case if I where using setInterval by itself.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>In the future I might expand on this post, and others like it. There is a lot more to write about with clustering alone in node.js.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/01/18/nodejs-cluster/" data-id="cjcqy9gwq0000fgv1b9hu9lt6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/01/16/hexo-data-files/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hexo data files for use in themes</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.14px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.71px;">SEO</a> <a href="/tags/angular/" style="font-size: 15px;">angular</a> <a href="/tags/animation/" style="font-size: 10px;">animation</a> <a href="/tags/automation/" style="font-size: 13.57px;">automation</a> <a href="/tags/backbone/" style="font-size: 14.29px;">backbone</a> <a href="/tags/blog/" style="font-size: 16.43px;">blog</a> <a href="/tags/canvas/" style="font-size: 14.29px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.86px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.43px;">discovery</a> <a href="/tags/ejs/" style="font-size: 12.14px;">ejs</a> <a href="/tags/games/" style="font-size: 18.57px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.71px;">hapi</a> <a href="/tags/hexo/" style="font-size: 15.71px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.71px;">jimp</a> <a href="/tags/jquery/" style="font-size: 12.14px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.43px;">linux</a> <a href="/tags/lodash/" style="font-size: 17.14px;">lodash</a> <a href="/tags/node-js/" style="font-size: 19.29px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.86px;">phaser</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/01/18/nodejs-cluster/">Threading in node.js with the cluster module</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/16/hexo-data-files/">Hexo data files for use in themes</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/11/nodejs-jsdom/">Client side javascript in a node.js environment using jsdom</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/10/nodejs-axios/">Using the axios promise based http client in node.js.</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/09/nodejs-stylus/">Generate stylus to css using the npm package stylus</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
