@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Example of the _.findIndex array method in lodash | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="The _.findIndex array method in lodash can be used to find the index of an element in an Array. In modern browsers there is now Array.findIndex that works in very much the same manor as _.findIndex, m">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Example of the _.findIndex array method in lodash">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/02/09/lodash-find-index/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="The _.findIndex array method in lodash can be used to find the index of an element in an Array. In modern browsers there is now Array.findIndex that works in very much the same manor as _.findIndex, m">
+<meta property="og:updated_time" content="2018-02-10T01:02:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Example of the _.findIndex array method in lodash">
+<meta name="twitter:description" content="The _.findIndex array method in lodash can be used to find the index of an element in an Array. In modern browsers there is now Array.findIndex that works in very much the same manor as _.findIndex, m">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <script src="/js/phaser-2.6.2.min.js"></script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-lodash-find-index" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/02/09/lodash-find-index/" class="article-date"> Published:
+  published: <time datetime="2018-02-09T23:23:00.000Z" itemprop="datePublished">2018-02-09</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/02/09/lodash-find-index/" class="article-date"> Modified:
+  <time datetime="2018-02-10T01:02:10.000Z" itemprop="dateModified">2018-02-09</time>
+</a>
+
+    <span class="article-date">V1.1</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/lodash/">lodash</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Example of the _.findIndex array method in lodash
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>The <a href="https://lodash.com/docs/4.17.5#findIndex" target="_blank" rel="external">_.findIndex</a> array method in <a href="https://lodash.com/" target="_blank" rel="external">lodash</a> can be used to find the index of an element in an Array. In modern browsers there is now Array.findIndex that works in very much the same manor as _.findIndex, making this yet another one of those lodash methods that you might only bother with for the sake of backward compatibility with older browsers. Yet again maybe not, it seems that the lodash alternatives often do have a little more going on with them, in addition there are additional helper methods that can be used with _.findIndex that come in handy.</p>
+<a id="more"></a>
+<h2 id="Basic-example-of-findIndex"><a href="#Basic-example-of-findIndex" class="headerlink" title="Basic example of _.findIndex"></a>Basic example of _.findIndex</h2><p>So even when it comes to older browsers, Array.indexOf works fine when dealing with an array of primitives. As such typical use case scenarios of _.findIndex involve arrays of Objects.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> users = [</div><div class="line">    &#123; <span class="attr">name</span>: <span class="string">'John'</span>, <span class="attr">points</span>: <span class="number">1200</span>&#125;,</div><div class="line">    &#123; <span class="attr">name</span>: <span class="string">'Jerry'</span>, <span class="attr">points</span>: <span class="number">300</span>&#125;, </div><div class="line">    &#123; <span class="attr">name</span>: <span class="string">'bill'</span>, <span class="attr">points</span>: <span class="number">935</span>&#125;</div><div class="line"> </div><div class="line">];</div><div class="line"> </div><div class="line"><span class="comment">// find bill using the _.matches shorthand</span></div><div class="line"><span class="built_in">console</span>.log(_.findIndex(users, &#123;<span class="attr">name</span>: <span class="string">'bill'</span>&#125;)); <span class="comment">// 2</span></div></pre></td></tr></table></figure>
+<h2 id="findIndex-vs-Array-indexOf"><a href="#findIndex-vs-Array-indexOf" class="headerlink" title="_.findIndex vs Array.indexOf"></a>_.findIndex vs Array.indexOf</h2><p>The Array.indexOf method in vanilla js is very well supported, but only works with arrays of primitives. Never the less when dealing with simple arrays, it is pretty safe to just use that method to get the index, as a solution with _.findIndex will be overly complex by comparison.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// an array, and what to look for</span></div><div class="line"><span class="keyword">var</span> arr = [<span class="string">'foo'</span>, <span class="string">'man'</span>, <span class="string">'chew'</span>],</div><div class="line">what = <span class="string">'man'</span>,</div><div class="line"> </div><div class="line"><span class="comment">// what about index</span></div><div class="line">i = _.findIndex(arr, <span class="function"><span class="keyword">function</span> (<span class="params">el</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> el === what;</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line"><span class="comment">// yes, _.findIndex can be used to find the index</span></div><div class="line"><span class="built_in">console</span>.log(i); <span class="comment">// 1</span></div><div class="line"> </div><div class="line"><span class="comment">// but why bother then Array.indexOf is well supported?</span></div><div class="line"><span class="built_in">console</span>.log( arr.indexOf(<span class="string">'man'</span>)) ; <span class="comment">// 1</span></div></pre></td></tr></table></figure>
+<h2 id="findIndex-vs-Array-findIndex"><a href="#findIndex-vs-Array-findIndex" class="headerlink" title="_.findIndex vs Array.findIndex"></a>_.findIndex vs Array.findIndex</h2><p>In modern browsers there is the Array.findIndex method that works in a very similar fashion of _.findIndex</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> objs = [&#123;</div><div class="line">        <span class="attr">n</span>: <span class="number">12</span></div><div class="line">    &#125;, &#123;</div><div class="line">        <span class="attr">n</span>: <span class="number">42</span></div><div class="line">    &#125;, &#123;</div><div class="line">        <span class="attr">n</span>: <span class="number">7</span></div><div class="line">    &#125;</div><div class="line">];</div><div class="line"> </div><div class="line"><span class="comment">// Array.findIndex works given the proper method</span></div><div class="line"><span class="built_in">console</span>.log( objs.findIndex(<span class="function"><span class="keyword">function</span>(<span class="params">el</span>)</span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> el.n === <span class="number">42</span>;</div><div class="line"> </div><div class="line">&#125;) ); <span class="comment">// 1</span></div></pre></td></tr></table></figure>
+<p>This works fine, and in addition the methods that you give to _.findIndex should also work with Array.findIndex, including lodash baked in methods that can be used with methods like _.find, and _.findIndex. In other words you can do this:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log( objs.findIndex( _.matches(&#123;<span class="attr">n</span>:<span class="number">42</span>&#125;) ) ); <span class="comment">// 1</span></div></pre></td></tr></table></figure>
+<p>However if you happend to be using lodash, you can just use the original method where a _.matches shorthand is baked into the method itself. That is it is what is used when you give _.findIndex and Object rather than a Function.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log( _.findIndex(objs, &#123;<span class="attr">n</span>:<span class="number">42</span>&#125;) ); <span class="comment">// 1</span></div></pre></td></tr></table></figure>
+<p>This results in a slightly more concise solution, and also backward compatibility at least as far as IE 10, and even farther depending on the version of lodash you are using. So that being said, maybe this is not another one of those methods in lodash that are no longer needed after all.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Not everything can, or should be in core javaScript itself. It’s nice that we now have a lot of methods like _.findIndex in the core of javaScript itself now, but there is still the question of older browsers, and also if you do take the time to dive deep into lodash, you might come to find that many of the methods do add a certain something more, or work in a slightly different way.</p>
+<p>Happy Coding</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/02/09/lodash-find-index/" data-id="cjdkykmf60006g8v1nx7pu6e4" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lodash/">lodash</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/02/10/nodejs-globals/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Globals in a node.js environment
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/02/08/nodejs-filesystem/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Working with the filesystem module in node.js</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.14px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.71px;">SEO</a> <a href="/tags/angular/" style="font-size: 15px;">angular</a> <a href="/tags/animation/" style="font-size: 10px;">animation</a> <a href="/tags/automation/" style="font-size: 13.57px;">automation</a> <a href="/tags/backbone/" style="font-size: 14.29px;">backbone</a> <a href="/tags/blog/" style="font-size: 16.43px;">blog</a> <a href="/tags/canvas/" style="font-size: 14.29px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.86px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.43px;">discovery</a> <a href="/tags/ejs/" style="font-size: 12.14px;">ejs</a> <a href="/tags/games/" style="font-size: 18.57px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.71px;">hapi</a> <a href="/tags/heroku/" style="font-size: 12.14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15.71px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.71px;">jimp</a> <a href="/tags/jquery/" style="font-size: 12.14px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.43px;">linux</a> <a href="/tags/lodash/" style="font-size: 17.86px;">lodash</a> <a href="/tags/node-js/" style="font-size: 19.29px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.14px;">phaser</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/02/11/nodejs-process/">The node.js process global what to know</a>
+          </li>
+        
+          <li>
+            <a href="/2018/02/10/nodejs-globals/">Globals in a node.js environment</a>
+          </li>
+        
+          <li>
+            <a href="/2018/02/09/lodash-find-index/">Example of the _.findIndex array method in lodash</a>
+          </li>
+        
+          <li>
+            <a href="/2018/02/08/nodejs-filesystem/">Working with the filesystem module in node.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/02/07/nodejs-buffer/">Buffers in node.js</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
