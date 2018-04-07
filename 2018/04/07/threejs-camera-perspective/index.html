@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Working with a perspective camera in three.js | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="One of the most important things to understand when making a three.js project, is at least the basics of working with a perspective camera. There are other types of cameras to work with in three.js, b">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Working with a perspective camera in three.js">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/04/07/threejs-camera-perspective/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="One of the most important things to understand when making a three.js project, is at least the basics of working with a perspective camera. There are other types of cameras to work with in three.js, b">
+<meta property="og:updated_time" content="2018-04-07T19:41:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Working with a perspective camera in three.js">
+<meta name="twitter:description" content="One of the most important things to understand when making a three.js project, is at least the basics of working with a perspective camera. There are other types of cameras to work with in three.js, b">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <script src="/js/phaser-2.6.2.min.js"></script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/games">Games</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-threejs-camera-perspective" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/07/threejs-camera-perspective/" class="article-date"> Published:
+  published: <time datetime="2018-04-07T14:49:00.000Z" itemprop="datePublished">2018-04-07</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/04/07/threejs-camera-perspective/" class="article-date"> Modified:
+  <time datetime="2018-04-07T19:41:51.000Z" itemprop="dateModified">2018-04-07</time>
+</a>
+
+    <span class="article-date">V1.1</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Working with a perspective camera in three.js
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>One of the most important things to understand when making a <a href="https://threejs.org/" target="_blank" rel="external">three.js</a> project, is at least the basics of working with a <a href="https://threejs.org/docs/index.html#api/cameras/PerspectiveCamera" target="_blank" rel="external">perspective camera</a>. There are other types of cameras to work with in three.js, but a perspective camera is the most common one that mimics the way the human eye sees the world.</p>
+<a id="more"></a>
+<p>In this post I will be covering some basic demos that have to do with a perspective camera, <a href="https://en.wikipedia.org/wiki/Viewing_frustum" target="_blank" rel="external">viewing frustum</a>, the base <a href="https://threejs.org/docs/index.html#api/cameras/Camera" target="_blank" rel="external">Camera Class</a>, and some additional things that are inherited from the <a href="https://threejs.org/docs/index.html#api/core/Object3D" target="_blank" rel="external">Object3D Class</a></p>
+<h2 id="What-to-know-before-hand"><a href="#What-to-know-before-hand" class="headerlink" title="What to know before hand"></a>What to know before hand</h2><p>This is not an introduction to three.js, or any additional skills that are required first in order to start working with something like three.js such as javaScript, and web programing in general. I assume that you have working knowledge of javaScript, and have started working with some basic three.js examples. however if you feel that you could stand to gain a deeper understanding of perspective cameras in three.js this post might be of interest.</p>
+<h2 id="The-perspective-camera-constructor"><a href="#The-perspective-camera-constructor" class="headerlink" title="The perspective camera constructor"></a>The perspective camera constructor</h2><p>The main method of interest in this blog post is the three.js <a href="https://threejs.org/docs/index.html#api/cameras/PerspectiveCamera" target="_blank" rel="external">perspective camera constructor](</a>. ). This constructor also inherits from <a href="https://threejs.org/docs/index.html#api/cameras/Camera" target="_blank" rel="external">Camera</a>, and the Camera constructor also inherits from <a href="https://threejs.org/docs/index.html#api/core/Object3D" target="_blank" rel="external">Object3D</a>.</p>
+<p>It is a good idea to have a strong foundational understanding of all of these constructors, but in this post I will be mainly focusing on the Perspective Camera Constructor.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fieldOfView = <span class="number">45</span>,</div><div class="line">aspectRatio = <span class="number">16</span> / <span class="number">9</span>,</div><div class="line">near = <span class="number">1</span>,</div><div class="line">far = <span class="number">1000</span>,</div><div class="line"> </div><div class="line"><span class="comment">// I can now make an instance of Perspective Camera</span></div><div class="line">camera = <span class="keyword">new</span> THREE.PerspectiveCamera(fieldOfView, aspectRatio, near, far);</div></pre></td></tr></table></figure>
+<h3 id="Understanding-Viewing-frustum"><a href="#Understanding-Viewing-frustum" class="headerlink" title="Understanding Viewing frustum."></a>Understanding Viewing frustum.</h3><p><a href="https://en.wikipedia.org/wiki/Viewing_frustum" target="_blank" rel="external">Viewing frustum</a> cam be thought of as a pyramid of vision that exists in front of a camera. Any object that lays inside of the pyramid will be rendered. This pyramid can be defined by an <a href="https://en.wikipedia.org/wiki/Field_of_view" target="_blank" rel="external">field of view</a> in terms of an angle in y direction. As well as additional values that define the aspect ratio of this view, as well as values that define where the top of the pyramid begins, and ends (view distance).</p>
+<h4 id="Field-of-view"><a href="#Field-of-view" class="headerlink" title="Field of view"></a>Field of view</h4><p>The first argument that is given to the three.js perspective camera constructor is the field of view. The value expected should be a Number representing an angle in degrees not radians.</p>
+<h4 id="Aspect-ratio"><a href="#Aspect-ratio" class="headerlink" title="Aspect ratio"></a>Aspect ratio</h4><p>The aspect ratio is the second argument that is given to the three.js perspective camera constructor. This value is the width divided by the height of the desired ratio. Typically you might want to set this to something like 16 / 9, or 4 / 3. Whatever value you set will be used to determine the width and height of the near, and far rectangles of the pyramid of vision.</p>
+<h4 id="Near-distance"><a href="#Near-distance" class="headerlink" title="Near distance"></a>Near distance</h4><p>This is the near bound of the frustum, any object that is from this distance, outward to the far distance will be rendered if it is inside the pyramid of vision.</p>
+<h4 id="Far-distance"><a href="#Far-distance" class="headerlink" title="Far distance"></a>Far distance</h4><p>This is for course the far distance of the view pyramid. It is also the distance at which the aspect ratio of the field of view will be at it’s largest, the bottom of the pyramid. If you are ever asking yourself, how far is to far, this value is of interest, as anything the exists beyond this distance will not be rendered.</p>
+<h2 id="Changing-the-pyramid-of-vision-during-runtime-with-the-updateProjectionMatrix-method"><a href="#Changing-the-pyramid-of-vision-during-runtime-with-the-updateProjectionMatrix-method" class="headerlink" title="Changing the pyramid of vision during runtime with the updateProjectionMatrix method"></a>Changing the pyramid of vision during runtime with the updateProjectionMatrix method</h2><p>With most projects typically I will be setting some values for the camera just once, and then change values that are part of the Object3D class for instance if I want to move the position, and orientation of the camera.</p>
+<p>Still If you want to change any of the properties that are used to create the geometry of the view pyramid, you may thing that there is some kind of method that needs to be called to reconfigure that when you change a value, and you are right. The method you want to call is updateProjectionMatrix.</p>
+<p>If you do not call this method, any change that is made to values like camera.fov, or camera.aspect will not take effect.</p>
+<p>A full list of the properties that correspond with the arguments that you give to the constructor are:</p>
+<ul>
+<li>camera.fov</li>
+<li>camera.aspect</li>
+<li>camera.near</li>
+<li>camera.far</li>
+</ul>
+<p>If you change a property you will need to call updateProjectionMatrix in order to re generate the pyramid geometry. like so:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">camera.fov = <span class="built_in">Math</span>.floor(<span class="number">25</span> + <span class="number">50</span> * bias);</div><div class="line">camera.updateProjectionMatrix();</div></pre></td></tr></table></figure>
+<h2 id="Camera-Constructor"><a href="#Camera-Constructor" class="headerlink" title="Camera Constructor"></a>Camera Constructor</h2><p>Perspective Camera inherits from the Camera constructor, as such the perspective Camera shares certain properties, and methods with all other cameras in three.js. I will not be getting into this class in depth with this post, but for now it is important to know that this class adds some properties and methods that are uniform across all cameras used in three.js, including a method that can be used to clone a camera.</p>
+<h2 id="Object3D-constructor"><a href="#Object3D-constructor" class="headerlink" title="Object3D constructor"></a>Object3D constructor</h2><p>The Camera class in turn also inherits from Object3D, this class is what helps to make Objects including a camera easy to work with in three.js. Like the Camera Class I will not get into detail as it is a little off topic, and it deserves a post of it’s own. However if you are interested in learning how to move the camera, or change it’s orientation this is the Class of interest for that.</p>
+<h2 id="An-Example-of-Perspective-Camera-use"><a href="#An-Example-of-Perspective-Camera-use" class="headerlink" title="An Example of Perspective Camera use"></a>An Example of Perspective Camera use</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// a scene is needed to place objects in</span></div><div class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene(),</div><div class="line"> </div><div class="line">    <span class="comment">// so here I am setting the values of the perspective camera</span></div><div class="line">    fieldOfView = <span class="number">45</span>,</div><div class="line">    aspectRatio = <span class="number">16</span> / <span class="number">9</span>,</div><div class="line">    near = <span class="number">1</span>,</div><div class="line">    far = <span class="number">1000</span>,</div><div class="line">    cam = <span class="keyword">new</span> THREE.PerspectiveCamera(fieldOfView, aspectRatio, near, far),</div><div class="line"> </div><div class="line">    <span class="comment">// In order to see anything I will also need a renderer</span></div><div class="line">    <span class="comment">// to use with my scene, and camera</span></div><div class="line">    renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line"> </div><div class="line">    <span class="comment">// I must append the dom element used by the renderer to the html</span></div><div class="line">    <span class="comment">// that I am using.</span></div><div class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'cube'</span>).appendChild(renderer.domElement);</div><div class="line"> </div><div class="line">    <span class="comment">// initialize method</span></div><div class="line">    <span class="keyword">var</span> init = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// add plane to the scene</span></div><div class="line">        <span class="keyword">var</span> plane = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">                <span class="keyword">new</span> THREE.PlaneBufferGeometry(<span class="number">500</span>, <span class="number">500</span>, <span class="number">8</span>, <span class="number">8</span>),</div><div class="line">                <span class="keyword">new</span> THREE.MeshBasicMaterial(&#123;</div><div class="line">                    <span class="attr">color</span>: <span class="number">0x00afaf</span>,</div><div class="line">                    <span class="attr">side</span>: THREE.DoubleSide</div><div class="line">                &#125;));</div><div class="line">        plane.rotation.x = <span class="built_in">Math</span>.PI / <span class="number">2</span>;</div><div class="line">        scene.add(plane);</div><div class="line"> </div><div class="line">        <span class="comment">// add a cube to the scene</span></div><div class="line">        cube = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">                <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">200</span>, <span class="number">200</span>, <span class="number">200</span>),</div><div class="line">                <span class="keyword">new</span> THREE.MeshNormalMaterial(&#123;&#125;));</div><div class="line">        cube.position.set(<span class="number">0</span>, <span class="number">100</span>, <span class="number">0</span>);</div><div class="line">        scene.add(cube);</div><div class="line"> </div><div class="line">        <span class="comment">// setting position of the camera</span></div><div class="line">        <span class="comment">// position is a property of Object3D</span></div><div class="line">        <span class="comment">// and the value is an instance of Vector3</span></div><div class="line">        cam.position.set(<span class="number">400</span>, <span class="number">400</span>, <span class="number">400</span>);</div><div class="line">        cam.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"> </div><div class="line">        <span class="comment">// setting a background color</span></div><div class="line">        scene.background = <span class="keyword">new</span> THREE.Color(<span class="number">.7</span>, <span class="number">.7</span>, <span class="number">.7</span>);</div><div class="line"> </div><div class="line">        <span class="comment">// 16:9 aspect ratio canvas</span></div><div class="line">        renderer.setSize(<span class="number">320</span>, <span class="number">180</span>);</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// update method</span></div><div class="line">    i = <span class="number">0</span>,</div><div class="line">    iMax = <span class="number">100</span>,</div><div class="line">    lt = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">    fr = <span class="number">100</span>,</div><div class="line">    update = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> per = i / iMax,</div><div class="line">        now = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">        bias = <span class="number">1</span> - <span class="built_in">Math</span>.abs(<span class="number">.5</span> - per) / <span class="number">.5</span>;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (now - lt &gt;= fr) &#123;</div><div class="line"> </div><div class="line">            <span class="comment">// changing aspect, and field of view</span></div><div class="line">            cam.aspect = <span class="number">.5</span> + <span class="number">1.5</span> * bias;</div><div class="line">            cam.fov = <span class="number">50</span> + <span class="number">25</span> * bias;</div><div class="line"> </div><div class="line">            <span class="comment">// I must call this to get it to work</span></div><div class="line">            cam.updateProjectionMatrix();</div><div class="line"> </div><div class="line">            i += <span class="number">1</span>;</div><div class="line">            i = i % iMax;</div><div class="line"> </div><div class="line">            lt = now;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// loop</span></div><div class="line">    loop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        requestAnimationFrame(loop);</div><div class="line"> </div><div class="line">        update();</div><div class="line">        renderer.render(scene, cam);</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// call init, and start loop</span></div><div class="line">    init();</div><div class="line">    loop();</div><div class="line"> </div><div class="line">&#125;</div><div class="line">    ());</div></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/04/07/threejs-camera-perspective/" data-id="cjfq11pox0004k8v1ltzq0nqg" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/canvas/">canvas</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/04/06/threejs-camera/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Cameras in three.js</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.67px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.67px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.67px;">angular</a> <a href="/tags/animation/" style="font-size: 10.67px;">animation</a> <a href="/tags/automation/" style="font-size: 13.33px;">automation</a> <a href="/tags/backbone/" style="font-size: 14px;">backbone</a> <a href="/tags/blog/" style="font-size: 16.67px;">blog</a> <a href="/tags/canvas/" style="font-size: 15.33px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.33px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.33px;">discovery</a> <a href="/tags/ejs/" style="font-size: 12px;">ejs</a> <a href="/tags/games/" style="font-size: 18.67px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 16px;">hapi</a> <a href="/tags/heroku/" style="font-size: 12px;">heroku</a> <a href="/tags/hexo/" style="font-size: 16px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.67px;">jimp</a> <a href="/tags/jquery/" style="font-size: 12px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 12px;">linux</a> <a href="/tags/lodash/" style="font-size: 18px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/node-js/" style="font-size: 19.33px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.33px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.67px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 11.33px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/04/07/threejs-camera-perspective/">Working with a perspective camera in three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/06/threejs-camera/">Cameras in three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/04/threejs-getting-started/">Getting started with three.js with a basic cube demo</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/28/js-xmlhttprequest/">Good old xmlHttpRequest for scripting http requests</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/27/js-fetch/">Using fetch to script http</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/games" class="mobile-nav-link">Games</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
