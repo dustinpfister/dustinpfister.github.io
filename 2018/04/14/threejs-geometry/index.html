@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Making custom geometry in three.js | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="When working with three.js there are many built in geometry constructors that can be used to quickly make many simple, common, solid shapes like cubes, and spheres. However when getting into making an">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Making custom geometry in three.js">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/04/14/threejs-geometry/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="When working with three.js there are many built in geometry constructors that can be used to quickly make many simple, common, solid shapes like cubes, and spheres. However when getting into making an">
+<meta property="og:updated_time" content="2018-04-15T00:28:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Making custom geometry in three.js">
+<meta name="twitter:description" content="When working with three.js there are many built in geometry constructors that can be used to quickly make many simple, common, solid shapes like cubes, and spheres. However when getting into making an">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <script src="/js/phaser-2.6.2.min.js"></script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-threejs-geometry" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/14/threejs-geometry/" class="article-date"> Published:
+  published: <time datetime="2018-04-14T20:03:00.000Z" itemprop="datePublished">2018-04-14</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/04/14/threejs-geometry/" class="article-date"> Modified:
+  <time datetime="2018-04-15T00:28:44.000Z" itemprop="dateModified">2018-04-14</time>
+</a>
+
+    <span class="article-date">V1.6</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Making custom geometry in three.js
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>When working with <a href="https://threejs.org/" target="_blank" rel="external">three.js</a> there are many built in geometry constructors that can be used to quickly make many simple, common, solid shapes like cubes, and spheres. However when getting into making an actual three.js project rather than just yet another simple rotating cube demo, there is going to be a need for a way to make custom geometry.</p>
+<a id="more"></a>
+<p>There are ways of importing geometry from an external source that was created with a 3d modeling program like blender. However what is you want to make a geometry my way of some javaScript, rather than json data? This is where the Geometry constructor comes into play.</p>
+<h2 id="What-to-know-before-hand"><a href="#What-to-know-before-hand" class="headerlink" title="What to know before hand."></a>What to know before hand.</h2><p>I assume that you know a thing or two about javaScript, also it would be a good idea to <a href="/2018/04/04/threejs-getting-started/">learn the basics</a> of three.js first if you have not. This is an advanced post on the <a href="https://threejs.org/docs/index.html#api/core/Geometry" target="_blank" rel="external">three.js Geometry constructor</a> that is an easy, but maybe not so efficient way of creating geometry that can be used in a Mesh that can be viewed, and worked with in a scene in three.js.</p>
+<p>This post is also on the regular Geometry constructor, rather than BufferGeometry.</p>
+<h2 id="Geometry-vs-BufferGeometry"><a href="#Geometry-vs-BufferGeometry" class="headerlink" title="Geometry vs BufferGeometry"></a>Geometry vs BufferGeometry</h2><p>In three.js there is <a href="https://threejs.org/docs/index.html#api/core/BufferGeometry" target="_blank" rel="external">BufferGeometry</a>, and then regular <a href="(https://threejs.org/docs/index.html#api/core/Geometry">Geometry</a>) constructors. The reason for this is that the regular Geometry constructor is easier to work with as the vertices, faces, and so forth are stored directly. However this comes at a performance loss.</p>
+<p>Still if you are new to making custom geometry it would make sense to start with the regular Geometry first, then progress into the more advanced BufferGeometry to know how to make your projects run faster.</p>
+<h2 id="BuferGeomeetry-from-Geometry"><a href="#BuferGeomeetry-from-Geometry" class="headerlink" title="BuferGeomeetry from Geometry"></a>BuferGeomeetry from Geometry</h2><p>I will not be getting into buffered geometry and why it is faster, at least not in this post. I think that it is at least worth mentioning that there is a method of Buffered Geometry instance that can be used to create a Buffered Geometry from an instance of regular geometry. So it is possible to create something with the regular geometry constructor, and then just convert it later.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> bufferGeometry = <span class="keyword">new</span> THREE.BufferGeometry().fromGeometry(geometry);</div></pre></td></tr></table></figure>
+<p>So don’t worry about it to much, at least for now, as you might find the regular geometry constructor easier to work with.</p>
+<h2 id="Basic-three-js-Geometry-example"><a href="#Basic-three-js-Geometry-example" class="headerlink" title="Basic three.js Geometry example."></a>Basic three.js Geometry example.</h2><p>The basic process is to first create an instance of Geometry by calling the constructor, and saving the instance of Geometry to a variable. Once you have your instance of Geometry you can now start adding some vertices to it, these are just points in space that are created using the <a href="https://threejs.org/docs/index.html#api/math/Vector3" target="_blank" rel="external">Vector3</a> constructor. </p>
+<p>After You have an array of vertices to work with you can start adding faces if it is a geometry that will be used with a Material that makes use of faces. This will be an array of Face3 instances that expect three arguments that are the index values of the vertices in which a face is to be drawn between 3 points. An easy way to do this is to think of it like connect the dots, each vertex has an index value to it, and you are just drawing triangles between them.</p>
+<p>Once you have your vertices, and faces you might want to call computeVertexNormals, and normalize the geometry. More on that later.</p>
+<p>Here is an example of what it is I am talking about here.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// SCENE</span></div><div class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"> </div><div class="line">    <span class="comment">// CAMERA</span></div><div class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">50</span>, <span class="number">4</span> / <span class="number">3</span>, <span class="number">.5</span>, <span class="number">1000</span>);</div><div class="line">    camera.position.set(<span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>);</div><div class="line">    camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// GEOMETRY</span></div><div class="line">    <span class="keyword">var</span> geometry = <span class="keyword">new</span> THREE.Geometry();</div><div class="line"> </div><div class="line">    <span class="comment">// create an array of vertices by way of</span></div><div class="line">    <span class="comment">// and array of vector3 instances</span></div><div class="line">    geometry.vertices.push(</div><div class="line"> </div><div class="line">        <span class="keyword">new</span> THREE.Vector3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>),</div><div class="line">        <span class="keyword">new</span> THREE.Vector3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>),</div><div class="line">        <span class="keyword">new</span> THREE.Vector3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>),</div><div class="line">        <span class="keyword">new</span> THREE.Vector3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>),</div><div class="line"> </div><div class="line">        <span class="keyword">new</span> THREE.Vector3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">-1</span>),</div><div class="line">        <span class="keyword">new</span> THREE.Vector3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">-1</span>),</div><div class="line">        <span class="keyword">new</span> THREE.Vector3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">-1</span>),</div><div class="line">        <span class="keyword">new</span> THREE.Vector3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">-1</span>));</div><div class="line"> </div><div class="line">    <span class="comment">// create faces by way of an array of</span></div><div class="line">    <span class="comment">// face3 instances. (you just play connect</span></div><div class="line">    <span class="comment">// the dots with index values from the</span></div><div class="line">    <span class="comment">// vertices array)</span></div><div class="line">    geometry.faces.push(</div><div class="line"> </div><div class="line">        <span class="keyword">new</span> THREE.Face3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>),</div><div class="line">        <span class="keyword">new</span> THREE.Face3(<span class="number">3</span>, <span class="number">0</span>, <span class="number">2</span>),</div><div class="line">        <span class="keyword">new</span> THREE.Face3(<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>),</div><div class="line">        <span class="keyword">new</span> THREE.Face3(<span class="number">7</span>, <span class="number">4</span>, <span class="number">6</span>),</div><div class="line"> </div><div class="line">        <span class="keyword">new</span> THREE.Face3(<span class="number">0</span>, <span class="number">4</span>, <span class="number">1</span>),</div><div class="line">        <span class="keyword">new</span> THREE.Face3(<span class="number">1</span>, <span class="number">4</span>, <span class="number">5</span>),</div><div class="line">        <span class="keyword">new</span> THREE.Face3(<span class="number">3</span>, <span class="number">7</span>, <span class="number">2</span>),</div><div class="line">        <span class="keyword">new</span> THREE.Face3(<span class="number">2</span>, <span class="number">7</span>, <span class="number">6</span>));</div><div class="line"> </div><div class="line">    <span class="comment">// compute Normals</span></div><div class="line">    geometry.computeVertexNormals();</div><div class="line"> </div><div class="line">    <span class="comment">// normalize the geometry</span></div><div class="line">    geometry.normalize();</div><div class="line"> </div><div class="line">    <span class="comment">// MESH with GEOMETRY, and Normal MATERIAL</span></div><div class="line">    scene.add(<span class="keyword">new</span> THREE.Mesh(</div><div class="line"> </div><div class="line">            <span class="comment">// geometry as first argument</span></div><div class="line">            geometry,</div><div class="line"> </div><div class="line">            <span class="comment">// then Material</span></div><div class="line">            <span class="keyword">new</span> THREE.MeshNormalMaterial(&#123;</div><div class="line">                <span class="attr">side</span>: THREE.DoubleSide</div><div class="line">            &#125;)));</div><div class="line"> </div><div class="line">    <span class="comment">// RENDER</span></div><div class="line">    <span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">    renderer.setSize(<span class="number">320</span>, <span class="number">240</span>);</div><div class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line">    renderer.render(scene, camera);</div><div class="line"> </div><div class="line">&#125;</div><div class="line">    ());</div></pre></td></tr></table></figure>
+<p>In this example I am repeating the use of Vector3, and Face3 constructors over and over again for each instance. However in more advanced examples you can of course get into making helper functions that will involve loops that will involve the use of these constructors in just one line of your code.</p>
+<h2 id="Creating-a-helper-method-that-returns-a-Geometry"><a href="#Creating-a-helper-method-that-returns-a-Geometry" class="headerlink" title="Creating a helper method that returns a Geometry"></a>Creating a helper method that returns a Geometry</h2><p>As a project grows more complex it might be a good idea to make methods that create, and return a geometry, just like the build in constructors that do just that. To pull that off I just need to have a method that returns an instance of Geometry that is created by way of some javaScript rather than just hard coded data.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> genPanes = <span class="function"><span class="keyword">function</span> (<span class="params">count</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> geometry = <span class="keyword">new</span> THREE.Geometry(),</div><div class="line"> </div><div class="line">        offset,</div><div class="line">        pane,</div><div class="line">        x = <span class="number">0</span>,</div><div class="line">        y = <span class="number">0</span>,</div><div class="line">        z = <span class="number">0</span>;</div><div class="line"> </div><div class="line">        count = count || <span class="number">6</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// generate vertices</span></div><div class="line">        pane = <span class="number">0</span>;</div><div class="line">        <span class="keyword">while</span> (pane &lt; count) &#123;</div><div class="line"> </div><div class="line">            <span class="keyword">var</span> i = <span class="number">0</span>,</div><div class="line">            per = pane / count,</div><div class="line">            len = <span class="number">4</span>;</div><div class="line">            <span class="keyword">while</span> (i &lt; len) &#123;</div><div class="line"> </div><div class="line">                x = <span class="built_in">Math</span>.floor(i % <span class="number">2</span>) + pane * <span class="number">1.5</span>;</div><div class="line">                y = <span class="built_in">Math</span>.floor(i / <span class="number">2</span>);</div><div class="line">                z = pane * per;</div><div class="line"> </div><div class="line">                geometry.vertices.push(<span class="keyword">new</span> THREE.Vector3(x, y, z));</div><div class="line"> </div><div class="line">                i += <span class="number">1</span>;</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            pane += <span class="number">1</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">// generate faces</span></div><div class="line">        pane = <span class="number">0</span>;</div><div class="line">        <span class="keyword">while</span> (pane &lt; count) &#123;</div><div class="line"> </div><div class="line">            offset = pane * <span class="number">4</span>;</div><div class="line"> </div><div class="line">            geometry.faces.push(</div><div class="line">                <span class="keyword">new</span> THREE.Face3(<span class="number">0</span> + offset, <span class="number">1</span> + offset, <span class="number">2</span> + offset),</div><div class="line">                <span class="keyword">new</span> THREE.Face3(<span class="number">3</span> + offset, <span class="number">2</span> + offset, <span class="number">1</span> + offset));</div><div class="line">            pane += <span class="number">1</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">// compute Normals</span></div><div class="line">        geometry.computeVertexNormals();</div><div class="line"> </div><div class="line">        <span class="comment">// normalize the geometry</span></div><div class="line">        geometry.normalize();</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> geometry;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// SCENE</span></div><div class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"> </div><div class="line">    <span class="comment">// CAMERA</span></div><div class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">50</span>, <span class="number">4</span> / <span class="number">3</span>, <span class="number">.5</span>, <span class="number">1000</span>);</div><div class="line">    camera.position.set(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>);</div><div class="line">    camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// MESH with Geometry, and Basic Material</span></div><div class="line">    scene.add(<span class="keyword">new</span> THREE.Mesh(</div><div class="line"> </div><div class="line">            genPanes(<span class="number">20</span>),</div><div class="line"> </div><div class="line">            <span class="comment">// Material</span></div><div class="line">            <span class="keyword">new</span> THREE.MeshNormalMaterial(&#123;</div><div class="line">                <span class="attr">side</span>: THREE.DoubleSide</div><div class="line">            &#125;)));</div><div class="line"> </div><div class="line">    <span class="comment">// RENDER</span></div><div class="line">    <span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">    renderer.setSize(<span class="number">320</span>, <span class="number">240</span>);</div><div class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line">    renderer.render(scene, camera);</div><div class="line"> </div><div class="line">&#125;</div><div class="line">    ());</div></pre></td></tr></table></figure>
+<h2 id="Normalizing-Geometry"><a href="#Normalizing-Geometry" class="headerlink" title="Normalizing Geometry"></a>Normalizing Geometry</h2><p>A common task to do when you have an off centered geometry, is to center it. In addition it may Also be desirable to have it set within a bounding sphere of area that has a radius of one, so that it is easily scaled up or down from there. To achieve this you will want to use the normalize method.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// creating a custom geometry</span></div><div class="line"><span class="keyword">var</span> geometry = <span class="keyword">new</span> THREE.Geometry();</div><div class="line">geometry.vertices.push(</div><div class="line"> </div><div class="line">    <span class="keyword">new</span> THREE.Vector3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>),</div><div class="line">    <span class="keyword">new</span> THREE.Vector3(<span class="number">5</span>, <span class="number">0</span>, <span class="number">0</span>),</div><div class="line">    <span class="keyword">new</span> THREE.Vector3(<span class="number">5</span>, <span class="number">5</span>, <span class="number">0</span>),</div><div class="line">    <span class="keyword">new</span> THREE.Vector3(<span class="number">0</span>, <span class="number">5</span>, <span class="number">0</span>));</div><div class="line">geometry.faces.push(</div><div class="line"> </div><div class="line">    <span class="keyword">new</span> THREE.Face3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>),</div><div class="line">    <span class="keyword">new</span> THREE.Face3(<span class="number">3</span>, <span class="number">0</span>, <span class="number">2</span>));</div><div class="line"> </div><div class="line"><span class="comment">// geometry is not centered, and it ranges</span></div><div class="line"><span class="comment">// out of the range of 1</span></div><div class="line"><span class="built_in">console</span>.log(geometry.vertices[<span class="number">0</span>].x); <span class="comment">// 0</span></div><div class="line"><span class="built_in">console</span>.log(geometry.vertices[<span class="number">1</span>].x); <span class="comment">// 5</span></div><div class="line"> </div><div class="line"><span class="comment">// normalize</span></div><div class="line">geometry.normalize();</div><div class="line">geometry.computeVertexNormals();</div><div class="line"> </div><div class="line"><span class="comment">// geometry is now centered to the origin</span></div><div class="line"><span class="comment">// and is inside the range of one</span></div><div class="line"><span class="built_in">console</span>.log(geometry.vertices[<span class="number">0</span>].x); <span class="comment">// -0.707...</span></div><div class="line"><span class="built_in">console</span>.log(geometry.vertices[<span class="number">1</span>].x); <span class="comment">// 0.707...</span></div></pre></td></tr></table></figure>
+<p>This is typically what I will always want to do with a geometry, after all it is going to be placed in a Mesh, at which point I will use methods that come with the mesh to move, and rotate the geometry further from there. Having the geometry centered to the origin will only be relative to the instance of Geometry that will be in a Mesh, not the over all Scene.</p>
+<p>In Other words think of this Geometry as being relative to the center of a Cube, or Sphere if you prefer, and then you are going to move and rotate this object in a Scene that might contain many such objects. So chances are you are going to want it centered to this relative origin, and scaled to a certain standard.</p>
+<h2 id="Scale-a-geometry"><a href="#Scale-a-geometry" class="headerlink" title="Scale a geometry"></a>Scale a geometry</h2><p>If you want to scale a geometry, it can be done with the scale method. This is something that might typically be done only once if it is a static Geometry. There is also a scale method with the Mesh that will be available when using the geometry, this is what should be typically used in a loop.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">geometry.scale(<span class="number">5</span>,<span class="number">5</span>,<span class="number">1</span>);</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/04/14/threejs-geometry/" data-id="cjg2owufh00060sv1ijb89mtg" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/canvas/">canvas</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/04/15/threejs-vector3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Vector3 in three.js for points in space
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/13/threejs-orbit-controls/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Quick orbit controls for three.js</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.63px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.38px;">angular</a> <a href="/tags/animation/" style="font-size: 10.63px;">animation</a> <a href="/tags/automation/" style="font-size: 13.13px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.75px;">backbone</a> <a href="/tags/blog/" style="font-size: 16.25px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.88px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.25px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.88px;">ejs</a> <a href="/tags/games/" style="font-size: 18.75px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.63px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.88px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15.63px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.63px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.88px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.88px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.13px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/node-js/" style="font-size: 19.38px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.5px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.5px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 15px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/04/16/threejs-fog/">Adding fog to a scene in three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/15/threejs-vector3/">Vector3 in three.js for points in space</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/14/threejs-geometry/">Making custom geometry in three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/13/threejs-orbit-controls/">Quick orbit controls for three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/12/threejs-buffer-geometry-loader/">The buffered geometry loader in three.js</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

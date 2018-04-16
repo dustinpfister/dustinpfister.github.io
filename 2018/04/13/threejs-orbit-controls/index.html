@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Quick orbit controls for three.js | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="It would not be to hard to implement some camera controls for a three.js project from scratch. It would involve some event handlers, and the use of a few Object3D methods like lookAt, and position.set">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Quick orbit controls for three.js">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/04/13/threejs-orbit-controls/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="It would not be to hard to implement some camera controls for a three.js project from scratch. It would involve some event handlers, and the use of a few Object3D methods like lookAt, and position.set">
+<meta property="og:updated_time" content="2018-04-14T13:41:12.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Quick orbit controls for three.js">
+<meta name="twitter:description" content="It would not be to hard to implement some camera controls for a three.js project from scratch. It would involve some event handlers, and the use of a few Object3D methods like lookAt, and position.set">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <script src="/js/phaser-2.6.2.min.js"></script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-threejs-orbit-controls" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/13/threejs-orbit-controls/" class="article-date"> Published:
+  published: <time datetime="2018-04-13T22:22:00.000Z" itemprop="datePublished">2018-04-13</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/04/13/threejs-orbit-controls/" class="article-date"> Modified:
+  <time datetime="2018-04-14T13:41:12.000Z" itemprop="dateModified">2018-04-14</time>
+</a>
+
+    <span class="article-date">V1.8</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Quick orbit controls for three.js
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>It would not be to hard to implement some camera controls for a <a href="https://threejs.org/" target="_blank" rel="external">three.js</a> project from scratch. It would involve some event handlers, and the use of a few <a href="https://threejs.org/docs/#api/core/Object3D" target="_blank" rel="external">Object3D</a> methods like lookAt, and position.set. However there is some additional resources in the three.js project repository itself that can be used to quickly set this up in a flash. In this post I will be covering how to quickly set up some orbit controls for the camera, so you do not have to keep changing hard coded values, or spend a great deal of time working on your own solution to just look around a scene.</p>
+<p>The Orbit Controls solution that can be found in the three.js examples folder in the github repo of the project can be used to quickly set up a solution for panning, zooming, and changing the orientation of a camera with the mouse, keyboard, and touch events.</p>
+<a id="more"></a>
+<h2 id="What-to-know-before-hand"><a href="#What-to-know-before-hand" class="headerlink" title="What to know before hand"></a>What to know before hand</h2><p>This is an advanced post on one of the many useful time saving features fount in the three.js examples folder in the <a href="https://github.com/mrdoob/three.js/tree/r91" target="_blank" rel="external">three.js github repository</a>. If you are looking for my take on <a href="/2018/04/04/threejs-getting-started/">getting started with three.js</a> type post I have written that before. In this post I assume you have a basic working knowledge of javaScript, and three.js and are wondering if there is some kind of official solution for quickly adding some orbit controls to a three.js project, in which case you are at the right place.</p>
+<h2 id="Where-to-get-the-file-for-orbit-controls"><a href="#Where-to-get-the-file-for-orbit-controls" class="headerlink" title="Where to get the file for orbit controls"></a>Where to get the file for orbit controls</h2><p>In order to quickly add Orbit controls you need to add a *.js file that is in the three.js repository that can be found <a href="https://github.com/mrdoob/three.js/blob/r91/examples/js/controls/OrbitControls.js" target="_blank" rel="external">here</a>. You will want to add this file to your project in a way so that it will append three.js, and add a constructor called <a href="https://threejs.org/docs/#examples/controls/OrbitControls" target="_blank" rel="external">THREE.OrbitControls</a>.</p>
+<h2 id="Using-the-OrbitControls-constructor"><a href="#Using-the-OrbitControls-constructor" class="headerlink" title="Using the OrbitControls constructor"></a>Using the OrbitControls constructor</h2><p>Once you have the constructor you just need to call the constructor passing the instance of the camera you want to to control which will give you an instance of THREE.OrbitControls.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// CAMERA</span></div><div class="line"><span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">75</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">250</span>, <span class="number">200</span>, <span class="number">250</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"> </div><div class="line"><span class="comment">// add controls for the camera</span></div><div class="line"><span class="keyword">var</span> controls = <span class="keyword">new</span> THREE.OrbitControls(camera);</div></pre></td></tr></table></figure>
+<p>Once you have an instance of the controls you just need to call the update method of the controls in a render or update loop.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">animate</span>(<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    requestAnimationFrame(animate);</div><div class="line">    controls.update();</div><div class="line"> </div><div class="line">    renderer.render(scene, camera);</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line">animate();</div></pre></td></tr></table></figure>
+<h2 id="Full-working-Example-of-three-js-Orbit-Controls"><a href="#Full-working-Example-of-three-js-Orbit-Controls" class="headerlink" title="Full working Example of three.js Orbit Controls"></a>Full working Example of three.js Orbit Controls</h2><p>For a full working example of this I will of course want something to look at such as a cube, and of course I will want the usual scene, camera, and renderer. In my html not only will I want to load three.js like normal, I will want to see to it that the Orbit controls are added to three.js, as or r91 they are not part of three.js itself, so it must be added by some means.</p>
+<h3 id="html"><a href="#html" class="headerlink" title="html"></a>html</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>test_threejs demos<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"demo"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"> </div><div class="line">        <span class="comment">&lt;!-- Three.js, and orbit controls --&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/js/threejs/0.91.0/three.min.js"</span> &gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/js/threejs/0.91.0/controls/OrbitControls.js"</span> &gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"> </div><div class="line">        <span class="comment">&lt;!-- My demo --&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"orbit-controls/js/main.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"> </div><div class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>If all goes well I should now be able to use the OrbitControls constructor just like any other constructor in three.js.</p>
+<h3 id="js"><a href="#js" class="headerlink" title="js"></a>js</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// Scene</span></div><div class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"> </div><div class="line">    <span class="comment">// Camera</span></div><div class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">45</span>, <span class="number">4</span>/<span class="number">3</span>, <span class="number">.5</span>, <span class="number">100</span>);</div><div class="line">    camera.position.set(<span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>);</div><div class="line">    camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// Orbit Controls</span></div><div class="line">    <span class="keyword">var</span> controls = <span class="keyword">new</span> THREE.OrbitControls(camera);</div><div class="line"></div><div class="line">    <span class="comment">// Something to look at</span></div><div class="line">    scene.add(<span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>), </div><div class="line">        <span class="keyword">new</span> THREE.MeshBasicMaterial(&#123;</div><div class="line">            <span class="attr">color</span>: <span class="number">0xff0000</span>,</div><div class="line">            <span class="attr">wireframe</span>: <span class="literal">true</span></div><div class="line">        &#125;)));</div><div class="line"> </div><div class="line">    <span class="comment">// Render</span></div><div class="line">    <span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">    renderer.setSize(<span class="number">320</span>, <span class="number">240</span>);</div><div class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"></div><div class="line">    <span class="comment">// loop</span></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">animate</span>(<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        requestAnimationFrame(animate);</div><div class="line">        controls.update();</div><div class="line">        renderer.render(scene, camera);</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    animate();</div><div class="line"> </div><div class="line">&#125;());</div></pre></td></tr></table></figure>
+<p>From here I have my basic example of how to go about using the orbit controls to quickly allow for the basic control of the camera that is typical of many games, and 3d modeling programs. From here it is just a question if you want to further tweak the behavior of the controls, there are plenty of additional properties to do that.</p>
+<h2 id="AutoRotate"><a href="#AutoRotate" class="headerlink" title="AutoRotate"></a>AutoRotate</h2><p>A common task with any three.js project is to have the camera rotate around a mesh or scene that you have made. With the orbit controls constructor there is an boolean that can be set true to start an automation rotation around a target position.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> controls = <span class="keyword">new</span> THREE.OrbitControls(camera);</div><div class="line"> </div><div class="line"><span class="comment">// auto rotate</span></div><div class="line">controls.autoRotate = <span class="literal">true</span>;</div><div class="line">controls.autoRotateSpeed = <span class="number">1</span>;</div><div class="line">controls.target = <span class="keyword">new</span> THREE.Vector3(<span class="number">.5</span>, <span class="number">.5</span>, <span class="number">.5</span>);</div></pre></td></tr></table></figure>
+<p>By default the target position is the origin, but you can use the vector3 to change it to another point. Speed can be set as well by giving a Number to the autoRotateSpeed property where 1 will mean it will take about a minute to make one rotation ad sixty frames per second.</p>
+<h2 id="Min-max-values"><a href="#Min-max-values" class="headerlink" title="Min max values"></a>Min max values</h2><p>There are a bunch of properties that can be used to set man and max values for the two angles of rotation <a href="https://en.wikipedia.org/wiki/Azimuth" target="_blank" rel="external">Azimuth</a>, and Polar angle of the <a href="https://en.wikipedia.org/wiki/Spherical_coordinate_system" target="_blank" rel="external">Spherical coordinate system</a>.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//  horizontally angle control</span></div><div class="line">controls.minAzimuthAngle = -<span class="built_in">Math</span>.PI / <span class="number">4</span>;</div><div class="line">controls.maxAzimuthAngle = <span class="built_in">Math</span>.PI / <span class="number">4</span>;</div><div class="line"> </div><div class="line"><span class="comment">// vertical angle control</span></div><div class="line">controls.minPolarAngle = -<span class="built_in">Math</span>.PI / <span class="number">2</span>;</div><div class="line">controls.maxPolarAngle = <span class="built_in">Math</span>.PI / <span class="number">2</span>;</div></pre></td></tr></table></figure>
+<p>There are also a bunch of other values that can be used to set limits on distance, and paining. The range of the values for the min, and max values for the angles range from -Math.PI to Math.PI</p>
+<h2 id="Set-the-panning-mode"><a href="#Set-the-panning-mode" class="headerlink" title="Set the panning mode"></a>Set the panning mode</h2><p>There is an option to set the panning mode for panning. By default the orbit controls use Screen Space Panning, but it can be set to Horizontal Panning if desired.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// HorizontalPanning ( 0 ScreenSpacePanning is the default)</span></div><div class="line">controls.panningMode = <span class="number">1</span>;</div></pre></td></tr></table></figure>
+<h2 id="Enable-Damping"><a href="#Enable-Damping" class="headerlink" title="Enable Damping"></a>Enable Damping</h2><p>There is the Enable Damping Boolean value that can be set true to give the controls some inertia. If you enable this you may also want to play around with the damping factor value as well.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">controls.enableDamping = <span class="literal">true</span>;</div><div class="line">controls.dampingFactor = <span class="number">.2</span>;</div></pre></td></tr></table></figure>
+<h2 id="Disables-right-clicking-on-the-page"><a href="#Disables-right-clicking-on-the-page" class="headerlink" title="Disables right clicking on the page"></a>Disables right clicking on the page</h2><p>One thing about the Orbit Controls is that it ends up disabling right clicking on the page in which I am using it, in most cases this does not present a problem. If for some reason it does the reason why is because event.preventDefault() is used in an on context menu event handler in the Orbit Controls source file, disabling it would be as simple as just commenting it out or removing the code all together.</p>
+<p>The code of interest looks like this<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">onContextMenu</span>(<span class="params"> event </span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> ( scope.enabled === <span class="literal">false</span> ) <span class="keyword">return</span>;</div><div class="line"> </div><div class="line">    event.preventDefault();</div><div class="line"> </div><div class="line">&#125;</div><div class="line"></div><div class="line">scope.domElement.addEventListener( <span class="string">'contextmenu'</span>, onContextMenu, <span class="literal">false</span> );</div></pre></td></tr></table></figure></p>
+<h2 id="Other-Controls-of-interest"><a href="#Other-Controls-of-interest" class="headerlink" title="Other Controls of interest"></a>Other Controls of interest</h2><p>If you take a look at the <a href="https://github.com/mrdoob/three.js/tree/r91/examples/js/controls" target="_blank" rel="external">other controls</a> in the three.js examples folder it looks like there are some additional options for quickly adding some typical controls to a three.js project, including fly controls. I have not check theme out yet, but I feel they might also come in handy at some point as well.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>I have not covered everything that the Orbit controls has to offer. It looks like it has some methods for saving and loading camera save states among other things but you get the idea. If you are thinking about taking the time to make your own controls for something like this think again, chances are it has been done before, and there is so shame of just taking advantage of these things like this to save time. The focus on any three.js project, or any project for that matter should be whatever it is that sets your project apart from all others. Chances are that is not going to be the orbit controls is it? I didn’t think so, just use this stuff and move on.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/04/13/threejs-orbit-controls/" data-id="cjg2owuf300030sv14a8f0b1s" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/canvas/">canvas</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/04/14/threejs-geometry/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Making custom geometry in three.js
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/12/threejs-buffer-geometry-loader/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">The buffered geometry loader in three.js</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.63px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.38px;">angular</a> <a href="/tags/animation/" style="font-size: 10.63px;">animation</a> <a href="/tags/automation/" style="font-size: 13.13px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.75px;">backbone</a> <a href="/tags/blog/" style="font-size: 16.25px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.88px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.25px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.88px;">ejs</a> <a href="/tags/games/" style="font-size: 18.75px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.63px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.88px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15.63px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.63px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.88px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.88px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.13px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/node-js/" style="font-size: 19.38px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.5px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.5px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 15px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/04/16/threejs-fog/">Adding fog to a scene in three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/15/threejs-vector3/">Vector3 in three.js for points in space</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/14/threejs-geometry/">Making custom geometry in three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/13/threejs-orbit-controls/">Quick orbit controls for three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/12/threejs-buffer-geometry-loader/">The buffered geometry loader in three.js</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
