@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Working with Scenes in three.js | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="A Scene in three.js is a constructor that can be used to create an instance of Scene that can be used to place everything that makes up an environment in a three.js project. It can contain cameras, li">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Working with Scenes in three.js">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/05/03/threejs-scene/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="A Scene in three.js is a constructor that can be used to create an instance of Scene that can be used to place everything that makes up an environment in a three.js project. It can contain cameras, li">
+<meta property="og:updated_time" content="2018-05-03T20:31:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Working with Scenes in three.js">
+<meta name="twitter:description" content="A Scene in three.js is a constructor that can be used to create an instance of Scene that can be used to place everything that makes up an environment in a three.js project. It can contain cameras, li">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <script src="/js/phaser-2.6.2.min.js"></script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-threejs-scene" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/03/threejs-scene/" class="article-date"> Published:
+  published: <time datetime="2018-05-03T13:36:00.000Z" itemprop="datePublished">2018-05-03</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/05/03/threejs-scene/" class="article-date"> Modified:
+  <time datetime="2018-05-03T20:31:43.000Z" itemprop="dateModified">2018-05-03</time>
+</a>
+
+    <span class="article-date">V1.7</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Working with Scenes in three.js
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>A <a href="https://threejs.org/docs/index.html#api/scenes/Scene" target="_blank" rel="external">Scene</a> in <a href="https://threejs.org/" target="_blank" rel="external">three.js</a> is a constructor that can be used to create an instance of Scene that can be used to place everything that makes up an environment in a three.js project. It can contain cameras, lights, and of course objects composed of a geometry and material.</p>
+<a id="more"></a>
+<p>In this post I will be covering Scenes in a bit of detail as I continue to expand, and improve <a href="/categories/three-js/">my content on three.js</a></p>
+<h2 id="What-to-know"><a href="#What-to-know" class="headerlink" title="What to know"></a>What to know</h2><p>This is an advanced post on <a href="https://threejs.org/" target="_blank" rel="external">three.js</a> that covers just one little constructor known as <a href="https://threejs.org/docs/index.html#api/scenes/Scene" target="_blank" rel="external">THREE.Scene</a>. If you are new to three.js you might want to start with my getting started post on three.js. If you are new to javaScript in general that is outside the scope of this whole collection of <a href="/categories/three-js/">posts on three.js</a>.</p>
+<h2 id="Basic-example-of-THREE-Scene"><a href="#Basic-example-of-THREE-Scene" class="headerlink" title="Basic example of THREE.Scene"></a>Basic example of THREE.Scene</h2><p>At a minimum you will want to have at least some kind of object to look at added to a Scene. This could just be a mesh that used a geometry from one of the built in geometry constructors in three.js such as <a href="https://threejs.org/docs/index.html#api/geometries/BoxGeometry" target="_blank" rel="external">THREE.BoxGeometry</a> with no material given to it.</p>
+<p>Unless I aim to do something headless with a scene and one or more objects, I will also want a camera and a renderer to look at what it is that I am doing.</p>
+<p>So a basic example of THREE.Scene might look something like this:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// create a Scene</span></div><div class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"> </div><div class="line">    <span class="comment">// add something to it</span></div><div class="line">    scene.add(<span class="keyword">new</span> THREE.Mesh(</div><div class="line">            <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)));</div><div class="line"> </div><div class="line">    <span class="comment">// add a CAMERA to it so we can see something</span></div><div class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">45</span>, <span class="number">4</span> / <span class="number">3</span>, <span class="number">.5</span>, <span class="number">100</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// position The camera away from the origin</span></div><div class="line">    <span class="comment">// and have it look at the origin</span></div><div class="line">    <span class="comment">// by default that is where something goes.</span></div><div class="line">    camera.position.set(<span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>);</div><div class="line">    camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// we need a RENDERER to render the scene</span></div><div class="line">    <span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">    renderer.setSize(<span class="number">320</span>, <span class="number">240</span>);</div><div class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"> </div><div class="line">    <span class="comment">// render the scene with the camera</span></div><div class="line">    renderer.render(scene, camera);</div><div class="line"> </div><div class="line">&#125;</div><div class="line">    ());</div></pre></td></tr></table></figure>
+<p>By default a Mesh will use the Basic material with a random color used to paint the faces of the geometry. Of course I could create an instance of some other material, or give a color or texture to another instance of basic material that I would then give as the second argument to the Mesh constructor, but this is a post on THREE.Scene so I will not be getting into that in depth. However I will be getting into the properties of THREE.Scene including the material override property, more on that later.</p>
+<h2 id="Fog"><a href="#Fog" class="headerlink" title="Fog"></a>Fog</h2><p>my full <a href="/2018/04/16/threejs-fog/">post on fog</a></p>
+<p>A property of interest in a scene instance is the fog Property which can be used to add a fog effect to a scene.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene(),</div><div class="line">fogColor = <span class="keyword">new</span> THREE.Color(<span class="number">0xffffff</span>);</div><div class="line"> </div><div class="line">scene.background = fogColor;</div><div class="line">scene.fog = <span class="keyword">new</span> THREE.FogExp2(fogColor, <span class="number">0.1</span>);</div></pre></td></tr></table></figure>
+<p>There are two kinds of fog that can be added to a scene in three.js which are <a href="https://threejs.org/docs/index.html#api/scenes/Fog" target="_blank" rel="external">Fog</a>, and <a href="https://threejs.org/docs/index.html#api/scenes/FogExp2" target="_blank" rel="external">FogExp2</a>. The regular Fog constructor will add a fog that works in a linear way, while the FogExp2 constructor works in an exponential way. Check out my full <a href="/2018/04/16/threejs-fog/">post on fog</a> for more on this.</p>
+<h2 id="Changing-the-background-of-the-Scene-with-Scene-background"><a href="#Changing-the-background-of-the-Scene-with-Scene-background" class="headerlink" title="Changing the background of the Scene with Scene.background"></a>Changing the background of the Scene with Scene.background</h2><p>It goes without saying that an important part of the scene instance is the background property. By default it is a solid black color, but it can be set to another solid color using THREE.Color.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scene.background = THREE.Color(<span class="number">0xffffff</span>);</div></pre></td></tr></table></figure>
+<p>If you want to use a texture, or a cube texture that can be used as well. I have written a <a href="/2018/04/22/threejs-cube-texture/">post on how to used a cube texture</a> in which I get into how to go about doing just that in detail.</p>
+<h2 id="Using-Scene-overrideMaterial-to-add-a-material-that-overrides-all-materials"><a href="#Using-Scene-overrideMaterial-to-add-a-material-that-overrides-all-materials" class="headerlink" title="Using Scene.overrideMaterial to add a material that overrides all materials"></a>Using Scene.overrideMaterial to add a material that overrides all materials</h2><p>There is the scene override property of a scene that will do exactly as you would expect, override all materials used in the scene with the material given to the material override property of the scene instance.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// create a Scene</span></div><div class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line">    scene.background = <span class="keyword">new</span> THREE.Color(<span class="number">0xafafaf</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// can set an override material for everything</span></div><div class="line">    scene.overrideMaterial = <span class="keyword">new</span> THREE.MeshDepthMaterial();</div><div class="line"> </div><div class="line">    <span class="comment">// just adding a 1x1x1 cube with the default</span></div><div class="line">    <span class="comment">// MeshBasicMaterial and random color for faces</span></div><div class="line">    <span class="comment">// when added to the scene like this</span></div><div class="line">    scene.add(<span class="keyword">new</span> THREE.Mesh(<span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)));</div><div class="line"> </div><div class="line">    <span class="comment">// adding another 1x1x1 cube but this time I am giving</span></div><div class="line">    <span class="comment">// and instance of MeshBasicMaterial in which I am setting</span></div><div class="line">    <span class="comment">// the face color of the faces to red</span></div><div class="line">    <span class="keyword">var</span> cube2 = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">            <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</div><div class="line"> </div><div class="line">            <span class="keyword">new</span> THREE.MeshBasicMaterial(&#123;</div><div class="line"> </div><div class="line">                <span class="attr">color</span>: <span class="number">0x00ff00</span></div><div class="line"> </div><div class="line">            &#125;));</div><div class="line">    cube2.position.set(<span class="number">-2</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">    scene.add(cube2);</div><div class="line"> </div><div class="line">    <span class="comment">// a sphere using the lamber material in wire frame mode</span></div><div class="line">    <span class="keyword">var</span> sphere = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">            <span class="keyword">new</span> THREE.SphereGeometry(<span class="number">1</span>, <span class="number">20</span>, <span class="number">20</span>),</div><div class="line"> </div><div class="line">            <span class="keyword">new</span> THREE.MeshLambertMaterial(&#123;</div><div class="line"> </div><div class="line">                <span class="attr">emissive</span>: <span class="number">0x00004a</span></div><div class="line"> </div><div class="line">            &#125;));</div><div class="line">    sphere.position.set(<span class="number">0</span>, <span class="number">0</span>, <span class="number">-2</span>);</div><div class="line">    scene.add(sphere);</div><div class="line"> </div><div class="line">    <span class="comment">// add a CAMERA to it so we can see something</span></div><div class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">45</span>, <span class="number">4</span> / <span class="number">3</span>, <span class="number">1</span>, <span class="number">100</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// position The camera away from the origin</span></div><div class="line">    <span class="comment">// and have it look at the origin</span></div><div class="line">    <span class="comment">// by default that is where something goes.</span></div><div class="line">    camera.position.set(<span class="number">2.5</span>, <span class="number">2.5</span>, <span class="number">2.5</span>);</div><div class="line">    camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// we need a RENDERER to render the scene</span></div><div class="line">    <span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">    renderer.setSize(<span class="number">320</span>, <span class="number">240</span>);</div><div class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"> </div><div class="line">    <span class="comment">// render the scene with the camera</span></div><div class="line">    renderer.render(scene, camera);</div><div class="line"> </div><div class="line">&#125;</div><div class="line">    ());</div></pre></td></tr></table></figure>
+<p>In the above demo I created a simple scene with a few instances of Mesh that each use a different material and or settings for the material. By setting an instance of THREE.MeshDepthMaterial as the value of Scene.overrideMaterial, all the other materials are ignored and the depth material is just used for everything.</p>
+<p>This can be useful if you want to have a feature that allows for doing something like setting everything in the scene to wire frame mode.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">scene.overrideMaterial = <span class="keyword">new</span> THREE.MeshBasicMaterial(&#123;</div><div class="line">    <span class="attr">color</span>: <span class="number">0xff0000</span>,</div><div class="line">    <span class="attr">wireframe</span>:<span class="literal">true</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="Using-Object3D-methods-in-scene"><a href="#Using-Object3D-methods-in-scene" class="headerlink" title="Using Object3D methods in scene"></a>Using Object3D methods in scene</h2><p>read my full <a href="/2018/04/23/threejs-object3d/">post on Object3D</a></p>
+<p>Like a lot of things in three.js the Scene Class inherits from <a href="/2018/04/23/threejs-object3d/">Object3D</a>. This gives THREE.Scene properties and methods like Object3D.position, Object3D.rotation and Object3D.add.</p>
+<p>So if I play with the instance of <a href="/2018/04/15/threejs-vector3/">Vector3</a> that is stored in the position property of my scene instance this will change the position of the whole Scene, and everything in it.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> frame = <span class="number">0</span>,</div><div class="line">maxFrame = <span class="number">50</span>,</div><div class="line">loop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> per = frame / maxFrame,</div><div class="line">    bias = <span class="built_in">Math</span>.abs(<span class="number">.5</span> - per) / <span class="number">.5</span>;</div><div class="line"> </div><div class="line">    requestAnimationFrame(loop);</div><div class="line"> </div><div class="line">    <span class="comment">// using Object3D properties to change</span></div><div class="line">    <span class="comment">// the position and rotation of a scene</span></div><div class="line">    scene.position.set(<span class="number">0</span>, <span class="number">1</span> * bias, <span class="number">0</span>);</div><div class="line">    scene.rotation.set(<span class="built_in">Math</span>.PI * <span class="number">2</span> * per, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">    renderer.render(scene, camera);</div><div class="line"> </div><div class="line">    frame += <span class="number">1</span>;</div><div class="line">    frame %= maxFrame;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line">loop();</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/05/03/threejs-scene/" data-id="cjgsbrm4700059sv1ltck5amu" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/05/04/threejs-mesh/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Using a Mesh in three.js
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/30/threejs-materials/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">An overview of materials in three.js</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.63px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.38px;">angular</a> <a href="/tags/animation/" style="font-size: 11.25px;">animation</a> <a href="/tags/automation/" style="font-size: 13.13px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.75px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.63px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.88px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.25px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.88px;">ejs</a> <a href="/tags/games/" style="font-size: 18.75px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.88px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.63px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.88px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.88px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.13px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/node-js/" style="font-size: 19.38px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.5px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.5px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.25px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/05/04/threejs-mesh/">Using a Mesh in three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/03/threejs-scene/">Working with Scenes in three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/30/threejs-materials/">An overview of materials in three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/23/threejs-object3d/">The Object3D Base Class in three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/22/threejs-cube-texture/">Adding a cube texture to a mesh in three.js</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
