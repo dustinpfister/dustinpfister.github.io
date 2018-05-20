@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Using an Orthographic Camera in three.js | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="In three.js there are a few cameras to work with, typically in must cases I would use the perspective camera, however there is also the orthographic camera as well that can come in handy. In this post">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Using an Orthographic Camera in three.js">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/05/17/threejs-camera-orthographic/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="In three.js there are a few cameras to work with, typically in must cases I would use the perspective camera, however there is also the orthographic camera as well that can come in handy. In this post">
+<meta property="og:updated_time" content="2018-05-17T22:06:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Using an Orthographic Camera in three.js">
+<meta name="twitter:description" content="In three.js there are a few cameras to work with, typically in must cases I would use the perspective camera, however there is also the orthographic camera as well that can come in handy. In this post">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <script src="/js/phaser-2.6.2.min.js"></script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-threejs-camera-orthographic" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/17/threejs-camera-orthographic/" class="article-date"> Published:
+  published: <time datetime="2018-05-17T20:24:00.000Z" itemprop="datePublished">2018-05-17</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/05/17/threejs-camera-orthographic/" class="article-date"> Modified:
+  <time datetime="2018-05-17T22:06:11.000Z" itemprop="dateModified">2018-05-17</time>
+</a>
+
+    <span class="article-date">V1.3</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Using an Orthographic Camera in three.js
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>In <a href="https://threejs.org/" target="_blank" rel="external">three.js</a> there are a few cameras to work with, typically in must cases I would use the perspective camera, however there is also the orthographic camera as well that can come in handy. In this post I will be writing about the orthographic camera, how it compares to the perspective camera, and why you might want to use it with certain projects.</p>
+<a id="more"></a>
+<h2 id="The-Cube-Stack-Model"><a href="#The-Cube-Stack-Model" class="headerlink" title="The Cube Stack Model"></a>The Cube Stack Model</h2><p>So In order to appreciate the differences between the orthographic, and perspective cameras in three.js I will first need some kind of scene that will help express that well. So that being said I made a model that I think will help make a scene that can do that very well.</p>
+<p>The model will generate a scene consisting of a plane, and a whole bunch of cubes randomly positioned over the plane, and on top of each other. This will result in something that might resemble a city, with many high buildings at different heights, or something to that effect.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> CubeStack = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// the stack constructor</span></div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">opt</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> boxCount,</div><div class="line">        box,</div><div class="line">        x,</div><div class="line">        y,</div><div class="line">        z,</div><div class="line">        plane,</div><div class="line">        boxArray = [],</div><div class="line">        boxIndex = <span class="number">0</span>;</div><div class="line"> </div><div class="line">        opt = opt || &#123;&#125;;</div><div class="line">        <span class="keyword">this</span>.boxCount = opt.boxCount === <span class="literal">undefined</span> ? <span class="number">15</span> : opt.boxCount;</div><div class="line">        <span class="keyword">this</span>.gx = <span class="number">5</span>;</div><div class="line">        <span class="keyword">this</span>.gy = <span class="number">5</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// this is what can be added to the scene</span></div><div class="line">        <span class="keyword">this</span>.group = <span class="keyword">new</span> THREE.Group();</div><div class="line"> </div><div class="line">        plane = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">                <span class="comment">// plane geometry</span></div><div class="line">                <span class="keyword">new</span> THREE.PlaneGeometry(<span class="keyword">this</span>.gx, <span class="keyword">this</span>.gy, <span class="keyword">this</span>.gx, <span class="keyword">this</span>.gy),</div><div class="line">                <span class="comment">// materials</span></div><div class="line">                [</div><div class="line">                    <span class="keyword">new</span> THREE.MeshStandardMaterial(&#123;</div><div class="line">                        <span class="attr">color</span>: <span class="number">0x00ff00</span>,</div><div class="line">                        <span class="attr">emissive</span>: <span class="number">0x0a0a0a</span></div><div class="line">                    &#125;),</div><div class="line">                    <span class="keyword">new</span> THREE.MeshStandardMaterial(&#123;</div><div class="line">                        <span class="attr">color</span>: <span class="number">0x0000ff</span>,</div><div class="line">                        <span class="attr">emissive</span>: <span class="number">0x0a0a0a</span></div><div class="line">                    &#125;)</div><div class="line">                ]);</div><div class="line">        plane.position.set(<span class="number">0</span>, <span class="number">-0.5</span>, <span class="number">0</span>);</div><div class="line">        plane.rotation.set(-<span class="built_in">Math</span>.PI / <span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">        plane.geometry.faces.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">face, i</span>) </span>&#123;</div><div class="line">            face.materialIndex = i % <span class="number">2</span>;</div><div class="line">        &#125;);</div><div class="line">        <span class="keyword">this</span>.group.add(plane);</div><div class="line"> </div><div class="line">        <span class="comment">// place some boxes on the plane</span></div><div class="line">        <span class="keyword">while</span> (boxIndex &lt; <span class="keyword">this</span>.boxCount) &#123;</div><div class="line"> </div><div class="line">            box = <span class="keyword">new</span> THREE.Mesh(</div><div class="line"> </div><div class="line">                    <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</div><div class="line"> </div><div class="line">                    <span class="keyword">new</span> THREE.MeshStandardMaterial(&#123;</div><div class="line"> </div><div class="line">                        <span class="attr">color</span>: <span class="number">0x00ffff</span>,</div><div class="line">                        <span class="attr">emissive</span>: <span class="number">0x0a0a0a</span></div><div class="line"> </div><div class="line">                    &#125;));</div><div class="line"> </div><div class="line">            x = <span class="built_in">Math</span>.floor(<span class="keyword">this</span>.gx * <span class="built_in">Math</span>.random());</div><div class="line">            y = <span class="number">0</span>;</div><div class="line">            z = <span class="built_in">Math</span>.floor(<span class="keyword">this</span>.gy * <span class="built_in">Math</span>.random());</div><div class="line"> </div><div class="line">            <span class="keyword">if</span> (boxArray[z] === <span class="literal">undefined</span>) &#123;</div><div class="line"> </div><div class="line">                boxArray[z] = [];</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="keyword">if</span> (boxArray[z][x] === <span class="literal">undefined</span>) &#123;</div><div class="line"> </div><div class="line">                boxArray[z][x] = [];</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            boxArray[z][x].push(box);</div><div class="line">            y = boxArray[z][x].length - <span class="number">1</span>;</div><div class="line"> </div><div class="line">            box.position.set(</div><div class="line"> </div><div class="line">                <span class="number">-2</span> + x,</div><div class="line">                y,</div><div class="line">                <span class="number">-2</span> + z);</div><div class="line">            <span class="keyword">this</span>.group.add(box);</div><div class="line"> </div><div class="line">            boxIndex += <span class="number">1</span>;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">&#125;</div><div class="line">    ());</div></pre></td></tr></table></figure>
+<p>So I have this saved as cube_stack.js, and I link to it in my html after three.js, and before the rest of my demo where I will be using this. I could get into this in detail, and yes it is far from perfect, but that would be off topic. For now if three.js is loaded in the browser, and then this is loaded I will have a constructor that I can use in a three.js demo like this:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> stack = <span class="keyword">new</span> CubeStack();</div><div class="line">scene.add(stack.group);</div></pre></td></tr></table></figure>
+<p>I could have it be a lot more that what it is but for the purpose of the subject of this post by doing this it will just add a group that contains a bunch of Mesh Object instances positioned in a way that might resemble a city. The reason why this is of interest comes when switching between the kinds of cameras used to view something like this.</p>
+<h2 id="The-Three-js-Orthographic-Camera-Example"><a href="#The-Three-js-Orthographic-Camera-Example" class="headerlink" title="The Three.js Orthographic Camera Example"></a>The Three.js Orthographic Camera Example</h2><p>Now that I have the model I can use it in a demo. I will want to make a demo that will show the difference between the two most common camera types by comparing what is rendered using an orthographic camera to that of a perspective camera. To do this I will want to use more than one camera in my demo.</p>
+<h3 id="An-Array-of-cameras"><a href="#An-Array-of-cameras" class="headerlink" title="An Array of cameras"></a>An Array of cameras</h3><p>In order to get a good sense of the difference between the orthographic camera compared to the typical perspective camera, I will want an array of cameras. One wll be an instance of THREE.PerspectiveCamera that is what I often use in most projects, while the other will be THREE.OrthographicCamera.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// CAMERAS</span></div><div class="line"><span class="keyword">var</span> width = <span class="number">3.2</span>,</div><div class="line">height = <span class="number">2.4</span>,</div><div class="line">cameras = [</div><div class="line"> </div><div class="line">    <span class="comment">// camera 0 will be the typical Perspective Camera</span></div><div class="line">    <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">45</span>, width / height, <span class="number">.5</span>, <span class="number">100</span>),</div><div class="line"> </div><div class="line">    <span class="comment">// and camera 1 will be Orthographic</span></div><div class="line">    <span class="keyword">new</span> THREE.OrthographicCamera(</div><div class="line">        -width,</div><div class="line">        width,</div><div class="line">        height,</div><div class="line">        -height,</div><div class="line">        <span class="number">.1</span>,</div><div class="line">        <span class="number">50</span>)</div><div class="line"> </div><div class="line">];</div><div class="line"> </div><div class="line">cameras.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">camera</span>)</span>&#123;</div><div class="line">    <span class="comment">// code that will effect all cameras used here</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>Any code that I will want to apply to all cameras I will of course put in the forEach loop, such as setting the position,a dn zoom level of the cameras.</p>
+<h2 id="The-example-in-full"><a href="#The-example-in-full" class="headerlink" title="The example in full"></a>The example in full</h2><p>So the example will look like this then:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// SCENE</span></div><div class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"> </div><div class="line">    <span class="comment">// CAMERAS</span></div><div class="line">    <span class="keyword">var</span> width = <span class="number">3.2</span>,</div><div class="line">    height = <span class="number">2.4</span>,</div><div class="line">    cameras = [</div><div class="line"> </div><div class="line">        <span class="comment">// camera 0 will be the typical Perspective Camera</span></div><div class="line">        <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">45</span>, width / height, <span class="number">.5</span>, <span class="number">100</span>),</div><div class="line"> </div><div class="line">        <span class="comment">// and camera 1 will be Orthographic</span></div><div class="line">        <span class="keyword">new</span> THREE.OrthographicCamera(</div><div class="line">            -width,</div><div class="line">            width,</div><div class="line">            height,</div><div class="line">            -height,</div><div class="line">            <span class="number">.1</span>,</div><div class="line">            <span class="number">50</span>)</div><div class="line"> </div><div class="line">    ];</div><div class="line"> </div><div class="line">    <span class="comment">// for each camera</span></div><div class="line">    cameras.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">camera</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// set to same position, and look at the origin</span></div><div class="line">        camera.position.set(<span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>);</div><div class="line">        camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"> </div><div class="line">        <span class="comment">// set zoom</span></div><div class="line">        camera.zoom = <span class="number">.75</span>;</div><div class="line">        camera.updateProjectionMatrix();</div><div class="line">        scene.add(camera);</div><div class="line"> </div><div class="line">        <span class="comment">// point light above the camera</span></div><div class="line">        <span class="keyword">var</span> light = <span class="keyword">new</span> THREE.PointLight();</div><div class="line">        light.position.set(<span class="number">0</span>, <span class="number">2</span>, <span class="number">0</span>);</div><div class="line">        camera.add(light);</div><div class="line"> </div><div class="line">        <span class="comment">// add orbit controls if there</span></div><div class="line">        <span class="keyword">if</span> (THREE.OrbitControls) &#123;</div><div class="line"> </div><div class="line">            <span class="keyword">new</span> THREE.OrbitControls(camera);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">    <span class="comment">// STACK</span></div><div class="line">    <span class="comment">// create an instance of the CubeStack Model</span></div><div class="line">    <span class="comment">// and add it to the scene</span></div><div class="line">    <span class="keyword">var</span> stack = <span class="keyword">new</span> CubeStack();</div><div class="line">    scene.add(stack.group);</div><div class="line"> </div><div class="line">    <span class="comment">// RENDER</span></div><div class="line">    <span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">    renderer.setSize(<span class="number">320</span>, <span class="number">240</span>);</div><div class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"> </div><div class="line">    <span class="comment">// lOOP</span></div><div class="line">    <span class="keyword">var</span> frame = <span class="number">0</span>,</div><div class="line">    maxFrame = <span class="number">1000</span>;</div><div class="line">    <span class="keyword">var</span> loop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> per = frame / maxFrame,</div><div class="line">        r = <span class="built_in">Math</span>.PI * <span class="number">2</span> * per,</div><div class="line">        <span class="comment">// camera index</span></div><div class="line">        ci = <span class="built_in">Math</span>.floor(per * <span class="number">8</span> % <span class="number">2</span>);</div><div class="line"> </div><div class="line">        requestAnimationFrame(loop);</div><div class="line"> </div><div class="line">        stack.group.rotation.set(<span class="number">0</span>, <span class="built_in">Math</span>.PI * <span class="number">2</span> * per, <span class="number">0</span>);</div><div class="line"> </div><div class="line">        renderer.render(scene, cameras[ci]);</div><div class="line"> </div><div class="line">        frame += <span class="number">1</span>;</div><div class="line">        frame = frame % maxFrame;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    loop();</div><div class="line"> </div><div class="line">&#125;</div><div class="line">    ());</div></pre></td></tr></table></figure>
+<p>When all goes well this will result in a rotating scene that looks like a bunch of buildings. The example will switch between camera 0 (perspective), and camera 1 (orthographic). If you take the time to reproduce this you will notice that it is easier to tell what the size is of things.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/05/17/threejs-camera-orthographic/" data-id="cjhfbu7d20001qwv1r91uatvd" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/05/18/lodash_filter/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          The lodash _.filter, and Array.filter methods
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/05/16/threejs-grouping-mesh-objects/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Grouping two or more Mesh Objects together in three.js</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.63px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.38px;">angular</a> <a href="/tags/animation/" style="font-size: 11.25px;">animation</a> <a href="/tags/automation/" style="font-size: 13.13px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.75px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.63px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.25px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.25px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.88px;">ejs</a> <a href="/tags/games/" style="font-size: 18.75px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.88px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.63px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.88px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.88px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.13px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/node-js/" style="font-size: 19.38px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.5px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.5px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.88px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/05/18/lodash_filter/">The lodash _.filter, and Array.filter methods</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/17/threejs-camera-orthographic/">Using an Orthographic Camera in three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/16/threejs-grouping-mesh-objects/">Grouping two or more Mesh Objects together in three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/14/threejs-mesh-material-index/">Using an array of materials, and setting material index values in three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/12/threejs-points-material/">The Points material in three.js</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
