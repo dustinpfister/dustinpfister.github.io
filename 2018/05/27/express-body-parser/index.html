@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>The express.js body parser module, and basic full stack development. | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Being able to parse a payload given to a node.js back end typically via a post request is a very common task when doing something with express.js. As such there is a built in way to quickly do this th">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The express.js body parser module, and basic full stack development.">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/05/27/express-body-parser/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="Being able to parse a payload given to a node.js back end typically via a post request is a very common task when doing something with express.js. As such there is a built in way to quickly do this th">
+<meta property="og:updated_time" content="2018-05-29T17:52:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The express.js body parser module, and basic full stack development.">
+<meta name="twitter:description" content="Being able to parse a payload given to a node.js back end typically via a post request is a very common task when doing something with express.js. As such there is a built in way to quickly do this th">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <script src="/js/phaser-2.6.2.min.js"></script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-express-body-parser" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/27/express-body-parser/" class="article-date"> Published:
+  published: <time datetime="2018-05-27T12:51:00.000Z" itemprop="datePublished">2018-05-27</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/05/27/express-body-parser/" class="article-date"> Modified:
+  <time datetime="2018-05-29T17:52:00.000Z" itemprop="dateModified">2018-05-29</time>
+</a>
+
+    <span class="article-date">V1.23</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/express/">express</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      The express.js body parser module, and basic full stack development.
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>Being able to parse a payload given to a node.js back end typically via a post request is a very common task when doing something with <a href="https://expressjs.com/" target="_blank" rel="external">express.js</a>. As such there is a built in way to quickly do this thanks to the <a href="https://www.npmjs.com/package/body-parser" target="_blank" rel="external">body-parser</a> module that is included with every express.js install. In order to get into body parsing it is necessary to put together at least a basic full stack application. So in this post I will be giving a an example that will include both front and back end code. However this is a post mainly on req.body, and how to parse that using the body parser module so I will be mostly covering that.</p>
+<a id="more"></a>
+<h2 id="Before-you-continue-reading"><a href="#Before-you-continue-reading" class="headerlink" title="Before you continue reading"></a>Before you continue reading</h2><p>This is a post on the use of the body-parser module that is used in express.js to parse incoming payloads from requests made from a front end system in a full stack node.js web application. In this post I am also using routers, and ejs for rendering templates. You will want to have at least a basic working knowledge of javaScript, and node.js. Full stack development is a little complicated, even when you are trying to simplify it.</p>
+<h2 id="A-word-about-version-numbers"><a href="#A-word-about-version-numbers" class="headerlink" title="A word about version numbers"></a>A word about version numbers</h2><p>I have been trying to make it a habit to mention what version of a javaScript project I am using clear in my posts on such things. There are many reasons why this is a good idea beyond just the usual date published, and date last updated. In this post I am using express 4.16.3, and ejs 2.6.1.</p>
+<h2 id="An-express-js-Body-Parser-example"><a href="#An-express-js-Body-Parser-example" class="headerlink" title="An express.js Body Parser example"></a>An express.js Body Parser example</h2><p>In this example I will of course be using express.js as a node.js back end framework, but I will also be installing ejs as a rendering engine, in terms of npm packages that is all that I installed in my demo folder. Everything else I used in this demo is just my own vanilla code. In a more advanced project I might be using additional javaScript projects like angular, and mongoose, but I do not want to take the focus away from express.js, and body-parser at least not in this post.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ mkdir body-parser</div><div class="line">$ cd body-parser</div><div class="line">$ npm init</div><div class="line">$ npm install express@4.16.3</div><div class="line">$ npm install ejs@2.6.1</div><div class="line">$ mkdir public</div><div class="line">$ mkdir routes</div><div class="line">$ mkdir views</div></pre></td></tr></table></figure>
+<h2 id="The-routes-folder"><a href="#The-routes-folder" class="headerlink" title="The routes folder"></a>The routes folder</h2><p>It has become standard practice to always have a routes folder in which I am using routers to help better manage paths when making an express application. In this demo I am using a separate javaScript file for both json and text paths that will serve as two separate examples of using the body parser to parse json, and plain old text given from the client system. </p>
+<p>In addition to this I also have a staic.js file in which I define my static paths for the sake of hosting certain static assets. In this demo it is just a js folder that holds the javaScript files that compose my front end code.</p>
+<p>If you want to learn more about using routers in express.js you might want to <a href="/2018/05/22/express-routers/">check out my post on express.js routers</a>. It is a great way of keeping things more organized when it comes to defining the paths that compose your application.</p>
+<h3 id="Hosting-my-front-end-javaScript-files-with-routes-static-js"><a href="#Hosting-my-front-end-javaScript-files-with-routes-static-js" class="headerlink" title="Hosting my front end javaScript files with /routes/static.js"></a>Hosting my front end javaScript files with /routes/static.js</h3><p>The static routes file is where I define my plain old static paths, with this demo I am just adding a static js folder in the public folder at the root of the project file system. Inside this js folder is where I will place javaScript files that will compose my simple crude client system for the sake of this demo. More on the front end code later.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</div><div class="line"> </div><div class="line"><span class="comment">// the router</span></div><div class="line">router = <span class="built_in">module</span>.exports = express.Router();</div><div class="line"> </div><div class="line"><span class="comment">// a static js path in public</span></div><div class="line">router.use(<span class="string">'/js'</span>, express.static(<span class="string">'public/js'</span>));</div></pre></td></tr></table></figure>
+<p>If you wish to lean more about setting up static paths used express.js, I have <a href="/2018/05/24/express-static/">a post on express.static</a> that you might want to check out.</p>
+<h3 id="The-body-parser-json-demo-at-routes-json-js"><a href="#The-body-parser-json-demo-at-routes-json-js" class="headerlink" title="The body-parser json demo at /routes/json.js"></a>The body-parser json demo at /routes/json.js</h3><p>In the routes folder I have a json.js file that will serve as an example of using the body parser to parse json given from a client system via a post request. This file will be used in my main app.js file at the root of the project folder to create a json path by mounting what I am doing inside this file to a json path there in app.js.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>),</div><div class="line">bodyParser = <span class="built_in">require</span>(<span class="string">'body-parser'</span>),</div><div class="line"> </div><div class="line"><span class="comment">// the router</span></div><div class="line">router = <span class="built_in">module</span>.exports = express.Router();</div><div class="line"> </div><div class="line"><span class="comment">// using body parser for req.body</span></div><div class="line">router.use(bodyParser.json());</div><div class="line"> </div><div class="line">router.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line"> </div><div class="line">    res.render(<span class="string">'index'</span>, &#123;</div><div class="line"> </div><div class="line">        <span class="attr">layout</span>: <span class="string">'json'</span></div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line"><span class="comment">// post request</span></div><div class="line">router.post(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> data = &#123;</div><div class="line">        <span class="attr">mess</span>: <span class="string">'yes this is dog.'</span>,</div><div class="line">        <span class="attr">body</span>: req.body</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (req.body.action) &#123;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (req.body.action === <span class="string">'foo'</span>) &#123;</div><div class="line"> </div><div class="line">            data.mess = <span class="string">'bar'</span>;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    res.json(data);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="The-plain-text-demo-of-body-parser-at-routes-text-js"><a href="#The-plain-text-demo-of-body-parser-at-routes-text-js" class="headerlink" title="The plain text demo of body-parser at /routes/text.js"></a>The plain text demo of body-parser at /routes/text.js</h3><p>This is what will be used to define my text path in the main app.js. It is very similar to my json.js file only I am using the body-parser to parse incoming posts that are just plain text, rather than json.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>),</div><div class="line">bodyParser = <span class="built_in">require</span>(<span class="string">'body-parser'</span>),</div><div class="line"> </div><div class="line"><span class="comment">// the router</span></div><div class="line">router = <span class="built_in">module</span>.exports = express.Router();</div><div class="line"> </div><div class="line"><span class="comment">// using body parser for req.body</span></div><div class="line">router.use(bodyParser.text());</div><div class="line"> </div><div class="line">router.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line"> </div><div class="line">    res.render(<span class="string">'index'</span>, &#123;</div><div class="line"> </div><div class="line">        <span class="attr">layout</span>: <span class="string">'text'</span></div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line"><span class="comment">// post request</span></div><div class="line">router.post(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> data = &#123;</div><div class="line">        <span class="attr">mess</span>: <span class="string">'yes this is dog.'</span>,</div><div class="line">        <span class="attr">body</span>: req.body</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    res.send(<span class="string">'The parsed body is: '</span>+req.body);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="The-main-app-js-of-this-demo-at-app-js"><a href="#The-main-app-js-of-this-demo-at-app-js" class="headerlink" title="The main app.js of this demo at /app.js"></a>The main app.js of this demo at /app.js</h2><p>Here in the main app.js file that I can start with node in the command line is where I will add in what I am doing in the routes folders. I am assigning the paths that I have defined in each javaScript file to a path off from root using app.use. So in other words the “/“ path in the json.js javaScript file becomes “/json” when using it with app.use in app.js.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>),</div><div class="line">app = express(),</div><div class="line"></div><div class="line"><span class="comment">// getting port this way</span></div><div class="line">port = process.env.PORT || process.argv[<span class="number">2</span>] || <span class="number">8080</span>;</div><div class="line"></div><div class="line"><span class="comment">// view engine setup</span></div><div class="line">app.set(<span class="string">'views'</span>, path.join(__dirname, <span class="string">'views'</span>));</div><div class="line">app.set(<span class="string">'view engine'</span>, <span class="string">'ejs'</span>);</div><div class="line"></div><div class="line"><span class="comment">// using what is in the routes folder</span></div><div class="line">app.use(<span class="string">'/'</span>, <span class="built_in">require</span>(<span class="string">'./routes/static'</span>));</div><div class="line">app.use(<span class="string">'/json'</span>, <span class="built_in">require</span>(<span class="string">'./routes/json'</span>));</div><div class="line">app.use(<span class="string">'/text'</span>, <span class="built_in">require</span>(<span class="string">'./routes/text'</span>));</div><div class="line"> </div><div class="line">app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line"> </div><div class="line">    res.render(<span class="string">'index'</span>, &#123;&#125;);</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line">app.listen(port, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'request object demo is up on port: '</span> + port);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="The-public-folder"><a href="#The-public-folder" class="headerlink" title="The public folder"></a>The public folder</h2><p>The public folder is the standard name that I give for a folder in the root name space of an express project where static assets are to be stored, and served up one way or another with express.static. In this demo I just had a js folder that is used to store all my front end javaScript files, in a more advanced project this folder would contain additional folders and assets for things like css, and image files.</p>
+<h3 id="My-vanilla-js-http-client-at-public-js-http-js"><a href="#My-vanilla-js-http-client-at-public-js-http-js" class="headerlink" title="My vanilla js http client at /public/js/http.js"></a>My vanilla js http client at /public/js/http.js</h3><p>In my http.js file I have my own http client that I use as my own vanilla js solution for scripting http. In a more advanced project where the focus is not just on body parsing in express.js I might choose to use <a href="/2018/01/10/nodejs-axios/">axios</a>, or $http in angular.js if making a <a href="https://en.wikipedia.org/wiki/MEAN_(software_bundle" target="_blank" rel="external">MEAN stack</a> application.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// my http method</span></div><div class="line"><span class="keyword">var</span> http = <span class="function"><span class="keyword">function</span> (<span class="params">argu, done, fail</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line"> </div><div class="line">    <span class="comment">// if first argument is a string, assume it is a url for a get request</span></div><div class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> argu === <span class="string">'string'</span>) &#123;</div><div class="line"> </div><div class="line">        argu = &#123;</div><div class="line">            <span class="attr">url</span>: argu</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// use given argu object or default to an empty object</span></div><div class="line">    argu = argu || &#123;&#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// default method is GET, payload is null, and URL is location.href</span></div><div class="line">    argu.method = argu.method || <span class="string">'GET'</span>;</div><div class="line">    argu.playload = argu.payload === <span class="literal">undefined</span> ? <span class="literal">null</span> : argu.payload;</div><div class="line">    argu.url = argu.url || location.href;</div><div class="line"> </div><div class="line">    <span class="comment">// default done and fail callbacks</span></div><div class="line">    argu.done = done || argu.done || <span class="function"><span class="keyword">function</span> (<span class="params">res</span>) </span>&#123; <span class="built_in">console</span>.log(res);&#125;;</div><div class="line">    argu.fail = fail || argu.fail || <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// given, or default beforeSend method</span></div><div class="line">    argu.beforeSend = argu.beforeSend || <span class="function"><span class="keyword">function</span> (<span class="params">xhr, next</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// if POST request, assume JSON</span></div><div class="line">        <span class="keyword">if</span> (argu.method.toUpperCase() === <span class="string">'POST'</span>) &#123;</div><div class="line"> </div><div class="line">            xhr.setRequestHeader(<span class="string">'Content-type'</span>, <span class="string">'application/json'</span>);</div><div class="line"> </div><div class="line">            <span class="comment">// custom send that uses JSON</span></div><div class="line">            argu.send = <span class="function"><span class="keyword">function</span> (<span class="params">xhr,argu</span>) </span>&#123;</div><div class="line"> </div><div class="line">                xhr.send(<span class="built_in">JSON</span>.stringify(argu.payload));</div><div class="line"> </div><div class="line">            &#125;;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        next();</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// given or default send method</span></div><div class="line">    argu.send = argu.send || <span class="function"><span class="keyword">function</span> (<span class="params">xhr,argu</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// just send</span></div><div class="line">        xhr.send(argu.payload);</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// open the request</span></div><div class="line">    xhr.open(argu.method, argu.url, <span class="literal">true</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// setup on ready state method to call done or fail methods</span></div><div class="line">    xhr.onreadystatechange = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.readyState === <span class="number">4</span>) &#123;</div><div class="line"> </div><div class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.status === <span class="number">200</span>) &#123;</div><div class="line"> </div><div class="line">                argu.done.call(<span class="keyword">this</span>, <span class="keyword">this</span>.response);</div><div class="line"> </div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">                argu.fail.call(<span class="keyword">this</span>);</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// call before send, and send request</span></div><div class="line">    argu.beforeSend(xhr, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        argu.send(xhr,argu);</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>This solution is what I ended up with when just directly working with the tired yet true XMLHttpRequest for scripting http. This is not something that I would use in production code, for that it may be best to stick to something more professional. I have writing posts on <a href="/2018/03/28/js-xmlhttprequest/">XMLHttpRequest</a>, <a href="/2018/01/10/nodejs-axios/">axios</a>, and <a href="/2018/03/27/js-fetch/">fetch</a>. In angular.js there is also of course the $http service as well, choose your solutions for scripting http accordingly depending on the project.</p>
+<h3 id="Wraping-document-getElementById-at-public-js-getid-js"><a href="#Wraping-document-getElementById-at-public-js-getid-js" class="headerlink" title="Wraping document.getElementById at /public/js/getid.js"></a>Wraping document.getElementById at /public/js/getid.js</h3><p>I also parked a simple function that wraps document.getElementById in a file called getid.js. It has been a practice that I have been doing for ages when doing anything vanilla js style. It may be more appropriate to place it elsewhere, but I decided to just park it there. In a more advanced project I might use some other means of gaining references to DOM elements, with many font end frameworks there are many ways of keeping these calls more concise compared to typing document.getElementById over and over again.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// just wrapping document.getElementById</span></div><div class="line"><span class="keyword">var</span> getId = <span class="function"><span class="keyword">function</span> (<span class="params">id</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> <span class="built_in">document</span>.getElementById(id);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>This is a total coding style thing thats about it.</p>
+<h3 id="The-client-code-that-will-send-json-at-public-js-body-json-js"><a href="#The-client-code-that-will-send-json-at-public-js-body-json-js" class="headerlink" title="The client code that will send json at /public/js/body-json.js"></a>The client code that will send json at /public/js/body-json.js</h3><p>This is the client script that I use in conjunction with my /json path defined in my json.js file that I am using in my routes folder. I am using my getId method which is just a method that wraps document.getElementById to gain a reference to an input element in my ejs templates, and add an event hadler to it that uses my http method to make a post request to the json path.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">getId(<span class="string">'app_send'</span>).addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">    http(&#123;</div><div class="line">        <span class="attr">url</span>: <span class="string">'/json'</span>,</div><div class="line">        <span class="attr">method</span>: <span class="string">'POST'</span>,</div><div class="line">        <span class="attr">payload</span>: &#123;</div><div class="line"> </div><div class="line">            <span class="attr">action</span>: <span class="string">'foo'</span></div><div class="line"> </div><div class="line">        &#125;</div><div class="line">    &#125;, <span class="function"><span class="keyword">function</span> (<span class="params">res</span>) </span>&#123;</div><div class="line"> </div><div class="line">        getId(<span class="string">'app_out'</span>).value += res + <span class="string">'\n\n'</span>;</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>This post is about express.js body parser so I want to keep this simple. So just having a front end that makes a simple post request to a path will work for the sake of the scope of this post.</p>
+<h3 id="The-client-code-that-will-send-plain-text-at-public-js-body-text-js"><a href="#The-client-code-that-will-send-plain-text-at-public-js-body-text-js" class="headerlink" title="The client code that will send plain text at /public/js/body-text.js"></a>The client code that will send plain text at /public/js/body-text.js</h3><p>Another script that makes a post request to one of my express.js powered back end scripts. This one just makes a plain text post rather than a json post. If you look at my http method you will see that by default the built in beforeSend method will convert what I give via the payload property to json. If for some reason I want to do something different than that I can do so by overwriting the beforeSend method with a method that sets the proper headers for what I want to send.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">getId(<span class="string">'app_send'</span>).addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">    http(&#123;</div><div class="line">        <span class="attr">url</span>: <span class="string">'/text'</span>,</div><div class="line">        <span class="attr">method</span>: <span class="string">'POST'</span>,</div><div class="line">        <span class="attr">payload</span>: <span class="string">'foo'</span>,</div><div class="line">        <span class="attr">beforeSend</span>: <span class="function"><span class="keyword">function</span> (<span class="params">xhr, next</span>) </span>&#123;</div><div class="line"> </div><div class="line">            xhr.setRequestHeader(<span class="string">'Content-type'</span>, <span class="string">'text/plain'</span>);</div><div class="line">            next();</div><div class="line"> </div><div class="line">        &#125;</div><div class="line">    &#125;, <span class="function"><span class="keyword">function</span> (<span class="params">res</span>) </span>&#123;</div><div class="line"> </div><div class="line">        getId(<span class="string">'app_out'</span>).value += res + <span class="string">'\n\n'</span>;</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>In most cases JSON will work just fine, I just wanted to have some additional front end code that exercises other aspects of the express body parser.</p>
+<h2 id="The-views-folder"><a href="#The-views-folder" class="headerlink" title="The views folder"></a>The views folder</h2><p>In this demo I am using a views folder for ejs templates. I often prefer to use ejs in place of just simple static html in the public folder.</p>
+<p>With ejs it is possible to define partials that define reusable parts of html that can be used in more than one page. Rather than repeating navigation markup for each page, I can just define it once, and then inject that part into any additional page that is to use that markup. This helps to keep my html examples concise in these demos.</p>
+<h3 id="Navigation-ejs-part-at-views-parts-nav-ejs"><a href="#Navigation-ejs-part-at-views-parts-nav-ejs" class="headerlink" title="Navigation ejs part at /views/_parts/nav.ejs"></a>Navigation ejs part at /views/_parts/nav.ejs</h3><p>This is the only ejs partial I have made for this demo which is the navigation page.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&quot;wrap_nav&quot;&gt;</div><div class="line"> </div><div class="line">   &lt;span&gt;</div><div class="line">   </div><div class="line">       &lt;a href=&quot;/&quot;&gt;HOME&lt;/a&gt;</div><div class="line">       &lt;a href=&quot;/json&quot;&gt;JSON&lt;/a&gt;</div><div class="line">       &lt;a href=&quot;/text&quot;&gt;TEXT&lt;/a&gt;</div><div class="line">   </div><div class="line">   &lt;/span&gt;</div><div class="line"> </div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
+<h3 id="layout-files-at-views-layouts-home-ejs-json-ejs-and-text-ejs"><a href="#layout-files-at-views-layouts-home-ejs-json-ejs-and-text-ejs" class="headerlink" title="layout files at /views/_layouts/home.ejs, json.ejs, and text.ejs"></a>layout files at /views/_layouts/home.ejs, json.ejs, and text.ejs</h3><p>These are the layouts for home, as well as the json, and text demos. The json and text layouts are almost the same aside from the fact that they grab different front end code in the static js folder mentioned before hand.</p>
+<p>/views/_layouts/home.ejs:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;h2&gt;Home&lt;/h2&gt;</div><div class="line">&lt;p&gt;These are some express.js body parser demos.&lt;/p&gt;</div></pre></td></tr></table></figure></p>
+<p>/views/_layouts/json.ejs:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;h2&gt;JSON&lt;/h2&gt;</div><div class="line"> </div><div class="line">&lt;input id=&quot;app_send&quot; type=&quot;button&quot; value=&quot;post&quot;&gt;&lt;br&gt;</div><div class="line">&lt;textarea id=&quot;app_out&quot; rows=&quot;20&quot; cols=&quot;60&quot;&gt;&lt;/textarea&gt;</div><div class="line"> </div><div class="line">&lt;script src=&quot;/js/body-json.js&quot;&gt;&lt;/script&gt;</div></pre></td></tr></table></figure></p>
+<p>/views/_layouts/text.ejs:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;h2&gt;text&lt;/h2&gt;</div><div class="line"> </div><div class="line">&lt;input id=&quot;app_send&quot; type=&quot;button&quot; value=&quot;post&quot;&gt;&lt;br&gt;</div><div class="line">&lt;textarea id=&quot;app_out&quot; rows=&quot;20&quot; cols=&quot;60&quot;&gt;&lt;/textarea&gt;</div><div class="line"> </div><div class="line">&lt;script src=&quot;/js/body-text.js&quot;&gt;&lt;/script&gt;</div></pre></td></tr></table></figure></p>
+<p>These layouts are used inside my index.ejs file, and which one that is used depends on which path I navigate to. If you look at my routes files mentioned above I also define what is to be done with get requests in the route files on top of just using body parser with post requests. In these get request handlers I am using res.render to render index.ejs, and am passing a layout property that is used to render the proper layout.</p>
+<h3 id="The-main-index-ejs-file-at-views-index-ejs"><a href="#The-main-index-ejs-file-at-views-index-ejs" class="headerlink" title="The main index ejs file at /views/index.ejs"></a>The main index ejs file at /views/index.ejs</h3><p>This is my main index.ejs file that is always used when rendering a page when responding to a get request. The layout of the page changes depending on the path because of the different get request handers passing different layout properties.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">&lt;%</div><div class="line"> </div><div class="line">   if(!this.layout)&#123;</div><div class="line">   </div><div class="line">       this.layout = &apos;home&apos;;</div><div class="line">   </div><div class="line">   &#125;</div><div class="line"> </div><div class="line">%&gt;</div><div class="line"> </div><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;en&quot;&gt;</div><div class="line">    &lt;head&gt;</div><div class="line">        &lt;title&gt;Request Objects&lt;/title&gt;</div><div class="line">        &lt;meta charset=&quot;utf-8&quot;&gt;</div><div class="line">    &lt;/head&gt;</div><div class="line">    &lt;body&gt;</div><div class="line"> </div><div class="line">        &lt;%= layout %&gt;</div><div class="line">        &lt;%- include(&apos;_parts/nav&apos;) %&gt;</div><div class="line"> </div><div class="line">        &lt;script src=&quot;/js/getid.js&quot;&gt;&lt;/script&gt;</div><div class="line">        &lt;script src=&quot;/js/http.js&quot;&gt;&lt;/script&gt;</div><div class="line"> </div><div class="line">        &lt;%- include(&apos;_layouts/&apos; + layout) %&gt;</div><div class="line"> </div><div class="line">    &lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>In this post I gave some simple examples of using the express.js body parser to parse incoming data from front end javaScript code. In order to have a working example of body parser I need to have at least some kind of front end system in order to send a payload to a backed to to parsed into reg.body. As such in this post I briefly touched base on many other areas that have to do with full stack development.</p>
+<p>In the future if I update this post it will be to expand on the content that has to do with the body parser module itself, and maybe try to provide a more basic example of using body parser if possible, maybe with a simple static view.</p>
+<p>This post covers the basics of what can become a serious full stack web application using node.js and express.js as a server side framework. In a serious project I would lose my vanilla js code, and use additional popular, well supported alternatives in place of it.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/05/27/express-body-parser/" data-id="cjhsdtg2m000ax8v1lshq9t3k" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/express/">express</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/05/29/express-request-headers/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Working with request headers in express.js
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/05/26/express-request-objects/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Request objects in express.js</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.63px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.38px;">angular</a> <a href="/tags/animation/" style="font-size: 11.25px;">animation</a> <a href="/tags/automation/" style="font-size: 13.13px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.75px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.63px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.25px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.25px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.88px;">ejs</a> <a href="/tags/express/" style="font-size: 13.75px;">express</a> <a href="/tags/games/" style="font-size: 18.75px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.88px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.63px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.88px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.88px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.13px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/node-js/" style="font-size: 19.38px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.5px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.5px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.88px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/05/29/express-request-headers/">Working with request headers in express.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/27/express-body-parser/">The express.js body parser module, and basic full stack development.</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/26/express-request-objects/">Request objects in express.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/25/express-rendering-with-ejs/">Rendering with ejs in express.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/24/express-static/">Serving static files with express.js</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
