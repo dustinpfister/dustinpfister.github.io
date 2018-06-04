@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Using passport for authentication in express.js apps | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="When making a full stack node.js powered application using express.js, there will often be a need to set up a way to handle user authentication (aka login in). This process can be a little involved, b">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Using passport for authentication in express.js apps">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/05/31/express-passport/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="When making a full stack node.js powered application using express.js, there will often be a need to set up a way to handle user authentication (aka login in). This process can be a little involved, b">
+<meta property="og:updated_time" content="2018-06-04T17:51:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Using passport for authentication in express.js apps">
+<meta name="twitter:description" content="When making a full stack node.js powered application using express.js, there will often be a need to set up a way to handle user authentication (aka login in). This process can be a little involved, b">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <script src="/js/phaser-2.6.2.min.js"></script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-express-passport" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/31/express-passport/" class="article-date"> Published:
+  published: <time datetime="2018-06-01T00:00:00.000Z" itemprop="datePublished">2018-05-31</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/05/31/express-passport/" class="article-date"> Modified:
+  <time datetime="2018-06-04T17:51:00.000Z" itemprop="dateModified">2018-06-04</time>
+</a>
+
+    <span class="article-date">V1.6</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/express/">express</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Using passport for authentication in express.js apps
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>When making a full stack node.js powered application using <a href="https://expressjs.com/" target="_blank" rel="external">express.js</a>, there will often be a need to set up a way to handle user authentication (aka login in). This process can be a little involved, but there are ways to help make it go a lot faster by using common libraries, and tools to make this process far less painful compared to attempting to do it from scratch. There is a project called <a href="https://www.npmjs.com/package/passport" target="_blank" rel="external">passport</a> that can help make authentication a whole word easier.</p>
+<a id="more"></a>
+<h2 id="what-to-know-before-continue-to-read"><a href="#what-to-know-before-continue-to-read" class="headerlink" title="what to know before continue to read"></a>what to know before continue to read</h2><p>This is a simple example of using passport.js to authenticate a user, also known as loggin in. It is not a full working example of an advanced project that involves doing this as I will not cover everything there is to know about this. However if you are looking for a simple working example, and then maybe branching off from there this might eb of value to you.</p>
+<p>This is not a getting started post on node.js, express.js, or javaScript in general. Also in this post I am using express 4.x, and passport 0.4.0.</p>
+<h2 id="Basic-example"><a href="#Basic-example" class="headerlink" title="Basic example"></a>Basic example</h2><p>For a Basic example I will be writing about a quick demo that just focus on a very basic use case that does not even involve a client database of any kind, just a single hard coded object.</p>
+<p>I will also be using the passport-local strategy, this is a strategy that involves visitors using a username and password with the project itself rather than using a third party like face book to authenticate.</p>
+<p>So I stared my passport demo by making a new project folder, making it the current working directory, then do an npm init like always with a node.js project. I then installed express, as well as ejs for rendering views. I then also installed express-session, passport, and the strategy I will be using in this demo called passport-local.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ mkdir passport-demo</div><div class="line">$ cd passport-demo</div><div class="line">$ npm init</div><div class="line">$ npm install express@4.16.3 --save</div><div class="line">$ npm install ejs@2.6.1 --save</div><div class="line">$ npm install express-session@1.15.6 --save</div><div class="line">$ npm install passport@0.4.0 --save</div><div class="line">$ npm install passport-local@1.0.0 --save</div></pre></td></tr></table></figure>
+<h2 id="The-views-folder"><a href="#The-views-folder" class="headerlink" title="The /views folder"></a>The /views folder</h2><p>Because I am using ejs I have a views folder that will house my ejs template files. If you prefer to go with a static solution you might want to look into <a href="/2018/05/24/express-static/">express.static</a>, I also have another post on using <a href="/2018/05/25/express-rendering-with-ejs/">ejs with express</a>, as well as another older post on ejs in which I am <a href="/2017/12/07/nodejs-ejs-javascript-templates/">using ejs by iteslf</a> without express. So I will not be getting into ejs in detail here, lets keep it with passport.</p>
+<h3 id="views-index-ejs"><a href="#views-index-ejs" class="headerlink" title="/views/index.ejs"></a>/views/index.ejs</h3><p>The main index.ejs file is what will always be used when rendering a page, and I will always provide an object that will give the current layout to use with that index.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;h1&gt;Passport local demo&lt;/h1&gt;</div><div class="line"> </div><div class="line">&lt;div&gt;</div><div class="line">    &lt;%- include(&apos;./layouts/&apos; + layout) %&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
+<p>So this index.ejs file will just render “Passport local demo”, and then the current layout but in a more advanced project I could also include standard navigation, and footer markup, with of course the usual additional stuff that will make it valid html.</p>
+<h3 id="The-views-layouts-folder"><a href="#The-views-layouts-folder" class="headerlink" title="The /views/layouts folder"></a>The /views/layouts folder</h3><p>This nested folder in the views folder will house the layout options. For the sake of keeping this demo as simple as possible I will just have two layouts, one for the login path, and another for root.</p>
+<h4 id="views-layouts-login-ejs"><a href="#views-layouts-login-ejs" class="headerlink" title="/views/layouts/login.ejs"></a>/views/layouts/login.ejs</h4><p>This will give the login form element that will be used to make the post request at the login path.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;form action=&quot;/login&quot; method=&quot;post&quot;&gt;</div><div class="line">    &lt;div&gt;</div><div class="line">    &lt;label&gt;Username:&lt;/label&gt;</div><div class="line">    &lt;input type=&quot;text&quot; name=&quot;user&quot;/&gt;&lt;br/&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">    &lt;div&gt;</div><div class="line">    &lt;label&gt;Password:&lt;/label&gt;</div><div class="line">    &lt;input type=&quot;password&quot; name=&quot;pass&quot;/&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">    &lt;div&gt;</div><div class="line">    &lt;input type=&quot;submit&quot; value=&quot;Submit&quot;/&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
+<h3 id="views-layouts-home-ejs"><a href="#views-layouts-home-ejs" class="headerlink" title="/views/layouts/home.ejs"></a>/views/layouts/home.ejs</h3><p>Here I have another layout file for the root, or home page at path ‘\/‘. Here if user is undefined then a message will show up asking the visitor to log in. If user is defined then the user is loged in, and the name of the user will be displayed.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;p&gt;This is home&lt;/p&gt;</div><div class="line"> </div><div class="line">&lt;% if (!user) &#123; %&gt;</div><div class="line">    &lt;p&gt;Welcome Home! Please &lt;a href=&quot;/login&quot;&gt;log in&lt;/a&gt;.&lt;/p&gt;</div><div class="line">&lt;% &#125; else &#123; %&gt;</div><div class="line">    &lt;p&gt;Hello &lt;%= user.username %&gt;, welcome home! &lt;a href=&quot;/logout&quot;&gt;logout&lt;/a&gt;&lt;/p&gt;</div><div class="line">&lt;% &#125; %&gt;</div></pre></td></tr></table></figure>
+<h2 id="The-app-js-file"><a href="#The-app-js-file" class="headerlink" title="The /app.js file"></a>The /app.js file</h2><p>Once everything is installed, and I have my view in place I can get started on the main app.js file of this demo. </p>
+<p>So my app .js file looks like this:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// yes this is an express.js app</span></div><div class="line"><span class="keyword">let</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>),</div><div class="line"> </div><div class="line"><span class="comment">// I will be using passport, and the local strategy</span></div><div class="line">passport = <span class="built_in">require</span>(<span class="string">'passport'</span>),</div><div class="line">Strategy = <span class="built_in">require</span>(<span class="string">'passport-local'</span>).Strategy,</div><div class="line"> </div><div class="line"><span class="comment">// my not so secret secret</span></div><div class="line">secret = <span class="string">'eeeek'</span>,</div><div class="line"> </div><div class="line"><span class="comment">// the single user record that is hard</span></div><div class="line"><span class="comment">// coded in for the sake of this simple demo</span></div><div class="line">user = &#123;</div><div class="line">    <span class="attr">username</span>: <span class="string">'foo'</span>,</div><div class="line">    <span class="attr">id</span>: <span class="number">0</span>,</div><div class="line">    <span class="attr">password</span>: <span class="string">'123'</span></div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">// will use the PORT environment variable if present,</span></div><div class="line"><span class="comment">// else use first argument from command line for PORT,</span></div><div class="line"><span class="comment">// else default to a hard coded value of 8080</span></div><div class="line">port = process.env.PORT || process.argv[<span class="number">2</span>] || <span class="number">8080</span>,</div><div class="line">app = express();</div><div class="line"> </div><div class="line"><span class="comment">// using ejs for rendering</span></div><div class="line">app.set(<span class="string">'views'</span>, __dirname + <span class="string">'/views'</span>);</div><div class="line">app.set(<span class="string">'view engine'</span>, <span class="string">'ejs'</span>);</div><div class="line"> </div><div class="line"><span class="comment">// using body parser to parse the body of incoming post requests</span></div><div class="line">app.use(<span class="built_in">require</span>(<span class="string">'body-parser'</span>).urlencoded(&#123;</div><div class="line">    <span class="attr">extended</span>: <span class="literal">true</span> <span class="comment">// must give a value for extended</span></div><div class="line">&#125;));</div><div class="line"> </div><div class="line"><span class="comment">// using express-session for session cookies</span></div><div class="line">app.use(</div><div class="line"> </div><div class="line">    <span class="built_in">require</span>(<span class="string">'express-session'</span>)(</div><div class="line"> </div><div class="line">        &#123;</div><div class="line">            <span class="attr">name</span>: <span class="string">'site_cookie'</span>,</div><div class="line">            <span class="attr">secret</span>: secret,</div><div class="line">            <span class="attr">resave</span>: <span class="literal">false</span>,</div><div class="line">            <span class="attr">saveUninitialized</span>: <span class="literal">false</span>,</div><div class="line">            <span class="attr">cookie</span>: &#123;</div><div class="line"> </div><div class="line">                <span class="comment">// make session cookies only last 15 seconds</span></div><div class="line">                <span class="comment">// for the sake of this demo</span></div><div class="line">                maxAge: <span class="number">15000</span></div><div class="line"> </div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    )</div><div class="line"> </div><div class="line">);</div><div class="line"> </div><div class="line"><span class="comment">// using the local strategy with passport</span></div><div class="line">passport.use(</div><div class="line"> </div><div class="line">    <span class="comment">// calling the constructor given by passport-local</span></div><div class="line">    <span class="keyword">new</span> Strategy(</div><div class="line"> </div><div class="line">        <span class="comment">// options for passport local</span></div><div class="line">        &#123;</div><div class="line"> </div><div class="line">            <span class="comment">// using custom field names</span></div><div class="line">            usernameField: <span class="string">'user'</span>,</div><div class="line">            <span class="attr">passwordField</span>: <span class="string">'pass'</span></div><div class="line"> </div><div class="line">        &#125;,</div><div class="line"> </div><div class="line">        <span class="comment">// login method</span></div><div class="line">        <span class="function"><span class="keyword">function</span> (<span class="params">username, password, cb</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="keyword">if</span> (username === user.username &amp;&amp; password.toString() === user.password) &#123;</div><div class="line"> </div><div class="line">                <span class="keyword">return</span> cb(<span class="literal">null</span>, user);</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="comment">// null and false for all other cases</span></div><div class="line">            <span class="keyword">return</span> cb(<span class="literal">null</span>, <span class="literal">false</span>);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    )</div><div class="line"> </div><div class="line">);</div><div class="line"> </div><div class="line">passport.serializeUser(<span class="function"><span class="keyword">function</span> (<span class="params">user, cb</span>) </span>&#123;</div><div class="line">    cb(<span class="literal">null</span>, user.id);</div><div class="line">&#125;);</div><div class="line"> </div><div class="line">passport.deserializeUser(<span class="function"><span class="keyword">function</span> (<span class="params">id, cb</span>) </span>&#123;</div><div class="line"> </div><div class="line">    cb(<span class="literal">null</span>, user);</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line">app.use(passport.initialize());</div><div class="line">app.use(passport.session());</div><div class="line"> </div><div class="line">app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line"> </div><div class="line">    res.render(<span class="string">'index'</span>, &#123;</div><div class="line">        <span class="attr">layout</span>: <span class="string">'home'</span>,</div><div class="line">        <span class="attr">user</span>: req.user</div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line">app.get(<span class="string">'/login'</span>,</div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line">    res.render(<span class="string">'index'</span>, &#123;</div><div class="line">        <span class="attr">layout</span>: <span class="string">'login'</span>,</div><div class="line">        <span class="attr">user</span>: req.user</div><div class="line">    &#125;);</div><div class="line">&#125;);</div><div class="line"> </div><div class="line">app.post(<span class="string">'/login'</span>,</div><div class="line">    passport.authenticate(<span class="string">'local'</span>, &#123;</div><div class="line">        <span class="comment">// redirect back to /login</span></div><div class="line">        <span class="comment">// if login fails</span></div><div class="line">        failureRedirect: <span class="string">'/login'</span></div><div class="line">    &#125;),</div><div class="line"> </div><div class="line">    <span class="comment">// end up at / if login works</span></div><div class="line">    <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line">        res.redirect(<span class="string">'/'</span>);</div><div class="line">    &#125;</div><div class="line">);</div><div class="line"> </div><div class="line">app.get(<span class="string">'/logout'</span>,</div><div class="line">    <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line">    req.logout();</div><div class="line">    res.redirect(<span class="string">'/'</span>);</div><div class="line">&#125;);</div><div class="line"> </div><div class="line">app.listen(port, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'passport-local demo up on port: '</span> + port);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="Passport-local-Strategy"><a href="#Passport-local-Strategy" class="headerlink" title="Passport local Strategy"></a>Passport local Strategy</h3><p>A strategy must be used with passport for authentication, in this example I am using <a href="https://www.npmjs.com/package/passport-local" target="_blank" rel="external">passport-local</a> which is a strategy involving a user name and password that is local with the application itself rather than depending on something like facebook. However many strategies exist for passport that can also be used to authenticate, making passport a great choice with this aspect of development.</p>
+<h3 id="Body-parser"><a href="#Body-parser" class="headerlink" title="Body parser"></a>Body parser</h3><p>I am using the built in express body parser to parse an incoming post request via bodyParser.urlencoded. Tne body parser module is an important component in full stack development using node.js, and express.js in the stack. It is a way to parse the body of incoming post requests into something that can then be accessed from the request object. </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">app.use(<span class="built_in">require</span>(<span class="string">'body-parser'</span>).urlencoded(&#123;</div><div class="line">    <span class="attr">extended</span>: <span class="literal">true</span> <span class="comment">// must give a value for extended</span></div><div class="line">&#125;));</div></pre></td></tr></table></figure>
+<p>For more information and examples of body parser you might want to check out my <a href="/2018/05/27/express-body-parser/">post on body parser</a> if interested.</p>
+<h3 id="using-express-session-for-session-cookies"><a href="#using-express-session-for-session-cookies" class="headerlink" title="using express-session for session cookies"></a>using express-session for session cookies</h3><p>So express-session is another important module that is often used in express.js powered projects. It is a way to quickly get up and running with sessions cookies, and session data. In this simple demo the session data is stored in memory, but it a more serious project I would want to use an additional storage system for express-session.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">app.use(</div><div class="line"> </div><div class="line">    <span class="built_in">require</span>(<span class="string">'express-session'</span>)(</div><div class="line"> </div><div class="line">        &#123;</div><div class="line">            <span class="attr">name</span>: <span class="string">'site_cookie'</span>,</div><div class="line">            <span class="attr">secret</span>: secret,</div><div class="line">            <span class="attr">resave</span>: <span class="literal">false</span>,</div><div class="line">            <span class="attr">saveUninitialized</span>: <span class="literal">false</span>,</div><div class="line">            <span class="attr">cookie</span>: &#123;</div><div class="line"> </div><div class="line">                <span class="comment">// make session cookies only last 15 seconds</span></div><div class="line">                <span class="comment">// for the sake of this demo</span></div><div class="line">                maxAge: <span class="number">15000</span></div><div class="line"> </div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    )</div><div class="line"> </div><div class="line">);</div></pre></td></tr></table></figure>
+<p>I made the maxAge of the session cookies only 15 seconds for the sake of just making new users of passport aware that the max age of a cookie is something important to be aware of.</p>
+<p>I will not get into every detail about express-session here, but I will say that there is a great deal more to know about it then what is presented here. For more detail on this you might consider reading <a href="/2018/06/01/express-session/">my post on express-session</a>.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>There is a great detail more to write about on passport.js, as well as the different strategies that can be used to authenticate users. It would also be nice to have a more advanced demo that involves user registration, and a database solution of some kind. Also I could make a more professional example that involves a session data storage solution other than the built in memory sore of express session, with a more advanced front end as well. In the coming days I might just do that and if I get to it I might improve the quality of this post along with it.</p>
+<p>This is my two hundredth blog post here at my <a href="https://dustinpfister.github.io">github pages site</a>, thought I would just throw that in at the end here.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/05/31/express-passport/" data-id="cji0n6jwa0001wkv1f44twai8" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/express/">express</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/06/01/express-session/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Using express-session for session data in express.js
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/05/30/express-cookie-parser/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Getting and setting cookies in express.js with cookie-parser</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.63px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.38px;">angular</a> <a href="/tags/animation/" style="font-size: 11.25px;">animation</a> <a href="/tags/automation/" style="font-size: 13.13px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.75px;">backbone</a> <a href="/tags/blog/" style="font-size: 16.25px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.88px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.25px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.88px;">ejs</a> <a href="/tags/express/" style="font-size: 15px;">express</a> <a href="/tags/games/" style="font-size: 18.75px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.63px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.88px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15.63px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.63px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.88px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.88px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.75px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/node-js/" style="font-size: 19.38px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.13px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.5px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 17.5px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/06/04/lodash_countby/">The lodash _.countBy method</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/01/express-session/">Using express-session for session data in express.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/31/express-passport/">Using passport for authentication in express.js apps</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/30/express-cookie-parser/">Getting and setting cookies in express.js with cookie-parser</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/29/express-request-headers/">Working with request headers in express.js</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

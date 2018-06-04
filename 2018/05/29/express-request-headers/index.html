@@ -5,16 +5,16 @@
   
   <title>Working with request headers in express.js | Dustin John Pfister at github pages</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="When reviving an http request from a client, that request will contain all kinds of headers that tell the server useful information about the request. In this post I will be quickly covering some exam">
+  <meta name="description" content="When receiving an http request from a client, that request will contain all kinds of headers that tell the server useful information about the request. In this post I will be quickly covering some exa">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Working with request headers in express.js">
 <meta property="og:url" content="https://dustinpfister.github.io/2018/05/29/express-request-headers/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="When reviving an http request from a client, that request will contain all kinds of headers that tell the server useful information about the request. In this post I will be quickly covering some exam">
-<meta property="og:updated_time" content="2018-05-29T18:34:36.000Z">
+<meta property="og:description" content="When receiving an http request from a client, that request will contain all kinds of headers that tell the server useful information about the request. In this post I will be quickly covering some exa">
+<meta property="og:updated_time" content="2018-06-04T19:15:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Working with request headers in express.js">
-<meta name="twitter:description" content="When reviving an http request from a client, that request will contain all kinds of headers that tell the server useful information about the request. In this post I will be quickly covering some exam">
+<meta name="twitter:description" content="When receiving an http request from a client, that request will contain all kinds of headers that tell the server useful information about the request. In this post I will be quickly covering some exa">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -106,10 +106,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2018/05/29/express-request-headers/" class="article-date"> Modified:
-  <time datetime="2018-05-29T18:34:36.000Z" itemprop="dateModified">2018-05-29</time>
+  <time datetime="2018-06-04T19:15:40.000Z" itemprop="dateModified">2018-06-04</time>
 </a>
 
-    <span class="article-date">V1.2</span>
+    <span class="article-date">V1.4</span>
 
     
   <div class="article-category">
@@ -132,8 +132,9 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>When reviving an http request from a client, that request will contain all kinds of headers that tell the server useful information about the request. In this post I will be quickly covering some examples of how to work with request headers in express.js.</p>
+        <p>When receiving an http request from a client, that request will contain all kinds of headers that tell the server useful information about the request. In this post I will be quickly covering some examples of how to work with request headers in <a href="https://expressjs.com/" target="_blank" rel="external">express.js</a> with some help with the req.get method, and the req.headers array that can be found in a request object.</p>
 <a id="more"></a>
+<h2 id="What-to-know"><a href="#What-to-know" class="headerlink" title="What to know"></a>What to know</h2><p>This is a post on working with request headers in express.js a node.js powered framework that is used for making full stack web applications. It is not a getting started post on express.js, node.js, javaScript in general, or any additional aspects of full stack web application development. In this post I am using express 4.x, and yes this is a project where the version matters a whole lot.</p>
 <h2 id="Different-request-headers-for-different-request-methods"><a href="#Different-request-headers-for-different-request-methods" class="headerlink" title="Different request headers for different request methods"></a>Different request headers for different request methods</h2><p>Request headers depend on the method of the request such as GET, and POST. A POST request header for example will contain a content-type header to tell the server the type of content that it is being given in the body of the request. However a GET request would not contain such a header, because it is just simply requesting whatever there is at a given location. Also It goes without saying that response headers differ slightly from request headers.</p>
 <h2 id="Basic-example"><a href="#Basic-example" class="headerlink" title="Basic example"></a>Basic example</h2><p>There is the req.get method that can be used to get a header to which you know the name off. If you do not know the name there is also the req.headers array that will store everything of interest when it comes to the request headers.</p>
 <p>Here is an example of a router that can be added into a express.js demo with app.use, say you save it in a folder at /routes/headers.js:</p>
@@ -142,6 +143,7 @@ ga('send', 'pageview');
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>),</div><div class="line">app = express();</div><div class="line"> </div><div class="line">app.use(<span class="string">'/headers'</span>,<span class="built_in">require</span>(<span class="string">'./routes/headers'</span>));</div><div class="line"> </div><div class="line">app.listen(<span class="number">8080</span>);</div></pre></td></tr></table></figure>
 <p>If you then start app.js in the command line with node and go to localhost:8080/headers in the browser you might see something like this.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="string">"headers"</span>: &#123;</div><div class="line">        <span class="string">"host"</span>: <span class="string">"localhost:8080"</span>,</div><div class="line">        <span class="string">"connection"</span>: <span class="string">"keep-alive"</span>,</div><div class="line">        <span class="string">"cache-control"</span>: <span class="string">"max-age=0"</span>,</div><div class="line">        <span class="string">"upgrade-insecure-requests"</span>: <span class="string">"1"</span>,</div><div class="line">        <span class="string">"user-agent"</span>: <span class="string">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36"</span>,</div><div class="line">        <span class="string">"accept"</span>: <span class="string">"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"</span>,</div><div class="line">        <span class="string">"accept-encoding"</span>: <span class="string">"gzip, deflate, br"</span>,</div><div class="line">        <span class="string">"accept-language"</span>: <span class="string">"en-US,en;q=0.9"</span>,</div><div class="line">        <span class="string">"cookie"</span>: <span class="string">"_ga=GA1.1.1007487929.1483993436"</span>,</div><div class="line">        <span class="string">"if-none-match"</span>: <span class="string">"W/\"271-4KyvCN/691Au0a0WB+wTlzE/aF0\""</span></div><div class="line">    &#125;,</div><div class="line">    <span class="string">"userAgent"</span>: <span class="string">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>I am sorry this is a thin post, I might expand on it more as my collection of content, and demos on express.js grows. In the mean time you might want to check one some of my other <a href="/categories/express/">posts on express.js</a> if interested.</p>
 
       
     </div>
@@ -156,6 +158,15 @@ ga('send', 'pageview');
   
     
 <nav id="article-nav">
+  
+    <a href="/2018/05/30/express-cookie-parser/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Getting and setting cookies in express.js with cookie-parser
+        
+      </div>
+    </a>
   
   
     <a href="/2018/05/27/express-body-parser/" id="article-nav-older" class="article-nav-link-wrap">
@@ -197,7 +208,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.63px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.38px;">angular</a> <a href="/tags/animation/" style="font-size: 11.25px;">animation</a> <a href="/tags/automation/" style="font-size: 13.13px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.75px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.63px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.25px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.25px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.88px;">ejs</a> <a href="/tags/express/" style="font-size: 13.75px;">express</a> <a href="/tags/games/" style="font-size: 18.75px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.88px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.63px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.88px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.88px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.13px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/node-js/" style="font-size: 19.38px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.5px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.5px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.88px;">three.js</a>
+      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.63px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.38px;">angular</a> <a href="/tags/animation/" style="font-size: 11.25px;">animation</a> <a href="/tags/automation/" style="font-size: 13.13px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.75px;">backbone</a> <a href="/tags/blog/" style="font-size: 16.25px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.88px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.25px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.88px;">ejs</a> <a href="/tags/express/" style="font-size: 15px;">express</a> <a href="/tags/games/" style="font-size: 18.75px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.63px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.88px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15.63px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.63px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.88px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.88px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.75px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/node-js/" style="font-size: 19.38px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.13px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.5px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 17.5px;">three.js</a>
     </div>
   </div>
 
@@ -206,7 +217,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
     </div>
   </div>
 
@@ -219,23 +230,23 @@ ga('send', 'pageview');
       <ul>
         
           <li>
+            <a href="/2018/06/04/lodash_countby/">The lodash _.countBy method</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/01/express-session/">Using express-session for session data in express.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/31/express-passport/">Using passport for authentication in express.js apps</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/30/express-cookie-parser/">Getting and setting cookies in express.js with cookie-parser</a>
+          </li>
+        
+          <li>
             <a href="/2018/05/29/express-request-headers/">Working with request headers in express.js</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/27/express-body-parser/">The express.js body parser module, and basic full stack development.</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/26/express-request-objects/">Request objects in express.js</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/25/express-rendering-with-ejs/">Rendering with ejs in express.js</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/24/express-static/">Serving static files with express.js</a>
           </li>
         
       </ul>
