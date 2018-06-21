@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Using app.get in express to get app settings, and handle get requests. | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="The app.get method in express.js has two uses, one is for getting the value of a local app setting, and the other is to define what to do with http GET requests. So in other words it’s behavior is ver">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Using app.get in express to get app settings, and handle get requests.">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/06/20/express-get/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="The app.get method in express.js has two uses, one is for getting the value of a local app setting, and the other is to define what to do with http GET requests. So in other words it’s behavior is ver">
+<meta property="og:updated_time" content="2018-06-20T17:28:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Using app.get in express to get app settings, and handle get requests.">
+<meta name="twitter:description" content="The app.get method in express.js has two uses, one is for getting the value of a local app setting, and the other is to define what to do with http GET requests. So in other words it’s behavior is ver">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-express-get" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/20/express-get/" class="article-date"> Published:
+  published: <time datetime="2018-06-20T16:54:00.000Z" itemprop="datePublished">2018-06-20</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/06/20/express-get/" class="article-date"> Modified:
+  <time datetime="2018-06-20T17:28:54.000Z" itemprop="dateModified">2018-06-20</time>
+</a>
+
+    <span class="article-date">V1.4</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/express/">express</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Using app.get in express to get app settings, and handle get requests.
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>The app.get method in <a href="https://expressjs.com/" target="_blank" rel="external">express.js</a> has two uses, one is for getting the value of a local app setting, and the other is to define what to do with http GET requests. So in other words it’s behavior is very different depending on the number of arguments that are given to it. If I just want to get the value of a certain app setting I only need to give the key of that setting to receive the corresponding key value. However if I want to do something with get requests I will want to not just give the path or pattern, but one or more functions that will do something with that incoming http get request. So this dual use of app.get works out okay, and as such I do not find it that confusing. So this will be a quick post on the ins and outs of app.get.</p>
+<a id="more"></a>
+<h3 id="1-What-to-know"><a href="#1-What-to-know" class="headerlink" title="1 - What to know"></a>1 - What to know</h3><p>This is a post on the app.get method in express.js, I will noe be getting into detail with eveything else about express, and node.js in this post. If interested you might want to check out my <a href="/2018/06/12/express/">main post on express.js</a>, if you are new to express.</p>
+<h3 id="2-Using-app-get-to-get-app-settings-values"><a href="#2-Using-app-get-to-get-app-settings-values" class="headerlink" title="2 - Using app.get to get app settings values"></a>2 - Using app.get to get app settings values</h3><p>When only giving one value to app.get that value is treated as a key in an object of key value pairs that are various settings for the app. There are many settings there to begin with, and it is also possible to set values with app.set to be used in various places in the body of an express.js app.</p>
+<h3 id="2-1-Getting-the-environment-value"><a href="#2-1-Getting-the-environment-value" class="headerlink" title="2.1 - Getting the environment value"></a>2.1 - Getting the environment value</h3><p>One value that should be there to begin with is the env setting. This is a setting that is used to find out if the app is in development or production mode.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(app.get(<span class="string">'env'</span>)); <span class="comment">// development</span></div></pre></td></tr></table></figure>
+<h3 id="2-2-Setting-the-full-list-of-settings"><a href="#2-2-Setting-the-full-list-of-settings" class="headerlink" title="2.2 - Setting the full list of settings"></a>2.2 - Setting the full list of settings</h3><p>If you want to know the full list of setting that currently exist in an app, the object of interest is at app.locals.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(app.locals.settings);</div></pre></td></tr></table></figure>
+<p>It would be a good idea to take a look at this to be aware of what is there to begin with, so that you do not write over any values with app.set when setting your own values this way.</p>
+<h3 id="3-Using-app-set-with-app-get-to-both-get-and-set-values"><a href="#3-Using-app-set-with-app-get-to-both-get-and-set-values" class="headerlink" title="3 - Using app.set with app.get, to both get and set values."></a>3 - Using app.set with app.get, to both get and set values.</h3><p>The app.set method is used with app.get to both set, and get values. This may be preferable than the alternative which would be to have my own conf object, or lengthly list of global variables.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">app.set(<span class="string">'foo'</span>,<span class="string">'bar'</span>);</div><div class="line"><span class="built_in">console</span>.log( app.get(<span class="string">'foo'</span>) ); <span class="comment">// bar</span></div></pre></td></tr></table></figure>
+<h2 id="4-Full-app-js-example-of-app-get"><a href="#4-Full-app-js-example-of-app-get" class="headerlink" title="4 - Full app.js example of app.get"></a>4 - Full app.js example of app.get</h2><p>So for a full working demo of app.get I just quickly put togetaher this simple demo that uses app.get to set a value for a port to listen on when starting the app, and also use app.get to respond to get requests.</p>
+<h3 id="4-1-Setup"><a href="#4-1-Setup" class="headerlink" title="4.1 - Setup"></a>4.1 - Setup</h3><p>So for this demo I will just need to create a new folder, and the only dependency I am using is express itself.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ mkdir app-get-demo</div><div class="line">$ cd app-get-demo</div><div class="line">$ npm init</div><div class="line">$ npm install express --save</div></pre></td></tr></table></figure>
+<h3 id="4-2-The-app-js-file"><a href="#4-2-The-app-js-file" class="headerlink" title="4.2 - The app.js file"></a>4.2 - The app.js file</h3><p>Once I have my basic demo folder the next step is to have my single app.js file that I will be starting from the command line using node.js. I used app.set to set a value for port, that I then use to start the app listening on that port. I also used app.get to set up a single path for root that will respond to get requests to that path.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>),</div><div class="line"> </div><div class="line">app = express();</div><div class="line"> </div><div class="line"><span class="comment">// set the port to listen on with app.set</span></div><div class="line">app.set(<span class="string">'port'</span>, process.argv[<span class="number">2</span>] || process.env.PORT || <span class="number">8080</span>);</div><div class="line"> </div><div class="line"><span class="comment">// use app.get to get the value of port</span></div><div class="line"><span class="built_in">console</span>.log(app.get(<span class="string">'port'</span>));</div><div class="line"> </div><div class="line"><span class="comment">// the full list of settings is at app.locals</span></div><div class="line"><span class="built_in">console</span>.log(app.locals.settings.port);</div><div class="line"> </div><div class="line"><span class="comment">// get the value of port with app.get, and also</span></div><div class="line"><span class="comment">// set what to do with get requests with app.get</span></div><div class="line">app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line"> </div><div class="line">    res.send(<span class="string">'The value of port is: '</span> + app.get(<span class="string">'port'</span>));</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line"><span class="comment">// listen on the port set with app.set</span></div><div class="line">app.listen(app.get(<span class="string">'port'</span>), <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'demo is up on port: '</span> + app.get(<span class="string">'port'</span>));</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="4-3-Starting-the-demo"><a href="#4-3-Starting-the-demo" class="headerlink" title="4.3 - Starting the demo"></a>4.3 - Starting the demo</h3><p>So now when I start the app.js file with node in the command line it will default to a hard coded port value of 8080 by default if there is no environment variable, or argument given.</p>
+<p>So If I just start the app like this.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ node app 3000</div></pre></td></tr></table></figure>
+<p>If I want I can then go to localhost:3000 in my browser I will get the intended message.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/06/20/express-get/" data-id="cjinty41e0000g0v1x4si063j" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/06/20/express-get/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/express/">express</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/06/19/express-helmet-dns-prefetch-control/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Using the express.js helmet.js middleware to set dns prefetch control headers</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2018/06/20/express-get/index.html';
+    this.page.identifier = '212';
+    this.page.title = 'Using app.get in express to get app settings, and handle get requests.';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.35px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.59px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.12px;">angular</a> <a href="/tags/animation/" style="font-size: 11.18px;">animation</a> <a href="/tags/automation/" style="font-size: 12.94px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.53px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.88px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.06px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.94px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.18px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.76px;">ejs</a> <a href="/tags/express/" style="font-size: 16.47px;">express</a> <a href="/tags/games/" style="font-size: 18.82px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.71px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.76px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15.29px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.59px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.76px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.76px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.82px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/node-js/" style="font-size: 19.41px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.24px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.35px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 17.65px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/06/20/express-get/">Using app.get in express to get app settings, and handle get requests.</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/19/express-helmet-dns-prefetch-control/">Using the express.js helmet.js middleware to set dns prefetch control headers</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/18/express-app-use/">The app.use method in express.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/15/express-app-object/">The Express app object list of must know features</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/14/hexo-disqus/">Adding disqus comments to a hexo powered side</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2018/06/20/express-get/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
