@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Using app.delete, to delete a server side file via the http delete method in express. | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Today for my quick morning post on express.js I wanted to start taking a look at some of the other http request methods other than get, and post. So for today I put together a quick demo that makes us">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Using app.delete, to delete a server side file via the http delete method in express.">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/06/21/express-app-delete/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="Today for my quick morning post on express.js I wanted to start taking a look at some of the other http request methods other than get, and post. So for today I put together a quick demo that makes us">
+<meta property="og:updated_time" content="2018-06-21T19:45:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Using app.delete, to delete a server side file via the http delete method in express.">
+<meta name="twitter:description" content="Today for my quick morning post on express.js I wanted to start taking a look at some of the other http request methods other than get, and post. So for today I put together a quick demo that makes us">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-express-app-delete" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/21/express-app-delete/" class="article-date"> Published:
+  <time datetime="2018-06-21T16:10:00.000Z" itemprop="datePublished">2018-06-21</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/06/21/express-app-delete/" class="article-date"> Modified:
+  <time datetime="2018-06-21T19:45:11.000Z" itemprop="dateModified">2018-06-21</time>
+</a>
+
+    <span class="article-date">V1.13</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/express/">express</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Using app.delete, to delete a server side file via the http delete method in express.
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>Today for my quick morning post on <a href="https://expressjs.com/" target="_blank" rel="external">express.js</a> I wanted to start taking a look at some of the other http request methods other than get, and post. So for today I put together a quick demo that makes use of the app.delete method.</p>
+<a id="more"></a>
+<h2 id="1-what-to-know-before-hand"><a href="#1-what-to-know-before-hand" class="headerlink" title="1 - what to know before hand"></a>1 - what to know before hand</h2><p>This is a post on the app.delete method of the app object in express.js. This is a method that is used to define logic that is used to handle http 1.1 delete requests. This is not a getting started post on express.js, or any additional skills that are required before hand to get something of value from this. If you are new to express you might want to check out my <a href="/2018/06/12/express/">main post on express</a>.</p>
+<h2 id="2-Setup"><a href="#2-Setup" class="headerlink" title="2 - Setup"></a>2 - Setup</h2><p>The setup process was not all that different from many of my other examples on express. I just created a new folder, made it the current working folder. I also made a public folder to house a simple static client with express.static. Also I set up a routes folder as a way to keep things a little more organized compared to having everything in the main app.js file.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ mkdir app-delete</div><div class="line">$ cd app-delete</div><div class="line">$ mkdir public</div><div class="line">$ mkdir routes</div><div class="line">$ npm init</div><div class="line">$ npm install express --save</div></pre></td></tr></table></figure>
+<h2 id="3-The-public-folder"><a href="#3-The-public-folder" class="headerlink" title="3 - The public folder"></a>3 - The public folder</h2><p>The public folder will hold the crude yet effective client system for this example. It consists of just an index.html file, and a single client.js file that will house my front end javaScript code.</p>
+<h3 id="3-1-The-public-index-html"><a href="#3-1-The-public-index-html" class="headerlink" title="3.1 - The /public/index.html"></a>3.1 - The /public/index.html</h3><p>Just a simple html file that will have a textarea message that can be used to define some text that will then be posed to the back end when clicking a post button element. It will also have another button that will make a delete request as well. The javaScript that will power all of this on the front end will be in a client.js file that will be used in the index via a script tag.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>express demo<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>app.delete<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div><div class="line"> </div><div class="line">    <span class="comment">&lt;!-- text input and post button --&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">textarea</span> <span class="attr">id</span>=<span class="string">"text"</span> <span class="attr">rows</span>=<span class="string">"10"</span> <span class="attr">cols</span>=<span class="string">"80"</span>&gt;</span><span class="tag">&lt;/<span class="name">textarea</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">"post"</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"post"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">"delete"</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"delete"</span>&gt;</span></div><div class="line"> </div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"client.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="3-2-The-public-client-js"><a href="#3-2-The-public-client-js" class="headerlink" title="3.2 - The /public/client.js"></a>3.2 - The /public/client.js</h3><p>This file will house the front end javaScript of the example. For the purpose of this simple example I did not choose to use or do anything fancy, or modern. I just used the good old tired yet true XMLHttprequest to make the requests from the browser.</p>
+<p>This file includes methods for making a get request for the file, making a post request to create or overwrite the file, and of course a method to make the delete request.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// warping document.getElementById</span></div><div class="line"><span class="keyword">var</span> get = <span class="function"><span class="keyword">function</span> (<span class="params">id</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> <span class="built_in">document</span>.getElementById(id);</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// get the file</span></div><div class="line"><span class="keyword">var</span> getFile = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line"> </div><div class="line">    xhr.open(<span class="string">'get'</span>, <span class="string">'/file'</span>);</div><div class="line"> </div><div class="line">    xhr.onreadystatechange = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.readyState === <span class="number">4</span>) &#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="keyword">this</span>.response);</div><div class="line"> </div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line"> </div><div class="line">                <span class="keyword">var</span> data = <span class="built_in">JSON</span>.parse(<span class="keyword">this</span>.response);</div><div class="line">                get(<span class="string">'text'</span>).value = data.text;</div><div class="line"> </div><div class="line">            &#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line"> </div><div class="line">                <span class="built_in">console</span>.log(e.message);</div><div class="line">                get(<span class="string">'text'</span>).value = e.message;</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    xhr.send(<span class="literal">null</span>);</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// send a delete request</span></div><div class="line"><span class="keyword">var</span> deleteFile = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line"> </div><div class="line">    xhr.open(<span class="string">'delete'</span>, <span class="string">'/file'</span>);</div><div class="line"> </div><div class="line">    xhr.onreadystatechange = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.readyState === <span class="number">4</span>) &#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'status: '</span> + <span class="keyword">this</span>.status);</div><div class="line">            <span class="built_in">console</span>.log(<span class="keyword">this</span>.response);</div><div class="line"> </div><div class="line">            <span class="comment">// confirm</span></div><div class="line">            getFile();</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    xhr.send(<span class="literal">null</span>);</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// send a post request</span></div><div class="line"><span class="keyword">var</span> sendPost = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line"> </div><div class="line">    xhr.open(<span class="string">'post'</span>, <span class="string">'/post'</span>);</div><div class="line">    xhr.setRequestHeader(<span class="string">'Content-Type'</span>, <span class="string">'application/json'</span>);</div><div class="line"> </div><div class="line">    xhr.onreadystatechange = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.readyState === <span class="number">4</span>) &#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="keyword">this</span>.response);</div><div class="line">            getFile();</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">//xhr.send(JSON.stringify(&#123;mess: 'i am the egg man.'&#125;));</span></div><div class="line">    <span class="comment">//xhr.send(null);</span></div><div class="line">    xhr.send(<span class="built_in">JSON</span>.stringify(&#123;</div><div class="line">            <span class="attr">mess</span>: get(<span class="string">'text'</span>).value</div><div class="line">        &#125;));</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// attach</span></div><div class="line">get(<span class="string">'post'</span>).addEventListener(<span class="string">'click'</span>, sendPost);</div><div class="line">get(<span class="string">'delete'</span>).addEventListener(<span class="string">'click'</span>, deleteFile);</div><div class="line"> </div><div class="line"><span class="comment">// first get</span></div><div class="line">getFile();</div></pre></td></tr></table></figure>
+<h2 id="4-The-routes-folder"><a href="#4-The-routes-folder" class="headerlink" title="4- The routes folder"></a>4- The routes folder</h2><p>The routes folder is a way to break things down more when making a complex express.js project that involves many different paths responding to many different types of requests. This can be done by making javaScript files in a folder that export an app or router object. What is exported by one of these files can then be used in the main app.js file, or any express javaScript file for that matter with the app.use method.</p>
+<p>In this example I have made a file for each type of request that is used including GET, POST, and yes of course DELETE.</p>
+<h3 id="4-1-The-routes-post-js-file"><a href="#4-1-The-routes-post-js-file" class="headerlink" title="4.1 - The /routes/post.js file"></a>4.1 - The /routes/post.js file</h3><p>This file will create a /post path that will respond to post requests that will be made by the client system. It will just check for a body, and message, and if all goes well will write a given message to a file called file.txt in the routes folder.</p>
+<p>The file.txt file will of course be the file in question that will be served up via GET requests, and deleted when a delete request is received.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>),</div><div class="line">fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line"> </div><div class="line">app = <span class="built_in">module</span>.exports = express();</div><div class="line"> </div><div class="line">app.use(<span class="built_in">require</span>(<span class="string">'body-parser'</span>).json());</div><div class="line"> </div><div class="line">app.post(<span class="string">'/post'</span>,</div><div class="line"> </div><div class="line">    <span class="comment">// check body</span></div><div class="line">    <span class="function"><span class="keyword">function</span> (<span class="params">req, res, next</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (req.body) &#123;</div><div class="line"> </div><div class="line">            <span class="keyword">if</span> (req.body.mess) &#123;</div><div class="line"> </div><div class="line">                next();</div><div class="line"> </div><div class="line">            &#125;<span class="keyword">else</span>&#123;</div><div class="line"> </div><div class="line">                res.json(&#123;</div><div class="line"> </div><div class="line">                    <span class="attr">mess</span>: <span class="string">'no message given'</span>,</div><div class="line">                    <span class="attr">body</span>: req.body</div><div class="line"> </div><div class="line">                &#125;);</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">        &#125;<span class="keyword">else</span>&#123;</div><div class="line"> </div><div class="line">            res.json(&#123;</div><div class="line"> </div><div class="line">                <span class="attr">mess</span>: <span class="string">'no body parsed'</span>,</div><div class="line">                <span class="attr">body</span>: req.body</div><div class="line"> </div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// write file</span></div><div class="line">    <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line"> </div><div class="line">        fs.writeFile(path.join(__dirname, <span class="string">'file.txt'</span>), req.body.mess, <span class="string">'utf8'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="keyword">var</span> mess = <span class="string">'looks good'</span>;</div><div class="line">            <span class="keyword">if</span> (e) &#123;</div><div class="line"> </div><div class="line">                mess = e.message;</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="comment">// respond</span></div><div class="line">            res.json(&#123;</div><div class="line"> </div><div class="line">                <span class="attr">mess</span>: mess,</div><div class="line">                <span class="attr">body</span>: req.body</div><div class="line"> </div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">);</div></pre></td></tr></table></figure>
+<h3 id="4-2-The-routes-file-js-file"><a href="#4-2-The-routes-file-js-file" class="headerlink" title="4.2 - The /routes/file.js file"></a>4.2 - The /routes/file.js file</h3><p>This is a file that will handle GET requests made to a /file path. If the file is there it will respond with it’s contents. If he file is not there it will respond with a message that indicates that.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>),</div><div class="line">fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line"> </div><div class="line">app = <span class="built_in">module</span>.exports = express();</div><div class="line"> </div><div class="line">app.set(<span class="string">'file-path'</span>, path.join(__dirname, <span class="string">'file.txt'</span>));</div><div class="line">app.set(<span class="string">'mess'</span>, <span class="string">'foo'</span>);</div><div class="line"> </div><div class="line">app.get(<span class="string">'/file'</span>,</div><div class="line"> </div><div class="line">    <span class="comment">// read file if there</span></div><div class="line">    <span class="function"><span class="keyword">function</span> (<span class="params">req, res, next</span>) </span>&#123;</div><div class="line"> </div><div class="line">    fs.readFile(app.get(<span class="string">'file-path'</span>), <span class="string">'utf8'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e, data</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (e) &#123;</div><div class="line"> </div><div class="line">            app.set(<span class="string">'mess'</span>, e.message);</div><div class="line">            next();</div><div class="line"> </div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">            res.json(&#123;</div><div class="line"> </div><div class="line">                <span class="attr">mess</span>: <span class="string">'got the file'</span>,</div><div class="line">                <span class="attr">text</span>: data.toString()</div><div class="line"> </div><div class="line">            &#125;)</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// if this far</span></div><div class="line">    <span class="function"><span class="keyword">function</span> (<span class="params">req,res</span>) </span>&#123;</div><div class="line"> </div><div class="line">    res.json(&#123;</div><div class="line"> </div><div class="line">        <span class="attr">mess</span>: app.get(<span class="string">'mess'</span>),</div><div class="line">        <span class="attr">text</span>: <span class="string">''</span></div><div class="line"> </div><div class="line">    &#125;)</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="4-3-The-routes-delete-js-file"><a href="#4-3-The-routes-delete-js-file" class="headerlink" title="4.3 - The /routes/delete.js file"></a>4.3 - The /routes/delete.js file</h3><p>This of course is the file that will respond to DELETE requests from the client. For this simple example I am not doing anything fancy, there is only one file to delete, and it will just be deleted. In an actual production app this might be handled differently, but the basic idea is there.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>),</div><div class="line">fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line"> </div><div class="line">app = <span class="built_in">module</span>.exports = express();</div><div class="line"> </div><div class="line">app.set(<span class="string">'file-path'</span>, path.join(__dirname, <span class="string">'file.txt'</span>));</div><div class="line">app.set(<span class="string">'mess'</span>, <span class="string">''</span>);</div><div class="line"> </div><div class="line">app.delete (<span class="string">'/file'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res, next</span>) </span>&#123;</div><div class="line"> </div><div class="line">    fs.unlink(app.get(<span class="string">'file-path'</span>), <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (e) &#123;</div><div class="line"> </div><div class="line">            app.set(<span class="string">'mess'</span>, e.message);</div><div class="line">            next();</div><div class="line"> </div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">            res.json(&#123;</div><div class="line"> </div><div class="line">                <span class="attr">mess</span>: <span class="string">'file deleted'</span>,</div><div class="line">                <span class="attr">path</span>: app.get(<span class="string">'file-path'</span>)</div><div class="line"> </div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line"> </div><div class="line">    res.json(&#123;</div><div class="line"> </div><div class="line">        <span class="attr">mess</span>: app.get(<span class="string">'mess'</span>)</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="5-The-app-js-file"><a href="#5-The-app-js-file" class="headerlink" title="5 The app.js file"></a>5 The app.js file</h2><p>Because I have placed the bulk of the examples logic off into the additional files in the route folder, the size of my main app.js file is very small. Here I am just using app.use to use each of the route files to handle GET requests for file.txt, post requests to create or overwrite file.txt, and delete requests to delete file.txt.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>),</div><div class="line"> </div><div class="line">app = express();</div><div class="line"> </div><div class="line"><span class="comment">// find out the port to listen on</span></div><div class="line">app.set(<span class="string">'port'</span>, process.argv[<span class="number">2</span>] || process.env.PORT || <span class="number">8080</span>);</div><div class="line"> </div><div class="line"><span class="comment">// serve a static client</span></div><div class="line">app.use(<span class="string">'/'</span>, express.static(<span class="string">'public'</span>));</div><div class="line"> </div><div class="line">app.use(<span class="built_in">require</span>(<span class="string">'./routes/post.js'</span>));</div><div class="line">app.use(<span class="built_in">require</span>(<span class="string">'./routes/file.js'</span>));</div><div class="line">app.use(<span class="built_in">require</span>(<span class="string">'./routes/delete.js'</span>));</div><div class="line"> </div><div class="line"><span class="comment">// start listening</span></div><div class="line">app.listen(app.get(<span class="string">'port'</span>), <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'the demo is up on port: '</span> + app.get(<span class="string">'port'</span>));</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="6-Starting-the-app"><a href="#6-Starting-the-app" class="headerlink" title="6 - Starting the app."></a>6 - Starting the app.</h2><p>When I start the app from the command line with node like usual</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ node app</div></pre></td></tr></table></figure>
+<p>The express app starts listening on port 8080, so I can navigate to it in the browser by going to localhost:8080.</p>
+<p>When doing so I can write something in the textarea element, click post, and the text will be saved as the contents of file.txt. If it is not there it will be created, if it is there it will be overwritten. In any case a get request is then made to the /file path each time the browser reloads, or when a POST or DELETE request is made to confirm that this works.</p>
+<p>Of course clicking the delete button will make a delete request, and file.txt will then be deleted.</p>
+<h2 id="7-Conclusion"><a href="#7-Conclusion" class="headerlink" title="7 - Conclusion"></a>7 - Conclusion</h2><p>Thats if for now, I just wanted to make a quick app.delete example for today, as I continue to expand my content on express. If this post sparks some interest, maybe I will revise it to get deeper into the DELETE http method, and why it may be a better choice compared to using POST.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/06/21/express-app-delete/" data-id="cjiuyt6vo00037sv14z6pkhdv" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/06/21/express-app-delete/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/express/">express</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/06/22/express-app-request-response/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Using more than one app in express, with req.app, res.app, and require
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/06/20/express-get/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Using app.get in express to get app settings, and handle get requests.</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2018/06/21/express-app-delete/index.html';
+    this.page.identifier = '213';
+    this.page.title = 'Using app.delete, to delete a server side file via the http delete method in express.';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.35px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.59px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.12px;">angular</a> <a href="/tags/animation/" style="font-size: 11.18px;">animation</a> <a href="/tags/automation/" style="font-size: 12.94px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.53px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.88px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.47px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.94px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.18px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.76px;">ejs</a> <a href="/tags/express/" style="font-size: 18.24px;">express</a> <a href="/tags/games/" style="font-size: 18.82px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.71px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.76px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15.29px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.59px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.76px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.76px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.82px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/node-js/" style="font-size: 19.41px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.65px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.35px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 17.06px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/06/26/express-on-the-fly-json/">Having a path that responds with on the fly json.</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/25/express-middleware/">Writing my own middleware methods in express.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/23/express-todo-app-example/">A todo app example using express, lowdb, and much more.</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/22/express-app-request-response/">Using more than one app in express, with req.app, res.app, and require</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/21/express-app-delete/">Using app.delete, to delete a server side file via the http delete method in express.</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2018/06/21/express-app-delete/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
