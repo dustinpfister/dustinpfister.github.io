@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Getting started with mongoose | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="So these days I have been experimenting with express as a way to make node.js powered full stack applications. In many of these simple projects I have been using lowdb as a database solution, which wo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Getting started with mongoose">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/07/02/mongodb-getting-started-with-mongoose/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="So these days I have been experimenting with express as a way to make node.js powered full stack applications. In many of these simple projects I have been using lowdb as a database solution, which wo">
+<meta property="og:updated_time" content="2018-07-05T19:34:39.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Getting started with mongoose">
+<meta name="twitter:description" content="So these days I have been experimenting with express as a way to make node.js powered full stack applications. In many of these simple projects I have been using lowdb as a database solution, which wo">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-mongodb-getting-started-with-mongoose" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/02/mongodb-getting-started-with-mongoose/" class="article-date"> Published:
+  <time datetime="2018-07-02T20:40:00.000Z" itemprop="datePublished">2018-07-02</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/07/02/mongodb-getting-started-with-mongoose/" class="article-date"> Modified:
+  <time datetime="2018-07-05T19:34:39.000Z" itemprop="dateModified">2018-07-05</time>
+</a>
+
+    <span class="article-date">V1.5</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/mongodb/">mongodb</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Getting started with mongoose
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>So these days I have been experimenting with express as a way to make node.js powered full stack applications. In many of these simple projects I have been using lowdb as a database solution, which works fine when it comes to simple projects that are going to be used off line. However if I aim to make something that will be deployed to a server, I am going to want to use something a little more professional, for this there is of course mongodb, and mongoose.js. This post will be a getting stared post on using mongoose.js to work with mongodb as a database solution.</p>
+<a id="more"></a>
+<h2 id="1-What-to-know"><a href="#1-What-to-know" class="headerlink" title="1 - What to know"></a>1 - What to know</h2><p>This is a getting started post on using <a href="http://mongoosejs.com/" target="_blank" rel="external">mongoose</a> to connect to <a href="https://www.mongodb.com/" target="_blank" rel="external">mongodb</a> to work with a database when making a node.js powreed applaction the requires the use of a databse solution that is a little more professional then something like <a href="/2017/12/28/nodejs-lowdb/">lowdb</a>. I am not going to get into detail about getting started with node.js, or javaScript in general. Also I am not going to cover getting started with mongodb itself, I assume you have it installed, and have the service up and running on the default port of 27017.</p>
+<h3 id="1-1-Version-numbers-matter"><a href="#1-1-Version-numbers-matter" class="headerlink" title="1.1 Version numbers matter"></a>1.1 Version numbers matter</h3><p>As of the writing of this post I am using nodejs v8.9.3, with mongodb v4.0.0, and mongoose 5.1.7. If you run into trouble reproducing what I have work out here always check the simplest things first.</p>
+<h2 id="2-A-Basic-Example-using-mongoose-js"><a href="#2-A-Basic-Example-using-mongoose-js" class="headerlink" title="2 - A Basic Example using mongoose.js"></a>2 - A Basic Example using mongoose.js</h2><p>So This basic example of using mongoose to work with mongodb will be a simple command line interface tool that will create, and list instances of a Model called Day that represents the amount of users that visit a site in a certain day. This will be a basic exercise of using mongoose to connect to the mongodb service that should be running in the os, and add a few instnaces of a Model to a collection of models in a database.</p>
+<h3 id="2-1-setup"><a href="#2-1-setup" class="headerlink" title="2.1 - setup"></a>2.1 - setup</h3><p>For this project I will just need node.js, and mongodb installed, and the mogodb service running on the default port. When it comes to npm packages the only package I need is mongoose.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ mkdir mongoose_test</div><div class="line">$ cd mongoose_test</div><div class="line">$ npm init</div><div class="line">$ npm install mongoose --save</div></pre></td></tr></table></figure>
+<p>Once I have eventing I need in the demo project folder I will be making just one javaScript file that will be called from the command line.</p>
+<h3 id="2-2-The-basic-js-file"><a href="#2-2-The-basic-js-file" class="headerlink" title="2.2 - The basic.js file"></a>2.2 - The basic.js file</h3><p>The basic js file will consist of all the code that will connect to mondodb, parse arguments from the command line, and create instances of a model.</p>
+<h4 id="2-2-1-Make-the-connection"><a href="#2-2-1-Make-the-connection" class="headerlink" title="2.2.1 - Make the connection"></a>2.2.1 - Make the connection</h4><p>I stared off basic.js, by grabbing a reference to what is reported by the mongoose package, and then proced to write the code that will define the mongodb url that is used to connect to mongo db. This is a sting that defined the protocol to use to connect to mongodb, as wel as the hostname, port, and the name of the database.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// grab mongoose</span></div><div class="line"><span class="keyword">let</span> mongoose = <span class="built_in">require</span>(<span class="string">'mongoose'</span>);</div><div class="line"> </div><div class="line"><span class="comment">// the mongodb url</span></div><div class="line"><span class="keyword">let</span> mongoURL = &#123;</div><div class="line">    <span class="attr">host</span>: <span class="string">'localhost'</span>,    <span class="comment">// assuming localhist will work, change if different</span></div><div class="line">    port: <span class="number">27017</span>,          <span class="comment">// default port change this if different</span></div><div class="line">    db: <span class="string">'mongoose_basic'</span>  <span class="comment">// name of database</span></div><div class="line">&#125;;</div><div class="line">mongoURL.url = <span class="string">'mongodb://'</span> + mongoURL.host + <span class="string">':'</span> + mongoURL.port + <span class="string">'/'</span> + mongoURL.db;</div><div class="line"> </div><div class="line"><span class="comment">// make a connection to mongoDB</span></div><div class="line">mongoose.connect(mongoURL.url);</div><div class="line"></div><div class="line"><span class="comment">// ref mongoose.connection</span></div><div class="line"><span class="keyword">let</span> db = mongoose.connection;</div></pre></td></tr></table></figure>
+<p>Once I have the mongodb url in order I can then use that to make a connection to the mongodb service that should be up and running. If you run into trouble look into the port and hostname values and make sure they will work with your setup.</p>
+<p>I then finish up my making a reference to mongoose.connection.</p>
+<h4 id="2-2-2-The-Day-Model"><a href="#2-2-2-The-Day-Model" class="headerlink" title="2.2.2 - The Day Model"></a>2.2.2 - The Day Model</h4><p>After that I define the code that will define my Model.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// a Box Model</span></div><div class="line"><span class="keyword">let</span> Day = mongoose.model(<span class="string">'Day'</span>, &#123;</div><div class="line">        <span class="attr">date</span>: <span class="built_in">String</span>,</div><div class="line">        <span class="attr">users</span>: <span class="built_in">Number</span></div><div class="line">    &#125;);</div></pre></td></tr></table></figure>
+<p>Nothing fancy here I just create an instance of a Day Model by calling mongoose.model, followed by the name of the model, and the schema of the model. There is a great deal more to write about when it comes to models, But this is a basic example so I will be keeping it basic.</p>
+<h4 id="2-2-3-The-Options-object"><a href="#2-2-3-The-Options-object" class="headerlink" title="2.2.3 - The Options object"></a>2.2.3 - The Options object</h4><p>After I have my connection setup, and a model defined, then I define an object that will be used to create instnaces of that model, as well as get a list of them, and drop the whole databse.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// options for creating Days, getting Days, and Droping the database</span></div><div class="line"><span class="keyword">let</span> options = &#123;</div><div class="line"> </div><div class="line">    <span class="comment">// create a new date</span></div><div class="line">    create: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// return a promise</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line"> </div><div class="line">            <span class="comment">// default to '1/1/10' for date, and 0 for users</span></div><div class="line">            <span class="keyword">let</span> date = process.argv[<span class="number">3</span>] || <span class="string">'1/1/10'</span>,</div><div class="line">            users = process.argv[<span class="number">4</span>] || <span class="number">0</span>,</div><div class="line"> </div><div class="line">            <span class="comment">// create the day</span></div><div class="line">            day = <span class="keyword">new</span> Day(&#123;</div><div class="line">                    <span class="attr">date</span>: date,</div><div class="line">                    <span class="attr">users</span>: users</div><div class="line">                &#125;);</div><div class="line"> </div><div class="line">            <span class="comment">// save the day</span></div><div class="line">            day.save(<span class="function"><span class="keyword">function</span> (<span class="params">e, day</span>) </span>&#123;</div><div class="line"> </div><div class="line">                <span class="keyword">if</span> (e) &#123;</div><div class="line"> </div><div class="line">                    <span class="built_in">console</span>.log(<span class="string">'create: error'</span>);</div><div class="line">                    reject(e.message);</div><div class="line"> </div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">                    <span class="built_in">console</span>.log(<span class="string">'create: saved new day'</span>);</div><div class="line">                    resolve(day);</div><div class="line"> </div><div class="line">                &#125;</div><div class="line"> </div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// drop (delete) the database</span></div><div class="line">    drop: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// return a promise</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line"> </div><div class="line">            db.dropDatabase(<span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">                <span class="keyword">if</span> (e) &#123;</div><div class="line"> </div><div class="line">                    <span class="built_in">console</span>.log(<span class="string">'drop: error'</span>);</div><div class="line">                    reject(e.message);</div><div class="line"> </div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">                    <span class="built_in">console</span>.log(<span class="string">'drop: databse droped.'</span>);</div><div class="line">                    resolve(<span class="string">'done'</span>);</div><div class="line"> </div><div class="line">                &#125;</div><div class="line"> </div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// get by date, or list all</span></div><div class="line">    getbydate: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// query defaults to an empty object</span></div><div class="line">        <span class="keyword">let</span> query = &#123;&#125;;</div><div class="line"> </div><div class="line">        <span class="comment">// set date if given</span></div><div class="line">        <span class="keyword">if</span> (process.argv[<span class="number">3</span>]) &#123;</div><div class="line">            query.date = process.argv[<span class="number">3</span>];</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">// return a promise</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line"> </div><div class="line">            Day.find(query, (e, days) =&gt; &#123;</div><div class="line"> </div><div class="line">                <span class="keyword">if</span> (e) &#123;</div><div class="line"> </div><div class="line">                    <span class="built_in">console</span>.log(<span class="string">'getByDate: error'</span>);</div><div class="line">                    reject(e.message)</div><div class="line"> </div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">                    <span class="built_in">console</span>.log(<span class="string">'getByDate: listing days:'</span>);</div><div class="line">                    resolve(days);</div><div class="line"> </div><div class="line">                &#125;</div><div class="line"> </div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>These methods will of course be used in the next portion of the script in which I am defining some event handers as to what to do when a connection has been established successfully.</p>
+<h4 id="2-2-4-On-Error-and-once-open"><a href="#2-2-4-On-Error-and-once-open" class="headerlink" title="2.2.4 - On Error, and once open"></a>2.2.4 - On Error, and once open</h4><p>Once I have the bulk of my logic together then it is just a matter of doing what is to be done when everything goes as plain, or not. Here I use the reference to mongoose.connection to set up when is to be done in the event of an error, or once the database is open and ready to be used.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// on error</span></div><div class="line">db.on(<span class="string">'error'</span>, (e) =&gt; &#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'error'</span>);</div><div class="line">    <span class="built_in">console</span>.log(e);</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line"><span class="comment">// once the database is open</span></div><div class="line">db.once(<span class="string">'open'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// default to getbydate</span></div><div class="line">    <span class="keyword">let</span> opt = process.argv[<span class="number">2</span>] || <span class="string">'getbydate'</span>;</div><div class="line"> </div><div class="line">    <span class="comment">// if we have that option...</span></div><div class="line">    <span class="keyword">if</span> (opt <span class="keyword">in</span> options) &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// ... then call it</span></div><div class="line">        options[opt]().then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</div><div class="line"> </div><div class="line">            <span class="comment">// log any response</span></div><div class="line">            <span class="built_in">console</span>.log(res);</div><div class="line"> </div><div class="line">            <span class="comment">// close the connection</span></div><div class="line">            db.close();</div><div class="line"> </div><div class="line">        &#125;).catch (<span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</div><div class="line">            <span class="comment">// if an error happens</span></div><div class="line"> </div><div class="line">            <span class="comment">// log error message</span></div><div class="line">            <span class="built_in">console</span>.log(e);</div><div class="line"> </div><div class="line">            <span class="comment">// close the connection</span></div><div class="line">            db.close();</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// else log that the option is not known</span></div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'unknown option: '</span> + opt);</div><div class="line"> </div><div class="line">        <span class="comment">// close the connection</span></div><div class="line">        db.close();</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>When the script is called from the command line, by default it will just list any instances of the Day model that might be in the database. I can then give it arguments to create instances of day, or drop the whole database and start over.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/07/02/mongodb-getting-started-with-mongoose/" data-id="cjj9a57nm0006t0v1w9eb6zes" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/07/02/mongodb-getting-started-with-mongoose/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongodb/">mongodb</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/03/mongodb-working-with-models-in-mongoose/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Working with models in mongoose
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/01/express-visual-analytics/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Visualizing google analytics data with three.js</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2018/07/02/mongodb-getting-started-with-mongoose/index.html';
+    this.page.identifier = '219';
+    this.page.title = 'Getting started with mongoose';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.63px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.38px;">angular</a> <a href="/tags/animation/" style="font-size: 11.25px;">animation</a> <a href="/tags/automation/" style="font-size: 13.13px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.75px;">backbone</a> <a href="/tags/blog/" style="font-size: 16.25px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.88px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.25px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.88px;">ejs</a> <a href="/tags/express/" style="font-size: 18.13px;">express</a> <a href="/tags/games/" style="font-size: 18.75px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.88px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15.63px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.63px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.88px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.88px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.75px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 11.25px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.38px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.5px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.5px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 17.5px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/07/05/mongodb-making-shell-scripts/">Making Mongodb Shell scripts, getting started.</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/03/mongodb-working-with-models-in-mongoose/">Working with models in mongoose</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/02/mongodb-getting-started-with-mongoose/">Getting started with mongoose</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/01/express-visual-analytics/">Visualizing google analytics data with three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/26/express-on-the-fly-json/">Having a path that responds with on the fly json.</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2018/07/02/mongodb-getting-started-with-mongoose/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
