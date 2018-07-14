@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Enabling authentication in mongodb | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="So I have been experimenting with mongodb a little these days as I am interesting in writing some content on the subject, aside from the fact that it will typically be the database solution I will run">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Enabling authentication in mongodb">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/07/06/mongodb-enable-auth/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="So I have been experimenting with mongodb a little these days as I am interesting in writing some content on the subject, aside from the fact that it will typically be the database solution I will run">
+<meta property="og:updated_time" content="2018-07-07T17:11:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Enabling authentication in mongodb">
+<meta name="twitter:description" content="So I have been experimenting with mongodb a little these days as I am interesting in writing some content on the subject, aside from the fact that it will typically be the database solution I will run">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-mongodb-enable-auth" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/06/mongodb-enable-auth/" class="article-date"> Published:
+  <time datetime="2018-07-06T15:47:00.000Z" itemprop="datePublished">2018-07-06</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/07/06/mongodb-enable-auth/" class="article-date"> Modified:
+  <time datetime="2018-07-07T17:11:55.000Z" itemprop="dateModified">2018-07-07</time>
+</a>
+
+    <span class="article-date">V1.18</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/mongodb/">mongodb</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Enabling authentication in mongodb
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>So I have been experimenting with <a href="https://www.mongodb.com/" target="_blank" rel="external">mongodb</a> a little these days as I am interesting in writing some content on the subject, aside from the fact that it will typically be the database solution I will run into when working in a node.js environment. In this post I will be writing abut <a href="https://docs.mongodb.com/manual/tutorial/enable-authentication/" target="_blank" rel="external">enabling authentication</a> for a database.</p>
+<a id="more"></a>
+<h2 id="1-what-to-know"><a href="#1-what-to-know" class="headerlink" title="1 - what to know"></a>1 - what to know</h2><p>This is a post on <a href="https://docs.mongodb.com/manual/tutorial/enable-authentication/" target="_blank" rel="external">enabling authentication</a> in <a href="https://www.mongodb.com/" target="_blank" rel="external">mongodb</a> so that a user name and password must be provided in order to do anything with the database. I am covering several examples of mongodb shell scripts, but will not get into that in detail. I am also writing about some more examples of the use of a model with mongoose, but will not be getting into those things in detail as well. The focus of this post is on setting up authentication for a database locally.</p>
+<h3 id="1-1-Might-not-need-to-bother-with-this-when-working-locally"><a href="#1-1-Might-not-need-to-bother-with-this-when-working-locally" class="headerlink" title="1.1 - Might not need to bother with this when working locally"></a>1.1 - Might not need to bother with this when working locally</h3><p>Out of the box authentication is disabled when working with mongodb locally, but often when I go to deploy a user name and password is required as part of the mongodb connect string. So this is something that is typically setup before hand on the node that I will be deploying the app, and in that case I just need to know the username and password to connect to mongodb.</p>
+<p>So enabling authentication is something that I often will only need to bother with when trying to reproduce a similar environment locally to that of what I am dealing with when deploying.</p>
+<h2 id="2-Enabling-or-disabling-authentication-via-mongod-cfg"><a href="#2-Enabling-or-disabling-authentication-via-mongod-cfg" class="headerlink" title="2 - Enabling or disabling authentication via mongod.cfg"></a>2 - Enabling or disabling authentication via mongod.cfg</h2><p>So far my preferred way of enabling or disabling authentication is by editing the <a href="https://docs.mongodb.com/manual/reference/configuration-options/" target="_blank" rel="external">mongod.cfg file</a>. As you would expect this is a configuration file for mongodb that is stored in several different locations depending on the version of mongodb, the os, or the setup. In any case I would want to know where this file is, and make sure I have the authority to edit it if I want to get this working, or disable it for that matter.</p>
+<h3 id="2-1-Editing-mongod-cfg-and-restarting-mongod-in-windows-10-with-mongodb-server-4"><a href="#2-1-Editing-mongod-cfg-and-restarting-mongod-in-windows-10-with-mongodb-server-4" class="headerlink" title="2.1 - Editing mongod.cfg, and restarting mongod in windows 10 with mongodb server 4"></a>2.1 - Editing mongod.cfg, and restarting mongod in windows 10 with mongodb server 4</h3><p>The mongo.conf file that I am using in a windows environment is located in the bin folder of the programFiles folder for mongodb.</p>
+<p>Anyway it currently looks like this:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"># mongod.conf</div><div class="line"></div><div class="line"># for documentation of all options, see:</div><div class="line">#   http://docs.mongodb.org/manual/reference/configuration-options/</div><div class="line"></div><div class="line"># Where and how to store data.</div><div class="line">storage:</div><div class="line">  dbPath: C:\Program Files\MongoDB\Server\4.0\data</div><div class="line">  journal:</div><div class="line">    enabled: true</div><div class="line">#  engine:</div><div class="line">#  mmapv1:</div><div class="line">#  wiredTiger:</div><div class="line"></div><div class="line"># where to write logging data.</div><div class="line">systemLog:</div><div class="line">  destination: file</div><div class="line">  logAppend: true</div><div class="line">  path:  C:\Program Files\MongoDB\Server\4.0\log\mongod.log</div><div class="line"></div><div class="line"># network interfaces</div><div class="line">net:</div><div class="line">  port: 27017</div><div class="line">  bindIp: 127.0.0.1</div><div class="line"></div><div class="line"># security settings including user password protection</div><div class="line">security:</div><div class="line">  authorization: enabled</div></pre></td></tr></table></figure></p>
+<p>This is a yaml formated file, and the particular value of interest is the authorization property under security. This can have two possible string values ‘enabled’ or ‘disabled’. In order to edit this file I need the proper access permissions, and once I make a change I will want to restart the mongod service that uses this file. In windows I would want to use services administrative tool to stop, and then restart the service.</p>
+<h2 id="3-The-mongoose-model-user-demo"><a href="#3-The-mongoose-model-user-demo" class="headerlink" title="3 - The mongoose_model_user demo"></a>3 - The mongoose_model_user demo</h2><p>To help show how to set things up with this I made a project complete with mongodb shell scripts, and a simple User model, along with scripts that connect to and use that model.</p>
+<h3 id="3-1-setup"><a href="#3-1-setup" class="headerlink" title="3.1 - setup"></a>3.1 - setup</h3><p>If you want to follow along locally you can clone down this demo, and do an npm install.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ git clone https://github.com/dustinpfister/mongoose_model_user</div><div class="line">$ cd mongoose_model_user</div><div class="line">$ npm install</div></pre></td></tr></table></figure>
+<h3 id="3-2-The-mongo-shell-folder"><a href="#3-2-The-mongo-shell-folder" class="headerlink" title="3.2 - The mongo_shell folder"></a>3.2 - The mongo_shell folder</h3><p>The mongo_shell folder is a folder that I have started placing in projects that involve mongodb. These are shell scripts, that are not intended to be used from any kind of client system, unless I am willing to take the chance to implement some kind of admin user account. In any case as far as I am concerned with the content of this post, these are scripts that must be called from the command line, either locally, or by remote when dealing with a deployment.</p>
+<p>In this project there are just a few scripts that I have put together that have to do with setting up a user and password for a database, these scripts must be used when authentication is disabled, and the values are hard coded into them. However as far as this post is concerned they should do the job just fine.</p>
+<h4 id="3-2-1-Using-one-of-these-scripts"><a href="#3-2-1-Using-one-of-these-scripts" class="headerlink" title="3.2.1 - Using one of these scripts"></a>3.2.1 - Using one of these scripts</h4><p>To use one of these scripts authentication must be disabled, and the script must be called with mongo, or from within the mongo shell with the load command.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">$ cd mongo_shell</div><div class="line">$ mongo users_list.js</div><div class="line">MongoDB shell version v4.0.0</div><div class="line">connecting to: mongodb://127.0.0.1:27017</div><div class="line">MongoDB server version: 4.0.0</div><div class="line">&#123;</div><div class="line">        &quot;dbName&quot; : &quot;mongoose_users&quot;,</div><div class="line">        &quot;users&quot; : [</div><div class="line">                &#123;</div><div class="line">                        &quot;_id&quot; : &quot;mongoose_users.dustin&quot;,</div><div class="line">                        &quot;user&quot; : &quot;dustin&quot;,</div><div class="line">                        &quot;db&quot; : &quot;mongoose_users&quot;,</div><div class="line">                        &quot;roles&quot; : [</div><div class="line">                                &#123;</div><div class="line">                                        &quot;role&quot; : &quot;dbOwner&quot;,</div><div class="line">                                        &quot;db&quot; : &quot;mongoose_users&quot;</div><div class="line">                                &#125;</div><div class="line">                        ],</div><div class="line">                        &quot;mechanisms&quot; : [</div><div class="line">                                &quot;SCRAM-SHA-1&quot;,</div><div class="line">                                &quot;SCRAM-SHA-256&quot;</div><div class="line">                        ]</div><div class="line">                &#125;</div><div class="line">        ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="3-2-2-Using-authentication"><a href="#3-2-2-Using-authentication" class="headerlink" title="3.2.2 - Using authentication"></a>3.2.2 - Using authentication</h4><p>If authentication is enabled these scripts can still be used just by supplying an auth object to them, via the eval option, or by placing it in another javaScript file and running that first.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ mongo users_list.js --<span class="built_in">eval</span> <span class="string">"var auth=&#123;username:\"dustin\",password:\"1234\"&#125;"</span></div></pre></td></tr></table></figure>
+<h4 id="3-2-3-The-users-add-js-file"><a href="#3-2-3-The-users-add-js-file" class="headerlink" title="3.2.3 - The users_add.js file"></a>3.2.3 - The users_add.js file</h4><p>Here is the shell script for creating a user. I start by making an instance of the Mongo Constructor, then get the database I want to create a user for, in this case it is a database called ‘mongoose_users’. Once I have the database I just need to get the user to find out if the user is there before hand as it will return null if the user is not there, and give me the user object if it is. In the event that the user is not there, the user is created with a hard coded name, and password.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// create a Mongo instance</span></div><div class="line"><span class="keyword">var</span> conn = <span class="keyword">new</span> Mongo(),</div><div class="line"> </div><div class="line"><span class="comment">// get the database</span></div><div class="line">db = conn.getDB(<span class="string">'mongoose_users'</span>),</div><div class="line"> </div><div class="line"><span class="comment">// get the user if it is there</span></div><div class="line">user = db.getUser(<span class="string">'dustin'</span>),</div><div class="line"> </div><div class="line">auth = auth || <span class="literal">null</span>;</div><div class="line"> </div><div class="line"><span class="keyword">if</span> (auth) &#123;</div><div class="line"> </div><div class="line">    db.auth(auth.username, auth.password);</div><div class="line"> </div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="comment">// if we do not have the user, create the user</span></div><div class="line"><span class="keyword">if</span> (!user) &#123;</div><div class="line"> </div><div class="line">    <span class="comment">// then create the user</span></div><div class="line">    db.createUser(&#123;</div><div class="line">        <span class="attr">user</span>: <span class="string">'dustin'</span>,</div><div class="line">        <span class="attr">pwd</span>: <span class="string">'1234'</span>,</div><div class="line">        <span class="attr">roles</span>: [&#123;</div><div class="line">                <span class="attr">role</span>: <span class="string">'dbOwner'</span>,</div><div class="line">                <span class="attr">db</span>: <span class="string">'mongoose_users'</span></div><div class="line">            &#125;</div><div class="line">        ]</div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">    <span class="comment">// the user exists, print info.</span></div><div class="line">    printjson(&#123;</div><div class="line">        <span class="string">"dbName"</span>: db.getName(),</div><div class="line">        <span class="string">"adminUser"</span>: user</div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>In a more professional script these values will not be hard coded, but this still is a huge improvement from having to hand code this into the mongo shell each time I need to do this, no way am I ever doing that.</p>
+<h4 id="3-2-4-the-users-list-js-file"><a href="#3-2-4-the-users-list-js-file" class="headerlink" title="3.2.4 - the users_list.js file"></a>3.2.4 - the users_list.js file</h4><p>This mongo shell script can be used to list the users in the database.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// create a Mongo instance</span></div><div class="line"><span class="keyword">var</span> conn = <span class="keyword">new</span> Mongo(),</div><div class="line"> </div><div class="line"><span class="comment">// get the database</span></div><div class="line">db = conn.getDB(<span class="string">'mongoose_users'</span>),</div><div class="line"> </div><div class="line">auth = auth || <span class="literal">null</span>;</div><div class="line"> </div><div class="line"><span class="keyword">if</span> (auth) &#123;</div><div class="line"> </div><div class="line">    db.auth(auth.username, auth.password);</div><div class="line"> </div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="comment">// the user info.</span></div><div class="line">printjson(&#123;</div><div class="line">    <span class="string">"dbName"</span>: db.getName(),</div><div class="line">    <span class="string">"users"</span>: db.getUsers()</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h4 id="3-2-5-the-users-drop-js-file"><a href="#3-2-5-the-users-drop-js-file" class="headerlink" title="3.2.5 - the users_drop.js file"></a>3.2.5 - the users_drop.js file</h4><p>If I want to drop the user in order to start over I can do so with this.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// create a Mongo instance</span></div><div class="line"><span class="keyword">var</span> conn = <span class="keyword">new</span> Mongo(),</div><div class="line"> </div><div class="line"><span class="comment">// get database</span></div><div class="line">db = conn.getDB(<span class="string">'mongoose_users'</span>),</div><div class="line"> </div><div class="line">auth = auth || <span class="literal">null</span>;</div><div class="line"> </div><div class="line"><span class="keyword">if</span> (auth) &#123;</div><div class="line"> </div><div class="line">    db.auth(auth.username, auth.password);</div><div class="line"> </div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="comment">// get the user</span></div><div class="line"><span class="keyword">var</span> user = db.getUser(<span class="string">'dustin'</span>);</div><div class="line"> </div><div class="line"><span class="comment">// if we have the user drop them</span></div><div class="line"><span class="keyword">if</span> (user) &#123;</div><div class="line"> </div><div class="line">    <span class="comment">// drop the user</span></div><div class="line">    db.dropUser(<span class="string">'dustin'</span>);</div><div class="line"> </div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">    <span class="comment">// the user is not there to drop</span></div><div class="line">    print(<span class="string">'the user is not there to drop'</span>);</div><div class="line"> </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="3-3-The-user-folder"><a href="#3-3-The-user-folder" class="headerlink" title="3.3 - The user folder"></a>3.3 - The user folder</h3><p>The user folder contains a simple set of javaScript files that connect to, and use the ‘mongoose_users’ database. Nothing fancy, just simple scripts that I can call from the command line using node. In a real project these might be express.js middleware functions, or something to that effect.</p>
+<h4 id="3-3-1-The-connect-js-file"><a href="#3-3-1-The-connect-js-file" class="headerlink" title="3.3.1 - The connect.js file"></a>3.3.1 - The connect.js file</h4><p>This is the file that I use to connect to mongodb.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// connect to mongodb with mongoose, and then return mongoose</span></div><div class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">options, cb</span>) =&gt;</span> &#123;</div><div class="line"> </div><div class="line">    <span class="comment">// grab mongoose</span></div><div class="line">    <span class="keyword">let</span> mongoose = <span class="built_in">require</span>(<span class="string">'mongoose'</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// use give object, or an empty object</span></div><div class="line">    options = options || &#123;&#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// host, port, and database name</span></div><div class="line">    options.host = options.host || <span class="string">'localhost'</span>;</div><div class="line">    options.port = options.port || <span class="number">27017</span>;</div><div class="line">    options.db = options.db || <span class="string">'mongoose_users'</span>;</div><div class="line"> </div><div class="line">    <span class="comment">// auth</span></div><div class="line">    options.username = options.username || <span class="literal">null</span>;</div><div class="line">    options.password = options.password || <span class="literal">null</span>;</div><div class="line">    <span class="keyword">let</span> logStr = <span class="string">''</span>;</div><div class="line">    <span class="keyword">if</span> (options.username &amp;&amp; options.password) &#123;</div><div class="line">        logStr = options.username + <span class="string">':'</span> + options.password + <span class="string">'@'</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// use url override if given, or set string based on other given options or defaults</span></div><div class="line">    options.url = options.url || <span class="string">'mongodb://'</span> + logStr + options.host + <span class="string">':'</span> + options.port + <span class="string">'/'</span> + options.db;</div><div class="line"> </div><div class="line">    <span class="comment">// use of set callback</span></div><div class="line">    cb = cb || <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// make a connection to mongoDB</span></div><div class="line">    mongoose.connect(options.url, &#123;</div><div class="line">        <span class="attr">useNewUrlParser</span>: <span class="literal">true</span></div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">    <span class="comment">// ref mongoose.connection</span></div><div class="line">    <span class="keyword">let</span> db = mongoose.connection;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// on error</span></div><div class="line">        db.on(<span class="string">'error'</span>, (e) =&gt; &#123;</div><div class="line"> </div><div class="line">            <span class="comment">// close database, fire callback with error object, and reject.</span></div><div class="line">            db.close();</div><div class="line">            cb(e,<span class="literal">null</span>);</div><div class="line">            reject(e);</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">        <span class="comment">// once the database is open</span></div><div class="line">        db.once(<span class="string">'open'</span>, () =&gt; &#123;</div><div class="line"> </div><div class="line">            <span class="comment">//  fire any given callback, and resolve with mongoose</span></div><div class="line">            <span class="comment">// do not close connection to database</span></div><div class="line">            cb(<span class="literal">null</span>, mongoose);</div><div class="line">            resolve(mongoose);</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h4 id="3-3-2-The-user-js-file"><a href="#3-3-2-The-user-js-file" class="headerlink" title="3.3.2 - The user.js file"></a>3.3.2 - The user.js file</h4><p>This is just a simple user model that is used for this simple example project.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// grab mongoose</span></div><div class="line"><span class="keyword">let</span> mongoose = <span class="built_in">require</span>(<span class="string">'mongoose'</span>);</div><div class="line"> </div><div class="line"><span class="comment">// create a Model</span></div><div class="line"><span class="keyword">let</span> User = mongoose.model(<span class="string">'User'</span>, &#123;</div><div class="line">        <span class="attr">name</span>: <span class="built_in">String</span>,</div><div class="line">        <span class="attr">password</span>: <span class="built_in">String</span>,</div><div class="line">        <span class="attr">createDate</span>: <span class="built_in">Date</span>,</div><div class="line">        <span class="attr">lastOn</span>: <span class="built_in">Date</span></div><div class="line">    &#125;);</div><div class="line"> </div><div class="line"><span class="comment">// export it</span></div><div class="line"><span class="built_in">module</span>.exports = User;</div></pre></td></tr></table></figure>
+<h4 id="3-3-3-The-create-js-file"><a href="#3-3-3-The-create-js-file" class="headerlink" title="3.3.3 - The create.js file"></a>3.3.3 - The create.js file</h4><p>This is the script that I call to create an instance of the User model that is defined in user.js.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// create a user</span></div><div class="line"><span class="built_in">require</span>(<span class="string">'./connect'</span>)(<span class="built_in">require</span>(<span class="string">'../conf.json'</span>)).then(<span class="function"><span class="keyword">function</span> (<span class="params">mongoose</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">let</span> db = mongoose.connection,</div><div class="line">    User = <span class="built_in">require</span>(<span class="string">'./user'</span>),</div><div class="line"> </div><div class="line">    <span class="comment">// create the user</span></div><div class="line">    user = <span class="keyword">new</span> User(&#123;</div><div class="line">            <span class="attr">name</span>: process.argv[<span class="number">2</span>] || <span class="string">'foo'</span>,</div><div class="line">            <span class="attr">password</span>: process.argv[<span class="number">3</span>] || <span class="string">'123'</span>,</div><div class="line">            <span class="attr">createDate</span>: <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">            <span class="attr">lastOn</span>: <span class="keyword">new</span> <span class="built_in">Date</span>()</div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    <span class="comment">// save the day</span></div><div class="line">    user.save(<span class="function"><span class="keyword">function</span> (<span class="params">e, day</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (e) &#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'create: error'</span>);</div><div class="line">            db.close();</div><div class="line"> </div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'create: saved new user'</span>);</div><div class="line">            <span class="built_in">console</span>.log(day);</div><div class="line">            db.close();</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(e);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h4 id="3-3-4-The-list-js-file"><a href="#3-3-4-The-list-js-file" class="headerlink" title="3.3.4 - The list.js file"></a>3.3.4 - The list.js file</h4><p>This script will list all the instances of the User model in the database, this is not to be confused with the users that are defined that have access to the database.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// list users</span></div><div class="line"><span class="built_in">require</span>(<span class="string">'./connect'</span>)(<span class="built_in">require</span>(<span class="string">'../conf.json'</span>)).then(<span class="function"><span class="keyword">function</span> (<span class="params">mongoose</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">let</span> db = mongoose.connection,</div><div class="line">    User = <span class="built_in">require</span>(<span class="string">'./user'</span>);     <span class="comment">// the User model</span></div><div class="line"> </div><div class="line">    User.find(&#123;&#125;, (e, users) =&gt; &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// list the users</span></div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'********** list users **********'</span>);</div><div class="line">        <span class="keyword">if</span> (e) &#123;</div><div class="line"> </div><div class="line">            <span class="comment">// if an error happens list the message</span></div><div class="line">            <span class="built_in">console</span>.log(e.message);</div><div class="line"> </div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">            <span class="keyword">if</span> (users.length &gt; <span class="number">0</span>) &#123;</div><div class="line"> </div><div class="line">                users.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">user</span>) </span>&#123;</div><div class="line"> </div><div class="line">                    <span class="built_in">console</span>.log(<span class="string">'name: '</span> + user.name + <span class="string">' ; laston '</span> + user.lastOn + <span class="string">';'</span>);</div><div class="line"> </div><div class="line">                &#125;);</div><div class="line"> </div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">                <span class="built_in">console</span>.log(<span class="string">'no users.'</span>);</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'********** **********'</span>);</div><div class="line"> </div><div class="line">        db.close();</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(e);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h4 id="3-3-5-The-dropall-js-file"><a href="#3-3-5-The-dropall-js-file" class="headerlink" title="3.3.5 - The dropall.js file"></a>3.3.5 - The dropall.js file</h4><p>I have made this script for the purpose of dropping the whole database if I want to in order to quickly start over.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// list users</span></div><div class="line"><span class="built_in">require</span>(<span class="string">'./connect'</span>)(<span class="built_in">require</span>(<span class="string">'../conf.json'</span>)).then(<span class="function"><span class="keyword">function</span> (<span class="params">mongoose</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">let</span> db = mongoose.connection;</div><div class="line"> </div><div class="line">    db.dropDatabase(<span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (e) &#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'drop: error'</span>);</div><div class="line"> </div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'drop: database droped!'</span>);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        db.close();</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(e);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="3-4-the-conf-json-file"><a href="#3-4-the-conf-json-file" class="headerlink" title="3.4 - the conf.json file"></a>3.4 - the conf.json file</h2><p>The conf.json file that I have at the root of the project is used to provide login credentials to scripts that use the connect.js file. What I have in the conf.json file will be passed as an options object to connect.js, and will result in a connection string that uses the credentials defined here.</p>
+<p>Here I am using login credentials<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">   <span class="string">"username"</span>: <span class="string">"dustin"</span>,</div><div class="line">   <span class="string">"password"</span>: <span class="string">"1234"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>This will result in a connection string that does not have login credentials<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">   <span class="string">"username"</span>: <span class="literal">null</span>,</div><div class="line">   <span class="string">"password"</span>: <span class="literal">null</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="4-Using-the-project"><a href="#4-Using-the-project" class="headerlink" title="4 - Using the project"></a>4 - Using the project</h2><p>So now I should cover how to use this project to point out some basic things about setting up authentication in mongodb.</p>
+<h3 id="4-1-authentication-failure-when-using-a-user-script"><a href="#4-1-authentication-failure-when-using-a-user-script" class="headerlink" title="4.1 - authentication failure when using a /user script"></a>4.1 - authentication failure when using a /user script</h3><p>So the main conf.json file in the root of the demo is where I am storing options that will be used in my connect.js file to make the connection to mongodb. This can include a few values, but for the purpose of this post the two key values are of course username, and password.</p>
+<p>So If I have a conf.json file like this:<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">   <span class="string">"username"</span>: <span class="string">"dustin"</span>,</div><div class="line">   <span class="string">"password"</span>: <span class="string">"1234"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>And I have not created a user for the ‘mongoose_users’ database, then authentication will fail even if I do not have authtaction enabled yet in the mongod.cfg file.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ cd user</div><div class="line">$ node create</div><div class="line">Authentication failed.</div></pre></td></tr></table></figure>
+<p>However this can easily be fixed by setting the values for username, and password to null.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">   <span class="string">"username"</span>: <span class="literal">null</span>,</div><div class="line">   <span class="string">"password"</span>: <span class="literal">null</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>At which point it will work just fine if authentication is disabled in the mongod service.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ cd user</div><div class="line">$ node create</div><div class="line">create: saved new user</div><div class="line">&#123; _id: 5b3fb20adf7b9427ac961f34,</div><div class="line">  name: &apos;foo&apos;,</div><div class="line">  password: &apos;123&apos;,</div><div class="line">  createDate: 2018-07-06T18:16:42.151Z,</div><div class="line">  lastOn: 2018-07-06T18:16:42.151Z,</div><div class="line">  __v: 0 &#125;</div></pre></td></tr></table></figure>
+<p>So if I want to password protect this database I will need to set up a user for this database, and I will also want to enable authentication in mongod.cfg.</p>
+<h3 id="4-2-Using-the-mongo-shell-users-add-js-file-to-add-a-user-when-authentication-is-disabled"><a href="#4-2-Using-the-mongo-shell-users-add-js-file-to-add-a-user-when-authentication-is-disabled" class="headerlink" title="4.2 - Using the /mongo_shell/users_add.js file to add a user when authentication is disabled"></a>4.2 - Using the /mongo_shell/users_add.js file to add a user when authentication is disabled</h3><p>So to set up the user that I defined in my users_add.js mongo shell script, I just need to go to my mongo_shell script folder, and call that script with mongo.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">$ cd mongo_shell</div><div class="line">$ mongo users_add.js</div><div class="line">MongoDB shell version v4.0.0</div><div class="line">connecting to: mongodb://127.0.0.1:27017</div><div class="line">MongoDB server version: 4.0.0</div><div class="line">Successfully added user: &#123;</div><div class="line">        &quot;user&quot; : &quot;dustin&quot;,</div><div class="line">        &quot;roles&quot; : [</div><div class="line">                &#123;</div><div class="line">                        &quot;role&quot; : &quot;dbOwner&quot;,</div><div class="line">                        &quot;db&quot; : &quot;mongoose_users&quot;</div><div class="line">                &#125;</div><div class="line">        ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>This will create the user ‘dustin’ with the password ‘1234’ that I hard coded in the js file users_add.js, This could be treated differently, but yo get the idea. I set the user up with the role of ‘dbOwner’ this is a mongodb hard coded role that gives be full control over the database, even droping the whole thing if I want.</p>
+<h3 id="4-3-user-scripts-now-work"><a href="#4-3-user-scripts-now-work" class="headerlink" title="4.3 - /user scripts now work"></a>4.3 - /user scripts now work</h3><p>So now with the conf.json file set like this</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">   <span class="string">"username"</span>: <span class="string">"dustin"</span>,</div><div class="line">   <span class="string">"password"</span>: <span class="string">"1234"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Authntacton does not fail, becuase the user is now there.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ cd user</div><div class="line">$ node list</div><div class="line">********** list users **********</div><div class="line">name: foo ; laston Fri Jul 06 2018 13:59:54 GMT-0400 (Eastern Daylight Time);</div><div class="line">name: foo ; laston Fri Jul 06 2018 14:16:42 GMT-0400 (Eastern Daylight Time);</div><div class="line">********** **********</div></pre></td></tr></table></figure>
+<h3 id="4-4-but-I-can-still-connect-without-a-password"><a href="#4-4-but-I-can-still-connect-without-a-password" class="headerlink" title="4.4 - but I can still connect without a password"></a>4.4 - but I can still connect without a password</h3><p>Event though I have an user set up, I can still just use the database without a password. Thats because authentication will only fail if I give incorrect credentials, or if I drop the user like before. However if I just do not give anything I can still just use it.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">   &quot;username&quot;: null,</div><div class="line">   &quot;password&quot;: null</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ cd user</div><div class="line">$ node list</div><div class="line">********** list users **********</div><div class="line">name: foo ; laston Fri Jul 06 2018 13:59:54 GMT-0400 (Eastern Daylight Time);</div><div class="line">name: foo ; laston Fri Jul 06 2018 14:16:42 GMT-0400 (Eastern Daylight Time);</div><div class="line">********** **********</div></pre></td></tr></table></figure>
+<p>This is because I have not actually enabled authentication in the mongod.cfg file that I mentioned above.</p>
+<h3 id="4-5-enabling-authentication"><a href="#4-5-enabling-authentication" class="headerlink" title="4.5 - enabling authentication"></a>4.5 - enabling authentication</h3><p>So to enable authentication I need to find the mongod.cfg file that the mongod service is using and just make sure the follwing is in there.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">security:</div><div class="line">  authorization: enabled</div></pre></td></tr></table></figure>
+<p>This will of course enable authentication when I restart the service. after restarting mongod, I will run into an authentication failure when trying to do something with the database when no credentials are given as expected.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ cd user</div><div class="line">$ node list</div><div class="line">********** list users **********</div><div class="line">command find requires authentication</div><div class="line">********** **********</div></pre></td></tr></table></figure>
+<p>So now I just need to use the proper credentials when connecting.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">   <span class="string">"username"</span>: <span class="string">"dustin"</span>,</div><div class="line">   <span class="string">"password"</span>: <span class="string">"1234"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>And of course I can use it agin juts fine then.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ cd user</div><div class="line">$ node list</div><div class="line">********** list users **********</div><div class="line">name: foo ; laston Fri Jul 06 2018 13:59:54 GMT-0400 (Eastern Daylight Time);</div><div class="line">name: foo ; laston Fri Jul 06 2018 14:16:42 GMT-0400 (Eastern Daylight Time);</div><div class="line">********** **********</div></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/07/06/mongodb-enable-auth/" data-id="cjjlzi8d600n4vwv1qkvmz6oy" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/07/06/mongodb-enable-auth/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongodb/">mongodb</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/06/lodash_sortby/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          The lodash _.sortBy method
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/05/mongodb-making-shell-scripts/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Making Mongodb Shell scripts, getting started.</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2018/07/06/mongodb-enable-auth/index.html';
+    this.page.identifier = '222';
+    this.page.title = 'Enabling authentication in mongodb';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.35px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.59px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.12px;">angular</a> <a href="/tags/animation/" style="font-size: 11.18px;">animation</a> <a href="/tags/automation/" style="font-size: 12.94px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.53px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.88px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.47px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.94px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.18px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.76px;">ejs</a> <a href="/tags/express/" style="font-size: 17.65px;">express</a> <a href="/tags/games/" style="font-size: 18.24px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.71px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.76px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15.29px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.59px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.76px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.76px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.82px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15.29px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.41px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.06px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.35px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 17.06px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/07/13/lodash_sample/">The lodash _.sample method for simpler sampling</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/11/lodash_pick/">Examples of the _.pick object method in lodash</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/10/nodejs-commander/">Using commander for option parsing in node.js, and more</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/09/mongodb-mongoose-schema-middleware/">Mongoose Schema Middleware</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/09/mongodb-mongoose-schema/">Mongoose Schema</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2018/07/06/mongodb-enable-auth/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

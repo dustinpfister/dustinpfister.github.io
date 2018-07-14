@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Using commander for option parsing in node.js, and more | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="When making scripts that are to be called from the command line with node.js, the subject of option parsing becomes of interest. Option parsing is the process of parsing a string of arguments from a c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Using commander for option parsing in node.js, and more">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/07/10/nodejs-commander/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="When making scripts that are to be called from the command line with node.js, the subject of option parsing becomes of interest. Option parsing is the process of parsing a string of arguments from a c">
+<meta property="og:updated_time" content="2018-07-10T17:15:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Using commander for option parsing in node.js, and more">
+<meta name="twitter:description" content="When making scripts that are to be called from the command line with node.js, the subject of option parsing becomes of interest. Option parsing is the process of parsing a string of arguments from a c">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-commander" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/10/nodejs-commander/" class="article-date"> Published:
+  <time datetime="2018-07-10T16:13:00.000Z" itemprop="datePublished">2018-07-10</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/07/10/nodejs-commander/" class="article-date"> Modified:
+  <time datetime="2018-07-10T17:15:33.000Z" itemprop="dateModified">2018-07-10</time>
+</a>
+
+    <span class="article-date">V1.9</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Using commander for option parsing in node.js, and more
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>When making scripts that are to be called from the command line with <a href="https://nodejs.org/en/" target="_blank" rel="external">node.js</a>, the subject of option parsing becomes of interest. Option parsing is the process of parsing a string of <a href="https://en.wikipedia.org/wiki/Command-line_argument#Arguments" target="_blank" rel="external">arguments from a command line interface</a> into a workable object of values. If you are in a situation in which you find yourself trying to work out your own solution for extracting arguments that are given from the command line via process,argv, you might want to stop and check out some of the npm modules that are around that help to make quick work of this such as <a href="https://www.npmjs.com/package/commander" target="_blank" rel="external">commander</a>. In this post I will be writing about commander as a solution for command line option parsing, and will be giving some examples of it’s use.</p>
+<a id="more"></a>
+<h2 id="1-what-to-know-before-getting-started-with-commander"><a href="#1-what-to-know-before-getting-started-with-commander" class="headerlink" title="1 - what to know before getting started with commander"></a>1 - what to know before getting started with commander</h2><p>What I am writing about here has to do with the <a href="https://www.npmjs.com/package/commander" target="_blank" rel="external">npm package known as commander</a> that is a helpful tool when making scripts that will be called from the command line in node.js. This is not a beginners guide for node.js, javaScript or any other skills that are needed before hand.</p>
+<h3 id="1-1-Commander-is-not-the-only-option-of-option-parsing"><a href="#1-1-Commander-is-not-the-only-option-of-option-parsing" class="headerlink" title="1.1 - Commander is not the only option of option parsing"></a>1.1 - Commander is not the only option of option parsing</h3><p>I have writne a post on another one called <a href="/2017/05/05/nodejs-nopt/">nopt</a> and I am sure there are many others. It would appear that commander is very popular, and it sure does get the job done well. I am not recommending nopt over commander, just pointing out that there are options, and that one of them should be used over bothering with this from the ground up in most cases.</p>
+<h2 id="2-A-basic-example-of-commander"><a href="#2-A-basic-example-of-commander" class="headerlink" title="2 - A basic example of commander"></a>2 - A basic example of commander</h2><p>For a basic example of commander I made a quick little example that will grab the version number from the package.json file, and use that as the version number that is to be displayed when the version argument is given.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env node</span></div><div class="line"> </div><div class="line"><span class="keyword">let</span> prog = <span class="built_in">require</span>(<span class="string">'commander'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>),</div><div class="line">pkg = <span class="built_in">require</span>(path.join(__dirname, <span class="string">'package.json'</span>));</div><div class="line"> </div><div class="line">prog</div><div class="line"> .version(pkg.version || <span class="string">'0.0.0'</span>,<span class="string">'-v, --version'</span>)</div><div class="line"> .parse(process.argv);</div></pre></td></tr></table></figure>
+<p>I start by requiring in commander, which gives me an object that is used to define options, and commands for the program. I finish by parsing and given arguments from the command line that are in process.argv</p>
+<h2 id="3-Setting-options-in-commander"><a href="#3-Setting-options-in-commander" class="headerlink" title="3 - Setting options in commander"></a>3 - Setting options in commander</h2><p>Setting options for the program just involves using the option method that can be chained. I can give both long, and short options, and there are a few conventions to look out for about this.</p>
+<h3 id="3-1-setting-boolean-options"><a href="#3-1-setting-boolean-options" class="headerlink" title="3.1 setting boolean options"></a>3.1 setting boolean options</h3><p>If I just want to have a simple true or false style option then I just need to give the string of option names, and a description like this.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env node</span></div><div class="line"> </div><div class="line"><span class="keyword">let</span> prog = <span class="built_in">require</span>(<span class="string">'commander'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>),</div><div class="line">pkg = <span class="built_in">require</span>(path.join(__dirname, <span class="string">'package.json'</span>));</div><div class="line"> </div><div class="line">prog</div><div class="line">.version(pkg.version || <span class="string">'0.0.0'</span>, <span class="string">'-v, --version'</span>)</div><div class="line">.option(<span class="string">'-a, --answer'</span>, <span class="string">'the answer'</span>)</div><div class="line">.parse(process.argv);</div><div class="line"> </div><div class="line"><span class="keyword">if</span> (prog.answer) &#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="number">42</span>);</div><div class="line"> </div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(prog);</div><div class="line"> </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="4-Using-commands-with-commander"><a href="#4-Using-commands-with-commander" class="headerlink" title="4 - Using commands with commander"></a>4 - Using commands with commander</h2><p>With commander a command is when I want to make some kind of command for a command. For example with the static website generator hexo that I use to build this site I do this in the command line when in a hexo project folder:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
+<p>however if I do not what to build my site, but just serve it up locally I can do this:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server -s</div></pre></td></tr></table></figure>
+<p>When doing that the public folder will be hosted locally, and I can view what I have so far before actually publishing. When making a command in commander this allows me to define these kinds of sub commands for commands.</p>
+<h3 id="4-1-Optional-vs-required-arguments"><a href="#4-1-Optional-vs-required-arguments" class="headerlink" title="4.1 - Optional vs required arguments"></a>4.1 - Optional vs required arguments</h3><p>When defining the string that will be the command it is possible to set one or more arguments that should be given after it, such as a directory or some numbers. These additional arguments can be optional or required.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">prog</div><div class="line">.command(<span class="string">'polpos [a] [d]'</span>) <span class="comment">// the arguments a and b are optional</span></div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">prog</div><div class="line">.command(<span class="string">'polpos &lt;a&gt; &lt;d&gt;'</span>) <span class="comment">// the arguments a and b are required</span></div></pre></td></tr></table></figure>
+<h3 id="4-2-A-polar-position-example-of-a-command"><a href="#4-2-A-polar-position-example-of-a-command" class="headerlink" title="4.2 - A polar position example of a command"></a>4.2 - A polar position example of a command</h3><p>So for an example of this I made a command that will give me the x, and y position of a pint that lays a given angle, and distance relative to a starting position. The starting position defaults to 0,0 but I can set it with additional options, I also have an additional option that will display more info if given.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env node</span></div><div class="line"> </div><div class="line"><span class="keyword">let</span> prog = <span class="built_in">require</span>(<span class="string">'commander'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>),</div><div class="line">pkg = <span class="built_in">require</span>(path.join(__dirname, <span class="string">'package.json'</span>));</div><div class="line"> </div><div class="line">prog</div><div class="line">.command(<span class="string">'polpos [a] [d]'</span>)</div><div class="line">.option(<span class="string">'-x, --startx &lt;n&gt;'</span>, <span class="string">'start x'</span>)</div><div class="line">.option(<span class="string">'-y, --starty &lt;n&gt;'</span>, <span class="string">'start y'</span>)</div><div class="line">.option(<span class="string">'-i, --info'</span>, <span class="string">'print more info'</span>)</div><div class="line">.action(<span class="function"><span class="keyword">function</span> (<span class="params">a, d, options</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">let</span> sx = <span class="built_in">Number</span>(options.startx === <span class="literal">undefined</span> ? <span class="number">0</span> : options.startx),</div><div class="line">    sy = <span class="built_in">Number</span>(options.starty === <span class="literal">undefined</span> ? <span class="number">0</span> : options.starty);</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (options.info) &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'polar position: '</span>);</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'start pos: '</span>, sx, sy);</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'angel: '</span>, a);</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'distance: '</span>, d);</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">''</span>);</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    a = a === <span class="literal">undefined</span> ? <span class="number">0</span> : a;</div><div class="line">    d = d === <span class="literal">undefined</span> ? <span class="number">0</span> : d;</div><div class="line"> </div><div class="line">    a = <span class="built_in">Math</span>.PI / <span class="number">180</span> * a;</div><div class="line"> </div><div class="line">    <span class="keyword">let</span> x = sx + <span class="built_in">Math</span>.cos(a) * d,</div><div class="line">    y = sy + <span class="built_in">Math</span>.sin(a) * d;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="built_in">Math</span>.floor(x), <span class="built_in">Math</span>.floor(y));</div><div class="line"> </div><div class="line">&#125;);</div><div class="line">prog.parse(process.argv);</div></pre></td></tr></table></figure>
+<p>Some use examples calling it with node.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$ node command.js polpos</div><div class="line">0,0</div><div class="line">$ node command.js polpos 0 100</div><div class="line">100 0</div><div class="line">$ node command.js polpos 90 100</div><div class="line">0 100</div><div class="line">$ node command.js polpos 45 100 -x 100 -y 100 -i</div><div class="line">polar position:</div><div class="line">start pos:  100 100</div><div class="line">angel:  45</div><div class="line">distance:  100</div><div class="line"></div><div class="line">170 170</div></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/07/10/nodejs-commander/" data-id="cjjlzi8gf00oovwv123qds5bo" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/07/10/nodejs-commander/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/11/lodash_pick/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Examples of the _.pick object method in lodash
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/09/mongodb-mongoose-schema-middleware/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Mongoose Schema Middleware</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2018/07/10/nodejs-commander/index.html';
+    this.page.identifier = '232';
+    this.page.title = 'Using commander for option parsing in node.js, and more';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.35px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.59px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.12px;">angular</a> <a href="/tags/animation/" style="font-size: 11.18px;">animation</a> <a href="/tags/automation/" style="font-size: 12.94px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.53px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.88px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.47px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.94px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.18px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.76px;">ejs</a> <a href="/tags/express/" style="font-size: 17.65px;">express</a> <a href="/tags/games/" style="font-size: 18.24px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.71px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.76px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15.29px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.59px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.76px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.76px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.82px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15.29px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.41px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.06px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.35px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 17.06px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/07/13/lodash_sample/">The lodash _.sample method for simpler sampling</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/11/lodash_pick/">Examples of the _.pick object method in lodash</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/10/nodejs-commander/">Using commander for option parsing in node.js, and more</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/09/mongodb-mongoose-schema-middleware/">Mongoose Schema Middleware</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/09/mongodb-mongoose-schema/">Mongoose Schema</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2018/07/10/nodejs-commander/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

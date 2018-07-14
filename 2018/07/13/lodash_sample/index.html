@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>The lodash _.sample method for simpler sampling | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Time for another post on lodash becuase it is very popular, and it is still useful. Regardless of what people say methods like _.sample help to make coding in javaScript faster, and more concise. In t">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The lodash _.sample method for simpler sampling">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/07/13/lodash_sample/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="Time for another post on lodash becuase it is very popular, and it is still useful. Regardless of what people say methods like _.sample help to make coding in javaScript faster, and more concise. In t">
+<meta property="og:updated_time" content="2018-07-13T17:42:05.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The lodash _.sample method for simpler sampling">
+<meta name="twitter:description" content="Time for another post on lodash becuase it is very popular, and it is still useful. Regardless of what people say methods like _.sample help to make coding in javaScript faster, and more concise. In t">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-lodash_sample" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/13/lodash_sample/" class="article-date"> Published:
+  <time datetime="2018-07-13T16:34:00.000Z" itemprop="datePublished">2018-07-13</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/07/13/lodash_sample/" class="article-date"> Modified:
+  <time datetime="2018-07-13T17:42:05.000Z" itemprop="dateModified">2018-07-13</time>
+</a>
+
+    <span class="article-date">V1.4</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/lodash/">lodash</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      The lodash _.sample method for simpler sampling
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>Time for another post on <a href="https://lodash.com/" target="_blank" rel="external">lodash</a> becuase it is very popular, and it is still useful. Regardless of what people say methods like <a href="https://lodash.com/docs/4.17.4#sample" target="_blank" rel="external">_.sample</a> help to make coding in javaScript faster, and more concise. In this post I will be writing about _.sample, and also show some examples of why I do tent to prefer using lodash to help get things done faster, and focus more on what really matters.</p>
+<a id="more"></a>
+<h2 id="1-What-to-know"><a href="#1-What-to-know" class="headerlink" title="1 - What to know"></a>1 - What to know</h2><p>This is a post on the lodash method _.sample, and a few related methods, as well as some corresponding plain old javaScript examples as well. It is not a getting started post on lodash, or javaScript in general.</p>
+<h2 id="2-Basic-example-of-sample"><a href="#2-Basic-example-of-sample" class="headerlink" title="2 - Basic example of _.sample"></a>2 - Basic example of _.sample</h2><p>So Sample is pretty straight forward, just give it an array, and it will return a random element from that array, a common task that comes up a lot when developing.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> nums = [<span class="number">5</span>, <span class="number">42</span>, <span class="number">-5</span>, <span class="number">7</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">52</span>, <span class="number">27</span>, <span class="number">158</span>, <span class="number">-1</span>];</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log( _.sample(nums) ); <span class="comment">// (random element from nums)</span></div></pre></td></tr></table></figure>
+<h3 id="2-1-Compare-to-a-vanilla-js-solution"><a href="#2-1-Compare-to-a-vanilla-js-solution" class="headerlink" title="2.1 - Compare to a vanilla js solution."></a>2.1 - Compare to a vanilla js solution.</h3><p>It’s not like doing this in plain old javaScript is that hard, and if you are just using lodash for this method and nothing else, it is kind of overkill, unless you just use just this one method or some kind of equivalent.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">nums = [<span class="number">5</span>, <span class="number">42</span>, <span class="number">-5</span>, <span class="number">7</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">52</span>, <span class="number">27</span>, <span class="number">158</span>, <span class="number">-1</span>];</div><div class="line"> </div><div class="line"><span class="keyword">let</span> si = <span class="built_in">Math</span>.floor(nums.length * <span class="built_in">Math</span>.random()),</div><div class="line">samp = nums.slice(si,si+<span class="number">1</span>)[<span class="number">0</span>];</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(samp); <span class="comment">// (random element from nums)</span></div></pre></td></tr></table></figure>
+<p>The think about this is that if I am going to bother with lodash, rather than going pure vanilla as some might say, I would of course use more than just one method, so maybe a more advanced example that makes use of a few lodash methods is in order to really see how lodash does in fact help.</p>
+<h2 id="3-The-grid-object-example"><a href="#3-The-grid-object-example" class="headerlink" title="3 - The grid object example"></a>3 - The grid object example</h2><p>For a more advanced example of this I made an object that represents a grid of objects. The objects are stored as a linear array, so I would want some methods that can be used to convert it to an array of arrays. For the sake of this post I would also want a method that I can use to get a random object, ans well as a random row, and col of objects.</p>
+<h3 id="3-1-The-lodash-version-of-the-gird-object"><a href="#3-1-The-lodash-version-of-the-gird-object" class="headerlink" title="3.1 - The lodash version of the gird object"></a>3.1 - The lodash version of the gird object</h3><p>If using lodash there is _.chunk, and <em>.zip that are very useful when dealing with these kinds of situations apart from that of just \</em>.sample. So for my example of the grid object using lodash I would use those methods.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> grid = &#123;</div><div class="line"> </div><div class="line">    <span class="comment">// the col width, and grid cells stored as a linear array</span></div><div class="line">    w : <span class="number">3</span>,</div><div class="line">    <span class="attr">cells</span> : [</div><div class="line">        &#123;<span class="attr">gold</span>: <span class="number">1</span>,<span class="attr">wood</span>:<span class="number">0</span>&#125;,&#123;<span class="attr">gold</span>: <span class="number">0</span>,<span class="attr">wood</span>:<span class="number">7</span>&#125;,&#123;<span class="attr">gold</span>: <span class="number">2</span>,<span class="attr">wood</span>:<span class="number">9</span>&#125;,</div><div class="line">        &#123;<span class="attr">gold</span>: <span class="number">0</span>,<span class="attr">wood</span>:<span class="number">0</span>&#125;,&#123;<span class="attr">gold</span>: <span class="number">0</span>,<span class="attr">wood</span>:<span class="number">7</span>&#125;,&#123;<span class="attr">gold</span>: <span class="number">0</span>,<span class="attr">wood</span>:<span class="number">7</span>&#125;,</div><div class="line">        &#123;<span class="attr">gold</span>: <span class="number">0</span>,<span class="attr">wood</span>:<span class="number">0</span>&#125;,&#123;<span class="attr">gold</span>: <span class="number">10</span>,<span class="attr">wood</span>:<span class="number">0</span>&#125;,&#123;<span class="attr">gold</span>: <span class="number">0</span>,<span class="attr">wood</span>:<span class="number">6</span>&#125;],</div><div class="line"> </div><div class="line">    <span class="comment">// chunk the linear array into an array of arrays</span></div><div class="line">    <span class="comment">// where each array is a row</span></div><div class="line">    chunkToRows: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// so _.chunk makes quick work of this</span></div><div class="line">        <span class="keyword">return</span> _.chunk(<span class="keyword">this</span>.cells, <span class="keyword">this</span>.w)</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// chunk the linear array into an array of arrays</span></div><div class="line">    <span class="comment">// where each array is a col (rotated right)</span></div><div class="line">    chunkToCols : <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// _.zip is useful for doing this</span></div><div class="line">        <span class="keyword">return</span> _.zip.apply(<span class="number">0</span>, <span class="keyword">this</span>.chunkToRows());</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// get a Random row, col or cell</span></div><div class="line">    rnd: <span class="function"><span class="keyword">function</span>(<span class="params">what</span>)</span>&#123;</div><div class="line"> </div><div class="line">       what = what || <span class="string">'cell'</span>;</div><div class="line"> </div><div class="line">       <span class="comment">// get a random row</span></div><div class="line">       <span class="keyword">if</span>(what === <span class="string">'row'</span>)&#123;</div><div class="line"> </div><div class="line">            <span class="keyword">return</span> _.sample(<span class="keyword">this</span>.chunkToRows());</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">       <span class="comment">// get a random col</span></div><div class="line">       <span class="keyword">if</span>(what === <span class="string">'col'</span>)&#123;</div><div class="line"> </div><div class="line">           <span class="keyword">return</span> _.sample(<span class="keyword">this</span>.chunkToCols());</div><div class="line"> </div><div class="line">       &#125;</div><div class="line"> </div><div class="line">        <span class="comment">// default to getting a random single cell</span></div><div class="line">        <span class="keyword">return</span> _.sample(<span class="keyword">this</span>.cells);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(grid.rnd()); <span class="comment">// random object</span></div><div class="line"><span class="built_in">console</span>.log(grid.rnd(<span class="string">'row'</span>)); <span class="comment">// random row</span></div><div class="line"><span class="built_in">console</span>.log(grid.rnd(<span class="string">'col'</span>)); <span class="comment">// random col</span></div></pre></td></tr></table></figure>
+<p>I was able to put this togather in a flash, and the code is very short, and clean. This is what lodash ( and making use of what is all ready out there in general ) is all about, making use of usual suspect methods to make quick work of things, and move on with what really matters.</p>
+<h3 id="3-2-A-vanilla-js-alternative"><a href="#3-2-A-vanilla-js-alternative" class="headerlink" title="3.2 - A vanilla js alternative"></a>3.2 - A vanilla js alternative</h3><p>So for me it’s not so hard to make a vanilla js alternative to this, but it was still far more time consuming. When coding with vanilla js I seem to prefer while loops over for loops or for each.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> grid = &#123;</div><div class="line"> </div><div class="line">    <span class="comment">// the col width, and grid cells stored as a linear array</span></div><div class="line">    w: <span class="number">3</span>,</div><div class="line">    <span class="attr">cells</span> : [</div><div class="line">        &#123;<span class="attr">gold</span>: <span class="number">1</span>,<span class="attr">wood</span>:<span class="number">0</span>&#125;,&#123;<span class="attr">gold</span>: <span class="number">0</span>,<span class="attr">wood</span>:<span class="number">7</span>&#125;,&#123;<span class="attr">gold</span>: <span class="number">2</span>,<span class="attr">wood</span>:<span class="number">9</span>&#125;,</div><div class="line">        &#123;<span class="attr">gold</span>: <span class="number">0</span>,<span class="attr">wood</span>:<span class="number">0</span>&#125;,&#123;<span class="attr">gold</span>: <span class="number">0</span>,<span class="attr">wood</span>:<span class="number">7</span>&#125;,&#123;<span class="attr">gold</span>: <span class="number">0</span>,<span class="attr">wood</span>:<span class="number">7</span>&#125;,</div><div class="line">        &#123;<span class="attr">gold</span>: <span class="number">0</span>,<span class="attr">wood</span>:<span class="number">0</span>&#125;,&#123;<span class="attr">gold</span>: <span class="number">10</span>,<span class="attr">wood</span>:<span class="number">0</span>&#125;,&#123;<span class="attr">gold</span>: <span class="number">0</span>,<span class="attr">wood</span>:<span class="number">6</span>&#125;],</div><div class="line"> </div><div class="line">    <span class="comment">// chunk the linear array into an array of arrays</span></div><div class="line">    <span class="comment">// where each array is a row</span></div><div class="line">    chunkToRows: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">let</span> matrix = [],</div><div class="line">        i = <span class="number">0</span>;</div><div class="line">        <span class="keyword">while</span> (i &lt; <span class="keyword">this</span>.cells.length) &#123;</div><div class="line"> </div><div class="line">            <span class="keyword">let</span> x = i % <span class="keyword">this</span>.w,</div><div class="line">            y = <span class="built_in">Math</span>.floor(i / <span class="keyword">this</span>.w);</div><div class="line"> </div><div class="line">            <span class="keyword">if</span> (!matrix[y]) &#123;</div><div class="line"> </div><div class="line">                matrix[y] = [];</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="keyword">let</span> row = matrix[y];</div><div class="line"> </div><div class="line">            row.push(<span class="keyword">this</span>.cells[y * <span class="keyword">this</span>.w + x]);</div><div class="line"> </div><div class="line">            i += <span class="number">1</span>;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> matrix;</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// chunk the linear array into an array of arrays</span></div><div class="line">    <span class="comment">// where each array is a col (rotated right)</span></div><div class="line">    chunkToCols: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">let</span> copy = [],</div><div class="line">        original = <span class="keyword">this</span>.chunkToRows(),</div><div class="line">        i = <span class="number">0</span>;</div><div class="line">        <span class="keyword">while</span> (i &lt; <span class="keyword">this</span>.cells.length) &#123;</div><div class="line"> </div><div class="line">            <span class="keyword">let</span> x = i % <span class="keyword">this</span>.w,</div><div class="line">            y = <span class="built_in">Math</span>.floor(i / <span class="keyword">this</span>.w);</div><div class="line"> </div><div class="line">            <span class="comment">// create row if it doesn't exist yet</span></div><div class="line">            <span class="keyword">if</span> (copy[y] === <span class="literal">undefined</span>) &#123;</div><div class="line">                copy[y] = [];</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="comment">// swap</span></div><div class="line">            copy[y][x] = original[x][y];</div><div class="line"> </div><div class="line">            i += <span class="number">1</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> copy;</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// get a Random row, col or cell</span></div><div class="line">    rnd: <span class="function"><span class="keyword">function</span> (<span class="params">what</span>) </span>&#123;</div><div class="line"> </div><div class="line">        what = what || <span class="string">'cell'</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// get a random row</span></div><div class="line">        <span class="keyword">if</span> (what === <span class="string">'row'</span>) &#123;</div><div class="line"> </div><div class="line">            <span class="keyword">let</span> rows = <span class="keyword">this</span>.chunkToRows();</div><div class="line">            <span class="keyword">return</span> rows[  <span class="built_in">Math</span>.floor( <span class="built_in">Math</span>.random() * rows.length ) ];</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">// get a random col</span></div><div class="line">        <span class="keyword">if</span> (what === <span class="string">'col'</span>) &#123;</div><div class="line"> </div><div class="line">            <span class="keyword">let</span> cols = <span class="keyword">this</span>.chunkToCols();</div><div class="line">            <span class="keyword">return</span> cols[  <span class="built_in">Math</span>.floor( <span class="built_in">Math</span>.random() * cols.length ) ];</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">// default to getting a random single cell</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.cells[  <span class="built_in">Math</span>.floor( <span class="built_in">Math</span>.random() * <span class="keyword">this</span>.cells.length ) ];</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(grid.rnd());</div><div class="line"><span class="built_in">console</span>.log(grid.rnd(<span class="string">'row'</span>));</div><div class="line"><span class="built_in">console</span>.log(grid.rnd(<span class="string">'col'</span>));</div></pre></td></tr></table></figure>
+<p>There are many ways to go about crunching this down a little more I am sure, but you get the idea. I know that it is nice to have a situation in which I am not depending on additional external resources, and as such am juts working directly within javaScripot itself. However these days, as I work on more complex projects, I often do just end up making lodash part of the stack, and if it is there I might as well make use of it.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/07/13/lodash_sample/" data-id="cjjlzi8az00m6vwv1j1ygpzry" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/07/13/lodash_sample/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lodash/">lodash</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/07/11/lodash_pick/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Examples of the _.pick object method in lodash</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2018/07/13/lodash_sample/index.html';
+    this.page.identifier = '234';
+    this.page.title = 'The lodash _.sample method for simpler sampling';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.35px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.59px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.12px;">angular</a> <a href="/tags/animation/" style="font-size: 11.18px;">animation</a> <a href="/tags/automation/" style="font-size: 12.94px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.53px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.88px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.47px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.94px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.18px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.76px;">ejs</a> <a href="/tags/express/" style="font-size: 17.65px;">express</a> <a href="/tags/games/" style="font-size: 18.24px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.71px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.76px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15.29px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.59px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.76px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.76px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.82px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15.29px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.41px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.06px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.35px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 17.06px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/07/13/lodash_sample/">The lodash _.sample method for simpler sampling</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/11/lodash_pick/">Examples of the _.pick object method in lodash</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/10/nodejs-commander/">Using commander for option parsing in node.js, and more</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/09/mongodb-mongoose-schema-middleware/">Mongoose Schema Middleware</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/09/mongodb-mongoose-schema/">Mongoose Schema</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2018/07/13/lodash_sample/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

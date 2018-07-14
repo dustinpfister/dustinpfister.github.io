@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Examples of the _.pick object method in lodash | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="When working with objects it is sometimes nice to quickly be able to make a custom object that is composed of properties from another object, just a few of them, not the whole thing. For this in lodas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Examples of the _.pick object method in lodash">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/07/11/lodash_pick/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="When working with objects it is sometimes nice to quickly be able to make a custom object that is composed of properties from another object, just a few of them, not the whole thing. For this in lodas">
+<meta property="og:updated_time" content="2018-07-11T19:54:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Examples of the _.pick object method in lodash">
+<meta name="twitter:description" content="When working with objects it is sometimes nice to quickly be able to make a custom object that is composed of properties from another object, just a few of them, not the whole thing. For this in lodas">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-lodash_pick" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/11/lodash_pick/" class="article-date"> Published:
+  <time datetime="2018-07-11T16:29:00.000Z" itemprop="datePublished">2018-07-11</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/07/11/lodash_pick/" class="article-date"> Modified:
+  <time datetime="2018-07-11T19:54:14.000Z" itemprop="dateModified">2018-07-11</time>
+</a>
+
+    <span class="article-date">V1.9</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/lodash/">lodash</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Examples of the _.pick object method in lodash
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>When working with objects it is sometimes nice to quickly be able to make a custom object that is composed of properties from another object, just a few of them, not the whole thing. For this in <a href="https://lodash.com/" target="_blank" rel="external">lodash</a> there is the <a href="https://lodash.com/docs/4.17.10#pick" target="_blank" rel="external">_.pick</a> method that can be used to create a new object that is a shallow copy of a given object, but with only properties that are in a given list of property names.</p>
+<a id="more"></a>
+<h2 id="1-What-to-know"><a href="#1-What-to-know" class="headerlink" title="1 - What to know"></a>1 - What to know</h2><p>This is a post on just the _.pick method in lodash. Here I will be writing just about that method, and some other related topics, but will not be getting into detail with lodash, or javaScript in general.</p>
+<h2 id="2-An-example-of-using-pick-involving-an-object-about-traffic-received-in-a-day"><a href="#2-An-example-of-using-pick-involving-an-object-about-traffic-received-in-a-day" class="headerlink" title="2 - An example of using _.pick involving an object about traffic received in a day."></a>2 - An example of using _.pick involving an object about traffic received in a day.</h2><p>For a basic example of using _.pick I will be giving a simple object that is created from the object literal notation. This object contains some simple primitives, and one property that is an Array. This will serve well as an example of what _.pick does, and also what to look out for when using it.</p>
+<h3 id="2-1-The-day-object"><a href="#2-1-The-day-object" class="headerlink" title="2.1 - The day object"></a>2.1 - The day object</h3><p>So here is that day object that will be used in some examples here.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> _ = <span class="built_in">require</span>(<span class="string">'lodash'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> day = &#123;</div><div class="line">    <span class="attr">date</span>: <span class="string">'1/2/17'</span>,</div><div class="line">    <span class="attr">users</span>: <span class="number">10</span>,</div><div class="line">    <span class="attr">pageviews</span>: <span class="number">13</span>,</div><div class="line">    <span class="attr">pages</span>: [&#123;</div><div class="line">            <span class="attr">path</span>: <span class="string">'/2017/01/01/hello/'</span>,</div><div class="line">            <span class="attr">users</span>: <span class="number">3</span>,</div><div class="line">            <span class="attr">pageviews</span>: <span class="number">4</span></div><div class="line">        &#125;, &#123;</div><div class="line">            <span class="attr">path</span>: <span class="string">'/2017/01/02/hello-again/'</span>,</div><div class="line">            <span class="attr">users</span>: <span class="number">7</span>,</div><div class="line">            <span class="attr">pageviews</span>: <span class="number">9</span></div><div class="line">        &#125;</div><div class="line"></div><div class="line">    ]</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>When dealing with an object like this, there might be scenarios where I might just want the date, and users properties. Also In some cases I might want the pages Array, and have it so it is a deep copy as well.</p>
+<h3 id="2-2-Basic-example-of-pick-to-get-just-the-date-and-users-from-the-day-object"><a href="#2-2-Basic-example-of-pick-to-get-just-the-date-and-users-from-the-day-object" class="headerlink" title="2.2 - Basic example of _.pick, to get just the date, and users from the day object."></a>2.2 - Basic example of _.pick, to get just the date, and users from the day object.</h3><p>So if I want a new object that is just a shallow copy of some of the primitive values of the day object, _.pick works just fine out of the gate like this.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log( _.pick(day, [<span class="string">'date'</span>, <span class="string">'users'</span>]) ); <span class="comment">// &#123; date: '1/2/17', users: 10 &#125;</span></div></pre></td></tr></table></figure>
+<p>I have my object with just the properties that I want, without the rest of the clutter, great. However things can get a little tricky when it comes to properties that have values that are not primitives.</p>
+<h3 id="2-3-With-pick-the-object-returned-is-a-shallow-clone"><a href="#2-3-With-pick-the-object-returned-is-a-shallow-clone" class="headerlink" title="2.3 - With _.pick the object returned is a shallow clone"></a>2.3 - With _.pick the object returned is a shallow clone</h3><p>So if I get another new object that is the result of using _.pick, but this time include the pages array, some might think that this array is a copy, or clone of the original. It is not, anything non-primitive will be referenced in.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> custom = _.pick(day, [<span class="string">'date'</span>,<span class="string">'users'</span>,<span class="string">'pages'</span>]);</div><div class="line"></div><div class="line"><span class="comment">// what is returned is a shallow clone</span></div><div class="line">day.users += <span class="number">50</span>;</div><div class="line"><span class="built_in">console</span>.log(day.users); <span class="comment">// 60</span></div><div class="line"><span class="built_in">console</span>.log(custom.users); <span class="comment">// 10</span></div><div class="line"> </div><div class="line"><span class="comment">// but not a deep clone</span></div><div class="line">day.pages[<span class="number">0</span>].users += <span class="number">50</span>;</div><div class="line"><span class="built_in">console</span>.log(day.pages[<span class="number">0</span>].users); <span class="comment">// 53</span></div><div class="line"><span class="built_in">console</span>.log(custom.pages[<span class="number">0</span>].users); <span class="comment">// 53</span></div></pre></td></tr></table></figure>
+<p>In some cases this is not a problem if I actually want references rather than a copy. However if it is a problem one solution is to just make a _.deepClone of the object, then passing that as the object for _.pick.</p>
+<h3 id="2-4-If-a-deep-clone-is-needed-try-just-doing-a-deepclone-on-the-object-that-is-given-to-pick"><a href="#2-4-If-a-deep-clone-is-needed-try-just-doing-a-deepclone-on-the-object-that-is-given-to-pick" class="headerlink" title="2.4 - If a deep clone is needed try just doing a _.deepclone on the object that is given to _.pick."></a>2.4 - If a deep clone is needed try just doing a _.deepclone on the object that is given to _.pick.</h3><p>If I want the pages array to be a copy, rather than a reference then this is where methods like _.deepClone come into play.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> custom = _.pick(_.cloneDeep(day), [<span class="string">'date'</span>,<span class="string">'pages'</span>]);</div><div class="line"> </div><div class="line">day.pages[<span class="number">0</span>].users += <span class="number">50</span>;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(day.pages[<span class="number">0</span>].users); <span class="comment">// 53</span></div><div class="line"><span class="built_in">console</span>.log(custom.pages[<span class="number">0</span>].users); <span class="comment">// 3</span></div></pre></td></tr></table></figure>
+<h2 id="3-Picking-from-a-Class"><a href="#3-Picking-from-a-Class" class="headerlink" title="3 - Picking from a Class"></a>3 - Picking from a Class</h2><p>When using _.pick a new object is going to be returned, so if I am using an object that has a constructor other than that of Object, then I am going to loose everything attached to the prototype. This is one of the main things to consider when doing anything with objects. Do I want a copy, or are references okay, and do I care about the prototype.</p>
+<h3 id="3-1-The-Day-constructor"><a href="#3-1-The-Day-constructor" class="headerlink" title="3.1 - The Day constructor"></a>3.1 - The Day constructor</h3><p>Say for example I have a Day constructor that can be used to create in instance of a day object rather than just an object literal.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> Day = <span class="function"><span class="keyword">function</span> (<span class="params">options</span>) </span>&#123;</div><div class="line"> </div><div class="line">    options = options || &#123;&#125;;</div><div class="line">    <span class="keyword">this</span>.date = options.date || <span class="string">'1/1/00'</span>;</div><div class="line">    <span class="keyword">this</span>.pages = [];</div><div class="line">    <span class="keyword">this</span>.users = <span class="number">0</span>;</div><div class="line">    <span class="keyword">this</span>.pageviews = <span class="number">0</span>;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (options.pages) &#123;</div><div class="line"> </div><div class="line">        <span class="keyword">this</span>.setPages(options.pages, <span class="keyword">this</span>.date);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// set pages</span></div><div class="line">Day.prototype.setPages = <span class="function"><span class="keyword">function</span> (<span class="params">pages</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">let</span> day = <span class="keyword">this</span>;</div><div class="line">    day.pages = _.cloneDeep(pages);</div><div class="line">    day.setFromPages();</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line">Day.prototype.setFromPages = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">let</span> day = <span class="keyword">this</span>;</div><div class="line">    day.users = <span class="number">0</span>;</div><div class="line">    day.pageviews = <span class="number">0</span>;</div><div class="line"> </div><div class="line">    _.each(day.pages, <span class="function"><span class="keyword">function</span> (<span class="params">page</span>) </span>&#123;</div><div class="line"> </div><div class="line">        day.users += page.users ? page.users : <span class="number">0</span>;</div><div class="line">        day.pageviews += page.pageviews ? page.pageviews : <span class="number">0</span>;</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line">Day.prototype.bounceRate = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.users / <span class="keyword">this</span>.pageviews;</div><div class="line"> </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>This differs from my earlier example in that now I can create an object that has a prototype with it.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> day = <span class="keyword">new</span> Day(&#123;</div><div class="line">    <span class="attr">date</span>: <span class="string">'1/2/17'</span>,</div><div class="line">    <span class="attr">pages</span>: [&#123;</div><div class="line">        <span class="attr">path</span>: <span class="string">'/2017/01/01/hello/'</span>,</div><div class="line">        <span class="attr">users</span>: <span class="number">3</span>,</div><div class="line">        <span class="attr">pageviews</span>: <span class="number">4</span></div><div class="line">    &#125;, &#123;</div><div class="line">        <span class="attr">path</span>: <span class="string">'/2017/01/02/hello-again/'</span>,</div><div class="line">        <span class="attr">users</span>: <span class="number">7</span>,</div><div class="line">        <span class="attr">pageviews</span>: <span class="number">9</span></div><div class="line">    &#125;]</div><div class="line">&#125;);</div><div class="line"><span class="built_in">console</span>.log( day.constructor.name ); <span class="comment">// 'Day'</span></div><div class="line"><span class="built_in">console</span>.log( &#123;&#125;.constructor.name ); <span class="comment">// 'Object'</span></div></pre></td></tr></table></figure>
+<h3 id="3-2-A-pick-from-a-class-results-in-the-loss-of-it’s-prototype"><a href="#3-2-A-pick-from-a-class-results-in-the-loss-of-it’s-prototype" class="headerlink" title="3.2 - A _.pick from a class results in the loss of it’s prototype"></a>3.2 - A _.pick from a class results in the loss of it’s prototype</h3><p>So after creating an instance of Day all my methods work just fine.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// my bound rate works</span></div><div class="line"><span class="built_in">console</span>.log(day.bounceRate()); <span class="comment">// 0.7692307692307693</span></div><div class="line"><span class="built_in">console</span>.log( day.constructor.name ); <span class="comment">// day</span></div></pre></td></tr></table></figure>
+<p>However if I use _.pick I will loose the prototype.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> custom = _.pick(day, [<span class="string">'date'</span>, <span class="string">'pages'</span>]);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log( custom.constructor.name ); <span class="comment">// Object</span></div></pre></td></tr></table></figure>
+<p>No big deal thought I would just need to make a new one.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> custom = <span class="keyword">new</span> Day(custom);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log( custom.constructor.name ); <span class="comment">// Day</span></div></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/07/11/lodash_pick/" data-id="cjjlzi8as00m3vwv11jpukfxl" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/07/11/lodash_pick/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lodash/">lodash</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/13/lodash_sample/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          The lodash _.sample method for simpler sampling
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/10/nodejs-commander/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Using commander for option parsing in node.js, and more</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2018/07/11/lodash_pick/index.html';
+    this.page.identifier = '233';
+    this.page.title = 'Examples of the _.pick object method in lodash';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.35px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.59px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.12px;">angular</a> <a href="/tags/animation/" style="font-size: 11.18px;">animation</a> <a href="/tags/automation/" style="font-size: 12.94px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.53px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.88px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.47px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.94px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.18px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.76px;">ejs</a> <a href="/tags/express/" style="font-size: 17.65px;">express</a> <a href="/tags/games/" style="font-size: 18.24px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.71px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.76px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15.29px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.59px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.76px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.76px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.82px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15.29px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.41px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.06px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.35px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 17.06px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/07/13/lodash_sample/">The lodash _.sample method for simpler sampling</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/11/lodash_pick/">Examples of the _.pick object method in lodash</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/10/nodejs-commander/">Using commander for option parsing in node.js, and more</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/09/mongodb-mongoose-schema-middleware/">Mongoose Schema Middleware</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/09/mongodb-mongoose-schema/">Mongoose Schema</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2018/07/11/lodash_pick/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
