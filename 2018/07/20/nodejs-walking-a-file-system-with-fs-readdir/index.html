@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Walking over the contents of a path recursively with fs.readdir | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="The subject of walking, or looping over a file system path recursively for the purpose of doing some kind of file operation on a whole bunch of files in a directory that meet a certain criteria is a s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Walking over the contents of a path recursively with fs.readdir">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/07/20/nodejs-walking-a-file-system-with-fs-readdir/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="The subject of walking, or looping over a file system path recursively for the purpose of doing some kind of file operation on a whole bunch of files in a directory that meet a certain criteria is a s">
+<meta property="og:updated_time" content="2018-07-21T23:55:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Walking over the contents of a path recursively with fs.readdir">
+<meta name="twitter:description" content="The subject of walking, or looping over a file system path recursively for the purpose of doing some kind of file operation on a whole bunch of files in a directory that meet a certain criteria is a s">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-walking-a-file-system-with-fs-readdir" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/20/nodejs-walking-a-file-system-with-fs-readdir/" class="article-date"> Published:
+  <time datetime="2018-07-20T21:48:00.000Z" itemprop="datePublished">2018-07-20</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/07/20/nodejs-walking-a-file-system-with-fs-readdir/" class="article-date"> Modified:
+  <time datetime="2018-07-21T23:55:40.000Z" itemprop="dateModified">2018-07-21</time>
+</a>
+
+    <span class="article-date">V1.14</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Walking over the contents of a path recursively with fs.readdir
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>The subject of walking, or looping over a file system path recursively for the purpose of doing some kind of file operation on a whole bunch of files in a directory that meet a certain criteria is a subject that comes up often with <a href="https://nodejs.org/en/" target="_blank" rel="external">node.js</a> development. There are many options when it comes to doing this, some of which are well known npm packages such as <a href="https://www.npmjs.com/package/walk" target="_blank" rel="external">walk</a>, and <a href="https://www.npmjs.com/package/klaw" target="_blank" rel="external">klaw</a>. However in this post I will be writing about how to go about doing so with just the node.js build in file system modules <a href="https://nodejs.org/dist/latest-v8.x/docs/api/fs.html#fs_fs_readdir_path_options_callback" target="_blank" rel="external">readdir method</a>, along with some others a well.</p>
+<a id="more"></a>
+<h2 id="1-before-continuing"><a href="#1-before-continuing" class="headerlink" title="1 - before continuing"></a>1 - before continuing</h2><p>This is a post on using the <a href="https://nodejs.org/dist/latest-v8.x/docs/api/fs.html#fs_fs_readdir_path_options_callback" target="_blank" rel="external">readdir method</a> in the <a href="https://nodejs.org/dist/latest-v8.x/docs/api/fs.html" target="_blank" rel="external">node.js file system module</a>, along with additional node.js core methods to make a basic file system walker. There are additional ways of doing this, not to mention many npm packages that can be just quickly used to get this done, and move on.</p>
+<h3 id="1-1-I-am-not-recommending-that-this-is-the-best-or-worst-option"><a href="#1-1-I-am-not-recommending-that-this-is-the-best-or-worst-option" class="headerlink" title="1.1 - I am not recommending that this is the best (or worst) option."></a>1.1 - I am not recommending that this is the best (or worst) option.</h3><p>I am not suggesting that using fs.readdir along with other node.js built in methods is the best way of going about making a file system walker. It may be better to go with streams, and better yet to just use one of the many walkers that are available to just be done with this, and move on with what the project is really about.</p>
+<h3 id="1-2-Be-sure-to-explore-other-options-on-this"><a href="#1-2-Be-sure-to-explore-other-options-on-this" class="headerlink" title="1.2 - Be sure to explore other options on this"></a>1.2 - Be sure to explore other options on this</h3><p>I have <a href="/2018/07/20/nodejs-ways-to-walk-a-file-system/">written a post</a> that aims to be a central post of sorts on file system walkers, be sure to check that out if you have not before hand to gain a better sense of what there is to work with when it comes to making a file system walker from the ground up, as well as the many other options when it comes to using one that has been made before hand.</p>
+<h2 id="2-Basic-example-of-fs-readdir"><a href="#2-Basic-example-of-fs-readdir" class="headerlink" title="2 - Basic example of fs.readdir"></a>2 - Basic example of fs.readdir</h2><p>Basic use of fs.readdir is fairly straight forward just give the directory that you want to know the contents of as the first argument, and then a callback as the second that will give an error or an array of item names.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"> </div><div class="line">fs.readdir(process.cwd(), (e,items)=&gt;&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(items);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>This by itself can obviously be used as a way to walk a file system, if it is used in a recursive way. To do that I will need to use more than just fs.readdir, because I need to know if an item in a name space is a file or directory. So A simple file walker solution will also need to involve fs.stat to gain more information about an item. Also Both of these methods will need to be used in a method that will be called recursively as well, so as to walk the whole file system rather than just the contents of a single file system name space.</p>
+<h2 id="2-1-Crude-single-method-recursive-walker-using-fs-readdir-fs-stat-and-Array-forEach"><a href="#2-1-Crude-single-method-recursive-walker-using-fs-readdir-fs-stat-and-Array-forEach" class="headerlink" title="2.1 - Crude single method recursive walker using fs.readdir, fs.stat, and Array.forEach"></a>2.1 - Crude single method recursive walker using fs.readdir, fs.stat, and Array.forEach</h2><p>Maybe it world be helpful to start with a simple, crude single method example of a file system walker. One that just does everything in the body of a single method using just a few file system methods, calls itself recursively. Maybe it does not even have proper error handling, and is the beginning of a kind of callback hell, but might still work find as a kind of starting point.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// just using fs, and path</span></div><div class="line"><span class="keyword">let</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"> </div><div class="line"><span class="comment">// a simple walk method</span></div><div class="line"><span class="keyword">let</span> walk = <span class="function"><span class="keyword">function</span> (<span class="params">dir</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// get the contents of dir</span></div><div class="line">    fs.readdir(root, (e, items) =&gt; &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// for each item in the contents</span></div><div class="line">        items.forEach(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</div><div class="line"> </div><div class="line">            <span class="comment">// get the item path</span></div><div class="line">            <span class="keyword">let</span> itemPath = path.join(dir, item);</div><div class="line"> </div><div class="line">            <span class="comment">// get the stats of the item</span></div><div class="line">            fs.stat(itemPath, (e, stats) =&gt; &#123;</div><div class="line"> </div><div class="line">                <span class="comment">// Just log the item path for now</span></div><div class="line">                <span class="built_in">console</span>.log(itemPath);</div><div class="line"> </div><div class="line">                <span class="comment">// for now just use stats to find out</span></div><div class="line">                <span class="comment">// if the current item is a dir</span></div><div class="line">                <span class="keyword">if</span> (stats.isDirectory()) &#123;</div><div class="line"> </div><div class="line">                    <span class="comment">// if so walk that too, by calling this</span></div><div class="line">                    <span class="comment">// method recursively</span></div><div class="line">                    walk(itemPath);</div><div class="line"> </div><div class="line">                &#125;</div><div class="line"> </div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line">walk(process.cwd());</div></pre></td></tr></table></figure>
+<p>So this is a good start, yes there are things going on that might give many developers a headache, but still the basic process is there. Start at a root name space, get the contents of that name space, for each item get the stats, preform an action for the item, and if it is a directory walk that as well.</p>
+<p>The next step might be to break this process down, and start adding some more features, but the general idea is all ready there.</p>
+<h2 id="3-A-file-system-walker-using-fs-readdir"><a href="#3-A-file-system-walker-using-fs-readdir" class="headerlink" title="3 - A file system walker using fs.readdir"></a>3 - A file system walker using fs.readdir</h2><p>So for a more advanced example of making a file system walker using fs.readdir,  I thought I would start to break things down a bit, by pulling fs.readDir into a function that returns a promise, and do that with fs.stat as well.</p>
+<h3 id="3-1-Making-a-readDir-method-that-returns-a-promise"><a href="#3-1-Making-a-readDir-method-that-returns-a-promise" class="headerlink" title="3.1 - Making a readDir method that returns a promise"></a>3.1 - Making a readDir method that returns a promise</h3><p>So I pulled fs.readdir into a method, and made it so that the method returns a promise. This will help improve error handing, and will also help reduce callback hell as well.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"> </div><div class="line"><span class="comment">// use fs.readDir to get the contents of the given dir</span></div><div class="line"><span class="keyword">let</span> readDir = <span class="function">(<span class="params">dir</span>) =&gt;</span> &#123;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line"> </div><div class="line">        fs.readdir(dir, (e, contents) =&gt; &#123;</div><div class="line"> </div><div class="line">            <span class="keyword">if</span> (e) &#123;</div><div class="line"> </div><div class="line">                reject(e)</div><div class="line"> </div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">                resolve(contents);</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="3-2-Doing-the-same-with-fs-stat"><a href="#3-2-Doing-the-same-with-fs-stat" class="headerlink" title="3.2 - Doing the same with fs.stat"></a>3.2 - Doing the same with fs.stat</h3><p>I did the same with the method that will be used to read stats as well.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// get the stats of the given item path</span></div><div class="line"><span class="keyword">let</span> readStats = <span class="function">(<span class="params">itemPath</span>) =&gt;</span> &#123;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line"> </div><div class="line">        fs.stat(itemPath, (e, stats) =&gt; &#123;</div><div class="line"> </div><div class="line">            <span class="keyword">if</span> (e) &#123;</div><div class="line"> </div><div class="line">                reject(e)</div><div class="line"> </div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">                resolve(stats);</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="3-3-Methods-for-what-to-do-for-files-and-dirs"><a href="#3-3-Methods-for-what-to-do-for-files-and-dirs" class="headerlink" title="3.3 - Methods for what to do for files, and dirs"></a>3.3 - Methods for what to do for files, and dirs</h3><p>In the more basic example I just looped over all items in a current folder, and for each item I just logged the path to the console after getting the states for it. In a real walker I will want to do more then just that, so I will want to have some way to defined a method that will be called for each item. For this method It would be nice to have some kind of api that can be accessed via the this keyword. The api would have relevant information about the current item, as well as additional things that are helpful when it comes to quickly reading the contents of the current file if needed.</p>
+<p>So I have broken things down into two helper methods, one is a method that calls a forItem method. In this forItem method an api is set up, and an onItem method is called with the api as the value of the this keyword for the onItem method. This onItem method is given when I call the main walk method.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// what to do for all items</span></div><div class="line"><span class="keyword">let</span> forAllItems = <span class="function">(<span class="params">opt, items</span>) =&gt;</span> &#123;</div><div class="line"> </div><div class="line">    items.forEach(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</div><div class="line"> </div><div class="line">        forItem(opt, item);</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// what to do for a single item</span></div><div class="line"><span class="keyword">let</span> forItem = <span class="function">(<span class="params">opt, item</span>) =&gt;</span> &#123;</div><div class="line"> </div><div class="line">    <span class="keyword">let</span> itemPath = path.join(opt.root, item);</div><div class="line"> </div><div class="line">    <span class="comment">// read stats</span></div><div class="line">    readStats(itemPath).then(<span class="function">(<span class="params">stats</span>) =&gt;</span> &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// the api</span></div><div class="line">        <span class="keyword">let</span> api = &#123;</div><div class="line"> </div><div class="line">            <span class="attr">opt</span>: opt,</div><div class="line">            <span class="attr">fs</span>: fs,</div><div class="line"> </div><div class="line">            <span class="comment">// read file convenience method</span></div><div class="line">            read: <span class="function"><span class="keyword">function</span> (<span class="params">cb</span>) </span>&#123;</div><div class="line"> </div><div class="line">                <span class="keyword">let</span> api = <span class="keyword">this</span>;</div><div class="line"> </div><div class="line">                <span class="keyword">return</span> fs.readFile(api.item.path, (e, data) =&gt; &#123;</div><div class="line"> </div><div class="line">                    <span class="keyword">if</span> (e) &#123;</div><div class="line"> </div><div class="line">                        cb(e, <span class="literal">null</span>);</div><div class="line"> </div><div class="line">                    &#125;</div><div class="line"> </div><div class="line">                    <span class="keyword">if</span> (data) &#123;</div><div class="line"> </div><div class="line">                        <span class="keyword">let</span> ext = api.item.ext;</div><div class="line"> </div><div class="line">                        <span class="keyword">if</span> (ext === <span class="string">'.js'</span> || ext === <span class="string">'.html'</span> || ext === <span class="string">'.css'</span>) &#123;</div><div class="line"> </div><div class="line">                            data = data.toString();</div><div class="line"> </div><div class="line">                        &#125;</div><div class="line"> </div><div class="line">                        cb(<span class="literal">null</span>, data);</div><div class="line"> </div><div class="line">                    &#125;</div><div class="line"> </div><div class="line">                &#125;);</div><div class="line"> </div><div class="line">            &#125;,</div><div class="line">            <span class="attr">item</span>: &#123;</div><div class="line"> </div><div class="line">                <span class="attr">path</span>: itemPath,</div><div class="line">                <span class="attr">filename</span>: item,</div><div class="line">                <span class="attr">ext</span>: path.extname(item).toLowerCase(),</div><div class="line">                <span class="attr">isDir</span>: stats.isDirectory()</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">        &#125;;</div><div class="line"> </div><div class="line">        opt.onItem.call(api, api.item);</div><div class="line"> </div><div class="line">        <span class="comment">// find next level</span></div><div class="line">        <span class="keyword">let</span> nextLevel = opt.level + <span class="number">1</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// if level is less than maxLevel, or the no maxLevel flag of -1 is set</span></div><div class="line">        <span class="keyword">if</span> (opt.level &lt; opt.maxLevel || opt.maxLevel === <span class="number">-1</span>) &#123;</div><div class="line"> </div><div class="line">            <span class="comment">// if dir</span></div><div class="line">            <span class="keyword">if</span> (stats.isDirectory()) &#123;</div><div class="line"> </div><div class="line">                walk(<span class="built_in">Object</span>.assign(&#123;&#125;, opt, &#123;</div><div class="line">                        <span class="attr">root</span>: itemPath,</div><div class="line">                        <span class="attr">level</span>: nextLevel</div><div class="line">                    &#125;));</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;).catch (<span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</div><div class="line"> </div><div class="line">        opt.onError.call(opt, e, item);</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>I included references to the fs module, as well as a read methid that can quickly be used to read the contents of the current item.</p>
+<h3 id="3-4-The-walk-method"><a href="#3-4-The-walk-method" class="headerlink" title="3.4 - The walk method"></a>3.4 - The walk method</h3><p>So then there is also of course the main walk method that is what will be called to start a file system walk. I can just give a string that is the root path to start walking, and then a single onItem method if I want. If I want to take advantage of more advanced options I can also give just an object with all options, and methods that are to be used as well.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// walk</span></div><div class="line"><span class="keyword">let</span> walk = <span class="function">(<span class="params">opt, onItem, onError</span>) =&gt;</span> &#123;</div><div class="line"> </div><div class="line">    <span class="comment">// if opt is a string</span></div><div class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> opt === <span class="string">'string'</span>) &#123;</div><div class="line"> </div><div class="line">        opt = &#123;</div><div class="line"> </div><div class="line">            <span class="attr">root</span>: opt</div><div class="line"> </div><div class="line">        &#125;;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    opt = opt || &#123;&#125;;</div><div class="line">    opt.root = path.resolve(opt.root || process.cwd());</div><div class="line">    opt.level = opt.level === <span class="literal">undefined</span> ? <span class="number">0</span> : opt.level;</div><div class="line">    opt.maxLevel = opt.maxLevel === <span class="literal">undefined</span> ? <span class="number">-1</span> : opt.maxLevel;</div><div class="line">    opt.onItem = opt.onItem || onItem || <span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(item);</div><div class="line">    &#125;;</div><div class="line">    opt.onError = opt.onError || onError || <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(e);</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// read dir, and call forAll items</span></div><div class="line">    readDir(opt.root).then(<span class="function"><span class="keyword">function</span> (<span class="params">items</span>) </span>&#123;</div><div class="line"> </div><div class="line">        forAllItems(opt, items);</div><div class="line"> </div><div class="line">    &#125;).catch (<span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</div><div class="line"> </div><div class="line">        opt.onError.call(opt, e);</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="3-5-Basic-use-case-example"><a href="#3-5-Basic-use-case-example" class="headerlink" title="3.5 - Basic use case example"></a>3.5 - Basic use case example</h3><p>So I can start a file system walk by just giving a root path, and then a method that will be called for each item.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">walk(<span class="string">'./'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'level: '</span> + <span class="keyword">this</span>.opt.level + <span class="string">' : '</span> + item.filename);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="3-5-Read-file-example"><a href="#3-5-Read-file-example" class="headerlink" title="3.5 - Read file example"></a>3.5 - Read file example</h3><p>I put in a read file method that can be used to quickly get the contents of a file.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">walk(<span class="string">'./'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// only log javaScript files</span></div><div class="line">    <span class="keyword">if</span> (item.ext === <span class="string">'.js'</span>) &#123;</div><div class="line"> </div><div class="line">        <span class="keyword">this</span>.read(<span class="function"><span class="keyword">function</span> (<span class="params">e, js</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="keyword">if</span> (js) &#123;</div><div class="line"> </div><div class="line">                <span class="built_in">console</span>.log(js);</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>The way I have it designed I will need to make sure it is a file first by checking the file extension. However you get the idea, anything that would work well as part of the api can go there. I could go in a direction in which I can make a custom file system walker that will work different depending on the project. For example if I am making a walker that will be working closes with markdown files I can add methods that can be used to parse markdown to html, and plain text, as well as preform other relavent actions.</p>
+<h3 id="3-6-Using-the-options-object-example"><a href="#3-6-Using-the-options-object-example" class="headerlink" title="3.6 - Using the options object example"></a>3.6 - Using the options object example</h3><p>It is also possible to use the walker by giving an object as just one argument, and then make full use of all options.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">walk(&#123;</div><div class="line"> </div><div class="line">    <span class="attr">root</span>: <span class="string">'./'</span>,</div><div class="line">    <span class="attr">maxLevel</span>: <span class="number">0</span>,</div><div class="line">    <span class="attr">onItem</span>: <span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'********** item **********'</span>);</div><div class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>.opt);</div><div class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>.item);</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'********** **** **********'</span>);</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line">    <span class="attr">onError</span>: <span class="function"><span class="keyword">function</span> (<span class="params">e, item</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'********** ERROR **********'</span>);</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(e.message);</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (item) &#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(item);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'********** ***** **********'</span>);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>For now there are just options for setting the level of recursion, however I could add many more options for filtering, and having more than just the onItem callback.</p>
+<h2 id="4-Conclusion"><a href="#4-Conclusion" class="headerlink" title="4 - Conclusion"></a>4 - Conclusion</h2><p>I hope this post has helped you gain some insite of how to make a node.js file system walker with fs.readdir, there are many more ways to go about doing this within node.js by itself, but this way seems to work okay for me. It might be a better choiuce however to look into some popular solutions for file system walking in node.js thought as well, as such be sure to check out <a href="/2018/07/20/nodejs-ways-to-walk-a-file-system/">my main post on this subject</a> before starting work on making your own walker.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/07/20/nodejs-walking-a-file-system-with-fs-readdir/" data-id="cjjxe83m10001oov1c170882j" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/07/20/nodejs-walking-a-file-system-with-fs-readdir/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/22/phaser-math-wrap-and-clamp/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Setting boundaries in Phaser with wrap, and clamp
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/20/nodejs-ways-to-walk-a-file-system/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Some Ways to walk a file system in node.js</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2018/07/20/nodejs-walking-a-file-system-with-fs-readdir/index.html';
+    this.page.identifier = '238';
+    this.page.title = 'Walking over the contents of a path recursively with fs.readdir';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.63px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.38px;">angular</a> <a href="/tags/animation/" style="font-size: 11.25px;">animation</a> <a href="/tags/automation/" style="font-size: 13.13px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.75px;">backbone</a> <a href="/tags/blog/" style="font-size: 16.25px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.88px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.25px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.88px;">ejs</a> <a href="/tags/express/" style="font-size: 18.13px;">express</a> <a href="/tags/games/" style="font-size: 18.75px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.88px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15.63px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.63px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.88px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.88px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.75px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15.63px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.38px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.13px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.5px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 17.5px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/07/22/phaser-math-wrap-and-clamp/">Setting boundaries in Phaser with wrap, and clamp</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/20/nodejs-walking-a-file-system-with-fs-readdir/">Walking over the contents of a path recursively with fs.readdir</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/20/nodejs-ways-to-walk-a-file-system/">Some Ways to walk a file system in node.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/19/nodejs-klaw/">Using klaw, and through2 to walk a file system in node.js.</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/17/phaser-color-class/">The Color class in Phaser for quick color conversion</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2018/07/20/nodejs-walking-a-file-system-with-fs-readdir/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Using klaw, and through2 to walk a file system in node.js. | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="When making a command line interface program in node.js that needs to walk a file system recursively there are many options. If you do want to work within the core set of node.js modules without insta">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Using klaw, and through2 to walk a file system in node.js.">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/07/19/nodejs-klaw/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="When making a command line interface program in node.js that needs to walk a file system recursively there are many options. If you do want to work within the core set of node.js modules without insta">
+<meta property="og:updated_time" content="2018-07-20T19:29:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Using klaw, and through2 to walk a file system in node.js.">
+<meta name="twitter:description" content="When making a command line interface program in node.js that needs to walk a file system recursively there are many options. If you do want to work within the core set of node.js modules without insta">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-klaw" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/19/nodejs-klaw/" class="article-date"> Published:
+  <time datetime="2018-07-19T17:22:00.000Z" itemprop="datePublished">2018-07-19</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/07/19/nodejs-klaw/" class="article-date"> Modified:
+  <time datetime="2018-07-20T19:29:50.000Z" itemprop="dateModified">2018-07-20</time>
+</a>
+
+    <span class="article-date">V1.1</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Using klaw, and through2 to walk a file system in node.js.
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>When making a command line interface program in node.js that needs to walk a file system recursively there are many options. If you do want to work within the core set of node.js modules without installing any additional from npm there is of course the nodedir method in the file system module that may be of interest. However in this post I will be writing about an npm package option that I seem to like a little for this known as <a href="https://www.npmjs.com/package/klaw" target="_blank" rel="external">klaw</a>, that can also be used with another popular project known as <a href="https://www.npmjs.com/package/through2" target="_blank" rel="external">through2</a>. I will be giving file system walking examples mainly using this, but will also touch base on some alternatives as well.</p>
+<a id="more"></a>
+<h2 id="1-What-to-know-before-hand"><a href="#1-What-to-know-before-hand" class="headerlink" title="1 - What to know before hand."></a>1 - What to know before hand.</h2><p>This is a post on the klaw npm package that provides a node.js file walker solution. I assume that you have some background on node.js, javaScript in general, and are now just looking for options when it comes to recursively walking the contents of a folder in a file system.</p>
+<h3 id="1-1-version-numbers-matter"><a href="#1-1-version-numbers-matter" class="headerlink" title="1.1 - version numbers matter"></a>1.1 - version numbers matter</h3><p>In this post I am using klaw 2.1.1 which as of july 2018 is still the latest version, and there has not been much activity in the repo for the past few months. That is not a deal breaker for me as long as it seems that the project is still fairly solid, and so far I can not say I have not run into any problems with klaw.</p>
+<h2 id="2-A-Basic-example-of-klaw-and-test-folder-setup"><a href="#2-A-Basic-example-of-klaw-and-test-folder-setup" class="headerlink" title="2 - A Basic example of klaw, and test folder setup"></a>2 - A Basic example of klaw, and test folder setup</h2><p>I put together some examples of klaw that have to do with walking a file system folder. Like many of my posts on an npm package I make a test folder, and install the package along with any additional packages I might need to make some demos. For the examples in this section the only additional package I am using is throught2.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ mkdir test_klaw</div><div class="line">$ cd test_klaw</div><div class="line">$ npm init</div><div class="line">$ npm install klaw --save</div><div class="line">$ npm install through2 --save</div></pre></td></tr></table></figure>
+<h2 id="2-1-Basic-js-example-of-using-klaw-to-walk-a-file-system"><a href="#2-1-Basic-js-example-of-using-klaw-to-walk-a-file-system" class="headerlink" title="2.1 - Basic.js example of using klaw to walk a file system"></a>2.1 - Basic.js example of using klaw to walk a file system</h2><p>For a basic.js file example I made a quick script that just walks the root name space of a path that I give as the first argument in the command line, else it defaults to the current working directory.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> klaw = <span class="built_in">require</span>(<span class="string">'klaw'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>),</div><div class="line"> </div><div class="line"><span class="comment">// the dir to walk</span></div><div class="line">dir_walk = process.argv[<span class="number">2</span>] || process.cwd();</div><div class="line"> </div><div class="line"><span class="comment">// walking dir_walk with the following options</span></div><div class="line">klaw(dir_walk, &#123;</div><div class="line"> </div><div class="line">    <span class="comment">// default to full recursion, if now depth is given</span></div><div class="line">    depthLimit: process.argv[<span class="number">3</span>] || <span class="number">-1</span></div><div class="line"> </div><div class="line">&#125;)</div><div class="line"> </div><div class="line"><span class="comment">// for each item</span></div><div class="line">.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (!item.stats.isDirectory()) &#123;</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(path.basename(item.path));</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;)</div><div class="line"> </div><div class="line"><span class="comment">// when the walk is over</span></div><div class="line">.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="string">''</span>);</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'the walk is over'</span>);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>I am so far only using a single option when calling klaw that can be used to set the depth level of recursion when it comes to walking through a file system, a key feature that just about any walker should have.</p>
+<h3 id="2-2-The-on-data-event-and-item-object"><a href="#2-2-The-on-data-event-and-item-object" class="headerlink" title="2.2 - The on data event, and item object"></a>2.2 - The on data event, and item object</h3><p>One of the most important aspects of klaw is the data event, as this is what will be called for each file that is not filtered out before hand, more on that later in this post. A single object is given for the method that is provided as the callback for this event that contains the absolute path of the item, as well as the stats for that item.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// for each item</span></div><div class="line">.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(item.path); <span class="comment">// the full absolute path of of the item</span></div><div class="line">    <span class="built_in">console</span>.log(item.stats); <span class="comment">// the stats of the item</span></div><div class="line"> </div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>The stats object is an instance of what is returned if I where to call an <a href="/2018/02/15/nodejs-filesystem-stat/">fs.stat</a> for each file, there is no need to do that as it is done foe each file by default. The path given is always an absolute path, as it should be for something like this.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ node basic ./ 0</div><div class="line">.gitignore</div><div class="line">basic.js</div><div class="line">package-lock.json</div><div class="line">package.json</div><div class="line"> </div><div class="line">the walk is over</div></pre></td></tr></table></figure>
+<h2 id="3-Using-fs-extra-as-a-replacement-for-graceful-fs"><a href="#3-Using-fs-extra-as-a-replacement-for-graceful-fs" class="headerlink" title="3 - Using fs-extra as a replacement for graceful-fs"></a>3 - Using fs-extra as a replacement for graceful-fs</h2><p>By default klaw uses the fs module replacement package known as <a href="https://github.com/isaacs/node-graceful-fs" target="_blank" rel="external">graceful-fs</a>, If I want to have klaw use something else such as <a href="https://www.npmjs.com/package/fs-extra" target="_blank" rel="external">fs-extra</a> for example, then I just need to pass it as the fs option when using klaw.</p>
+<p>So then I just need to install it.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install fs-extra --save</div></pre></td></tr></table></figure></p>
+<p>And then pass it as the file system module via the fs option.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> klaw = <span class="built_in">require</span>(<span class="string">'klaw'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>),</div><div class="line"></div><div class="line"><span class="comment">// the dir to walk</span></div><div class="line">dir_walk = process.argv[<span class="number">2</span>] || process.cwd();</div><div class="line"></div><div class="line"><span class="comment">// walking dir_walk with the following options</span></div><div class="line">klaw(dir_walk, &#123;</div><div class="line"></div><div class="line">    <span class="comment">// using fs-extra as the fs module</span></div><div class="line">    fs: <span class="built_in">require</span>(<span class="string">'fs-extra'</span>) </div><div class="line"></div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">// for each item</span></div><div class="line">.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">// now using fs-extra in place of graceful-fs</span></div><div class="line">    <span class="comment">// So now I can use promises</span></div><div class="line">    <span class="keyword">this</span>.fs.readFile(item.path).then(<span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</div><div class="line"></div><div class="line">        <span class="built_in">console</span>.log(data.toString());</div><div class="line"></div><div class="line">    &#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"></div><div class="line">        <span class="built_in">console</span>.log(e.message);</div><div class="line"></div><div class="line">    &#125;);</div><div class="line"></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>So as you can see fs-extra makes each of the file system methods return a promise, if I comment one the fs option this will of course result in an error. If interested I have <a href="/2018/01/08/nodejs-fs-extra/">written a post on fs-extra</a> a while back if you want to read more about that fs module drop in replacement.</p>
+<h2 id="5-Using-stream-Transfrom-to-filter-items"><a href="#5-Using-stream-Transfrom-to-filter-items" class="headerlink" title="5 - Using stream.Transfrom to filter items"></a>5 - Using stream.Transfrom to filter items</h2><p>In this post I am also using through2 as a way to make streams to use with the pipe method. If for some reason I do not want to use through2 one alternative is to just directly use stream.Transform in object mode.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> klaw = <span class="built_in">require</span>(<span class="string">'klaw'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>),</div><div class="line">stream = <span class="built_in">require</span>(<span class="string">'stream'</span>),</div><div class="line">dir_walk = process.argv[<span class="number">2</span>] || process.cwd();</div><div class="line"> </div><div class="line">klaw(dir_walk)</div><div class="line"> </div><div class="line"><span class="comment">// using stream.Transform in objectMode</span></div><div class="line">.pipe(<span class="keyword">new</span> stream.Transform(&#123;</div><div class="line"> </div><div class="line">        <span class="attr">objectMode</span>: <span class="literal">true</span>,</div><div class="line">        <span class="attr">transform</span>: <span class="function"><span class="keyword">function</span> (<span class="params">item, en, cb</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="keyword">if</span> (item.stats.size &gt; <span class="number">0</span> &amp;&amp; item.stats.size &lt; <span class="number">1024</span>) &#123;</div><div class="line"> </div><div class="line">                <span class="keyword">this</span>.push(item);</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            cb();</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;))</div><div class="line"> </div><div class="line"><span class="comment">// the filtered list of items</span></div><div class="line">.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(item.path);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="4-Using-through2-to-filter-items"><a href="#4-Using-through2-to-filter-items" class="headerlink" title="4 - Using through2 to filter items"></a>4 - Using through2 to filter items</h2><p>The projects readme file recommends that I use through2 to to quickly help with more advanced filtering operations that, may involve preforming one or more steps, some of which may require additional file io operations such as reading the actual contents of a file rather than just the meta data. Turns out that through2 is a fairly popular project, so I thought I would give it a try.</p>
+<h2 id="4-1-filtering-by-file-extension"><a href="#4-1-filtering-by-file-extension" class="headerlink" title="4.1 - filtering by file extension"></a>4.1 - filtering by file extension</h2><p>So if I want to filter by extension I can pass a method to the through2 object method that will return</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> klaw = <span class="built_in">require</span>(<span class="string">'klaw'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>),</div><div class="line">through2 = <span class="built_in">require</span>(<span class="string">'through2'</span>),</div><div class="line">dir_walk = process.argv[<span class="number">2</span>] || process.cwd();</div><div class="line"> </div><div class="line"><span class="comment">// lets klaw</span></div><div class="line">klaw(dir_walk)</div><div class="line"> </div><div class="line"><span class="comment">// only html</span></div><div class="line">.pipe(through2.obj(<span class="function"><span class="keyword">function</span> (<span class="params">item, enc, next</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">let</span> ext = path.extname(item.path);</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (ext.toLowerCase() === <span class="string">'.html'</span> || ext.toLowerCase() === <span class="string">'.htm'</span>) &#123;</div><div class="line"> </div><div class="line">            <span class="keyword">this</span>.push(item);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        next();</div><div class="line"> </div><div class="line">    &#125;))</div><div class="line"> </div><div class="line"><span class="comment">// for each item that remains</span></div><div class="line">.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(item.path);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="4-2-More-advanced-filtering-that-involves-looking-at-the-content"><a href="#4-2-More-advanced-filtering-that-involves-looking-at-the-content" class="headerlink" title="4.2 - More advanced filtering that involves looking at the content"></a>4.2 - More advanced filtering that involves looking at the content</h2><p>In many cases I might want to filter files based on the content of a file as well. For example I with html files I might only want files that have a certain meta tag, and I also might want to append some properties to the item object as well.</p>
+<p>For this I can use another npm project that is useful for working with html content, without having to have a working browser environment in node.js, such as cases like this called <a href="/2017/11/28/nodejs-cheerio/">cheerio</a>.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> klaw = <span class="built_in">require</span>(<span class="string">'klaw'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>),</div><div class="line">through2 = <span class="built_in">require</span>(<span class="string">'through2'</span>),</div><div class="line">cheerio = <span class="built_in">require</span>(<span class="string">'cheerio'</span>),</div><div class="line">fs = <span class="built_in">require</span>(<span class="string">'fs-extra'</span>),</div><div class="line">dir_walk = process.argv[<span class="number">2</span>] || process.cwd();</div><div class="line"> </div><div class="line"><span class="comment">// lets klaw</span></div><div class="line">klaw(dir_walk)</div><div class="line"> </div><div class="line"><span class="comment">// only html</span></div><div class="line">.pipe(through2.obj(<span class="function"><span class="keyword">function</span> (<span class="params">item, enc, next</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">let</span> ext = path.extname(item.path);</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (ext.toLowerCase() === <span class="string">'.html'</span> || ext.toLowerCase() === <span class="string">'.htm'</span>) &#123;</div><div class="line"> </div><div class="line">            <span class="keyword">this</span>.push(item);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        next();</div><div class="line"> </div><div class="line">    &#125;))</div><div class="line"> </div><div class="line"><span class="comment">// read html</span></div><div class="line">.pipe(through2.obj(<span class="function"><span class="keyword">function</span> (<span class="params">item, enc, next</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">let</span> stream = <span class="keyword">this</span>;</div><div class="line"> </div><div class="line">        fs.readFile(item.path).then(<span class="function"><span class="keyword">function</span> (<span class="params">html</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">// buffer to string</span></div><div class="line">            html = html.toString();</div><div class="line"> </div><div class="line">            <span class="keyword">let</span> $ = cheerio.load(html);</div><div class="line"> </div><div class="line">            <span class="comment">// if it is an article</span></div><div class="line">            <span class="keyword">if</span> ($(<span class="string">'meta[content="article"]'</span>).length) &#123;</div><div class="line"> </div><div class="line">                <span class="comment">// title, and paragraph text</span></div><div class="line">                item.title = $(<span class="string">'title'</span>).text();</div><div class="line">                item.text_p = $(<span class="string">'.article-inner&gt;&gt;p'</span>).text();</div><div class="line"> </div><div class="line">                <span class="comment">// push the item</span></div><div class="line">                stream.push(item);</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            next();</div><div class="line"> </div><div class="line">        &#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(e);</div><div class="line">            next();</div><div class="line"> </div><div class="line">        &#125;)</div><div class="line"> </div><div class="line">    &#125;))</div><div class="line"> </div><div class="line"><span class="comment">// for each article</span></div><div class="line">.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'********** ********** **********'</span>);</div><div class="line">    <span class="built_in">console</span>.log(item.title);</div><div class="line">    <span class="built_in">console</span>.log(item.text);</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'********** ********** **********'</span>);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>This works great at getting all the files that meat that criteria. I could expand this into some kind of actual useful tool that will give me information about a public html folder such as total site wide word count for all blog posts, or something to that effect, but you get the idea.</p>
+<h2 id="5-klaw-alternatives"><a href="#5-klaw-alternatives" class="headerlink" title="5 - klaw alternatives"></a>5 - klaw alternatives</h2><p>So now that I have covered how to use klaw as a node.js file system walker solution, it might be a good call to briefly take a look at some alternatives.</p>
+<h3 id="5-1-The-nodedir-npm-package"><a href="#5-1-The-nodedir-npm-package" class="headerlink" title="5.1 - The nodedir npm package"></a>5.1 - The nodedir npm package</h3><p>One of the first file systems walkers I have come across is <a href="https://www.npmjs.com/package/node-dir" target="_blank" rel="external">nodedir</a>, and I have <a href="/2017/11/05/nodejs-node-dir/">written a post</a> on this on a while back. As of this writing it would look as though the project is no longer supported, as there has not been a single commit at least for over a year now. Still the main method of interest does seem to work okay for what it was designed to do if you want to give it a try anyway.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> dir = <span class="built_in">require</span>(<span class="string">'node-dir'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>),</div><div class="line">dir_walk = process.argv[<span class="number">2</span>] || process.cwd();</div><div class="line"> </div><div class="line"><span class="comment">// read all files in dir_walk recursively</span></div><div class="line">dir.readFiles(dir_walk, <span class="function"><span class="keyword">function</span> (<span class="params">err, content, fileName, next</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (err) &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// if error</span></div><div class="line">        <span class="built_in">console</span>.log(err);</div><div class="line">        next();</div><div class="line"> </div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// else we have the item</span></div><div class="line">        <span class="built_in">console</span>.log(fileName);</div><div class="line">        <span class="built_in">console</span>.log(content);</div><div class="line"> </div><div class="line">        next();</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>This solution works okay, but I can not say I would prefer it over klaw these days. I have written a <a href="/2017/11/05/nodejs-node-dir/">post on node-dir</a> a while back if you are interested in reading more about this one anyway for whatever the reason.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/07/19/nodejs-klaw/" data-id="cjjxe83kb0000oov107xvkzfu" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/07/19/nodejs-klaw/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/20/nodejs-ways-to-walk-a-file-system/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Some Ways to walk a file system in node.js
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/17/phaser-color-class/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">The Color class in Phaser for quick color conversion</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2018/07/19/nodejs-klaw/index.html';
+    this.page.identifier = '236';
+    this.page.title = 'Using klaw, and through2 to walk a file system in node.js.';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.63px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.38px;">angular</a> <a href="/tags/animation/" style="font-size: 11.25px;">animation</a> <a href="/tags/automation/" style="font-size: 13.13px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.75px;">backbone</a> <a href="/tags/blog/" style="font-size: 16.25px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.88px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.25px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.88px;">ejs</a> <a href="/tags/express/" style="font-size: 18.13px;">express</a> <a href="/tags/games/" style="font-size: 18.75px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.88px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15.63px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.63px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.88px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.88px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.75px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15.63px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.38px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.13px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.5px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 17.5px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/07/22/phaser-math-wrap-and-clamp/">Setting boundaries in Phaser with wrap, and clamp</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/20/nodejs-walking-a-file-system-with-fs-readdir/">Walking over the contents of a path recursively with fs.readdir</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/20/nodejs-ways-to-walk-a-file-system/">Some Ways to walk a file system in node.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/19/nodejs-klaw/">Using klaw, and through2 to walk a file system in node.js.</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/17/phaser-color-class/">The Color class in Phaser for quick color conversion</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2018/07/19/nodejs-klaw/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
