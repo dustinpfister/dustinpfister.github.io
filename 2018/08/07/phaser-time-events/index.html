@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Using Phaser timer events | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="So there are many ways to go about working with time in Phaser. Yes if I really want to I can just create my own date objects, and use them as a way to control frame rate, and when certain events will">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Using Phaser timer events">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/08/07/phaser-time-events/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="So there are many ways to go about working with time in Phaser. Yes if I really want to I can just create my own date objects, and use them as a way to control frame rate, and when certain events will">
+<meta property="og:updated_time" content="2018-08-08T19:55:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Using Phaser timer events">
+<meta name="twitter:description" content="So there are many ways to go about working with time in Phaser. Yes if I really want to I can just create my own date objects, and use them as a way to control frame rate, and when certain events will">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  
+  <!-- phaser post -->
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-phaser-time-events" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/07/phaser-time-events/" class="article-date"> Published:
+  <time datetime="2018-08-07T14:54:00.000Z" itemprop="datePublished">2018-08-07</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/08/07/phaser-time-events/" class="article-date"> Modified:
+  <time datetime="2018-08-08T19:55:04.000Z" itemprop="dateModified">2018-08-08</time>
+</a>
+
+    <span class="article-date">V1.14</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/phaser/">phaser</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Using Phaser timer events
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>So there are many ways to go about working with time in <a href="https://phaser.io/" target="_blank" rel="external">Phaser</a>. Yes if I really want to I can just create my own date objects, and use them as a way to control frame rate, and when certain events will happen when making a project. That is a fine and good when it comes to making a game vanilla js style, however if I am using a frame work I should use what is given in that in order to help save time with making my own solutions. In most cases the framework built in solution for something works just fine, and I should only bother making my own solutions if doing so is called for. In any case this post is about <a href="https://phaser.io/docs/2.6.2/Phaser.Timer.html" target="_blank" rel="external">timer events</a> in <a href="https://photonstorm.github.io/phaser-ce/" target="_blank" rel="external">phaser ce</a>, and how working with them can help make quick work of setting up things that need to happen every now and then when making my game logic.</p>
+<a id="more"></a>
+<h2 id="1-What-to-know-before-continuing"><a href="#1-What-to-know-before-continuing" class="headerlink" title="1 - What to know before continuing."></a>1 - What to know before continuing.</h2><p>This is a post on time events in <a href="https://photonstorm.github.io/phaser-ce/" target="_blank" rel="external">phaser ce</a>, the community addition of <a href="https://phaser.io/" target="_blank" rel="external">phaser</a> a popular html5 game framework. Time events are a way of defining some code that is to fire after a delay, just once, or over and over again. Time events are one of several ways to go about defining game logic that is to fire after a delay, or in a loop. These events can be used in conjunction with those other methods, however I will not be getting into those in detail here.</p>
+<p>The nice thing about these timer events is that they are subject to pausing of the game state. So in other words I do not have to adjust manually, phaser does this for me, making phaser timers one of the many little features that make using the framework a major time saver.</p>
+<h2 id="1-1-The-Phaser-Timer-Class"><a href="#1-1-The-Phaser-Timer-Class" class="headerlink" title="1.1 - The Phaser Timer Class"></a>1.1 - The Phaser Timer Class</h2><p>This post is mainly about the phaser <a href="https://photonstorm.github.io/phaser-ce/Phaser.Timer.html" target="_blank" rel="external">Timer class</a>, as well as the Time Class that is closely associated with it. I might briefly write about other related aspects of phaser as well, however the emphasis is there.</p>
+<h2 id="1-2-The-Time-class"><a href="#1-2-The-Time-class" class="headerlink" title="1.2 - The Time class"></a>1.2 - The Time class</h2><p>This post is about using Timers that are used in the <a href="https://photonstorm.github.io/phaser-ce/Phaser.Time.html" target="_blank" rel="external">Time class</a>. In this post I will not be writing about everything that has to do with this class, just adding timers to it’s timer pool, and it’s events property which is an instance of a timer that</p>
+<h2 id="1-3-Timer-event-objects"><a href="#1-3-Timer-event-objects" class="headerlink" title="1.3 - Timer event objects"></a>1.3 - Timer event objects</h2><p>There are also <a href="https://photonstorm.github.io/phaser-ce/Phaser.TimerEvent.html" target="_blank" rel="external">timer event objects</a> that is what is returned when using a timer methd like loop, or repeat. These come in handy for controlling a single timer event by setting its loop, or repeat count properties.</p>
+<h2 id="2-Some-basic-examples-of-time-events-in-phaser-CE"><a href="#2-Some-basic-examples-of-time-events-in-phaser-CE" class="headerlink" title="2 - Some basic examples of time events in phaser CE"></a>2 - Some basic examples of time events in phaser CE</h2><p>For some basic examples I will just give some example that involve just a single state, and creating method, using phaser in headless mode. I think one of the best ways to learn something new with phaser, javaScript, and many things in general is to just start exparementing with some basic exercises so lets get at it.</p>
+<h3 id="2-1-Making-A-delay-that-fires-once-with-game-time-events"><a href="#2-1-Making-A-delay-that-fires-once-with-game-time-events" class="headerlink" title="2.1 - Making A delay that fires once with game.time.events"></a>2.1 - Making A delay that fires once with game.time.events</h3><p>So if I just want to make a timer that will fire after a given millisecond amount of time, one way to do that would be to add a Timer via game.time.events.add. I do so by passing the millisecond about as the first argument, and then give a callback as the second argument.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>,<span class="number">240</span>,Phaser.HEADLESS);</div><div class="line"> </div><div class="line">game.state.add(<span class="string">'delay'</span>, &#123;</div><div class="line"> </div><div class="line">    <span class="attr">create</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'create method called'</span>);</div><div class="line">        <span class="comment">// fire the given callback every 100ms</span></div><div class="line">        game.time.events.add(<span class="number">5000</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'five secs passed'</span>);</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>Here I am using the instance of Phaser.Timer that is bound to the master clock at game.time.events, and instance of timer that is bound to the master game clock found at game.time which is an instance of Phaser.Time.</p>
+<h3 id="2-2-Adding-a-Timer-class-object-to-the-timer-pool-with-game-time-add"><a href="#2-2-Adding-a-Timer-class-object-to-the-timer-pool-with-game-time-add" class="headerlink" title="2.2 - Adding a Timer class object to the timer pool with game.time.add"></a>2.2 - Adding a Timer class object to the timer pool with game.time.add</h3><p>Another way to work with timers in phaser is to create a instance of the Phaser.Timer class manually, and then add that to the games pool of timers with the add method of the Time class (via game.time.add).</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">game.state.add(<span class="string">'timer-pool'</span>, &#123;</div><div class="line"> </div><div class="line">    <span class="attr">create</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// making a new timer for this game that will auto destroy</span></div><div class="line">        <span class="keyword">var</span> timer = <span class="keyword">new</span> Phaser.Timer(game, <span class="literal">true</span>);</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'just a sec...'</span>);</div><div class="line"> </div><div class="line">        <span class="comment">// add a one sec delay</span></div><div class="line">        timer.add(<span class="number">1000</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'okay.'</span>);</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">        <span class="comment">// start the timer</span></div><div class="line">        timer.start();</div><div class="line"> </div><div class="line">        <span class="comment">// add it to the timer pool</span></div><div class="line">        game.time.add(timer);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="2-3-Defining-loops-in-the-create-method-of-a-state"><a href="#2-3-Defining-loops-in-the-create-method-of-a-state" class="headerlink" title="2.3 - Defining loops in the create method of a state"></a>2.3 - Defining loops in the create method of a state</h3><p>It is often desirable to have a way to have some code that will execute every set duration of time over and over again, for this I would use the loop property of a timer class.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>,<span class="number">240</span>,Phaser.HEADLESS);</div><div class="line"> </div><div class="line">game.state.add(<span class="string">'basic-loops'</span>, &#123;</div><div class="line"> </div><div class="line">    <span class="attr">create</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        game.time.events.loop(<span class="number">100</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'tick 100:'</span>);</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">        game.time.events.loop(<span class="number">1000</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'tick 1000:'</span>);</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line">game.state.start(<span class="string">'basic-loops'</span>);</div></pre></td></tr></table></figure>
+<h3 id="2-4-A-repeat-example"><a href="#2-4-A-repeat-example" class="headerlink" title="2.4 - A repeat example"></a>2.4 - A repeat example</h3><p>There is a repeat method in the timmer class that can be used to repeat a callback a number of times. I just need to give a count after the delay.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>,<span class="number">240</span>,Phaser.HEADLESS);</div><div class="line"> </div><div class="line">game.state.add(<span class="string">'repeat'</span>, &#123;</div><div class="line"> </div><div class="line">    <span class="attr">create</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> tick = <span class="number">0</span>;</div><div class="line">        game.time.events.repeat(<span class="number">1000</span>, <span class="number">5</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'tick: '</span> + tick);</div><div class="line">            tick++;</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line">game.state.start(<span class="string">'repeat'</span>);</div></pre></td></tr></table></figure>
+<p>However repeating can also be controled by setting the loop value of a timer event to false when using the loop method as well.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">game.state.add(<span class="string">'repeat'</span>, &#123;</div><div class="line"> </div><div class="line">    <span class="attr">create</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> tick = <span class="number">0</span>,</div><div class="line">        timer = game.time.events.loop(<span class="number">1000</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'tick: '</span> + tick);</div><div class="line"> </div><div class="line">            <span class="keyword">if</span> (tick === <span class="number">3</span>) &#123;</div><div class="line"> </div><div class="line">                timer.loop = <span class="literal">false</span>;</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            tick++;</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="3-Comparing-the-use-of-a-timer-to-just-doing-nothing-in-an-update-loop"><a href="#3-Comparing-the-use-of-a-timer-to-just-doing-nothing-in-an-update-loop" class="headerlink" title="3 - Comparing the use of a timer to just doing nothing in an update loop"></a>3 - Comparing the use of a timer to just doing nothing in an update loop</h2><p>When making a phaser project it is important to do something to make it so the game runs at a consistent speed across different devices that are capable of processing javaScript at different speeds. The use of timers are one such way to do this. In this example I made a project that demonstrates the difference between using timers to set frame rate compared to just letting things flow in the main update loop of a phaser state.</p>
+<h3 id="3-1-Making-the-game-object-and-adding-a-global-object"><a href="#3-1-Making-the-game-object-and-adding-a-global-object" class="headerlink" title="3.1 - Making the game object, and adding a global object"></a>3.1 - Making the game object, and adding a global object</h3><p>I start off my making a new instance of a phaser game, and define a global object that will contain anything that I would use across state methods, and state objects when making a more complex phaser project. In this example this object contains properties that will be the min and max boundaries of two display objects, and some methods that will be used to create, and move those objects.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// the Phaser game instance</span></div><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>);</div><div class="line"> </div><div class="line"><span class="comment">// some global stuff</span></div><div class="line">game.global = &#123;</div><div class="line"> </div><div class="line">    <span class="attr">xMax</span>: <span class="number">32</span>,</div><div class="line">    <span class="attr">xMin</span>: <span class="number">0</span>,</div><div class="line"> </div><div class="line">    <span class="comment">// a move sprite method</span></div><div class="line">    moveSprite: <span class="function"><span class="keyword">function</span> (<span class="params">sprite</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// step based on a boolean in the sprites data object</span></div><div class="line">        <span class="comment">// that may or may not be there</span></div><div class="line">        <span class="keyword">if</span> (sprite.data.goRight) &#123;</div><div class="line">            sprite.x += <span class="number">5</span>;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            sprite.x -= <span class="number">5</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">// find of the sprite is out of bounds, setting the boolean</span></div><div class="line">        <span class="comment">// in it's data object if not there in the process.</span></div><div class="line">        <span class="keyword">if</span> (sprite.x &gt;= <span class="keyword">this</span>.xMax) &#123;</div><div class="line">            sprite.data.goRight = <span class="literal">false</span>;</div><div class="line">            sprite.data.x = <span class="keyword">this</span>.xMax;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (sprite.x &lt;= <span class="keyword">this</span>.xMin) &#123;</div><div class="line">            sprite.data.goRight = <span class="literal">true</span>;</div><div class="line">            sprite.data.x = <span class="keyword">this</span>.xMin;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// make a simple sprite sheet</span></div><div class="line">    mkSheet: <span class="function"><span class="keyword">function</span> (<span class="params">game</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// using canvas to make a sprite sheet</span></div><div class="line">        <span class="keyword">var</span> canvas = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>),</div><div class="line">        ctx = canvas.getContext(<span class="string">'2d'</span>),</div><div class="line">        spriteGT,</div><div class="line">        spriteRT;</div><div class="line"> </div><div class="line">        <span class="comment">// will hold two frames that are 32 x 32</span></div><div class="line">        canvas.width = <span class="number">64</span>;</div><div class="line">        canvas.height = <span class="number">32</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// drawing the frames</span></div><div class="line">        ctx.fillStyle = <span class="string">'#00ff00'</span>;</div><div class="line">        ctx.fillRect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">32</span>, <span class="number">32</span>);</div><div class="line">        ctx.fillStyle = <span class="string">'#ff0000'</span>;</div><div class="line">        ctx.fillRect(<span class="number">32</span>, <span class="number">0</span>, <span class="number">32</span>, <span class="number">32</span>);</div><div class="line"> </div><div class="line">        <span class="comment">// adding the sheet to the phaser cache</span></div><div class="line">        game.cache.addSpriteSheet(<span class="string">'sheet'</span>, <span class="literal">null</span>, canvas, <span class="number">32</span>, <span class="number">32</span>, <span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>If you would like to read more about sprite sheets I have written a <a href="/2017/10/12/phaser-spritesheets/">post on them in general a while back</a>, however I also have a newer one in which I write about <a href="/2018/08/04/phaser-spritesheet-from-canvas/">making sprite sheets with canvas</a> like this without having to load an external asset first which is nice when making quick examples like this.</p>
+<h3 id="3-2-The-state-object"><a href="#3-2-The-state-object" class="headerlink" title="3.2 - The state object"></a>3.2 - The state object</h3><p>In the state object of this example I am creating two sprites in the create method of the state, one is using a timer for its movement, and it is also using the phaser built in animation system to loop over the frames in the sheet rather than doing so manually by stepping the frameIndex property of the sprite. Then there is of course another sprite that is using the same sheet, as well as the same simple method that defines it’s basic movement, but is being updated in the main update loop without anything governing it’s frame rate.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// compare-real-time demo</span></div><div class="line">game.state.add(<span class="string">'compare-real-time'</span>, &#123;</div><div class="line"> </div><div class="line">    <span class="comment">// create method for compare-real-time demo state</span></div><div class="line">    create: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> spriteGT,</div><div class="line">        spriteRT; <span class="comment">// sprite game time, and sprite real time</span></div><div class="line"> </div><div class="line">        <span class="comment">// calling my method that will give me a sprite sheet</span></div><div class="line">        game.global.mkSheet(game);</div><div class="line"> </div><div class="line">        <span class="comment">// create game time sprite</span></div><div class="line">        spriteGT = game.add.sprite(<span class="number">0</span>, <span class="number">32</span>, <span class="string">'sheet'</span>, <span class="number">0</span>);</div><div class="line">        spriteGT.name = <span class="string">'box_game_time'</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// create an play an animation using phasers animation manager</span></div><div class="line">        spriteGT.animations.add(<span class="string">'flash'</span>, [<span class="number">0</span>, <span class="number">1</span>], <span class="number">6</span>, <span class="literal">true</span>);</div><div class="line">        spriteGT.play(<span class="string">'flash'</span>);</div><div class="line"> </div><div class="line">        <span class="comment">// Here is the time event example in action</span></div><div class="line">        <span class="comment">// move 'box_game_time' sprite every 100ms</span></div><div class="line">        game.time.events.loop(<span class="number">100</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            game.global.moveSprite(game.world.getByName(<span class="string">'box_game_time'</span>));</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">        <span class="comment">// real time sprite</span></div><div class="line">        spriteRT = game.add.sprite(<span class="number">0</span>, <span class="number">64</span>, <span class="string">'sheet'</span>, <span class="number">0</span>);</div><div class="line">        spriteRT.name = <span class="string">'box_real_time'</span>;</div><div class="line"> </div><div class="line">        game.global.xMax = game.world.width - <span class="number">32</span>;</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// update method for compare-real-time demo state</span></div><div class="line">    update: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> spriteRT = game.world.getByName(<span class="string">'box_real_time'</span>);</div><div class="line"> </div><div class="line">        <span class="comment">// moving 'box_real_time' by whatever speed the update loop ticks at.</span></div><div class="line">        game.global.moveSprite(spriteRT);</div><div class="line"> </div><div class="line">        <span class="comment">// doing the same with animation</span></div><div class="line">        spriteRT.frame += <span class="number">1</span>;</div><div class="line">        <span class="keyword">if</span> (spriteRT.frame &gt;= <span class="number">3</span>) &#123;</div><div class="line">            spriteRT.frame = <span class="number">0</span>;</div><div class="line">            spriteRT.frame = <span class="number">0</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line"><span class="comment">// start the demo</span></div><div class="line">game.state.start(<span class="string">'compare-real-time'</span>);</div><div class="line"><span class="string">`</span></div></pre></td></tr></table></figure>
+<h3 id="3-4-The-example-in-action"><a href="#3-4-The-example-in-action" class="headerlink" title="3.4 - The example in action"></a>3.4 - The example in action</h3><p>When starting this project up the ‘box_game_time’ sprite moves, and animates in a way that is expected white the other one moves and flashes real fast as it is doing so by the raw speed at which the update loop is going.</p>
+<p>This is a subject that comes up a lot with javaScript related game development, in short it is just important to find some kind of way to make sure that things are flowing by the system clock, rather than the speed at which the computer can run instructions.</p>
+<h2 id="4-Conclusion"><a href="#4-Conclusion" class="headerlink" title="4 - Conclusion"></a>4 - Conclusion</h2><p>Thank you for reading, I hope you found this post useful for gaining some better insight on timers in phaser ce.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/08/07/phaser-time-events/" data-id="cjkquhr7k00167gv1qkrw62f2" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/08/07/phaser-time-events/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/canvas/">canvas</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/games/">games</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/phaser/">phaser</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/08/08/phaser-animations/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Making animations in phaser with the animation manager
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/08/06/nodejs-readline/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">The node.js readline module, for making a cli shell.</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2018/08/07/phaser-time-events/index.html';
+    this.page.identifier = '252';
+    this.page.title = 'Using Phaser timer events';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.22px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 11.67px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.56px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.22px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.78px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 16.67px;">express</a> <a href="/tags/games/" style="font-size: 18.33px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.44px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.67px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.89px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.78px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.11px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/08/12/lodash_flatten/">The lodash _.flatten method for flatting down a multi dimensional array</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/11/lodash_join/">The lodash _.join method, and Array.join</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/10/phaser-animations-keyframes/">Animation keyframes with phaser</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/09/lodash_compact/">removing false values from an array with _.compact.</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/08/phaser-animations/">Making animations in phaser with the animation manager</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2018/08/07/phaser-time-events/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

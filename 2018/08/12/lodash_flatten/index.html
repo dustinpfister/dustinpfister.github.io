@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>The lodash _.flatten method for flatting down a multi dimensional array | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="So some of the method in lodash are can come in handy, and really do help to save time with certain projects, todays post on lodash is one of those methods which is _.flatten. The _.flatten, and also">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The lodash _.flatten method for flatting down a multi dimensional array">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/08/12/lodash_flatten/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="So some of the method in lodash are can come in handy, and really do help to save time with certain projects, todays post on lodash is one of those methods which is _.flatten. The _.flatten, and also">
+<meta property="og:updated_time" content="2018-08-12T19:01:05.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The lodash _.flatten method for flatting down a multi dimensional array">
+<meta name="twitter:description" content="So some of the method in lodash are can come in handy, and really do help to save time with certain projects, todays post on lodash is one of those methods which is _.flatten. The _.flatten, and also">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-lodash_flatten" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/12/lodash_flatten/" class="article-date"> Published:
+  <time datetime="2018-08-12T16:17:00.000Z" itemprop="datePublished">2018-08-12</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/08/12/lodash_flatten/" class="article-date"> Modified:
+  <time datetime="2018-08-12T19:01:05.000Z" itemprop="dateModified">2018-08-12</time>
+</a>
+
+    <span class="article-date">V1.6</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/lodash/">lodash</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      The lodash _.flatten method for flatting down a multi dimensional array
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>So some of the method in <a href="https://lodash.com/" target="_blank" rel="external">lodash</a> are can come in handy, and really do help to save time with certain projects, todays post on lodash is one of those methods which is <a href="https://lodash.com/docs/4.17.10#flatten" target="_blank" rel="external">_.flatten</a>. The _.flatten, and also _.flattenDeep methods are one of many methods that help with the task of working with arrays of arrays, or multi dimensional arrays in javaScript. Flatten can be used to flatten down an array of arrays into a single array, thus making it a method that can be thought of as a reversal of <a href="/2017/09/13/lodash-chunk/">_.chunk</a>.</p>
+<a id="more"></a>
+<h2 id="1-what-to-know"><a href="#1-what-to-know" class="headerlink" title="1 - what to know"></a>1 - what to know</h2><p>This is a post on the _.flatten method in lodash, than ca be used to flatten nested arrays down into a single array. I will not be getting into lodash, arrays, and javaScript in general in depth, and assume that you have at least some background with javaScript and using lodash in a project.</p>
+<h2 id="2-Basic-example-of-flatten-and-chunk"><a href="#2-Basic-example-of-flatten-and-chunk" class="headerlink" title="2 - Basic example of _.flatten, and _.chunk"></a>2 - Basic example of _.flatten, and _.chunk</h2><p>So for a basic example of _.flatten and the corresponding _.chunk method I will start off with an array of arrays where each array is a number between 1 and 9, and is broken into three arrays of three numbers each. The _.flatten method can be used to flatten such an array of arrays into a single linear array, and then the _.chunk method can be used to break it back down again into the array of arrays.</p>
+<h3 id="2-1-flattening-an-array-of-arrays-into-a-linear-array-with-flatten"><a href="#2-1-flattening-an-array-of-arrays-into-a-linear-array-with-flatten" class="headerlink" title="2.1 - flattening an array of arrays into a linear array with _.flatten"></a>2.1 - flattening an array of arrays into a linear array with _.flatten</h3><p>So If I make an array of arrays with the array literal notation I can flatten it down into a straght linear array with the lodash _.flatten method, but just passing the array of arrays as the first argument.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> grid = [</div><div class="line">   [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</div><div class="line">   [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>],</div><div class="line">   [<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]</div><div class="line">];</div><div class="line"> </div><div class="line"><span class="keyword">let</span> flat = _.flatten(grid);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log( flat ); <span class="comment">// [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]</span></div></pre></td></tr></table></figure>
+<p>Simple enough right, now if I want to break it back down again I will want to use _.chunk.</p>
+<h3 id="2-2-chunking-a-linear-array-into-an-array-of-arrays-with-chunk"><a href="#2-2-chunking-a-linear-array-into-an-array-of-arrays-with-chunk" class="headerlink" title="2.2 - chunking a linear array into an array of arrays with _.chunk"></a>2.2 - chunking a linear array into an array of arrays with _.chunk</h3><p>So then if I have a linear array but then want to break it down into an array of arrays there is the _.chunk method that can do the opposite of /_.flatten. It works by passing the linear array as the first argument, and then the element length of the arrays as the second argument.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> flat = [ <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span> ];</div><div class="line"> </div><div class="line"><span class="keyword">let</span> grid = _.chunk(flat,<span class="number">3</span>);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log( grid ); <span class="comment">// [ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ] ]</span></div></pre></td></tr></table></figure>
+<h2 id="3-The-lodash-flattenDepth-method-for-when-there-are-many-levels-of-nested-arrays"><a href="#3-The-lodash-flattenDepth-method-for-when-there-are-many-levels-of-nested-arrays" class="headerlink" title="3 - The lodash _.flattenDepth method for when there are many levels of nested arrays"></a>3 - The lodash _.flattenDepth method for when there are many levels of nested arrays</h2><p>If I have a situastion in which I am dealing with many nested levels of arrays I can use the _.flattenDepth method that is just like _.flatten only it accepts a second argument that sets the depth at which flattening is to take. With the normal _.flatten method only a single level will be flattened, and with the _.flattenDeep method all levels will be flattened, but with _.flattenDepth I can control the depth of this.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> grid3 = [</div><div class="line">   [[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>],[<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]],</div><div class="line">   [[<span class="number">10</span>,<span class="number">11</span>,<span class="number">12</span>],[<span class="number">13</span>,<span class="number">14</span>,<span class="number">15</span>],[<span class="number">16</span>,<span class="number">17</span>,<span class="number">18</span>]],</div><div class="line">   [[<span class="number">19</span>,<span class="number">20</span>,<span class="number">21</span>],[<span class="number">22</span>,<span class="number">23</span>,<span class="number">24</span>],[<span class="number">25</span>,<span class="number">26</span>,<span class="number">27</span>]],</div><div class="line">];</div><div class="line"> </div><div class="line"><span class="keyword">let</span> grid2 = _.flattenDepth(grid3,<span class="number">1</span>);</div><div class="line"><span class="keyword">let</span> grid = _.flattenDepth(grid3,<span class="number">2</span>);</div><div class="line"> </div><div class="line"><span class="comment">// just one level</span></div><div class="line"><span class="built_in">console</span>.log( grid2 );</div><div class="line"><span class="comment">/*</span></div><div class="line">[ [ 1, 2, 3 ],</div><div class="line">  [ 4, 5, 6 ],</div><div class="line">  [ 7, 8, 9 ],</div><div class="line">  [ 10, 11, 12 ],</div><div class="line">  [ 13, 14, 15 ],</div><div class="line">  [ 16, 17, 18 ],</div><div class="line">  [ 19, 20, 21 ],</div><div class="line">  [ 22, 23, 24 ],</div><div class="line">  [ 25, 26, 27 ] ]</div><div class="line">*/</div><div class="line"> </div><div class="line"><span class="comment">// all the way to linear</span></div><div class="line"><span class="built_in">console</span>.log( grid );</div><div class="line"><span class="comment">// [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]</span></div></pre></td></tr></table></figure>
+<h2 id="4-A-grid-example-using-flatten-and-friends"><a href="#4-A-grid-example-using-flatten-and-friends" class="headerlink" title="4 - A grid example using _.flatten and friends"></a>4 - A grid example using _.flatten and friends</h2><p>So an example that involves some fun with a gird is in order for a method that has to do with multi dimensional arrays, so lets get into that for a moment as a way to learn why methods like _.flatten come in handy. Say you are making a game that involves to one extent or another a grid, and each grid position has an object associated with it. This gird might be used in a lot of different ways but so far you just have a single minimal module that uses _.chunk to break down a linear array into an array of arrays that each have an object for each x, y position.</p>
+<p>There is only a few properties of this modules that store the current state of the grid, and a single public method that can be used to generate the grid. When calling the genMap method it will create an object for each position with basic info like x,y, and the index when it does exist as a linear array. The genMap object also allows for a forPos methods that is called for each position which can be used to make custom properties for the position object.</p>
+<h3 id="4-1-The-grid-module-using-chunk"><a href="#4-1-The-grid-module-using-chunk" class="headerlink" title="4.1 - The grid module using _.chunk"></a>4.1 - The grid module using _.chunk</h3><p>So here is the code of the module that I was explaining. In it I create a public api, and return that api after calling the genMap method once with default values to make sure that the gird always has some kind of set of values.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> grid = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// public api method</span></div><div class="line">    <span class="keyword">let</span> api = &#123;</div><div class="line">        <span class="attr">grid</span>: [],</div><div class="line">        <span class="attr">w</span>: <span class="number">8</span>,</div><div class="line">        <span class="attr">h</span>: <span class="number">8</span></div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// generate a map</span></div><div class="line">    api.genMap = <span class="function"><span class="keyword">function</span> (<span class="params">opt</span>) </span>&#123;</div><div class="line"> </div><div class="line">        opt = opt || &#123;&#125;;</div><div class="line">        opt.forPos = opt.forPos || <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</div><div class="line">        <span class="keyword">this</span>.w = opt.w || <span class="keyword">this</span>.w;</div><div class="line">        <span class="keyword">this</span>.h = opt.h || <span class="keyword">this</span>.h;</div><div class="line">        <span class="keyword">this</span>.grid = [];</div><div class="line"> </div><div class="line">        <span class="keyword">let</span> i = <span class="number">0</span>,</div><div class="line">        len = <span class="keyword">this</span>.w * <span class="keyword">this</span>.h;</div><div class="line">        <span class="keyword">while</span> (i &lt; len) &#123;</div><div class="line"> </div><div class="line">            <span class="keyword">let</span> obj = &#123;&#125;;</div><div class="line"> </div><div class="line">            obj.i = i;</div><div class="line">            obj.x = i % <span class="keyword">this</span>.w;</div><div class="line">            obj.y = <span class="built_in">Math</span>.floor(i / <span class="keyword">this</span>.w);</div><div class="line"> </div><div class="line">            opt.forPos.call(obj, obj.x, obj.y, obj.i);</div><div class="line"> </div><div class="line">            <span class="keyword">this</span>.grid.push(obj);</div><div class="line"> </div><div class="line">            i += <span class="number">1</span>;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">// chunk the linear array into an array of arrays</span></div><div class="line">        <span class="keyword">this</span>.grid = _.chunk(<span class="keyword">this</span>.grid, <span class="keyword">this</span>.w);</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    api.genMap();</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> api;</div><div class="line"> </div><div class="line">&#125;</div><div class="line">    ());</div></pre></td></tr></table></figure>
+<p>The genMap method works by just creating a linear array of objects for each position, and then I use the _.chunk method to break it down into the propper array of arrays form.</p>
+<h3 id="4-2-Using-flatten-to-help-with-tabulating-a-grid-involving-money"><a href="#4-2-Using-flatten-to-help-with-tabulating-a-grid-involving-money" class="headerlink" title="4.2 - Using _.flatten to help with tabulating a grid involving money"></a>4.2 - Using _.flatten to help with tabulating a grid involving money</h3><p>So now that I have my grid module it is time to start playing around with some custom maps, and methods that involve the use of _.flatten among other useful methods like <a href="/2018/07/25/lodash_reduce/">_.reduce</a>. How about a map that holds random amounts of money, and I must make a method that tabulates the total sum of the money in the grid.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// gen a map with random amounts of money in it</span></div><div class="line">grid.genMap(&#123;</div><div class="line">    <span class="attr">w</span>: <span class="number">3</span>,</div><div class="line">    <span class="attr">h</span>: <span class="number">3</span>,</div><div class="line">    <span class="attr">forPos</span>: <span class="function"><span class="keyword">function</span> (<span class="params">x, y, i</span>) </span>&#123;</div><div class="line">        <span class="keyword">this</span>.money = _.random(<span class="number">0</span>, <span class="number">5</span>);</div><div class="line">    &#125;</div><div class="line">&#125;);</div><div class="line"> </div><div class="line"><span class="comment">// A Tab money method that makes use of \_flatten</span></div><div class="line"><span class="comment">// to flatten the grid back to a linear array</span></div><div class="line"><span class="keyword">var</span> tabMoney = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> grid = <span class="keyword">this</span>;</div><div class="line">    <span class="keyword">return</span> _.reduce(_.flatten(grid.grid), <span class="function"><span class="keyword">function</span> (<span class="params">acc, obj</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> &#123;</div><div class="line">            <span class="attr">money</span>: acc.money + obj.money</div><div class="line">        &#125;</div><div class="line">    &#125;).money;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(grid.grid);</div><div class="line"><span class="built_in">console</span>.log(tabMoney.call(grid, grid));</div><div class="line"><span class="comment">/*</span></div><div class="line">[ [ &#123; i: 0, x: 0, y: 0, money: 2 &#125;,</div><div class="line">    &#123; i: 1, x: 1, y: 0, money: 5 &#125;,</div><div class="line">    &#123; i: 2, x: 2, y: 0, money: 4 &#125; ],</div><div class="line">  [ &#123; i: 3, x: 0, y: 1, money: 4 &#125;,</div><div class="line">    &#123; i: 4, x: 1, y: 1, money: 1 &#125;,</div><div class="line">    &#123; i: 5, x: 2, y: 1, money: 4 &#125; ],</div><div class="line">  [ &#123; i: 6, x: 0, y: 2, money: 4 &#125;,</div><div class="line">    &#123; i: 7, x: 1, y: 2, money: 4 &#125;,</div><div class="line">    &#123; i: 8, x: 2, y: 2, money: 2 &#125; ] ]</div><div class="line">30</div><div class="line">*/</div></pre></td></tr></table></figure>
+<p>Here my tab money method works by making use of _.flatten to flatten the grid into a linear array to which I am then using with _.reduce to tabulate the amount of money for each position object.</p>
+<h2 id="5-conclusion"><a href="#5-conclusion" class="headerlink" title="5 - conclusion"></a>5 - conclusion</h2><p>I hope you enjoyed this post on the lodash _.flatten method, if you think there should be something more to add to this post be sure to let me know in the comments. Also if you enjoyed this post you might want to check out my many other <a href="/categories/lodash/">posts on lodash</a>. Some other posts of interest that are relavent to _.flatten migth be my post on <a href="/2017/09/13/lodash-chunk/">_.chunk</a>, and <a href="/2018/02/01/lodash_zip/">_.zip</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/08/12/lodash_flatten/" data-id="cjkrkchdn0000fwv1vta9q2z1" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/08/12/lodash_flatten/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lodash/">lodash</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/08/11/lodash_join/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">The lodash _.join method, and Array.join</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2018/08/12/lodash_flatten/index.html';
+    this.page.identifier = '257';
+    this.page.title = 'The lodash _.flatten method for flatting down a multi dimensional array';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.22px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 11.67px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.56px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.22px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.78px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 16.67px;">express</a> <a href="/tags/games/" style="font-size: 18.33px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.44px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.67px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.89px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.78px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.11px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/08/12/lodash_flatten/">The lodash _.flatten method for flatting down a multi dimensional array</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/11/lodash_join/">The lodash _.join method, and Array.join</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/10/phaser-animations-keyframes/">Animation keyframes with phaser</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/09/lodash_compact/">removing false values from an array with _.compact.</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/08/phaser-animations/">Making animations in phaser with the animation manager</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2018/08/12/lodash_flatten/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

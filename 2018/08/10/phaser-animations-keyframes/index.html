@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Animation keyframes with phaser | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="When making animations for a phaser ce project, or with animation in general actually the concept of a key frame is important. A key frame can be described as a frame when an animation begins, or ends">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Animation keyframes with phaser">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/08/10/phaser-animations-keyframes/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="When making animations for a phaser ce project, or with animation in general actually the concept of a key frame is important. A key frame can be described as a frame when an animation begins, or ends">
+<meta property="og:updated_time" content="2018-08-11T19:13:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Animation keyframes with phaser">
+<meta name="twitter:description" content="When making animations for a phaser ce project, or with animation in general actually the concept of a key frame is important. A key frame can be described as a frame when an animation begins, or ends">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  
+  <!-- phaser post -->
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-phaser-animations-keyframes" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/10/phaser-animations-keyframes/" class="article-date"> Published:
+  <time datetime="2018-08-10T13:56:00.000Z" itemprop="datePublished">2018-08-10</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/08/10/phaser-animations-keyframes/" class="article-date"> Modified:
+  <time datetime="2018-08-11T19:13:57.000Z" itemprop="dateModified">2018-08-11</time>
+</a>
+
+    <span class="article-date">V1.7</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/phaser/">phaser</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Animation keyframes with phaser
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>When making animations for a <a href="https://photonstorm.github.io/phaser-ce/" target="_blank" rel="external">phaser ce</a> project, or with animation in general actually the concept of a key frame is important. A key frame can be described as a frame when an animation begins, or ends, and as such it is a beginning state from which an animation will progress from, and then back to in the case of a looping animation. It can also be the two frames at which an animation begins at a starting state, and ends at an ending state when dealing with some kind of non-looping animation sequence. In this post I will be writing about key frames when using the phaser ce game framework, giving some examples of this important animation concept when making sprite sheets for a phaser project.</p>
+<a id="more"></a>
+<h2 id="1-Before-continuing-to-read"><a href="#1-Before-continuing-to-read" class="headerlink" title="1 - Before continuing to read"></a>1 - Before continuing to read</h2><p>This is a post on <a href="https://en.wikipedia.org/wiki/Key_frame" target="_blank" rel="external">animation keyframes</a> using phaser ce, and html5 game framework. This is an advanced post on phaser, and javaScript, and I assume that you have at least some background on these topics before hand.</p>
+<h2 id="1-1-keyframes-and-tweening"><a href="#1-1-keyframes-and-tweening" class="headerlink" title="1.1 - keyframes, and tweening"></a>1.1 - keyframes, and tweening</h2><p>In you travels on javscript realed content that has to do with animation to one extent or another you might have heard about the terms <a href="https://en.wikipedia.org/wiki/Key_frame" target="_blank" rel="external">keyframes</a>, and <a href="https://en.wikipedia.org/wiki/Key_frame" target="_blank" rel="external">tweening</a>. These are just terms for the end points of an animation and all the other frames that lay in between those end points. For example if you have an animation that loops back to the beginning, resulting in a loading icon type animation, that kind of animation would only have a single keyframe, and all other frames just transition back to that initial state. In other words you start with a key frame, and then tween back to that keyframe. Other animations act as transitions from one state, to another state, these kinds of animations have two key frames, an initial state, and an ending state. In addition with this kind of animation all other frames transition this starting state to an ending state.</p>
+<h2 id="2-basic-example-of-keyframes-in-animation"><a href="#2-basic-example-of-keyframes-in-animation" class="headerlink" title="2 - basic example of keyframes in animation"></a>2 - basic example of keyframes in animation</h2><p>For a basic example of keyframes, and tweening I will just quickly put together a demo that is just a simple circle that starts out at the right, then swings to the left, and then back again. If I get some time maybe I will make some more interesting animations, but for the sake of this post, and the basic concepts to work with that can be used to make more interesting animations, this should work okay for a basic example.</p>
+<h2 id="2-1-sheet-from-canvas"><a href="#2-1-sheet-from-canvas" class="headerlink" title="2.1 - sheet from canvas"></a>2.1 - sheet from canvas</h2><p>In this example I am using a method I wrote that can be used to quickly make animations with canvas. I have written about this method back in my post on making sprite sheets with canvas, but I will also cover some of the important aspects of this method in detail here as well. If you want to work out something else to make animations thats fine, I think it is often best to have your own system for this kind of thing, but this should still work out okay to help cover some of the important aspects of keyframes and tweening.</p>
+<p>The code of the method is like this:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> sheetFromCanvas = <span class="function"><span class="keyword">function</span> (<span class="params">opt</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> f,</div><div class="line">    sx,</div><div class="line">    per,</div><div class="line">    canvas = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>);</div><div class="line">    ctx = canvas.getContext(<span class="string">'2d'</span>);</div><div class="line"> </div><div class="line">    opt = opt || &#123;&#125;;</div><div class="line">    opt.name = opt.name || <span class="string">''</span>;</div><div class="line">    opt.frames = opt.frames || <span class="number">3</span>;</div><div class="line">    opt.frameWidth = opt.frameWidth || <span class="number">32</span>;</div><div class="line">    opt.frameHeight = opt.frameHeight || <span class="number">32</span>;</div><div class="line">    opt.forFrame = opt.forFrame || <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</div><div class="line">    opt.game = opt.game || <span class="literal">null</span>;</div><div class="line"> </div><div class="line">    canvas.width = opt.frameWidth * opt.frames;</div><div class="line">    canvas.height = opt.frameHeight;</div><div class="line"> </div><div class="line">    f = <span class="number">0</span>;</div><div class="line">    <span class="keyword">while</span> (f &lt; opt.frames) &#123;</div><div class="line">        per = f / opt.frames;</div><div class="line"> </div><div class="line">        sx = opt.frameWidth * f + <span class="number">0.5</span>;</div><div class="line"> </div><div class="line">        ctx.save();</div><div class="line">        ctx.translate(sx, <span class="number">0</span>);</div><div class="line"> </div><div class="line">        opt.forFrame.call(&#123;</div><div class="line">            <span class="attr">f</span>: f,</div><div class="line">            <span class="attr">sx</span>: sx,</div><div class="line">            <span class="attr">per</span>: per,</div><div class="line">            <span class="attr">bias</span>: <span class="built_in">Math</span>.abs(<span class="number">.5</span> - per) / <span class="number">.5</span>,</div><div class="line">            <span class="attr">canvas</span>: canvas,</div><div class="line">            <span class="attr">ctx</span>: ctx,</div><div class="line">            <span class="attr">frameWidth</span>: opt.frameWidth,</div><div class="line">            <span class="attr">frameHeight</span>: opt.frameHeight</div><div class="line">        &#125;, ctx);</div><div class="line">        ctx.restore();</div><div class="line"> </div><div class="line">        f += <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// add a new sheet to cache if we have a game</span></div><div class="line">    <span class="keyword">if</span> (opt.game) &#123;</div><div class="line">        opt.game.cache.addSpriteSheet(opt.name, <span class="literal">null</span>, canvas, opt.frameWidth, opt.frameHeight, opt.frames, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// return the canvas</span></div><div class="line">    <span class="keyword">return</span> canvas;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>The method is used by passing an object with values that define the frame width, and height, the number of total animation frames, along with a method that is executed with call function prototype method making the value of the this keyword refer to an api that contains properties about the current frame. In the body of this method is where I define the logic that will be my animation. This includes values like the current frame index, the percentage to completion, and a value I call bias that is a value that starts at one then progresses to zero, and back to one again. There are many other values, and methods that I could add to further expand this api, but whenever I make something like this I have come to find that these are the must have values to start off with.</p>
+<h2 id="2-2-The-main-js-file-that-uses-my-sheetFromCanvas-method-to-make-a-basic-animation"><a href="#2-2-The-main-js-file-that-uses-my-sheetFromCanvas-method-to-make-a-basic-animation" class="headerlink" title="2.2 - The main.js file that uses my sheetFromCanvas method to make a basic animation"></a>2.2 - The main.js file that uses my sheetFromCanvas method to make a basic animation</h2><p>So I can then use my method in the create method of a phaser state, to create a sprite sheet this way. For the animation that I describe it involves a starting state that is the first key frame, and then I am just tweening back to that starting state.</p>
+<p>So then I can use my sheet from canvas method like this:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// the Phaser game instance</span></div><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>);</div><div class="line"> </div><div class="line"><span class="comment">// some global stuff</span></div><div class="line">game.global = &#123;&#125;;</div><div class="line"> </div><div class="line">game.state.add(<span class="string">'single-loop'</span>, &#123;</div><div class="line"> </div><div class="line">    <span class="attr">create</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        sheetFromCanvas(&#123;</div><div class="line"> </div><div class="line">            <span class="attr">game</span>: game,</div><div class="line">            <span class="attr">name</span>: <span class="string">'sheet-basic'</span>,</div><div class="line">            <span class="attr">frameWidth</span>: <span class="number">32</span>,</div><div class="line">            <span class="attr">frameHeight</span>: <span class="number">64</span>,</div><div class="line">            <span class="attr">frames</span>: <span class="number">20</span>,</div><div class="line">            <span class="attr">forFrame</span>: <span class="function"><span class="keyword">function</span> (<span class="params">ctx</span>) </span>&#123;</div><div class="line"> </div><div class="line">                <span class="keyword">var</span> sa = -<span class="built_in">Math</span>.PI,</div><div class="line">                a = sa - <span class="built_in">Math</span>.PI * <span class="keyword">this</span>.bias,</div><div class="line">                bounce = <span class="number">4</span>,</div><div class="line">                cx = <span class="keyword">this</span>.frameWidth / <span class="number">2</span>,</div><div class="line">                cy = <span class="keyword">this</span>.frameHeight / <span class="number">2</span> - bounce * <span class="keyword">this</span>.bias,</div><div class="line">                r = <span class="keyword">this</span>.frameWidth / <span class="number">4</span>;</div><div class="line"> </div><div class="line">                ctx.strokeStyle = <span class="string">'#ffffff'</span>;</div><div class="line"> </div><div class="line">                <span class="comment">// draw main circle</span></div><div class="line">                ctx.beginPath();</div><div class="line">                ctx.arc(cx, cy, r, <span class="number">0</span>, <span class="built_in">Math</span>.PI * <span class="number">2</span>);</div><div class="line">                ctx.closePath();</div><div class="line">                ctx.stroke();</div><div class="line"> </div><div class="line">                <span class="comment">// draw smaller circle along the line of the main circle</span></div><div class="line">                ctx.fillStyle = <span class="string">'rgba('</span>+<span class="built_in">Math</span>.floor((<span class="number">255</span> * <span class="keyword">this</span>.bias))+<span class="string">',0,0,1)'</span>;</div><div class="line">                ctx.beginPath();</div><div class="line">                ctx.arc(<span class="built_in">Math</span>.cos(a) * <span class="number">8</span> + cx, <span class="built_in">Math</span>.sin(a) * <span class="number">8</span> + cy, r / <span class="number">4</span>, <span class="number">0</span>, <span class="built_in">Math</span>.PI * <span class="number">2</span>);</div><div class="line">                ctx.closePath();</div><div class="line">                ctx.stroke();</div><div class="line">                ctx.fill();</div><div class="line"> </div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> sprite = game.add.sprite(<span class="number">0</span>, <span class="number">0</span>, <span class="string">'sheet-basic'</span>, <span class="number">0</span>);</div><div class="line">        sprite.animations.add(<span class="string">'loop'</span>, <span class="literal">null</span>, <span class="number">12</span>, <span class="literal">true</span>);</div><div class="line"> </div><div class="line">        sprite.animations.play(<span class="string">'loop'</span>);</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="attr">update</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line">game.state.start(<span class="string">'single-loop'</span>);</div></pre></td></tr></table></figure>
+<h2 id="3-conclusion"><a href="#3-conclusion" class="headerlink" title="3 - conclusion"></a>3 - conclusion</h2><p>So keyframes are just the start, and end points of an animation, and in a nut shell that is all there is to it. If you liked this post you might want to check out my manly other <a href="/categories/phaser/">posts on phaser</a> as well. If you would like me to expand on this post more, and give more animation examples be sure to let me know in the comments. Thanks for reading.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/08/10/phaser-animations-keyframes/" data-id="cjkquhr0c00097gv1qw2erurf" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/08/10/phaser-animations-keyframes/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/animation/">animation</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/canvas/">canvas</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/games/">games</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/phaser/">phaser</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/08/11/lodash_join/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          The lodash _.join method, and Array.join
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/08/09/lodash_compact/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">removing false values from an array with _.compact.</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2018/08/10/phaser-animations-keyframes/index.html';
+    this.page.identifier = '255';
+    this.page.title = 'Animation keyframes with phaser';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.22px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 11.67px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.56px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.22px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.78px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 16.67px;">express</a> <a href="/tags/games/" style="font-size: 18.33px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.44px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.67px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.89px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.78px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.11px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/08/12/lodash_flatten/">The lodash _.flatten method for flatting down a multi dimensional array</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/11/lodash_join/">The lodash _.join method, and Array.join</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/10/phaser-animations-keyframes/">Animation keyframes with phaser</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/09/lodash_compact/">removing false values from an array with _.compact.</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/08/phaser-animations/">Making animations in phaser with the animation manager</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2018/08/10/phaser-animations-keyframes/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
