@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Using streams with the request npm package. | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="So for yet another post on node.js and the many useful packages that can be installed via npm I thought I would write another post on the npm package request, that is a popular http client for scripti">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Using streams with the request npm package.">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/08/15/nodejs-request-streams/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="So for yet another post on node.js and the many useful packages that can be installed via npm I thought I would write another post on the npm package request, that is a popular http client for scripti">
+<meta property="og:updated_time" content="2018-08-16T00:28:03.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Using streams with the request npm package.">
+<meta name="twitter:description" content="So for yet another post on node.js and the many useful packages that can be installed via npm I thought I would write another post on the npm package request, that is a popular http client for scripti">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense -->
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-request-streams" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/15/nodejs-request-streams/" class="article-date"> Published:
+  <time datetime="2018-08-15T17:27:00.000Z" itemprop="datePublished">2018-08-15</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/08/15/nodejs-request-streams/" class="article-date"> Modified:
+  <time datetime="2018-08-16T00:28:03.000Z" itemprop="dateModified">2018-08-15</time>
+</a>
+
+    <span class="article-date">V1.14</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Using streams with the request npm package.
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>So for <a href="/categories/node-js/">yet another post</a> on <a href="https://nodejs.org/en/" target="_blank" rel="external">node.js</a> and the many useful packages that can be installed via <a href="https://www.npmjs.com/" target="_blank" rel="external">npm</a> I thought I would write another post on the npm package request, that is a popular http client for scripting http. Although I think this time around I will be focusing on streams. Out of the box request only gives to ways to work with incoming data, callback methods, and streams. Promise support can be added, but that is off topic for this post.</p>
+<a id="more"></a>
+<h2 id="1-What-to-know"><a href="#1-What-to-know" class="headerlink" title="1 - What to know"></a>1 - What to know</h2><p>This is an advanced post on node.js, and JavaScript that has to do with working streams using request over the built in modules for doing so. I will not be covering everything there is to know about request, let alone all the other topics of interest that branch off from this. If you want to learn the basics about request, I have <a href="/2017/05/23/nodejs-request/">an older post on that</a>. In this post I am usingh node 8.x, and the version of request is 2.88.0.</p>
+<h2 id="1-1-Buffers"><a href="#1-1-Buffers" class="headerlink" title="1.1 - Buffers"></a>1.1 - Buffers</h2><p>In this post I will be making heavy use of Buffers, they come up a lot in node.js when working with streams. In this post I will be mostly working with chunks of data from requests using request, as that is what this is mainly what the post is on. However in some examples I will also be working with buffers when it comes to writing data to a file as well. If you are not to keen on buffers you might want to check out my <a href="/2018/02/07/nodejs-buffer/">post on buffers</a>, but the <a href="https://nodejs.org/dist/latest-v8.x/docs/api/buffer.html" target="_blank" rel="external">node.js docs</a> might very well be the best source on that subject.</p>
+<h2 id="1-2-Streams"><a href="#1-2-Streams" class="headerlink" title="1.2 - Streams"></a>1.2 - Streams</h2><p>This post has to do with streams involving the http client request. Request gives two ways to work with data that is the reponse to an http request, callbacks, and streams. If you do not know a great deal about streams you might want to check out the <a href="https://nodejs.org/dist/latest-v8.x/docs/api/stream.html" target="_blank" rel="external">node.js docs on streams</a> as well.</p>
+<h2 id="2-Just-logging-chunks-of-data-as-they-come-in"><a href="#2-Just-logging-chunks-of-data-as-they-come-in" class="headerlink" title="2 - Just logging chunks of data as they come in."></a>2 - Just logging chunks of data as they come in.</h2><p>As chunks of data come in from a request there are many things that I might want to do with that stream of data. Such as writing them to a file, running it through some kind of transformation, or just logging it out to the standard output in the command line interface. In this section I will be going over a few quick examples of just doing this for starters.</p>
+<h3 id="2-1-Using-process-stdout"><a href="#2-1-Using-process-stdout" class="headerlink" title="2.1 - Using process.stdout"></a>2.1 - Using process.stdout</h3><p>One way to log that data to the console, is to pipe it to process.stdout. This will work in a simular way to that of using console.log, the incoming chunks will be logged out to the console.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> request = <span class="built_in">require</span>(<span class="string">'request'</span>);</div><div class="line"> </div><div class="line">request(<span class="string">'https://raw.githubusercontent.com/request/request/master/README.md'</span>)</div><div class="line"> </div><div class="line">.pipe(process.stdout);</div></pre></td></tr></table></figure>
+<h3 id="2-1-Using-console-log-by-using-the-data-event"><a href="#2-1-Using-console-log-by-using-the-data-event" class="headerlink" title="2.1 - Using console.log by using the data event"></a>2.1 - Using console.log by using the data event</h3><p>If you really want to use console.log, one way to do so would be to the data event.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> request = <span class="built_in">require</span>(<span class="string">'request'</span>);</div><div class="line"> </div><div class="line">request(<span class="string">'https://google.com'</span>)</div><div class="line"> </div><div class="line">.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">chunk</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(chunk.toString());</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>This is also handy if I want to do something with the chunks as they come in, but it might not be a true replacement for stream.transform, more on that later.</p>
+<h2 id="3-Writing-chunks-to-a-file"><a href="#3-Writing-chunks-to-a-file" class="headerlink" title="3 - Writing chunks to a file"></a>3 - Writing chunks to a file</h2><p>One thing that comes to mind when working with streams using request, is that I will want to write some chunks of data to a file. for this there is the createWriteStream method in the stream module. In this section I will be covering a few examples of this using request.</p>
+<h3 id="3-1-CreateWriteStream-basic-example"><a href="#3-1-CreateWriteStream-basic-example" class="headerlink" title="3.1 - CreateWriteStream basic example"></a>3.1 - CreateWriteStream basic example</h3><p>So this will be a basic example of using stream.createWriteStream to write chunks of data from a request using request. I can use the on error, and on data events to log any errors, and give a sense of progress. The pipe the incoming chunks to createWriteStream.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> request = <span class="built_in">require</span>(<span class="string">'request'</span>),</div><div class="line">fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"> </div><div class="line"><span class="comment">// start the get request</span></div><div class="line">request(process.argv[<span class="number">2</span>] || <span class="string">'https://dustinpfister.github.io'</span>)</div><div class="line"> </div><div class="line"><span class="comment">// log any error</span></div><div class="line">.on(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err</span>)</span>&#123; <span class="built_in">console</span>.log(err);&#125;)</div><div class="line"> </div><div class="line"><span class="comment">// log chunks</span></div><div class="line">.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">chunk</span>) </span>&#123;<span class="built_in">console</span>.log(chunk.toString());&#125;)</div><div class="line"> </div><div class="line"><span class="comment">// pipe to createWriteStream</span></div><div class="line">.pipe(fs.createWriteStream(<span class="string">'file_'</span> + <span class="keyword">new</span> <span class="built_in">Date</span>().getTime() + <span class="string">'.txt'</span>));</div></pre></td></tr></table></figure>
+<h3 id="3-2-Using-the-write-method"><a href="#3-2-Using-the-write-method" class="headerlink" title="3.2 - Using the write method"></a>3.2 - Using the write method</h3><p>If I want to use write stream in a way in wich I call a method each time I want to write a few bytes of data to the file that I have created with create Write stream that is not to hard to pull off. Doing so just requires that I save the instance of the write stream to a variable, and just call the write method, passing the chunks to that method.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> request = <span class="built_in">require</span>(<span class="string">'request'</span>),</div><div class="line">stream = <span class="built_in">require</span>(<span class="string">'stream'</span>),</div><div class="line">fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line"> </div><div class="line"><span class="comment">// requesting a url given from the command line, or my home page</span></div><div class="line">uri = process.argv[<span class="number">2</span>] || <span class="string">'https://dustinpfister.github.io'</span>,</div><div class="line"> </div><div class="line"><span class="comment">// a tx file to write to</span></div><div class="line">txFile = fs.createWriteStream(<span class="string">'file_'</span> + <span class="keyword">new</span> <span class="built_in">Date</span>().getTime() + <span class="string">'.txt'</span>);</div><div class="line"> </div><div class="line"><span class="comment">// start the get request</span></div><div class="line">request(&#123;</div><div class="line"> </div><div class="line">    <span class="attr">method</span>: <span class="string">'get'</span>,</div><div class="line">    <span class="attr">uri</span>: uri</div><div class="line"> </div><div class="line">&#125;)</div><div class="line"> </div><div class="line"><span class="comment">// if an error log it</span></div><div class="line">.on(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(err);</div><div class="line"> </div><div class="line">&#125;)</div><div class="line"> </div><div class="line"><span class="comment">// for each chunk</span></div><div class="line">.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">chunk</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// log to the console</span></div><div class="line">    <span class="built_in">console</span>.log(chunk.toString());</div><div class="line"> </div><div class="line">    <span class="comment">// and write it to the file</span></div><div class="line">    txFile.write(chunk);</div><div class="line"> </div><div class="line">&#125;)</div><div class="line"> </div><div class="line"><span class="comment">// when done</span></div><div class="line">.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// let me know, and end</span></div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'file done'</span>);</div><div class="line">    txFile.end();</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>This is useful for situations in which the writing process might have many pauses, and I just want to write to the file a few bytes at a time.</p>
+<h2 id="4-Stream-transform"><a href="#4-Stream-transform" class="headerlink" title="4 - Stream.transform"></a>4 - Stream.transform</h2><p>The transform method in the node.js built in stream module, can be used to define my own transform methods. That is anything that I might want to do with an incoming stream of data, simple things like converting text to upper case, to more complex things that can be considered a kind of compression, encryption, or obfuscation.</p>
+<h3 id="4-1-To-upper-case"><a href="#4-1-To-upper-case" class="headerlink" title="4.1 - To upper case"></a>4.1 - To upper case</h3><p>For a simple example of a transform I made an example that just converts every letter to uppercase.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> request = <span class="built_in">require</span>(<span class="string">'request'</span>),</div><div class="line">stream = <span class="built_in">require</span>(<span class="string">'stream'</span>);</div><div class="line"> </div><div class="line">request(<span class="string">'https://raw.githubusercontent.com/request/request/master/README.md'</span>)</div><div class="line"> </div><div class="line">.pipe(<span class="keyword">new</span> stream.Transform(&#123;</div><div class="line"> </div><div class="line">        <span class="attr">transform</span>: <span class="function"><span class="keyword">function</span> (<span class="params">chunk, en, cb</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="keyword">this</span>.push(chunk.toString().toUpperCase());</div><div class="line"> </div><div class="line">            cb();</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;))</div><div class="line"> </div><div class="line">.pipe(process.stdout)</div><div class="line"> </div><div class="line">.on(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(err);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>This is just a basic example of what can be done with Stream.transform, but I can define some kind of more complex way of transforming an incoming stream of data with this.</p>
+<h2 id="5-Downloading-war-and-peace"><a href="#5-Downloading-war-and-peace" class="headerlink" title="5 - Downloading war and peace"></a>5 - Downloading war and peace</h2><p>So maybe a good example of why streams are important is when dealing with very large files. The novel war an peace has a reputation of being a very large book, of over five hundred thousand words. On a slow connection a file this large will take a little while to download. </p>
+<p>In this example I am checking the headers of a file at a url that holds a text file that is a copy of war and peace via a head request first. Once the head request is done I look for a content length header, and assume that this must be the byte length of the file. Once I have the byte length I can check if it is between some set limits for downloading the body of a file. If all goes well I then start the get request for the file, and for each incoming byte of data I update a percent done variable, and log the current percentage done in the console. While this is happening I am also writing the chunks to a file as well.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> request = <span class="built_in">require</span>(<span class="string">'request'</span>),</div><div class="line">fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line"> </div><div class="line"><span class="comment">// requesting "War, and peace" (it's over 500,000 words)</span></div><div class="line">uri = <span class="string">'http://www.textfiles.com/etext/FICTION/war_peace_text'</span>,</div><div class="line"> </div><div class="line"><span class="comment">// a tx file to write to</span></div><div class="line">txFile = fs.createWriteStream(<span class="string">'warpeace_.txt'</span>);</div><div class="line"> </div><div class="line"><span class="comment">// start out with a head request</span></div><div class="line"><span class="comment">// as I would likt to know the file</span></div><div class="line"><span class="comment">// size first</span></div><div class="line">request(&#123;</div><div class="line"> </div><div class="line">    <span class="attr">method</span>: <span class="string">'head'</span>,</div><div class="line">    <span class="attr">uri</span>: uri</div><div class="line"> </div><div class="line">&#125;)</div><div class="line"> </div><div class="line"><span class="comment">// if an error log it</span></div><div class="line">.on(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(err);</div><div class="line"> </div><div class="line">&#125;)</div><div class="line"> </div><div class="line"><span class="comment">// if we have a response for the head request</span></div><div class="line">.on(<span class="string">'response'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">res</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// get the byte size</span></div><div class="line">    <span class="keyword">let</span> byteSize = res.headers[<span class="string">'content-length'</span>] || <span class="number">-1</span>,</div><div class="line">    byteDown = <span class="number">0</span>,</div><div class="line">    per = <span class="number">0</span>;</div><div class="line"> </div><div class="line">    <span class="comment">// if we have a byteSize between two bounds</span></div><div class="line">    <span class="keyword">if</span> (byteSize &gt;= <span class="number">0</span> &amp;&amp; byteSize &lt;= <span class="number">10000000</span>) &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// Then make the actual get request</span></div><div class="line">        <span class="comment">// for the body of the file</span></div><div class="line">        request(&#123;</div><div class="line"> </div><div class="line">            <span class="attr">method</span>: <span class="string">'get'</span>,</div><div class="line">            <span class="attr">uri</span>: uri</div><div class="line"> </div><div class="line">        &#125;)</div><div class="line"> </div><div class="line">        <span class="comment">// if an error log it</span></div><div class="line">        .on(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(err);</div><div class="line"> </div><div class="line">        &#125;)</div><div class="line"> </div><div class="line">        <span class="comment">// for each incoming chunk</span></div><div class="line">        .on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">chunk</span>) </span>&#123;</div><div class="line"> </div><div class="line">            byteDown += chunk.length;</div><div class="line">            per = byteDown / byteSize * <span class="number">100</span>;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'downloading: '</span> + per.toFixed(<span class="number">2</span>) + <span class="string">'%'</span>);</div><div class="line"> </div><div class="line">            <span class="comment">// write the current chunk</span></div><div class="line">            txFile.write(chunk);</div><div class="line"> </div><div class="line">        &#125;)</div><div class="line"> </div><div class="line">        .on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'file done'</span>);</div><div class="line">            <span class="built_in">console</span>.log(byteDown + <span class="string">' bytes downloaded'</span>);</div><div class="line"> </div><div class="line">            txFile.end();</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'byteSize: '</span> + byteSize);</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'byteSize not in bounds, headers:'</span>);</div><div class="line">        <span class="built_in">console</span>.log(res.headers);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h2 id="6-Converting-a-png-file-to-ascii-art"><a href="#6-Converting-a-png-file-to-ascii-art" class="headerlink" title="6 - Converting a png file to ascii art"></a>6 - Converting a png file to ascii art</h2><p>Okay now it is time to do something fun involving png files, and ascii art. If you are wondering if there is an npm package that can be used to parse the binary data of a png file into a set of data that is workable with javaScript, yes there is. I was able to fine a nice npm package for this called <a href="https://www.npmjs.com/package/pngjs" target="_blank" rel="external">pngjs</a>. This works great with request right out of the gate.</p>
+<p>All I have to do is just pipe the output of request, to in instance of the PNG constructor that is available via what is exported when I bring pngjs into a project.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install pngjs --save</div></pre></td></tr></table></figure>
+<p>after piping the stream from request to PNG there is then a parsed event that I can use to work with the image data in the form of an array of numbers that are the reg,green, blue, and alpha color channels of the png files pixel data.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// using request of course</span></div><div class="line"><span class="keyword">let</span> request = <span class="built_in">require</span>(<span class="string">'request'</span>),</div><div class="line"> </div><div class="line"><span class="comment">// as well as pngjs</span></div><div class="line">png = <span class="built_in">require</span>(<span class="string">'pngjs'</span>).PNG;</div><div class="line"> </div><div class="line"><span class="comment">// using the node.js built in stream, and fs modules</span></div><div class="line">stream = <span class="built_in">require</span>(<span class="string">'stream'</span>),</div><div class="line">fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line"> </div><div class="line"><span class="comment">// an output file to write to</span></div><div class="line">txFile = fs.createWriteStream(<span class="string">'ascii.txt'</span>);</div><div class="line"> </div><div class="line"><span class="comment">// request my stack overflow icon</span></div><div class="line">request(<span class="string">'https://i.stack.imgur.com/R3O9s.png?s=64&amp;g=1'</span>)</div><div class="line"> </div><div class="line"><span class="comment">// pipe the response to pngjs</span></div><div class="line">.pipe(<span class="keyword">new</span> png(&#123;</div><div class="line">        <span class="attr">filterType</span>: <span class="number">4</span></div><div class="line">    &#125;))</div><div class="line"> </div><div class="line"><span class="comment">// when the png is parsed into workable data</span></div><div class="line">.on(<span class="string">'parsed'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// the this keyword refers to an object</span></div><div class="line">    <span class="comment">// that contains data on the png file</span></div><div class="line">    <span class="keyword">let</span> img = <span class="keyword">this</span>,</div><div class="line"> </div><div class="line">    <span class="comment">// the char palette</span></div><div class="line">    palette = <span class="string">' ,.,:,;,!,i,1,*,3,&amp;'</span>.split(<span class="string">','</span>),</div><div class="line"> </div><div class="line">    <span class="comment">// row will be used to build a row of chars</span></div><div class="line">    row;</div><div class="line"> </div><div class="line">    <span class="comment">// for all values of y in the image</span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> y = <span class="number">0</span>; y &lt; <span class="keyword">this</span>.height; y++) &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// start off with a new row</span></div><div class="line">        row = <span class="string">''</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// far all values of x (in the current row)</span></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> x = <span class="number">0</span>; x &lt; <span class="keyword">this</span>.width; x++) &#123;</div><div class="line"> </div><div class="line">            <span class="comment">// get the current index</span></div><div class="line">            <span class="keyword">let</span> index = (<span class="keyword">this</span>.width * y + x) &lt;&lt; <span class="number">2</span>,</div><div class="line"> </div><div class="line">            <span class="comment">// rgb channel values (in 0-1 form)</span></div><div class="line">            r = img.data[index] / <span class="number">255</span>,</div><div class="line">            g = img.data[index + <span class="number">1</span>] / <span class="number">255</span>,</div><div class="line">            b = img.data[index + <span class="number">2</span>] / <span class="number">255</span>,</div><div class="line"> </div><div class="line">            <span class="comment">// alpha channel (in 0-1 form)</span></div><div class="line">            a = img.data[index + <span class="number">3</span>] / <span class="number">255</span>,</div><div class="line"> </div><div class="line">            <span class="comment">// value between black and white</span></div><div class="line">            val = (r + g + b) / <span class="number">3</span>;</div><div class="line"> </div><div class="line">            <span class="comment">// make it so alpha just reduces value</span></div><div class="line">            val = val * a;</div><div class="line"> </div><div class="line">            <span class="comment">// select char based on value</span></div><div class="line">            row += palette[<span class="built_in">Math</span>.floor(val * (palette.length - <span class="number">1</span>))];</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">// log the current row, and write the row to the txt file</span></div><div class="line">        <span class="built_in">console</span>.log(row);</div><div class="line">        txFile.write(row + <span class="string">'\n'</span>);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'image size: '</span>, img.width, img.height);</div><div class="line">    txFile.end();</div><div class="line"> </div><div class="line">&#125;)</div><div class="line"> </div><div class="line"><span class="comment">// if an error happens log it</span></div><div class="line">.on(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(err);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>Its a really cool project for handling this sort of thing, It can also be used to encode to png as well, but that is a matter for another post.</p>
+<h2 id="7-Conclusion"><a href="#7-Conclusion" class="headerlink" title="7 - Conclusion"></a>7 - Conclusion</h2><p>So streams can be a nice way to work with requests, the callback system as well is tired yet true as well with request. Also if I want to use promises there is a wealth of options when it comes to adding support for that sort of thing as well, as compared to axios where that is just built in from that start. After spending some time playing around with request I am beginning to see why this is such a popular http client for node.js, there is a lot of versatility with this one.</p>
+<p>Than you for reading I hope you got something out of this post. If you think something is missing please feel free to write about it in the comments.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/08/15/nodejs-request-streams/" data-id="cjl5tzbb000tllov1i1vsg9if" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/08/15/nodejs-request-streams/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/08/16/nodejs-crypto-create-cipher-iv/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          The Crypto CreateCipheriv method in node.js
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/08/14/phaser-buttons/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Phaser Buttons</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2018/08/15/nodejs-request-streams/index.html';
+    this.page.identifier = '260';
+    this.page.title = 'Using streams with the request npm package.';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.22px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 11.67px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.56px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.22px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.78px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 16.67px;">express</a> <a href="/tags/games/" style="font-size: 18.89px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.44px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.67px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 17.78px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.33px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.11px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/08/23/nodejs-os-cpus-find-count-of/">Find the count of cpus in a node.js environment with os.cpus</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/22/phaser-point-setmagnitude/">Setting, and getting point length in phaser with Point.setMagnitude, and Point.getMagnitude.</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/21/phaser-point-normalize/">Normalizing Points in Phaser</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/20/phaser-point-rotate-sprite-around-another/">Rotating one sprite around another in Phaser using Point.rotate</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/19/phaser-point-angle-between-two-sprites/">Finding the angle between to sprites in phaser with the Point Class</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2018/08/15/nodejs-request-streams/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

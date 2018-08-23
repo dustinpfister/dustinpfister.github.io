@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Pseudo full screen in phaser using that scale manager | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Toggling full screen when making a phaser project can end up becoming a bit of a rabbit hole, at least that has been my experience with it. Never the less, I think I have worked out some solutions tha">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pseudo full screen in phaser using that scale manager">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/08/13/phaser-scale-fullscreen-pseudo/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="Toggling full screen when making a phaser project can end up becoming a bit of a rabbit hole, at least that has been my experience with it. Never the less, I think I have worked out some solutions tha">
+<meta property="og:updated_time" content="2018-08-13T22:48:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Pseudo full screen in phaser using that scale manager">
+<meta name="twitter:description" content="Toggling full screen when making a phaser project can end up becoming a bit of a rabbit hole, at least that has been my experience with it. Never the less, I think I have worked out some solutions tha">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense -->
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-phaser-scale-fullscreen-pseudo" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/13/phaser-scale-fullscreen-pseudo/" class="article-date"> Published:
+  <time datetime="2018-08-13T21:06:00.000Z" itemprop="datePublished">2018-08-13</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/08/13/phaser-scale-fullscreen-pseudo/" class="article-date"> Modified:
+  <time datetime="2018-08-13T22:48:04.000Z" itemprop="dateModified">2018-08-13</time>
+</a>
+
+    <span class="article-date">V1.11</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/phaser/">phaser</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Pseudo full screen in phaser using that scale manager
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>Toggling full screen when making a <a href="http://phaser.io" target="_blank" rel="external">phaser</a> project can end up becoming a bit of a rabbit hole, at least that has been my experience with it. Never the less, I think I have worked out some solutions that seem to work okay. With the phaser Scale manager it is possible to make a request to set actual full screen mode in the browser, and with some browsers this works fine without any problems. However on some browsers it will not work, so there might be a desire of a back up plan, one that involves just simply scaling up the game to the full size of the browser window. Doing so with phaser is a little involved, but in the post I will be writing about toggling a kind of pseudo full screen mode in phaser.</p>
+<a id="more"></a>
+<h2 id="1-what-to-know-about-before-continuing"><a href="#1-what-to-know-about-before-continuing" class="headerlink" title="1 - what to know about before continuing"></a>1 - what to know about before continuing</h2><p>This is an advanced post on phaser, the javaScript powered game frame work used to make web based games. In this post I will be writing about many different aspects of the framework, and web development that I will not be covering in detail. However if you have at least some background with phaser, and javaScript you might find this post useful.</p>
+<h2 id="1-1-The-Scale-Manager"><a href="#1-1-The-Scale-Manager" class="headerlink" title="1.1 - The Scale Manager"></a>1.1 - The Scale Manager</h2><p>In the post I am using the Phaser Scale Manager. As the name implies this is the component of phaser that is of interest when it comes to Scaling a game, or toggling full screen. This manager has many properties, and methods, but I will only be covering some of the most relevant aspects of the Scale manager in this post. If you want to read more about that scale manager there is always the <a href="https://photonstorm.github.io/phaser-ce/Phaser.ScaleManager.html" target="_blank" rel="external">phaser ce docs</a> on the subject.</p>
+<h2 id="1-2-Setting-actual-full-screen"><a href="#1-2-Setting-actual-full-screen" class="headerlink" title="1.2 - Setting actual full screen"></a>1.2 - Setting actual full screen</h2><p>It is possible to use the scale manager to set actual full screen more if the browser supports it. I have <a href="/2017/10/15/phaser-scale-fullscreen/">written a post on actual full screen</a> a while back, but I do not think a solution that just depends on that alone will work out great. If you are going to bother with it, you might want to also do something similar to what I am doing in this post as well, as a kind of fall back.</p>
+<h2 id="2-An-example-of-pseudo-full-screen"><a href="#2-An-example-of-pseudo-full-screen" class="headerlink" title="2 - An example of pseudo full screen"></a>2 - An example of pseudo full screen</h2><p>For an example of pseudo full screen, fake full screen, or just simply game canvas scaling I will be making a simple phaser example. This example will just be a basic image of something like just a circle, in a real project this will of course be the view port of a game, but for the scope of just scaling it should work just fine. When I click the canvas of this project the canvas will scale up to the size of the browser window, and when I click it again it will go back to the old location in the layout of a page. </p>
+<p>This can be archived by removing the canvas from the layouts container element, and then placing it in a fixed position div. Then when it is toggled back, it will be removed from the fixed div, and back to the original container. As you might guess the fixed div is placed above all other content on the page, and is scaled to fit the whole of the window.</p>
+<h3 id="2-1-The-index-html-file"><a href="#2-1-The-index-html-file" class="headerlink" title="2.1 - The index.html file"></a>2.1 - The index.html file</h3><p>So the html file of this project represents what would be a layout of some kind. When I have a game placed in a web site it will often just be a small section of that page, along with other content. So My html file contains that container, as well as links to phaser, and my main.js file that will contain everything else.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>Phaser Demos<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"/css/style_vanilla.css"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">body</span> <span class="attr">style</span>=<span class="string">"margin:0px;padding:0px"</span>&gt;</span></div><div class="line"> </div><div class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"margin-left:15px;margin-right:15px;"</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"position:relative;width:100%;height:100px;background:#af0000;"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"position:relative;background:#00af00;padding:20px;"</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"gamearea"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"> </div><div class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/js/phaser.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./main.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>What it does not have is the fixed position div element. This is something that I think should be generated in my code in order to help make the project a little more portable.</p>
+<h3 id="2-2-The-main-js-file"><a href="#2-2-The-main-js-file" class="headerlink" title="2.2 - The main.js file"></a>2.2 - The main.js file</h3><p>In my main.js file I create my instance of Phaser.Game, and create a single state called resize. In this state I create a single simple display object that represents what would be the contents of a game. I am disabling scrollTo as I do with most of my phaser projects, and then I create, and append the fixed div I mentioned earlier.</p>
+<p>Then I add a handler for any kind of onDown event that will be used to toggle the scale. This works by first checking which scale mode is currently active. If it is NO_SCALE then I will want to have the scale mode change to SHOW_ALL, and scale up the canvas. If it is All ready set to the SHOW_All ScaleMode then I will want to put it back to normal.</p>
+<p>When scaling the canvas up I will want to set the windowConstraints bottom value to ‘visual’, if I do not do this then the canvas might scale relative to the layout of the page which I do not want. The pageAlignHorizontally, and pageAlignVertically properties should also be set to true from there default false values. These properties are important because I am using the SHOW_all scale mode that will preserve aspect ration as it scales, so I will want the result centered.</p>
+<p>Next I set the target scale by setting the game.scale.width, and game.scale.height properties to the values I want to scale to, in this case it is window.innerWidth, and window.innerHeight. I then also set the size of the fixed div as well to make sure that it is the same area as the window.</p>
+<p>I then use the Phaser.Canvas.removeFromDom method to remove the canvas from the dom. The canvas element will still be at game.canvas, it will just no longer be appended to the container, as I want to place it in the fixed div I made, which is of couse what I do next with the appnedChild method. Once that is all done I set the scale mode to SHOW_All. This will also trigger a refresh for the scale manager, so I do not have to call that method manually.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div></pre></td><td class="code"><pre><div class="line">game.state.add(<span class="string">'resize'</span>, &#123;</div><div class="line"> </div><div class="line">    <span class="attr">create</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// just a circle</span></div><div class="line">        <span class="keyword">var</span> bx = game.add.graphics(<span class="number">160</span>, <span class="number">120</span>);</div><div class="line">        bx.beginFill(<span class="number">0x008f00</span>);</div><div class="line">        bx.drawCircle(<span class="number">0</span>, <span class="number">0</span>, <span class="number">240</span>);</div><div class="line">        bx.endFill();</div><div class="line">        game.stage.backgroundColor = <span class="string">'#2a2a2a'</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// disable scrollTo</span></div><div class="line">        game.scale.compatibility.scrollTo = <span class="literal">false</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// inject a fixed position DIV for SCALE</span></div><div class="line">        <span class="keyword">var</span> fixDiv = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</div><div class="line">        fixDiv.style.position = <span class="string">'fixed'</span>;</div><div class="line">        fixDiv.style.top = <span class="string">'0px'</span>;</div><div class="line">        fixDiv.style.left = <span class="string">'0px'</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// setFiex to be called when toggling to pseudo full screen</span></div><div class="line">        <span class="comment">// or when the window is resized</span></div><div class="line">        <span class="keyword">var</span> setFixed = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">            game.scale.width = <span class="built_in">window</span>.innerWidth;</div><div class="line">            game.scale.height = <span class="built_in">window</span>.innerHeight;</div><div class="line">            fixDiv.style.width = game.scale.width + <span class="string">'px'</span>;</div><div class="line">            fixDiv.style.Height = game.scale.height + <span class="string">'px'</span>;</div><div class="line">        &#125;;</div><div class="line"> </div><div class="line">        <span class="comment">// call setFixed on window resize</span></div><div class="line">        <span class="built_in">window</span>.addEventListener(<span class="string">'resize'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;setFixed();&#125;);</div><div class="line"> </div><div class="line">        <span class="comment">// append to body</span></div><div class="line">        <span class="built_in">document</span>.body.appendChild(fixDiv);</div><div class="line"> </div><div class="line">        <span class="comment">// on input down toggle full screen</span></div><div class="line">        game.input.onDown.add(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">// IF scale mode is NO_SCALE then toggle to SHOW_ALL</span></div><div class="line">            <span class="keyword">if</span> (game.scale.scaleMode === Phaser.ScaleManager.NO_SCALE) &#123;</div><div class="line"> </div><div class="line">                <span class="comment">// set window constraints to 'visual' for both right, and bottom</span></div><div class="line">                game.scale.windowConstraints.bottom = <span class="string">'visual'</span>;</div><div class="line"> </div><div class="line">                <span class="comment">// I will want the scaled canvas to align horizontally/Vertically</span></div><div class="line">                game.scale.pageAlignHorizontally = <span class="literal">true</span>;</div><div class="line">                game.scale.pageAlignVertically = <span class="literal">true</span>;</div><div class="line"> </div><div class="line">                <span class="comment">// set</span></div><div class="line">                setFixed();</div><div class="line"> </div><div class="line">                <span class="comment">// remove from dom</span></div><div class="line">                Phaser.Canvas.removeFromDOM(game.canvas);</div><div class="line"> </div><div class="line">                <span class="comment">// append to fixDIV</span></div><div class="line">                fixDiv.appendChild(game.canvas);</div><div class="line"> </div><div class="line">                <span class="comment">// set scale mode to 'SHOW_ALL'</span></div><div class="line">                game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;</div><div class="line"> </div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">                <span class="comment">// ELSE if scale mode is not NO_SCALE toggle back</span></div><div class="line"> </div><div class="line">                <span class="comment">// set window constraints back to default</span></div><div class="line">                game.scale.windowConstraints.bottom = <span class="string">''</span>;</div><div class="line"> </div><div class="line">                <span class="comment">// I will want to set these back to there defaults</span></div><div class="line">                game.scale.pageAlignHorizontally = <span class="literal">false</span>;</div><div class="line">                game.scale.pageAlignVertically = <span class="literal">false</span>;</div><div class="line"> </div><div class="line">                <span class="comment">// remove from dom</span></div><div class="line">                Phaser.Canvas.removeFromDOM(game.canvas);</div><div class="line"> </div><div class="line">                <span class="comment">// append back to game.parent</span></div><div class="line">                <span class="built_in">document</span>.getElementById(game.parent).appendChild(game.canvas);</div><div class="line"> </div><div class="line">                <span class="comment">// set scale back to NO_SCALE</span></div><div class="line">                game.scale.scaleMode = Phaser.ScaleManager.NO_SCALE;</div><div class="line"> </div><div class="line">            &#125;</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line">game.state.start(<span class="string">'resize'</span>);</div></pre></td></tr></table></figure>
+<p>The process of putting things back is kind of a reversal of the same process as before. I once again use the Phaser.Canvas.removeFromDom method to remove the canvas from the dom, but I now place it back in the container that is in the layout of the page.</p>
+<h2 id="3-Conclusion"><a href="#3-Conclusion" class="headerlink" title="3 - Conclusion"></a>3 - Conclusion</h2><p>This project along with just about everything else that I make is a work in progress. I might want to do a great deal more with this to make it more robust, but the basic idea is there. The canvas just needs to be removed from the container in the page layout, and then placed in a new container that is fixed to the browser window, scaled to the size of the window, and hopefully has a zIndex that is above all other content on the page. Once that canvas is in it’s new container I just need to set the scale mode that I want, and the size of the scale, alonge with any other relevant properties set in the scale manager.</p>
+<p>I hope you found this post helpful, if so you might want to check out my many other posts on phaser. Thank you for reading.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/08/13/phaser-scale-fullscreen-pseudo/" data-id="cjl5tzbjz00wulov1vfuxo2h5" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/08/13/phaser-scale-fullscreen-pseudo/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/games/">games</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/phaser/">phaser</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/08/14/phaser-buttons/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Phaser Buttons
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/08/12/lodash_flatten/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">The lodash _.flatten method for flatting down a multi dimensional array</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2018/08/13/phaser-scale-fullscreen-pseudo/index.html';
+    this.page.identifier = '258';
+    this.page.title = 'Pseudo full screen in phaser using that scale manager';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.22px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 11.67px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.56px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.22px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.78px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 16.67px;">express</a> <a href="/tags/games/" style="font-size: 18.89px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.44px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.67px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 17.78px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.33px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.11px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/08/23/nodejs-os-cpus-find-count-of/">Find the count of cpus in a node.js environment with os.cpus</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/22/phaser-point-setmagnitude/">Setting, and getting point length in phaser with Point.setMagnitude, and Point.getMagnitude.</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/21/phaser-point-normalize/">Normalizing Points in Phaser</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/20/phaser-point-rotate-sprite-around-another/">Rotating one sprite around another in Phaser using Point.rotate</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/19/phaser-point-angle-between-two-sprites/">Finding the angle between to sprites in phaser with the Point Class</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2018/08/13/phaser-scale-fullscreen-pseudo/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
