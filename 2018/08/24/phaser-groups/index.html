@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Getting started with Groups of Sprites in phaser | Dustin John Pfister at github pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="So in many games you end up with one or more collections or groups of sprites. In this case there is a need for all kinds of methods that help with managing that group of display objects. In todays po">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Getting started with Groups of Sprites in phaser">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/08/24/phaser-groups/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="So in many games you end up with one or more collections or groups of sprites. In this case there is a need for all kinds of methods that help with managing that group of display objects. In todays po">
+<meta property="og:updated_time" content="2018-08-26T16:41:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Getting started with Groups of Sprites in phaser">
+<meta name="twitter:description" content="So in many games you end up with one or more collections or groups of sprites. In this case there is a need for all kinds of methods that help with managing that group of display objects. In todays po">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense -->
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-phaser-groups" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/24/phaser-groups/" class="article-date"> Published:
+  <time datetime="2018-08-25T00:08:00.000Z" itemprop="datePublished">2018-08-24</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/08/24/phaser-groups/" class="article-date"> Modified:
+  <time datetime="2018-08-26T16:41:18.000Z" itemprop="dateModified">2018-08-26</time>
+</a>
+
+    <span class="article-date">V1.17</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/phaser/">phaser</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Getting started with Groups of Sprites in phaser
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>So in many games you end up with one or more collections or groups of sprites. In this case there is a need for all kinds of methods that help with managing that group of display objects. In todays post I will be writing about grops in <a href="https://photonstorm.github.io/phaser-ce/" target="_blank" rel="external">Phaser ce</a>. There are many methods, and properties with groups, so this will be just a simple getting started post on groups for now.</p>
+<a id="more"></a>
+<h2 id="1-What-to-know-before-continuing"><a href="#1-What-to-know-before-continuing" class="headerlink" title="1 - What to know before continuing"></a>1 - What to know before continuing</h2><p>There is a great deal to know about phaser ce, as well as javaScript in general before hand. In this post I am writing just about the Phaser.Group Constructor, and even then I am not covering all bases with that, this is just a getting started post on Groups. Phaser is a fairly complex project, and it will take time to get up to speed with it, however it is worth the investment, because it goes without saying that this is one of the more fun, and exciting javaScript projects out on the open Internet.</p>
+<h2 id="2-Some-Basic-examples-of-groups"><a href="#2-Some-Basic-examples-of-groups" class="headerlink" title="2 - Some Basic examples of groups"></a>2 - Some Basic examples of groups</h2><p>In this section I will be covering some basic examples of using groups in a phaser project. These examples are just quick silly little demos that help to show how groups are useful, for keeping large collections of display objects organized.</p>
+<h3 id="2-1-Just-creating-a-Group-and-adding-a-single-child"><a href="#2-1-Just-creating-a-Group-and-adding-a-single-child" class="headerlink" title="2.1 - Just creating a Group, and adding a single child"></a>2.1 - Just creating a Group, and adding a single child</h3><p>So for starters a very basic example might be to juts create a single Group instance, and add a single display object to it. To do this I just need to call game.add.group, and save the reference to it in a variable. At which point I can add a display object to the group with the add method of the Group instance.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// create a group with game.add.group</span></div><div class="line"><span class="keyword">var</span> aGroup = game.add.group();</div><div class="line"> </div><div class="line"><span class="keyword">var</span> text = game.add.text(<span class="number">0</span>, <span class="number">0</span>, <span class="string">'foo'</span>);</div><div class="line"> </div><div class="line"><span class="comment">// add a display object with Group.add;</span></div><div class="line">aGroup.add(text);</div><div class="line"> </div><div class="line"><span class="comment">// the display objects of a Group are stored in the children array</span></div><div class="line"><span class="built_in">console</span>.log(aGroup.children[<span class="number">0</span>].text); <span class="comment">// 'foo'</span></div></pre></td></tr></table></figure>
+<h3 id="2-2-Nesting-groups"><a href="#2-2-Nesting-groups" class="headerlink" title="2.2 - Nesting groups"></a>2.2 - Nesting groups</h3><p>I can nest on e group inside of another group. When doing so the x, and x position of the child group is relative to that of the parent Group.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// creating two groups</span></div><div class="line"><span class="keyword">var</span> group1 = game.add.group(),</div><div class="line">group2 = game.add.group(),</div><div class="line">font = &#123;</div><div class="line">    <span class="attr">fill</span>: <span class="string">'red'</span>,</div><div class="line">    <span class="attr">font</span>: <span class="string">'20px courier'</span></div><div class="line">&#125;;</div><div class="line"> </div><div class="line">group1.add(game.add.text(<span class="number">0</span>, <span class="number">0</span>, <span class="string">'hello'</span>, font));</div><div class="line">group1.add(game.add.text(<span class="number">0</span>, <span class="number">20</span>, <span class="string">'world'</span>, font));</div><div class="line">group1.x = <span class="number">50</span>;</div><div class="line">group1.y = <span class="number">50</span>;</div><div class="line"> </div><div class="line">group2.add(game.add.text(<span class="number">0</span>, <span class="number">0</span>, <span class="string">'phaser'</span>, font));</div><div class="line">group2.add(game.add.text(<span class="number">0</span>, <span class="number">20</span>, <span class="string">'style!'</span>, font));</div><div class="line">group2.x = <span class="number">100</span>;</div><div class="line">group2.y = <span class="number">50</span>;</div><div class="line"> </div><div class="line"><span class="comment">// I can nest groups</span></div><div class="line">group1.add(group2);</div></pre></td></tr></table></figure>
+<h3 id="3-Example-1-of-Phaser-Group-A-group-of-text-objects"><a href="#3-Example-1-of-Phaser-Group-A-group-of-text-objects" class="headerlink" title="3 - Example 1 of Phaser.Group - A group of text objects"></a>3 - Example 1 of Phaser.Group - A group of text objects</h3><p>Text objects in phaser come in handy for just simply displaying information on the canvas. Of course there is the process of making your own custom fonts with a sprite sheet, but that is off topic. Anyway often it is desirable to just display the current state of some variables on the canvas, for debugging purposes, or even for the sake of game play.</p>
+<p>In this example I am using the Group constructor to create an instance of a group in the create method of the state object, and then adding a bunch of text elements to it. I can then use these text objects in another method of the state object to display some data. </p>
+<h3 id="3-1-The-text-group-example"><a href="#3-1-The-text-group-example" class="headerlink" title="3.1 - The text group example"></a>3.1 - The text group example</h3><p>I start off by creating the instance of the Group with game.add.group, along with the font I will be using, and other function level variables. </p>
+<p>I then gave the Group a name, this is something in phaser that is similar to that of ids, and getElementById when it comes to client side javaScript. There are other ways to gain, and stored references to display objects, and Groups, but this is one option for doing so that I tent to like.</p>
+<p>I then create instances of text display objects with game.add.text, and add them to the Group with text.add. Before doing so I can set various initial values if desired, in this textame though I just set a name for each text object. After that</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>);</div><div class="line"> </div><div class="line">game.state.add(<span class="string">'example-1'</span>, &#123;</div><div class="line"> </div><div class="line">    <span class="attr">create</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// creating the text Group</span></div><div class="line">        <span class="keyword">var</span> textGroup = game.add.group(),</div><div class="line">        font = &#123;</div><div class="line">            <span class="attr">fill</span>: <span class="string">'red'</span>,</div><div class="line">            <span class="attr">font</span>: <span class="string">'15px courier'</span></div><div class="line">        &#125;,</div><div class="line">        i = <span class="number">0</span>,</div><div class="line">        len = <span class="number">5</span>,</div><div class="line">        text;</div><div class="line"> </div><div class="line">        <span class="comment">// giving th Group a Name</span></div><div class="line">        textGroup.name = <span class="string">'text-group'</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// make some Text objects</span></div><div class="line">        <span class="keyword">while</span> (i &lt; len) &#123;</div><div class="line"> </div><div class="line">            <span class="comment">// adding the text object to the cache</span></div><div class="line">            <span class="comment">// and storing a refernce to it</span></div><div class="line">            text = game.add.text(<span class="number">0</span>, i * <span class="number">15</span>, <span class="string">''</span>, font);</div><div class="line"> </div><div class="line">            <span class="comment">// using Group.add to add a text</span></div><div class="line">            <span class="comment">// display object to the Group</span></div><div class="line">            textGroup.add(text);</div><div class="line">            text.name = <span class="string">'text-'</span> + i;</div><div class="line"> </div><div class="line">            i += <span class="number">1</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="attr">update</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// I can use getByName to grab a ref to the group</span></div><div class="line">        <span class="comment">// if I am using names rather than a global variable</span></div><div class="line">        <span class="comment">// or property of an object appended to the state or</span></div><div class="line">        <span class="comment">// game objects</span></div><div class="line">        <span class="keyword">var</span> textGroup = game.world.getByName(<span class="string">'text-group'</span>),</div><div class="line">        text;</div><div class="line"> </div><div class="line">        <span class="comment">// If I set names for the children of the group I can use</span></div><div class="line">        <span class="comment">// that to get a certain child element</span></div><div class="line">        text = textGroup.getByName(<span class="string">'text-0'</span>);</div><div class="line">        text.text = <span class="string">'Roll: '</span> + <span class="built_in">Math</span>.round(<span class="built_in">Math</span>.random() * <span class="number">6</span>);</div><div class="line"> </div><div class="line">        <span class="comment">// or I can use one of the many Phaser.Group Class Methods</span></div><div class="line">        <span class="comment">// such as filter</span></div><div class="line">        textGroup.filter(<span class="function"><span class="keyword">function</span> (<span class="params">child, index</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">// return any child that has an index greater than zero</span></div><div class="line">            <span class="keyword">return</span> index &gt; <span class="number">0</span>;</div><div class="line"> </div><div class="line">        &#125;).list.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">child, i</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">// an instance of Phaser.ArraySet is returned</span></div><div class="line">            <span class="comment">// so the list property of an ArraySet instance</span></div><div class="line">            <span class="comment">// is the actual instance of Array in core js</span></div><div class="line"> </div><div class="line">            <span class="comment">// so something with the text</span></div><div class="line">            <span class="keyword">var</span> exp = child.data.exp = child.data.exp || <span class="number">1</span>,</div><div class="line">            base = <span class="number">2</span> + i;</div><div class="line"> </div><div class="line">            <span class="comment">// the text property of a text object is what can be used to set</span></div><div class="line">            <span class="comment">// the value of text</span></div><div class="line">            child.text = base + <span class="string">'^'</span> + exp + <span class="string">' = '</span> + <span class="built_in">Math</span>.pow(base, exp);</div><div class="line"> </div><div class="line">            exp += <span class="number">1</span>;</div><div class="line">            exp %= <span class="number">25</span>;</div><div class="line">            child.data.exp = exp;</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line">game.state.start(<span class="string">'example-1'</span>);</div></pre></td></tr></table></figure>
+<p>In the update loop I am grabbing a reference to the Group using game.world.getByName, once I have my reference to the Group that I created before hand in the create method, I can then then do a number of things with the group. In this example I am getting a reference to a single text object in the Group once again because I assigned names for everything, but I also demonstrated the use of a Group method called filter to gain a list of all the remaining text elements as well.</p>
+<h2 id="4-Example-3-of-Phaser-Group-An-example-involving-blocks"><a href="#4-Example-3-of-Phaser-Group-An-example-involving-blocks" class="headerlink" title="4 - Example 3 of Phaser.Group - An example involving blocks"></a>4 - Example 3 of Phaser.Group - An example involving blocks</h2><p>For another example of using Groups I Made an example that involves making a Class for each child in a group, as well as A class that works with the Group of children. This is something that I end up developing from the ground up over, and over again when it comes to making a project vanilla js style. However with phaser the Process of doing this is a whole world faster, and many of the usual suspects for working with a collection of something is there to begin with, saving me a great deal of time inventing the wheel yet again. A major reason why it makes sense to bother with a framework like phaser ce.</p>
+<h3 id="4-1-Sheet-from-canvas-method"><a href="#4-1-Sheet-from-canvas-method" class="headerlink" title="4.1 - Sheet from canvas method"></a>4.1 - Sheet from canvas method</h3><p>So This example involves the use of a helper method that I have been developing that helps me make assets by way of the 2d canvas drawing context. This is something that I keep hacking over, adding features, and making certain tweaks. So I start off my copying and pasting this into my project.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// sheet from canvas helper</span></div><div class="line"><span class="keyword">var</span> sheetFromCanvas = <span class="function"><span class="keyword">function</span> (<span class="params">opt</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> f,</div><div class="line">    fd, <span class="comment">// frame data</span></div><div class="line">    sx,</div><div class="line">    per,</div><div class="line">    canvas = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>);</div><div class="line">    ctx = canvas.getContext(<span class="string">'2d'</span>);</div><div class="line"> </div><div class="line">    opt = opt || &#123;&#125;;</div><div class="line">    opt.name = opt.name || <span class="string">'sheet'</span>;</div><div class="line">    opt.frames = opt.frames || <span class="number">3</span>;</div><div class="line">    opt.frameWidth = opt.frameWidth || <span class="number">32</span>;</div><div class="line">    opt.frameHeight = opt.frameHeight || <span class="number">32</span>;</div><div class="line">    opt.forFrame = opt.forFrame || <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</div><div class="line">    opt.game = opt.game || &#123;&#125;;</div><div class="line"> </div><div class="line">    canvas.width = opt.frameWidth * opt.frames;</div><div class="line">    canvas.height = opt.frameHeight;</div><div class="line"> </div><div class="line">    <span class="comment">// to store frame data</span></div><div class="line">    opt.game.global = opt.game.global || &#123;&#125;;</div><div class="line">    opt.game.global.frameData = opt.game.frameData || &#123;&#125;;</div><div class="line"> </div><div class="line">    fd = opt.game.global.frameData[opt.name] = [];</div><div class="line"> </div><div class="line">    f = <span class="number">0</span>;</div><div class="line">    <span class="comment">// for each frame</span></div><div class="line">    <span class="keyword">while</span> (f &lt; opt.frames) &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// find current percent</span></div><div class="line">        per = f / opt.frames;</div><div class="line">        sx = opt.frameWidth * f + <span class="number">0.5</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// push frame index to frame data</span></div><div class="line">        fd.push(f);</div><div class="line"> </div><div class="line">        <span class="comment">// call forFrame with api set to the value</span></div><div class="line">        <span class="comment">// of 'this' inside the forFrame function</span></div><div class="line">        ctx.save();</div><div class="line">        ctx.translate(sx, <span class="number">0</span>);</div><div class="line">        opt.forFrame.call(&#123;</div><div class="line">            <span class="attr">f</span>: f,</div><div class="line">            <span class="attr">p</span>: <span class="built_in">Math</span>.PI,</div><div class="line">            <span class="attr">p2</span>: <span class="built_in">Math</span>.PI * <span class="number">2</span>,</div><div class="line">            <span class="attr">hw</span>: opt.frameWidth / <span class="number">2</span>,</div><div class="line">            <span class="attr">hh</span>: opt.frameHeight / <span class="number">2</span>,</div><div class="line">            <span class="attr">sx</span>: sx,</div><div class="line">            <span class="attr">per</span>: per,</div><div class="line">            <span class="attr">canvas</span>: canvas,</div><div class="line">            <span class="attr">ctx</span>: ctx</div><div class="line">        &#125;, ctx);</div><div class="line">        ctx.restore();</div><div class="line"> </div><div class="line">        <span class="comment">// next frame</span></div><div class="line">        f += <span class="number">1</span>;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// add a new sheet to cache if we have a game</span></div><div class="line">    <span class="keyword">if</span> (opt.game) &#123;</div><div class="line"> </div><div class="line">        opt.game.cache.addSpriteSheet(opt.name, <span class="literal">null</span>, canvas, opt.frameWidth, opt.frameHeight, opt.frames, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">//document.body.appendChild(canvas);</span></div><div class="line"> </div><div class="line">    <span class="comment">// return the canvas</span></div><div class="line">    <span class="keyword">return</span> canvas;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>I could get into the details of this, but that is a whole other post. Making assets this way is just a nice alternative to loading external assets, that works okay for simple demos like this. Use case examples will follow in later sub sections of this section.</p>
+<h3 id="4-2-The-SpriteDat-Class"><a href="#4-2-The-SpriteDat-Class" class="headerlink" title="4.2 - The SpriteDat Class"></a>4.2 - The SpriteDat Class</h3><p>This is a Class that can be used to create an instance of an object that will be used as the data object of children in a group. This is something that I will want to write in very different ways depending on the logic of the project that I am developing. Any kind of property or method that should be parked with a child of the group should be placed here.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// SpriteDat Class to be used with Sprite data objects</span></div><div class="line"><span class="keyword">var</span> SpriteDat = <span class="function"><span class="keyword">function</span> (<span class="params">opt</span>) </span>&#123;</div><div class="line"> </div><div class="line">    opt = opt || &#123;&#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// will used the Phaser.Game instance given via the</span></div><div class="line">    <span class="comment">// options object, or assume a game variable exists at the global space</span></div><div class="line">    <span class="keyword">this</span>.game = opt.game || game;</div><div class="line"> </div><div class="line">    <span class="comment">// ref to the sprite</span></div><div class="line">    <span class="keyword">this</span>.sprite = opt.sprite || &#123;&#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// default percent done to zero</span></div><div class="line">    <span class="keyword">this</span>.per = <span class="number">0</span>;</div><div class="line"> </div><div class="line">    <span class="comment">// default deltas to zero</span></div><div class="line">    <span class="keyword">this</span>.deltaX = <span class="number">0</span>;</div><div class="line">    <span class="keyword">this</span>.deltaY = <span class="number">0</span>;</div><div class="line"> </div><div class="line">    <span class="comment">// full reset</span></div><div class="line">    <span class="comment">// this will set a new starting position,</span></div><div class="line">    <span class="comment">// along with deltas, and all other values</span></div><div class="line">    <span class="keyword">this</span>.reset();</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// call to fully reset</span></div><div class="line">SpriteDat.prototype.reset = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// first starting options</span></div><div class="line">    <span class="keyword">this</span>.startX = <span class="number">32</span> + <span class="built_in">Math</span>.random() * (game.world.width - <span class="number">64</span>);</div><div class="line">    <span class="keyword">this</span>.startY = <span class="number">32</span> + <span class="built_in">Math</span>.random() * (game.world.height - <span class="number">64</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// new deltas</span></div><div class="line">    <span class="keyword">this</span>.newDeltas();</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// new starting position and deltas</span></div><div class="line">SpriteDat.prototype.newDeltas = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">this</span>.startX += <span class="keyword">this</span>.deltaX * <span class="keyword">this</span>.per;</div><div class="line">    <span class="keyword">this</span>.startY += <span class="keyword">this</span>.deltaY * <span class="keyword">this</span>.per;</div><div class="line"> </div><div class="line">    <span class="comment">// deltas (amount of change)</span></div><div class="line">    <span class="keyword">this</span>.deltaX = <span class="built_in">Math</span>.random() * <span class="number">50</span> - <span class="number">25</span>;</div><div class="line">    <span class="keyword">this</span>.deltaY = <span class="built_in">Math</span>.random() * <span class="number">50</span> - <span class="number">25</span>;</div><div class="line"> </div><div class="line">    <span class="comment">// current tick, percent done, and tick count</span></div><div class="line">    <span class="keyword">this</span>.tick = <span class="number">0</span>;</div><div class="line">    <span class="keyword">this</span>.per = <span class="number">0</span>;</div><div class="line">    <span class="keyword">this</span>.tickCount = <span class="built_in">Math</span>.floor(<span class="number">10</span> + <span class="number">40</span> * <span class="built_in">Math</span>.random());</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// return a</span></div><div class="line">SpriteDat.prototype.clamped = <span class="function"><span class="keyword">function</span> (<span class="params">per</span>) </span>&#123;</div><div class="line"> </div><div class="line">    per = per === <span class="literal">undefined</span> ? <span class="keyword">this</span>.per : per;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line"> </div><div class="line">        <span class="attr">x</span>: Phaser.Math.wrap(<span class="keyword">this</span>.startX + <span class="keyword">this</span>.deltaX * per, <span class="number">-32</span>, game.world.width + <span class="number">32</span>),</div><div class="line">        <span class="attr">y</span>: Phaser.Math.wrap(<span class="keyword">this</span>.startY + <span class="keyword">this</span>.deltaY * per, <span class="number">-32</span>, game.world.height + <span class="number">32</span>)</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// start the nextTick</span></div><div class="line">SpriteDat.prototype.nextTick = <span class="function"><span class="keyword">function</span> (<span class="params">per</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">this</span>.per = <span class="keyword">this</span>.tick / <span class="keyword">this</span>.tickCount;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> curPos = <span class="keyword">this</span>.clamped();</div><div class="line"> </div><div class="line">    <span class="keyword">this</span>.sprite.x = curPos.x;</div><div class="line">    <span class="keyword">this</span>.sprite.y = curPos.y;</div><div class="line"> </div><div class="line">    <span class="comment">// step next tick</span></div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.tick &lt; <span class="keyword">this</span>.tickCount) &#123;</div><div class="line">        <span class="keyword">this</span>.tick += <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>A use case example of this will be used in another Class that will be used to create and instance of Phaser.Group. In that Class an instance of this Class will be made for each instance of a child in the Group. So in other words in this example I have two Classes, one for a Child, and the other for a Group. These classes use as well as extend on the functionality of Groups, and children that is all ready present in phaser, allowing me to make these types of classes more streamlined.</p>
+<h3 id="4-3-The-SpriteGroup-Class"><a href="#4-3-The-SpriteGroup-Class" class="headerlink" title="4.3 - The SpriteGroup Class"></a>4.3 - The SpriteGroup Class</h3><p>This is the Class that will create an instance of Phaser.Group, as well as populate the Group with Sprites that use a Sprite Sheet that I have generated with my asset-less solution for making sprite sheets. It also of course creates an instnace of my SpriteDat Class for each of the Data objects of each sprite in the Group.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Sprite Group - The name should say it all</span></div><div class="line"><span class="keyword">var</span> SpriteGroup = <span class="function"><span class="keyword">function</span> (<span class="params">opt</span>) </span>&#123;</div><div class="line"> </div><div class="line">    opt = opt || &#123;&#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// will used the Phaser.Game instance given via the</span></div><div class="line">    <span class="comment">// options object, or assume a game variable exists at the global space</span></div><div class="line">    <span class="keyword">this</span>.game = opt.game || game;</div><div class="line"> </div><div class="line">    <span class="comment">// the key of the sprite sheet to use</span></div><div class="line">    <span class="keyword">this</span>.sheetKey = opt.sheetKey || <span class="string">''</span>;</div><div class="line"> </div><div class="line">    <span class="keyword">this</span>.group = <span class="keyword">this</span>.game.add.group();</div><div class="line">    <span class="keyword">this</span>.group.name = opt.name || <span class="string">''</span>;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> i = <span class="number">0</span>,</div><div class="line">    len = <span class="number">32</span>,</div><div class="line">    sprite;</div><div class="line"> </div><div class="line">    <span class="comment">// using group.create to create sprites for the group</span></div><div class="line">    <span class="keyword">while</span> (i &lt; len) &#123;</div><div class="line"> </div><div class="line">        sprite = <span class="keyword">this</span>.group.create(<span class="number">0</span>, <span class="number">0</span>, <span class="keyword">this</span>.sheetKey);</div><div class="line">        sprite.name = <span class="keyword">this</span>.group.name + <span class="string">'-sprite-'</span> + i;</div><div class="line">        sprite.frame = <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">3</span>);</div><div class="line"> </div><div class="line">        sprite.data = <span class="keyword">new</span> SpriteDat(&#123;</div><div class="line">                <span class="attr">game</span>: <span class="keyword">this</span>.game,</div><div class="line">                <span class="attr">sprite</span>: sprite</div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">        sprite.x = sprite.data.startX;</div><div class="line">        sprite.y = sprite.data.startY;</div><div class="line"> </div><div class="line">        i += <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line">SpriteGroup.prototype.newDeltas = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">this</span>.group.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">sprite</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// new deltas for all</span></div><div class="line">        sprite.data.newDeltas();</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>This Class Will be called in the create method in the state in which I will be using all of this. In a real project this Class would end up becoming far more complex, but the basic idea of all of this is there.</p>
+<h3 id="4-4-The-Phaser-Game-Instance-and-example-state"><a href="#4-4-The-Phaser-Game-Instance-and-example-state" class="headerlink" title="4.4 - The Phaser Game Instance, and example state"></a>4.4 - The Phaser Game Instance, and example state</h3><p>So now that I have everything that I need to make a project I now just need to create the instance of Phaser.Game, then make the state object, and start that state object. In the create method of the stat object, I create my sheet with my sheetFromCanvas solution, then create my instance of the SpriteGroup Class. I then set up a loop for seating the deltas of all the children every two seconds.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>);</div><div class="line"> </div><div class="line">game.state.add(<span class="string">'example-2'</span>, &#123;</div><div class="line"> </div><div class="line">    <span class="attr">create</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// green block sheet</span></div><div class="line">        sheetFromCanvas(&#123;</div><div class="line">            <span class="attr">name</span>: <span class="string">'block'</span>,</div><div class="line">            <span class="attr">game</span>: game,</div><div class="line">            <span class="attr">frames</span>: <span class="number">3</span>,</div><div class="line">            <span class="attr">frameWidth</span>: <span class="number">16</span>,</div><div class="line">            <span class="attr">frameHeight</span>: <span class="number">16</span>,</div><div class="line">            <span class="attr">forFrame</span>: <span class="function"><span class="keyword">function</span> (<span class="params">ctx</span>) </span>&#123;</div><div class="line">                <span class="keyword">var</span> colors = [<span class="string">'red'</span>, <span class="string">'white'</span>, <span class="string">'blue'</span>];</div><div class="line">                ctx.fillStyle = colors[<span class="keyword">this</span>.f];</div><div class="line">                ctx.lineWidth = <span class="number">3</span>;</div><div class="line">                ctx.fillRect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">32</span>, <span class="number">32</span>);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">        <span class="comment">// making the sprite Group</span></div><div class="line">        <span class="keyword">var</span> sg = <span class="keyword">new</span> SpriteGroup(&#123;</div><div class="line">                <span class="attr">game</span>: <span class="keyword">this</span>.game,</div><div class="line">                <span class="attr">sheetKey</span>: <span class="string">'block'</span>,</div><div class="line">                <span class="attr">name</span>: <span class="string">'blocks'</span></div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">        <span class="comment">// I can set up a timer for new deltas</span></div><div class="line">        <span class="comment">// I just need to make sure the context is the</span></div><div class="line">        <span class="comment">// instance of SpriteGroup</span></div><div class="line">        game.time.events.loop(<span class="number">2000</span>, sg.newDeltas, sg);</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="attr">update</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// I can also grab the group by using getByName</span></div><div class="line">        <span class="keyword">var</span> blocks = game.world.getByName(<span class="string">'blocks'</span>);</div><div class="line"> </div><div class="line">        <span class="comment">// Group.forEach method example</span></div><div class="line">        blocks.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">sprite</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">// call next tick for each sprite in the group</span></div><div class="line">            sprite.data.nextTick();</div><div class="line"> </div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line">game.state.start(<span class="string">'example-2'</span>);</div></pre></td></tr></table></figure>
+<p>In the update loop I demonstrate that I can also just grab an instance of the Group by itself by name if I feel inclined to do so, however mode of the logic should be pulled into that class, that can be pulled into it’s own file to help keep this organized.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/08/24/phaser-groups/" data-id="cjlodbt8v000668v1yvqynhee" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/08/24/phaser-groups/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/games/">games</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/phaser/">phaser</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/08/25/phaser-world-get-by-name/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Getting sprites, and other objects by name in phaser with world.getByName
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/08/23/nodejs-os-cpus-find-count-of/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Find the count of cpus in a node.js environment with os.cpus</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2018/08/24/phaser-groups/index.html';
+    this.page.identifier = '269';
+    this.page.title = 'Getting started with Groups of Sprites in phaser';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.22px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 11.67px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.56px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.22px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.78px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 16.67px;">express</a> <a href="/tags/games/" style="font-size: 18.89px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.44px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.67px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 17.78px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.33px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.11px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/09/04/phaser-gameobj-enable-step/">Enabling frame by frame stepping in phaser</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/01/lodash-defaults/">Setting default values with lodash</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/30/phaser-group-create/">Making a group of sprites in phaser with group.create</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/28/phaser-group-fixed-to-camera/">Fixing Sprites and other display objects to a camera in phaser</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/27/phaser-group-nesting/">Nesting groups in groups in phaser</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2018/08/24/phaser-groups/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
