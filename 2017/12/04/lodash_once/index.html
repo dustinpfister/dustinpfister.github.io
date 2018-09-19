@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   
   <title>The lodash _.once method use examples. | Dustin John Pfister at github pages</title>
+  
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="Part of my debugging process involves placing a console.log in my code at some point to log out to the console the status of some value. Often it might be placed in the body of some code that ends up">
 <meta property="og:type" content="article">
@@ -11,7 +12,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2017/12/04/lodash_once/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="Part of my debugging process involves placing a console.log in my code at some point to log out to the console the status of some value. Often it might be placed in the body of some code that ends up">
-<meta property="og:updated_time" content="2017-12-04T15:00:05.000Z">
+<meta property="og:updated_time" content="2018-09-07T13:48:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The lodash _.once method use examples.">
 <meta name="twitter:description" content="Part of my debugging process involves placing a console.log in my code at some point to log out to the console the status of some value. Often it might be placed in the body of some code that ends up">
@@ -113,10 +114,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/12/04/lodash_once/" class="article-date"> Modified:
-  <time datetime="2017-12-04T15:00:05.000Z" itemprop="dateModified">2017-12-04</time>
+  <time datetime="2018-09-07T13:48:24.000Z" itemprop="dateModified">2018-09-07</time>
 </a>
 
-    <span class="article-date">V1.2</span>
+    <span class="article-date">V1.3</span>
 
     
   <div class="article-category">
@@ -143,7 +144,7 @@ ga('send', 'pageview');
 <a id="more"></a>
 <h2 id="Basic-use-example-of-once-in-lodash"><a href="#Basic-use-example-of-once-in-lodash" class="headerlink" title="Basic use example of _.once in lodash"></a>Basic use example of _.once in lodash</h2><p>_.once works by returning a function that will call the given function only once when called.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> trap = _.once(<span class="function"><span class="keyword">function</span>(<span class="params">mess</span>)</span>&#123;</div><div class="line"></div><div class="line">   <span class="built_in">console</span>.log(mess);</div><div class="line"></div><div class="line">&#125;);</div><div class="line"></div><div class="line">trap(<span class="string">'okay'</span>); <span class="comment">// 'okay' logged to the console</span></div><div class="line">trap(<span class="string">'nope'</span>); <span class="comment">// ( nothing )</span></div></pre></td></tr></table></figure>
-<h2 id="How-once-works"><a href="#How-once-works" class="headerlink" title="How _.once works"></a>How _.once works</h2><p>If you have some experience with <a href="https://en.wikipedia.org/wiki/Closure_(computer_programming" target="_blank" rel="external">concept of closures</a>), and guessed that is how _.once works then you would be right.</p>
+<h2 id="How-once-works"><a href="#How-once-works" class="headerlink" title="How _.once works"></a>How _.once works</h2><p>If you have some experience with <a href="https://en.wikipedia.org/wiki/Closure_(computer_programming)" target="_blank" rel="external">concept of closures</a>, and guessed that is how _.once works then you would be right.</p>
 <p>I often like to study the source code of very popular javaScript projects in oder to have at least some understanding as to how it works, as such the source code of _.once in v4.17.4 of lodash looks like this:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">before</span>(<span class="params">n, func</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> result;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> func != <span class="string">'function'</span>) &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(FUNC_ERROR_TEXT);</div><div class="line">    &#125;</div><div class="line">    n = toInteger(n);</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (--n &gt; <span class="number">0</span>) &#123;</div><div class="line">            result = func.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (n &lt;= <span class="number">1</span>) &#123;</div><div class="line">            func = <span class="literal">undefined</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> result;</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">once</span>(<span class="params">func</span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> before(<span class="number">2</span>,func);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>So the _.once method is a good example of how closures come in handy. Once returns a function within a function, and the value of result in the before helper is what gets returned each time _.once is called.</p>
@@ -244,7 +245,7 @@ s.setAttribute('data-timestamp', +new Date());
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/JSON/" style="font-size: 12.22px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 11.67px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.56px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.22px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.78px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 16.67px;">express</a> <a href="/tags/games/" style="font-size: 18.89px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.44px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.67px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 17.78px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.33px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.11px;">three.js</a>
+      <a href="/tags/JSON/" style="font-size: 12.22px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 11.67px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.56px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.22px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.78px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 16.67px;">express</a> <a href="/tags/games/" style="font-size: 18.33px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.44px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.67px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 17.78px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.89px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.11px;">three.js</a>
     </div>
   </div>
 
@@ -266,23 +267,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2018/09/04/phaser-gameobj-enable-step/">Enabling frame by frame stepping in phaser</a>
+            <a href="/2018/09/18/phaser-sprite-alpha/">Setting sprite transparency in phaser with Sprite.alpha</a>
           </li>
         
           <li>
-            <a href="/2018/09/01/lodash-defaults/">Setting default values with lodash</a>
+            <a href="/2018/09/17/phaser-sprite-health/">Using Sprite.health to manage hit point in phaser ce.</a>
           </li>
         
           <li>
-            <a href="/2018/08/30/phaser-group-create/">Making a group of sprites in phaser with group.create</a>
+            <a href="/2018/09/15/phaser-sprite-events-ondestroy/">The Phaser on destroy event</a>
           </li>
         
           <li>
-            <a href="/2018/08/28/phaser-group-fixed-to-camera/">Fixing Sprites and other display objects to a camera in phaser</a>
+            <a href="/2018/09/14/phaser-sprite-data/">Phaser Sprite data objects</a>
           </li>
         
           <li>
-            <a href="/2018/08/27/phaser-group-nesting/">Nesting groups in groups in phaser</a>
+            <a href="/2018/09/13/phaser-sprite-events-onkilled/">The Sprite onKilled event in phaser</a>
           </li>
         
       </ul>

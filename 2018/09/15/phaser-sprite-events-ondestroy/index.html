@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>The Phaser on destroy event | Dustin John Pfister at github pages</title>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Recently I wrote a post on the onKilled event that can be used to attach event handlers to display objects in Phaser ce that will fire when the kill method is called. In phaser ce the kill method is v">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Phaser on destroy event">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/09/15/phaser-sprite-events-ondestroy/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="Recently I wrote a post on the onKilled event that can be used to attach event handlers to display objects in Phaser ce that will fire when the kill method is called. In phaser ce the kill method is v">
+<meta property="og:updated_time" content="2018-09-17T19:59:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The Phaser on destroy event">
+<meta name="twitter:description" content="Recently I wrote a post on the onKilled event that can be used to attach event handlers to display objects in Phaser ce that will fire when the kill method is called. In phaser ce the kill method is v">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense -->
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-phaser-sprite-events-ondestroy" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/15/phaser-sprite-events-ondestroy/" class="article-date"> Published:
+  <time datetime="2018-09-15T19:04:00.000Z" itemprop="datePublished">2018-09-15</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/09/15/phaser-sprite-events-ondestroy/" class="article-date"> Modified:
+  <time datetime="2018-09-17T19:59:57.000Z" itemprop="dateModified">2018-09-17</time>
+</a>
+
+    <span class="article-date">V1.21</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/phaser/">phaser</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      The Phaser on destroy event
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>Recently I wrote a post on the onKilled event that can be used to attach event handlers to display objects in <a href="https://photonstorm.github.io/phaser-ce/" target="_blank" rel="external">Phaser ce</a> that will fire when the kill method is called. In phaser ce the kill method is very different from the destroy method in that the kill method will just put a sprite in a dead state, while the destroy method will completely destroy a sprite all together.</p>
+<a id="more"></a>
+<h2 id="1-What-to-know"><a href="#1-What-to-know" class="headerlink" title="1 - What to know"></a>1 - What to know</h2><p>This is a post on the <a href="https://photonstorm.github.io/phaser-ce/Phaser.Events.html#onDestroy" target="_blank" rel="external">onDestroy event</a> in phaser ce that can be used to define some javaScript that is to be called when a display object such as a sprite is completely removed from phaser using the destroy method. In this post I am also using a lot of other phaser ce features such as groups, and timers. So this is not a <a href="/2017/10/04/phaser-getting-started/">getting started post on phaser ce</a>, or javaScript in general.</p>
+<h3 id="1-1-This-is-a-phaser-ce-phaser-2-x-post"><a href="#1-1-This-is-a-phaser-ce-phaser-2-x-post" class="headerlink" title="1.1 - This is a phaser ce (phaser 2.x) post."></a>1.1 - This is a phaser ce (phaser 2.x) post.</h3><p>As of this writing all of my posts on phaser, including this one, are on <a href="https://photonstorm.github.io/phaser-ce/" target="_blank" rel="external">Phaser ce</a> also known as phaser 2.x. This is the second major release of the javaScript powered game framework known as <a href="https://phaser.io/" target="_blank" rel="external">phaser</a>, which might be one of the most popular and best supported options to go with when it comes to html5 game development. I have not started playing with phaser 3 yet, but when I do that will likely have to be a completely separate collection of posts as a lot has changed.</p>
+<h2 id="2-A-phaser-example-using-sprite-events-onDestroy"><a href="#2-A-phaser-example-using-sprite-events-onDestroy" class="headerlink" title="2 - A phaser example using sprite.events.onDestroy"></a>2 - A phaser example using sprite.events.onDestroy</h2><p>For a full working example of using the onDestroy event I put together something that is very similar to the example that I made for my other post on the onKilled event. There is at least one significant difference though, this example does not involve a group of sprites there where created once and then reused. In this example I am adding sprites to a group as needed, and when they are destroyed there are completely removed. In most projects I might prefer to use a set pool of sprites that I reuse, but never the less this is a different approach that in some ways may be a better solution for working with a group of sprites.</p>
+<h3 id="2-1-The-enemies-js-file"><a href="#2-1-The-enemies-js-file" class="headerlink" title="2.1 - The enemies.js file"></a>2.1 - The enemies.js file</h3><p>For this example I made an enemies.js file that will be a collection of methods that pull a lot of logic out of my state objects resulting in more fine grain code examples. These methods setup a main game data object, make a sprite sheet with canvas, and of course provides a handler to be used with the onDestry event.</p>
+<h4 id="2-1-1-Staring-off-the-module-with-Enemy-setup"><a href="#2-1-1-Staring-off-the-module-with-Enemy-setup" class="headerlink" title="2.1.1 - Staring off the module with Enemy.setup"></a>2.1.1 - Staring off the module with Enemy.setup</h4><p>I start off this module by just making a object literal to which I will be appending the methods. I often have a setup method in these finds of modules that is to be called in the create method of a boot state, that is used to set up some values that will be used in the other methods.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Enemy = &#123;&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// setup a game.data object</span></div><div class="line">Enemy.setup = <span class="function"><span class="keyword">function</span> (<span class="params">game</span>) </span>&#123;</div><div class="line"> </div><div class="line">    game.data = &#123;</div><div class="line"> </div><div class="line">        <span class="attr">maxEnemies</span>: <span class="number">5</span>,</div><div class="line">        <span class="attr">enemies</span>: game.add.group(),</div><div class="line">        <span class="attr">score</span>: <span class="number">0</span></div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>One of the values game.data.score is a value that will be incremented in my onDestroy handler that will be coming up later in this example..</p>
+<h4 id="2-1-2-The-Enemy-onDestroy-handler-that-will-be-attached-to-sprite-events-onDestroy"><a href="#2-1-2-The-Enemy-onDestroy-handler-that-will-be-attached-to-sprite-events-onDestroy" class="headerlink" title="2.1.2 - The Enemy.onDestroy handler that will be attached to sprite.events.onDestroy"></a>2.1.2 - The Enemy.onDestroy handler that will be attached to sprite.events.onDestroy</h4><p>here is the is handler that I will be attaching to sprite.events.onDestroy when creating a new sprite with my spawn method that I will be getting to shortly.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// The onDestroy method that will be called each time an enemy is killed</span></div><div class="line">Enemy.onDestroy = <span class="function"><span class="keyword">function</span> (<span class="params">sprite</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> game = <span class="keyword">this</span>.game,</div><div class="line">    spriteSpeed = (sprite.data.dx + sprite.data.dy) / <span class="number">8</span>,</div><div class="line">    speedBonus = <span class="number">175</span>, <span class="comment">// points bonus for speed.</span></div><div class="line">    perKill = <span class="number">25</span>; <span class="comment">// points per kill</span></div><div class="line"> </div><div class="line">    <span class="comment">// score formula</span></div><div class="line">    game.data.score += perKill + <span class="built_in">Math</span>.floor(spriteSpeed * speedBonus);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>When using sprite.events.onDestroy I can set the value of the this keyword using one of the arguments when calling sprite.events.onDestroy. In this example each time the onDestroy handler is called the players score will increase with the formula outlined in the method, a common task to happen each time an enemy is destroyed.</p>
+<h4 id="2-1-3-The-Enemy-onInputDown-handler"><a href="#2-1-3-The-Enemy-onInputDown-handler" class="headerlink" title="2.1.3 - The Enemy.onInputDown handler"></a>2.1.3 - The Enemy.onInputDown handler</h4><p>Here I have an onInputdown handler that will also be attached to sprites when they are generated in my spawn method.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// What happens when the player clicks an enemy</span></div><div class="line">Enemy.onInputDown = <span class="function"><span class="keyword">function</span> (<span class="params">enemy</span>) </span>&#123;</div><div class="line"> </div><div class="line">    enemy.data.hp -= <span class="number">1</span>;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (enemy.data.hp === <span class="number">1</span>) &#123;</div><div class="line">        enemy.frame = <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// call destroy</span></div><div class="line">    <span class="keyword">if</span> (enemy.data.hp &lt;= <span class="number">0</span>) &#123;</div><div class="line"> </div><div class="line">        enemy.destroy();</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>In this example I am not using the phaser built in health system, I have nothing against it, I just find myself conflicted between making health a part of my Class that I develop when making a game or not. Because I do not have anything else going on in this example that will result in a sprite being destroyed other than clicking it, I made it so the destroy method is called here. In a more complex project where I have things going on like damage over time, I would of course want to handle that elsewhere.</p>
+<h4 id="2-1-4-Generating-a-Sprite-data-object"><a href="#2-1-4-Generating-a-Sprite-data-object" class="headerlink" title="2.1.4 - Generating a Sprite.data object"></a>2.1.4 - Generating a Sprite.data object</h4><p>Sprite data objects are an official way of attaching some properties, and methods that should be associated with a given sprite. Say you are developing an adventure game, and you have developed a Class that contains properties an methods to be used with a sprite, the data object is the typical standard way of attaching an instance of that class to a sprite in phaser.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// generate a data object for a sprite</span></div><div class="line">Enemy.genSpriteData = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        <span class="attr">dx</span>: <span class="built_in">Math</span>.random() * <span class="number">3.5</span> + <span class="number">0.5</span>,</div><div class="line">        <span class="attr">dy</span>: <span class="built_in">Math</span>.random() * <span class="number">3.5</span> + <span class="number">0.5</span>,</div><div class="line">        <span class="attr">hp</span>: <span class="number">2</span></div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>In this example I am just storing some delta values, and a health value. In a real project I would have one or more complex classes attached to the data object.</p>
+<h4 id="2-1-5-Making-a-sheet-with-canvas"><a href="#2-1-5-Making-a-sheet-with-canvas" class="headerlink" title="2.1.5 - Making a sheet with canvas"></a>2.1.5 - Making a sheet with canvas</h4><p>For this example I am making a simple sprite sheet made with canvas. This works fine if I just want to skin an area with solid color box when it comes to these simple demos. In addition it event works okay when making some not so simple sheets by way of the 2d canvas drawing context.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// make a sprite sheet</span></div><div class="line">Enemy.mkSheet = <span class="function"><span class="keyword">function</span> (<span class="params">game</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// sprite sheet generated by canvas</span></div><div class="line">    <span class="keyword">var</span> canvas = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>),</div><div class="line">    ctx = canvas.getContext(<span class="string">'2d'</span>);</div><div class="line">    canvas.width = <span class="number">64</span>;</div><div class="line">    canvas.height = <span class="number">32</span>;</div><div class="line"> </div><div class="line">    <span class="comment">// blue frame</span></div><div class="line">    ctx.fillStyle = <span class="string">'#0000ff'</span>;</div><div class="line">    ctx.fillRect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">32</span>, <span class="number">32</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// red frame</span></div><div class="line">    ctx.fillStyle = <span class="string">'#ff0000'</span>;</div><div class="line">    ctx.fillRect(<span class="number">32</span>, <span class="number">0</span>, <span class="number">32</span>, <span class="number">32</span>);</div><div class="line"> </div><div class="line">    game.cache.addSpriteSheet(<span class="string">'sheet-block'</span>, <span class="literal">null</span>, canvas, <span class="number">32</span>, <span class="number">32</span>, <span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>For more info on this approach of making a sprite sheet with canvas, you might want to <a href="/2018/08/04/phaser-spritesheet-from-canvas/">check out my post</a> on that subject.</p>
+<h4 id="2-1-6-The-Spawn-method-that-will-create-a-new-Sprite-and-attach-Enemy-onDestroy"><a href="#2-1-6-The-Spawn-method-that-will-create-a-new-Sprite-and-attach-Enemy-onDestroy" class="headerlink" title="2.1.6 - The Spawn method that will create a new Sprite and attach Enemy.onDestroy"></a>2.1.6 - The Spawn method that will create a new Sprite and attach Enemy.onDestroy</h4><p>So here is the method where I will be using sprite.events.onDestroy to attach my handler that I defined in Enemy.onDestroy above. I also attach my onInputDown hander as well, and generate a data object for the sprite.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// re-spawn a dead enemy</span></div><div class="line">Enemy.spawn = <span class="function"><span class="keyword">function</span> (<span class="params">a</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> data = <span class="keyword">this</span>.game.data,</div><div class="line">    enemies = data.enemies;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (enemies.children.length &lt; data.maxEnemies) &#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> enemy = data.enemies.create(<span class="number">0</span>, <span class="number">0</span>, <span class="string">'sheet-block'</span>);</div><div class="line"> </div><div class="line">        <span class="comment">// attach onDestroy event</span></div><div class="line">        enemy.events.onDestroy.add(Enemy.onDestroy, <span class="keyword">this</span>);</div><div class="line"> </div><div class="line">        <span class="comment">// attach on input down event</span></div><div class="line">        enemy.inputEnabled = <span class="literal">true</span>;</div><div class="line">        enemy.events.onInputDown.add(Enemy.onInputDown, <span class="keyword">this</span>);</div><div class="line"> </div><div class="line">        enemy.data = Enemy.genSpriteData();</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>So in this example I am creating sprites as needed rather than generating a reusable pool of sprites like I did on my post on onKilled. This method will be called every so often by way of a timer, rather than on every frame tick.</p>
+<h4 id="2-1-7-The-Enemy-update-method-to-be-called-on-each-frame-tick"><a href="#2-1-7-The-Enemy-update-method-to-be-called-on-each-frame-tick" class="headerlink" title="2.1.7 - The Enemy.update method to be called on each frame tick"></a>2.1.7 - The Enemy.update method to be called on each frame tick</h4><p>When I make a module like this there is almost always an update method where I define some logic that is to be called on each frame tick in the main update method of a game state that uses the module.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// What needs to happen for each frame tick</span></div><div class="line">Enemy.update = <span class="function"><span class="keyword">function</span> (<span class="params">game</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> data = game.data,</div><div class="line">    game = game;</div><div class="line"> </div><div class="line">    <span class="comment">// loop all enemies</span></div><div class="line">    data.enemies.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">enemy</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// step position based on current deltas</span></div><div class="line">        enemy.x = Phaser.Math.wrap(enemy.x += enemy.data.dx, <span class="number">-32</span>, game.world.width + <span class="number">32</span>);</div><div class="line">        enemy.y = Phaser.Math.wrap(enemy.y += enemy.data.dy, <span class="number">-32</span>, game.world.height + <span class="number">32</span>);</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>For this example I am just moving the sprites based on there current deltas that are set in there data objects when spawned.</p>
+<h3 id="2-2-The-Phaser-Game-instance-and-state-objects"><a href="#2-2-The-Phaser-Game-instance-and-state-objects" class="headerlink" title="2.2 - The Phaser.Game instance, and state objects"></a>2.2 - The Phaser.Game instance, and state objects</h3><p>Time to tie everything together with some state objects, and make the magic happen. It is common practice for me in many of these demos to have a boot state, that among many other things calls methods that setup my modules, and creates assets from canvas. In real projects I also do scaling and fix certain issues in the boot state as well.</p>
+<h4 id="2-2-1-The-boot-state"><a href="#2-2-1-The-boot-state" class="headerlink" title="2.2.1 - The boot state"></a>2.2.1 - The boot state</h4><p>Here in the boot state I call my setup method, and make the sprite sheet, and then proceed to the demo state.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>);</div><div class="line"> </div><div class="line">game.state.add(<span class="string">'boot'</span>, &#123;</div><div class="line"> </div><div class="line">    <span class="attr">create</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// setup game data object</span></div><div class="line">        Enemy.setup(<span class="keyword">this</span>.game);</div><div class="line"> </div><div class="line">        Enemy.mkSheet(<span class="keyword">this</span>.game);</div><div class="line"> </div><div class="line">        <span class="comment">// start demo, and do not clear the world</span></div><div class="line">        game.state.start(<span class="string">'demo'</span>,<span class="literal">false</span>,<span class="literal">false</span>);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h4 id="2-2-2-The-demo-state"><a href="#2-2-2-The-demo-state" class="headerlink" title="2.2.2 - The demo state"></a>2.2.2 - The demo state</h4><p>Here in the demo state I set up a timer loop event that will call my spawn method every second, and also set up a text element to display the current score. The score is of course what is updated every time a sprite is destroyed.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">game.state.add(<span class="string">'demo'</span>, &#123;</div><div class="line"> </div><div class="line">    <span class="attr">create</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// call Enemy.spawn every second</span></div><div class="line">        game.time.events.loop(<span class="number">1000</span>, Enemy.spawn, <span class="keyword">this</span>);</div><div class="line"> </div><div class="line">        <span class="comment">// text display object to show score</span></div><div class="line">        <span class="keyword">var</span> text = game.add.text(<span class="number">5</span>, <span class="number">5</span>, <span class="string">''</span>, &#123;</div><div class="line">                <span class="attr">fill</span>: <span class="string">'white'</span></div><div class="line">            &#125;);</div><div class="line">        text.name = <span class="string">'disp-score'</span>;</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="attr">update</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> data = <span class="keyword">this</span>.game.data;</div><div class="line"> </div><div class="line">        Enemy.update(game);</div><div class="line"> </div><div class="line">        game.world.getByName(<span class="string">'disp-score'</span>).text = <span class="string">'score: '</span> + data.score;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line">game.state.start(<span class="string">'boot'</span>);</div></pre></td></tr></table></figure>
+<h2 id="3-Conclusion"><a href="#3-Conclusion" class="headerlink" title="3 - Conclusion"></a>3 - Conclusion</h2><p>The onDestroy event is a great way to set up some logic that is to be executed when a sprite is completely destroyed with the destroy sprite method. It can be used with onKilled, or as a complete replacement. The process of creating sprites on demand rather than making a reusable pool of sprites might have some advantages in terms of speed in some cases. As such this kind of approach might be desirable over the alternative, but really matters most to me is the nature of the game itself regardless of how it works.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/09/15/phaser-sprite-events-ondestroy/" data-id="cjm87xnw9000c94v1qaiie1z2" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/09/15/phaser-sprite-events-ondestroy/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/phaser/">phaser</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/09/17/phaser-sprite-health/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Using Sprite.health to manage hit point in phaser ce.
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/09/14/phaser-sprite-data/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Phaser Sprite data objects</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2018/09/15/phaser-sprite-events-ondestroy/index.html';
+    this.page.identifier = '280';
+    this.page.title = 'The Phaser on destroy event';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.22px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 11.67px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.56px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.22px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.78px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 16.67px;">express</a> <a href="/tags/games/" style="font-size: 18.33px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.44px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.67px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 17.78px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.89px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.11px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/09/18/phaser-sprite-alpha/">Setting sprite transparency in phaser with Sprite.alpha</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/17/phaser-sprite-health/">Using Sprite.health to manage hit point in phaser ce.</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/15/phaser-sprite-events-ondestroy/">The Phaser on destroy event</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/14/phaser-sprite-data/">Phaser Sprite data objects</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/13/phaser-sprite-events-onkilled/">The Sprite onKilled event in phaser</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2018/09/15/phaser-sprite-events-ondestroy/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
