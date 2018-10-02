@@ -12,7 +12,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2017/09/24/lodash_forown/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="Looping over all keys in an object is something that comes up a whole lot when working on a javScript project. Sometimes it would be nice to have a method that will only loop over key value pares that">
-<meta property="og:updated_time" content="2017-10-02T13:50:56.000Z">
+<meta property="og:updated_time" content="2018-10-02T00:17:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The lodash _.forown method">
 <meta name="twitter:description" content="Looping over all keys in an object is something that comes up a whole lot when working on a javScript project. Sometimes it would be nice to have a method that will only loop over key value pares that">
@@ -114,10 +114,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/09/24/lodash_forown/" class="article-date"> Modified:
-  <time datetime="2017-10-02T13:50:56.000Z" itemprop="dateModified">2017-10-02</time>
+  <time datetime="2018-10-02T00:17:49.000Z" itemprop="dateModified">2018-10-01</time>
 </a>
 
-    <span class="article-date">V1.4</span>
+    <span class="article-date">V1.8</span>
 
     
   <div class="article-category">
@@ -140,18 +140,20 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>Looping over all keys in an object is something that comes up a whole lot when working on a javScript project. Sometimes it would be nice to have a method that will only loop over key value pares that are actually part of the object rather than it’s prototype. For this there is the <a href="https://lodash.com/docs/4.17.4#forOwn" target="_blank" rel="external">_.forOwn</a> method in <a href="https://lodash.com/" target="_blank" rel="external">lodash</a> that makes this very easy.</p>
+        <p>Looping over all keys in an object is something that comes up a whole lot when working on a javScript project. Sometimes it would be nice to have a method that will only loop over key value pares that are actually part of the object rather than it’s prototype. For this there is the <a href="https://lodash.com/docs/4.17.4#forOwn" target="_blank" rel="external">_.forOwn</a> method in <a href="https://lodash.com/" target="_blank" rel="external">lodash</a> that makes this very easy. There is also of course the <a href="/reports/2018/09/30/lodash_forin/">_.forIn</a> method as well that will loop over the own properties of an object as well as what is in the prototype object as well.</p>
 <a id="more"></a>
+<h2 id="1-What-to-know"><a href="#1-What-to-know" class="headerlink" title="1 - What to know"></a>1 - What to know</h2><p>This is a post on the _.forOwn method in lodash, and related topics in javaScript. It is not a getting started post on lodash, or javaScript in general. I also will not be getting into prototype based inheritance in this post as well, as that is a matter for another post.</p>
+<h2 id="2-A-Basic-example-of-forOwn"><a href="#2-A-Basic-example-of-forOwn" class="headerlink" title="2 - A Basic example of _.forOwn"></a>2 - A Basic example of _.forOwn</h2><p>For a basic example of _.forOwn I put together a quick example that involves a custom made constructor method, and a prototype for that method. The _.forOwn method will loop over just the own properties of the object.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Unit = <span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</div><div class="line"> </div><div class="line">    obj = obj || &#123;&#125;;</div><div class="line">    <span class="keyword">this</span>.x = obj.x || <span class="number">0</span>;</div><div class="line">    <span class="keyword">this</span>.y = obj.y || <span class="number">0</span>;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// size value in the prototype</span></div><div class="line">Unit.prototype.size = <span class="number">64</span>;</div><div class="line"> </div><div class="line"><span class="comment">// new Unit</span></div><div class="line"><span class="keyword">var</span> u = <span class="keyword">new</span> Unit(&#123;</div><div class="line">        <span class="attr">x</span> : <span class="number">12</span>,</div><div class="line">        <span class="attr">y</span> : <span class="number">5</span></div><div class="line">    &#125;);</div><div class="line"> </div><div class="line"><span class="comment">// only x and y are displayed in the console (nothing from the prototype)</span></div><div class="line">_.forOwn(u, <span class="function"><span class="keyword">function</span> (<span class="params">val, key, obj</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(key + <span class="string">' : '</span>+val);</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line"><span class="comment">// _.forIn on the other and will display everything.</span></div><div class="line">_.forIn(u, <span class="function"><span class="keyword">function</span> (<span class="params">val, key, obj</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(key + <span class="string">' : '</span>+val);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<h2 id="Using-a-for-in-loop"><a href="#Using-a-for-in-loop" class="headerlink" title="Using a for in loop"></a>Using a for in loop</h2><p>So _.forOwn is one of those methods in lodash where I am scratching my head wondering why I should bother with lodash, because doing things like this are not that difficult in vanilla js.</p>
+<h2 id="3-Using-a-for-in-loop"><a href="#3-Using-a-for-in-loop" class="headerlink" title="3 - Using a for in loop"></a>3 - Using a for in loop</h2><p>So _.forOwn is one of those methods in lodash where I am scratching my head wondering why I should bother with lodash, because doing things like this are not that difficult in vanilla js.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> key,val;</div><div class="line"><span class="keyword">for</span>(key <span class="keyword">in</span> u)&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// using Object.hasOwnProperty to find if a property is directly on an object</span></div><div class="line">    <span class="keyword">if</span>(u.hasOwnProperty(key))&#123;</div><div class="line"> </div><div class="line">        val = u[key];</div><div class="line">        <span class="built_in">console</span>.log(key + <span class="string">' : '</span>+val);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>So the nature of a for in loop is that it will loop over all properties of an object, not just the ones</p>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Be sure to check out my other <a href="/categories/lodash/">posts on lodash</a></p>
+<p>The for in loop will loop over the own properties of an object as well inherited properties, so the hasOwnProperty method has to be used as a way to filter those out, and just have the own properties of the object.</p>
+<h2 id="4-Conclusion"><a href="#4-Conclusion" class="headerlink" title="4 - Conclusion"></a>4 - Conclusion</h2><p>One nice things about the _.forOwn method is that it may be a bit more concise compared to writing out a for in loop. That is something of value because I find that making code more concise may help to improve readability, other then that I cant say it is to big of a deal to do this the vanilla js way. If you enjoyed this post be sure to check out my other <a href="/categories/lodash/">posts on lodash</a>, and if you have any questions or concerns feel free to drop a line in the comments.</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2017/09/24/lodash_forown/" data-id="cjl5tzas300lhlov1erisyd0r" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2017/09/24/lodash_forown/" data-id="cjm8dsyup00lamov1a77o0ctw" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2017/09/24/lodash_forown/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -244,7 +246,7 @@ s.setAttribute('data-timestamp', +new Date());
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
     </div>
   </div>
 
@@ -257,23 +259,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2018/09/18/phaser-sprite-alpha/">Setting sprite transparency in phaser with Sprite.alpha</a>
+            <a href="/2018/10/01/lodash_extend/">The lodash _.extend method for combining objects, and alternatives</a>
           </li>
         
           <li>
-            <a href="/2018/09/17/phaser-sprite-health/">Using Sprite.health to manage hit point in phaser ce.</a>
+            <a href="/2018/09/30/lodash_forin/">The lodash _.forIn method</a>
           </li>
         
           <li>
-            <a href="/2018/09/15/phaser-sprite-events-ondestroy/">The Phaser on destroy event</a>
+            <a href="/2018/09/29/phaser-group-get-closest-to/">Getting a sprite that is closest to another sprite in a group in phaser</a>
           </li>
         
           <li>
-            <a href="/2018/09/14/phaser-sprite-data/">Phaser Sprite data objects</a>
+            <a href="/2018/09/28/phaser-group-align/">Aligning Sprites in a group into a grid in phaser ce with group.align</a>
           </li>
         
           <li>
-            <a href="/2018/09/13/phaser-sprite-events-onkilled/">The Sprite onKilled event in phaser</a>
+            <a href="/2018/09/27/lodash_create/">The _.create method in lodash, and native Object.create</a>
           </li>
         
       </ul>

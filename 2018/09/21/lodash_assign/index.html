@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>The _.assign Object method in lodash, and alternatives | Dustin John Pfister at github pages</title>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Looking over my content so far I am surprised that I have not yet wrote a post on _.assign in lodash, as well as the native alternative Object.assign. The _.assign method is one of many ways to go abo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The _.assign Object method in lodash, and alternatives">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/09/21/lodash_assign/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="Looking over my content so far I am surprised that I have not yet wrote a post on _.assign in lodash, as well as the native alternative Object.assign. The _.assign method is one of many ways to go abo">
+<meta property="og:updated_time" content="2018-09-25T19:34:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The _.assign Object method in lodash, and alternatives">
+<meta name="twitter:description" content="Looking over my content so far I am surprised that I have not yet wrote a post on _.assign in lodash, as well as the native alternative Object.assign. The _.assign method is one of many ways to go abo">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense -->
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-lodash_assign" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/21/lodash_assign/" class="article-date"> Published:
+  <time datetime="2018-09-21T23:51:00.000Z" itemprop="datePublished">2018-09-21</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/09/21/lodash_assign/" class="article-date"> Modified:
+  <time datetime="2018-09-25T19:34:22.000Z" itemprop="dateModified">2018-09-25</time>
+</a>
+
+    <span class="article-date">V1.15</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/lodash/">lodash</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      The _.assign Object method in lodash, and alternatives
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>Looking over my content so far I am surprised that I have not yet wrote a post on <a href="https://lodash.com/docs/4.17.10#assign" target="_blank" rel="external">_.assign</a> in <a href="https://lodash.com/" target="_blank" rel="external">lodash</a>, as well as the native alternative <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign" target="_blank" rel="external">Object.assign</a>. The _.assign method is one of many ways to go about combining a bunch of objects into a single object. The process of doing so is a little involved because there is a lot to know about objects and what happens when there are combined together in javaScript. For example objects are copied by reference rather than value, which can result in unexpected behavior if you are new to javaScript and are not aware of that nature. There is also the question of the prototype, and how that should be handled as well. So in todays post I will be covering some use case scenarios of _.assign, and alternatives such as _.merge, and the native Object.assign method.</p>
+<a id="more"></a>
+<h2 id="1-what-to-know"><a href="#1-what-to-know" class="headerlink" title="1 - what to know"></a>1 - what to know</h2><p>This is a post on the <a href="https://lodash.com/" target="_blank" rel="external">lodash</a> object method <a href="https://lodash.com/docs/4.17.10#assign" target="_blank" rel="external">_.assign</a>, as well as the native javaScript <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign" target="_blank" rel="external">Object.assign</a> method as well. This is not a getting started post on lodash, or javaScrtipt and I expect that you have at least some background with these topics.</p>
+<h2 id="2-Basic-example-of-assign"><a href="#2-Basic-example-of-assign" class="headerlink" title="2 - Basic example of assign"></a>2 - Basic example of assign</h2><p>So for a basic example of the assign method I will start out with a bunch of objects that contain properties, and methods that I will like to combine together into a single method. In this example I will not be doing anything advanced involving nested objects or the prototype chain, and I will be giving both lodash, and native Object.assign examples.</p>
+<h3 id="2-1-Using-the-lodash-assign-method"><a href="#2-1-Using-the-lodash-assign-method" class="headerlink" title="2.1 - Using the lodash _.assign method."></a>2.1 - Using the lodash _.assign method.</h3><p>So say I have an object that contains an x, and y position, as well as another object that contains deltas for x and y. In addition I also have an object of methods that I would like to use with these values. I could use Function.call, but before I do that I would still need to combine the position and delta values into a single object. There are a few options for doing so and _.assign is one of them.</p>
+<p>All I have to do is pass an object that is the object that I want everything assigned to as the first argument. For this example I just give it an empty object because I do not want to mangle any of the other objects. After that I just start passing objects that I want assigned to the empty object.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> pos = &#123;</div><div class="line">    <span class="attr">x</span>: <span class="number">42</span>,</div><div class="line">    <span class="attr">y</span>: <span class="number">12</span></div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> deltas = &#123;</div><div class="line">    <span class="attr">dx</span>: <span class="number">1.2</span>,</div><div class="line">    <span class="attr">dy</span>: <span class="number">0.2</span></div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> methods = &#123;</div><div class="line">    <span class="attr">step</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">this</span>.x += <span class="keyword">this</span>.dx;</div><div class="line">        <span class="keyword">this</span>.y += <span class="keyword">this</span>.dy;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="comment">// assign everything to a new object</span></div><div class="line"><span class="keyword">var</span> obj = _.assign(&#123;&#125;, pos, deltas, methods);</div><div class="line"> </div><div class="line">obj.step();</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(obj.x,obj.y); <span class="comment">// 43.2,12.2</span></div></pre></td></tr></table></figure>
+<p>This results as in an object that works as expected. However There is much that I am not covering in this example such as what happens when there are name space collisions, what happens to the prototype, and what if a nested object is used and it’s values change. More on all that later but for now you should get the basic idea of what _.assign is good for.</p>
+<h3 id="2-2-Using-the-javaScript-native-Object-assign-method"><a href="#2-2-Using-the-javaScript-native-Object-assign-method" class="headerlink" title="2.2 - Using the javaScript native Object.assign method"></a>2.2 - Using the javaScript native Object.assign method</h3><p>If you are only concerned about supporting native browsers then there is the core javaScript native Object.assign method that works in the same way.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// assign everything to a new object</span></div><div class="line"><span class="keyword">var</span> obj = <span class="built_in">Object</span>.assign(&#123;&#125;, pos, deltas,methods);</div><div class="line"></div><div class="line">obj.step();</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(obj.x,obj.y); <span class="comment">// 43.2,12.2</span></div></pre></td></tr></table></figure>
+<p>Assuming that it is always there to work with it would seem that Object.assign works in more or less the same way. So then _.assign is another one of those methods in lodash that pull it’s relevance into question as time goes on. Keep in mode that this is not the case with all lodash methods, some do bring a bit something more, but it would appear that _.assign is not a good example of that, aside from the safety net deal if that is important to you.</p>
+<h2 id="3-Nested-objects-an-assign-vs-merge"><a href="#3-Nested-objects-an-assign-vs-merge" class="headerlink" title="3 - Nested objects an _.assign vs _.merge"></a>3 - Nested objects an _.assign vs _.merge</h2><p>So when dealing with nested objects you might run into problems, depending on how you expect objects to combine together. As the name suggested _.assign, well, assigns what is in the objects that you give it to the target object that is given as the first argument. In other worlds objects are copied in by reference and not by value which is the typical case with objects. In many cases this does not present a problem because it may be what is expected or desired. </p>
+<p>However if the typical copy by reference behavior is not what is expected, then when one of the values of the objects that are given to assign changes, then it will also change in the target object where everything is assigned to. If this is not what is desired then there are a number of ways to change that such as using a method like <a href="/2017/11/13/lodash_clonedeep/">_.cloneDeep</a> when passing in the objects, or better yet using another lodash method know as <a href="/2017/11/17/lodash_merge/">_.merge</a>.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> _ = <span class="built_in">require</span>(<span class="string">'lodash'</span>);</div><div class="line"> </div><div class="line"><span class="comment">// nested objects</span></div><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">    <span class="attr">pos</span>: &#123;</div><div class="line">        <span class="attr">x</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">y</span>: <span class="number">7</span>,</div><div class="line">        <span class="attr">delta</span>: &#123;</div><div class="line">            <span class="attr">x</span>: <span class="number">0</span>,</div><div class="line">            <span class="attr">y</span>: <span class="number">2.5</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// methods</span></div><div class="line"><span class="keyword">var</span> methods = &#123;</div><div class="line">    <span class="attr">step</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">this</span>.pos.x += <span class="keyword">this</span>.pos.delta.x;</div><div class="line">        <span class="keyword">this</span>.pos.y += <span class="keyword">this</span>.pos.delta.y;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// assign everything to a new object</span></div><div class="line"><span class="keyword">var</span> assign = _.assign(&#123;&#125;, obj, methods);</div><div class="line"> </div><div class="line"><span class="comment">// merge everything to a new object</span></div><div class="line"><span class="keyword">var</span> merge = _.merge(&#123;&#125;, obj, methods);</div><div class="line"> </div><div class="line">obj.pos.x = <span class="number">0</span>;</div><div class="line">obj.pos.y = <span class="number">0</span>;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(merge.pos.x, merge.pos.y); <span class="comment">// 2,7</span></div><div class="line"><span class="built_in">console</span>.log(assign.pos.x, assign.pos.y); <span class="comment">// 0,0</span></div></pre></td></tr></table></figure>
+<p>As you can see when using _.merge changing the values of the original objects has no effect on the object that had values added in compared to _.assign.</p>
+<h2 id="4-assign-and-an-objects-prototype"><a href="#4-assign-and-an-objects-prototype" class="headerlink" title="4 - _assign and an objects prototype"></a>4 - _assign and an objects prototype</h2><p>The _.assign method will only assign the own enumerable properties from source objects, and will not do anything with inherited properties and methods from a prototype when dealing with objects that are created from a class.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Simple Point Class</span></div><div class="line"><span class="keyword">var</span> Point = <span class="function"><span class="keyword">function</span> (<span class="params">x, y, dx, dy</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">this</span>.x = x;</div><div class="line">    <span class="keyword">this</span>.y = y;</div><div class="line">    <span class="keyword">this</span>.dx = dx;</div><div class="line">    <span class="keyword">this</span>.dy = dy;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// With a prototype</span></div><div class="line">Point.prototype.tick = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">this</span>.x += <span class="keyword">this</span>.dx;</div><div class="line">    <span class="keyword">this</span>.y += <span class="keyword">this</span>.dy;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// so if I have an instance of Point</span></div><div class="line"><span class="keyword">var</span> pt = <span class="keyword">new</span> Point(<span class="number">50</span>, <span class="number">100</span>, <span class="number">0</span>, <span class="number">25</span>);</div><div class="line"> </div><div class="line"><span class="comment">// then it's constructor is Point</span></div><div class="line"><span class="built_in">console</span>.log(pt.constructor.name); <span class="comment">// 'Point'</span></div><div class="line"> </div><div class="line"><span class="comment">// and the tick method works as expected</span></div><div class="line">pt.tick();</div><div class="line"><span class="built_in">console</span>.log(pt.x, pt.y); <span class="comment">// 50 125</span></div><div class="line"> </div><div class="line"><span class="comment">// but if I assign it to a plain old object</span></div><div class="line"><span class="keyword">var</span> assigned = _.assign(&#123;&#125;,pt);</div><div class="line"> </div><div class="line"><span class="comment">// then the prototype is lost</span></div><div class="line"><span class="built_in">console</span>.log(assigned.constructor.name); <span class="comment">// Object</span></div><div class="line"> </div><div class="line"><span class="comment">// so then I would be calling undefined if I</span></div><div class="line"><span class="comment">// called assign.tick</span></div><div class="line"><span class="comment">//assigned.tick(); // TypeError: assigned.tick is not a function</span></div></pre></td></tr></table></figure>
+<p>There is a number of ways of resolving this one way would be to use _.create to set the prototype back to the object. However there is also the _.extend method which is an alias for _.assignIn that can be used as a way to keep method from a prototype.These different solutions work in very different ways so in this section I will cover what some of the options are.</p>
+<h3 id="4-1-Using-create-to-bring-the-prototype-back"><a href="#4-1-Using-create-to-bring-the-prototype-back" class="headerlink" title="4.1 - Using _.create to bring the prototype back"></a>4.1 - Using _.create to bring the prototype back</h3><p>So one way to bring the prototype back after using _.assign would be to just use _.create to create a new object with the desired prototype, and pass in the result of an _.assign as the properties to use with that object.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> keepIt = _.create(Point.prototype, _.assign(&#123;&#125;, <span class="keyword">new</span> Point(<span class="number">0</span>,<span class="number">0</span>,<span class="number">5</span>,<span class="number">2</span>),&#123;<span class="attr">foo</span>:<span class="string">'bar'</span>&#125;));</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(keepIt.constructor.name); <span class="comment">// Point</span></div><div class="line">keepIt.tick();</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(keepIt); <span class="comment">// Point &#123; x: 5, y: 2, dx: 5, dy: 2, foo: 'bar' &#125;</span></div></pre></td></tr></table></figure>
+<p>This keeps the prototype in the prototype where it should be rather than another solution in which the prototype ends up getting mixed in with regular old object properties. There is also of course the native Object.create which also works the same way.</p>
+<h3 id="4-2-Using-assignIn-aka-extend-to-combine-everything"><a href="#4-2-Using-assignIn-aka-extend-to-combine-everything" class="headerlink" title="4.2 - Using _.assignIn aka _.extend to combine everything."></a>4.2 - Using _.assignIn aka _.extend to combine everything.</h3><p>Another option would be to use _.extend which is an alias for _.assignIn. The _.assignIn method works like _assign, but it will bring in the prototype method as well.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// EXTEND</span></div><div class="line"><span class="keyword">var</span> extended = _.extend(&#123;&#125;,<span class="keyword">new</span> Point(<span class="number">5</span>,<span class="number">7</span>,<span class="number">25</span>,<span class="number">50</span>));</div><div class="line"> </div><div class="line"><span class="comment">// the prototype will be lost</span></div><div class="line"><span class="built_in">console</span>.log(extended.constructor.name); <span class="comment">// Object</span></div><div class="line"> </div><div class="line"><span class="comment">// but it will be combined the inherited properties into the object.</span></div><div class="line">extended.tick();</div><div class="line"><span class="built_in">console</span>.log(extended); <span class="comment">// &#123; x: 30, y: 57, dx: 25, dy: 50, tick: [Function] &#125;</span></div></pre></td></tr></table></figure>
+<p>This can defeat the purpose of the prototype object if dealing with a large collection of objects that share the same prototype, so this solution should be avoided. Unless for some reason you want ot need to do it of course.</p>
+<h2 id="5-Conclusion"><a href="#5-Conclusion" class="headerlink" title="5 - Conclusion"></a>5 - Conclusion</h2><p>So _.assign, as well as other methods like _.merge, and _.extend are some of the many useful methods for working with objects in a project where lodash is part of the stack. Although many of the methods are now native in javaScript itself, there is much more that lodash has to offer. In any case if you use the native Object.assign or the _.assign method hopefully this post has helped you gain a better understanding of what assign does if you did not know before hand. In any case I hope you enjoyed the post, thanks for reading.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/09/21/lodash_assign/" data-id="cjmr08xrr000ma8v1w0yhqvji" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/09/21/lodash_assign/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lodash/">lodash</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/09/24/lodash_get/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Get an object value by path with the _.get Object method in lodash
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/09/20/phaser-tilemap/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Starting out with Tile maps in phaser</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2018/09/21/lodash_assign/index.html';
+    this.page.identifier = '285';
+    this.page.title = 'The _.assign Object method in lodash, and alternatives';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.22px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 11.67px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.56px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.22px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.78px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 16.67px;">express</a> <a href="/tags/games/" style="font-size: 18.33px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.44px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.67px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 17.78px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.89px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.11px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/10/01/lodash_extend/">The lodash _.extend method for combining objects, and alternatives</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/30/lodash_forin/">The lodash _.forIn method</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/29/phaser-group-get-closest-to/">Getting a sprite that is closest to another sprite in a group in phaser</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/28/phaser-group-align/">Aligning Sprites in a group into a grid in phaser ce with group.align</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/27/lodash_create/">The _.create method in lodash, and native Object.create</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2018/09/21/lodash_assign/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

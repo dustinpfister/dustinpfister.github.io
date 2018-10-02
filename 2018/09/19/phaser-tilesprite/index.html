@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Tile Sprites in phaser for repeating backgrounds. | Dustin John Pfister at github pages</title>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Tile sprites are a useful way to go about making a repeating background in a Phaser ce project. A tile Sprite is not to be confused with a tile map which is something completely different. For today I">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tile Sprites in phaser for repeating backgrounds.">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/09/19/phaser-tilesprite/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="Tile sprites are a useful way to go about making a repeating background in a Phaser ce project. A tile Sprite is not to be confused with a tile map which is something completely different. For today I">
+<meta property="og:updated_time" content="2018-09-20T16:44:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tile Sprites in phaser for repeating backgrounds.">
+<meta name="twitter:description" content="Tile sprites are a useful way to go about making a repeating background in a Phaser ce project. A tile Sprite is not to be confused with a tile map which is something completely different. For today I">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense -->
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-phaser-tilesprite" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/19/phaser-tilesprite/" class="article-date"> Published:
+  <time datetime="2018-09-19T23:14:00.000Z" itemprop="datePublished">2018-09-19</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/09/19/phaser-tilesprite/" class="article-date"> Modified:
+  <time datetime="2018-09-20T16:44:10.000Z" itemprop="dateModified">2018-09-20</time>
+</a>
+
+    <span class="article-date">V1.1</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/phaser/">phaser</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Tile Sprites in phaser for repeating backgrounds.
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>Tile sprites are a useful way to go about making a repeating background in a <a href="https://photonstorm.github.io/phaser-ce/" target="_blank" rel="external">Phaser ce</a> project. A <a href="https://photonstorm.github.io/phaser-ce/Phaser.TileSprite.html" target="_blank" rel="external">tile Sprite</a> is not to be confused with a tile map which is something completely different. For today I spent a little time playing around with tile sprites, and have found that if I ever want to set something up that involves one or more repeating backgrounds, I will want to use a tile sprite.</p>
+<a id="more"></a>
+<h2 id="1-what-to-know"><a href="#1-what-to-know" class="headerlink" title="1 - what to know"></a>1 - what to know</h2><p>In this post I will be writing about making and using tile sprites in <a href="https://photonstorm.github.io/phaser-ce/" target="_blank" rel="external">phaser ce</a> the community edition of the <a href="https://phaser.io" target="_blank" rel="external">popular javaScript game frame work</a>. I will also be making use of a lot of other aspects of phaser including things like state objects, and making sprite sheets from canvas elements. I will of course not get into every little detail about phaser let alone javaScript in general, but I have written a <a href="/2017/10/04/phaser-getting-started/">getting started post on phaser</a> a while back.</p>
+<h3 id="1-1-This-is-a-phaser-ce-2-x-post"><a href="#1-1-This-is-a-phaser-ce-2-x-post" class="headerlink" title="1.1 - This is a phaser ce (2.x) post"></a>1.1 - This is a phaser ce (2.x) post</h3><p>Ever sense the release of phaser 3 earlier this year I have started the habit of making in clear what version of phaser I am using when making a post. This is a practice that I should be doing in one manor or another each time anyway. So for this post I was using phaser ce 2.11.0</p>
+<h2 id="2-Basic-example-using-a-tile-sprite-in-phaser-ce"><a href="#2-Basic-example-using-a-tile-sprite-in-phaser-ce" class="headerlink" title="2 - Basic example using a tile sprite in phaser ce"></a>2 - Basic example using a tile sprite in phaser ce</h2><p>For a basic example of a tile sprite I will need a texture, in this example I will be making once via a canvas element. Once I have a texture that will repeat well I can then use that texture to make a tile sprite by calling game.add.tileSprite. There are some properties that I then can used to work with the tile sprite, but the most important one might be the Phaser.Point instance at the tileSprite.tilePosition property. This what I use to make a repeating texture scroll. In this section I will be covering a basic working example of this.</p>
+<h3 id="2-1-The-tile-sprite-helper"><a href="#2-1-The-tile-sprite-helper" class="headerlink" title="2.1 - The tile sprite helper"></a>2.1 - The tile sprite helper</h3><p>In this method I am creating a tile sprite by calling game.add.tileSprite, the arguments that I give to the constructor are essentially the same as a regular Sprite, so if you are familiar with that constructor you know the drill. If not the first two arguments are the x, and y position, the next two are the width and height, the fifth is a key to the sheet I want to use, and the final argument is the frame index.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// make a tile sprite</span></div><div class="line"><span class="keyword">var</span> mkTileSprite = <span class="function"><span class="keyword">function</span> (<span class="params">game</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> tile = game.add.tileSprite(<span class="number">0</span>, <span class="number">0</span>, game.world.width, game.world.height, <span class="string">'sheet-block'</span>, <span class="number">0</span>);</div><div class="line">    tile.name = <span class="string">'tile'</span>;</div><div class="line"> </div><div class="line">    tile.data.i = <span class="number">0</span>;</div><div class="line">    tile.data.i_max = <span class="number">150</span>;</div><div class="line">    tile.data.tick = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">this</span>.per = <span class="keyword">this</span>.i / <span class="keyword">this</span>.i_max;</div><div class="line"> </div><div class="line">        <span class="keyword">this</span>.r = <span class="built_in">Math</span>.PI * <span class="number">2</span> * <span class="keyword">this</span>.per;</div><div class="line">        <span class="keyword">this</span>.x = <span class="built_in">Math</span>.cos(<span class="keyword">this</span>.r) * <span class="number">64</span>;</div><div class="line">        <span class="keyword">this</span>.y = <span class="built_in">Math</span>.sin(<span class="keyword">this</span>.r) * <span class="number">64</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// set tile position</span></div><div class="line">        tile.tilePosition.set(<span class="keyword">this</span>.x, <span class="keyword">this</span>.y);</div><div class="line"> </div><div class="line">        <span class="keyword">this</span>.i += <span class="number">1</span>;</div><div class="line">        <span class="keyword">this</span>.i %= <span class="keyword">this</span>.i_max;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>Once I have my tile sprite I assign a name to it so I can use game.world.getByName as a way to grab a reference to it later on in my code. In addition to that I also assign some code to the <a href="/2018/09/14/phaser-sprite-data/">data object of the tile sprite</a> to help offset some stuff to the instance of the tile sprite rather than polluting the global name space, or ending up with a lengthly game.data object in the event that this example  grows.</p>
+<h3 id="2-2-Making-the-sprite-sheet"><a href="#2-2-Making-the-sprite-sheet" class="headerlink" title="2.2 - Making the sprite sheet"></a>2.2 - Making the sprite sheet</h3><p>The above example makes use of a sprite sheet called ‘sheet-block’, I often like to use canvas as a way to make basic sheets for the purpose of these examples. So here I have a method that will create a simple texture that will repeat well with canvas, and then add it to the cache.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mkSheet = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// sprite sheet generated by canvas</span></div><div class="line">    <span class="keyword">var</span> canvas = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>),</div><div class="line">    ctx = canvas.getContext(<span class="string">'2d'</span>);</div><div class="line">    canvas.width = <span class="number">64</span>;</div><div class="line">    canvas.height = <span class="number">64</span>;</div><div class="line"> </div><div class="line">    <span class="comment">// background</span></div><div class="line">    ctx.fillStyle = <span class="string">'#8a0000'</span>;</div><div class="line">    ctx.fillRect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">64</span>, <span class="number">64</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// white lines around edges</span></div><div class="line">    ctx.strokeStyle = <span class="string">'#ffffff'</span>;</div><div class="line">    ctx.strokeRect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">64</span>, <span class="number">64</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// large circle in the center</span></div><div class="line">    ctx.fillStyle = <span class="string">'#4a0000'</span>;</div><div class="line">    ctx.lineWidth = <span class="number">3</span>;</div><div class="line">    ctx.beginPath()</div><div class="line">    ctx.arc(<span class="number">32</span>, <span class="number">32</span>, <span class="number">16</span>, <span class="number">0</span>, <span class="built_in">Math</span>.PI * <span class="number">2</span>)</div><div class="line">    ctx.fill();</div><div class="line">    ctx.stroke();</div><div class="line"> </div><div class="line">    <span class="comment">// small circles at the corners</span></div><div class="line">    ctx.fillStyle = <span class="string">'#ff0000'</span>;</div><div class="line">    <span class="keyword">var</span> i = <span class="number">0</span>,x,y;</div><div class="line">    <span class="keyword">while</span> (i &lt; <span class="number">4</span>) &#123;</div><div class="line">        x = i % <span class="number">2</span>;</div><div class="line">        y = <span class="built_in">Math</span>.floor(i / <span class="number">2</span>);</div><div class="line">        ctx.beginPath()</div><div class="line">        ctx.arc(x * <span class="number">64</span>, y * <span class="number">64</span>, <span class="number">4</span>, <span class="number">0</span>, <span class="built_in">Math</span>.PI * <span class="number">2</span>)</div><div class="line">        ctx.fill();</div><div class="line">        ctx.stroke();</div><div class="line">        i += <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// add a single sheet to cache</span></div><div class="line">    game.cache.addSpriteSheet(<span class="string">'sheet-block'</span>, <span class="literal">null</span>, canvas, <span class="number">64</span>, <span class="number">64</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>I have found that it is generally a good practice to stick to powers of 2 when making the size of a frame to be used in sprite sheets. Although other sizes might work it can some times cause adverse effects, or in some cases not work at all.</p>
+<h3 id="2-3-Now-to-get-things-working"><a href="#2-3-Now-to-get-things-working" class="headerlink" title="2.3 - Now to get things working"></a>2.3 - Now to get things working</h3><p>So now that I have my two helper methods I can now make use of them my making a Phaser.Game instance, and a state object. For this example I just need to call my mkSheet helper in in the create method followed by the mkTileSprite helper. Then in the update method I just need to call the tick method in the data object of my tile sprite.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>);</div><div class="line"> </div><div class="line">game.state.add(<span class="string">'boot'</span>, &#123;</div><div class="line"> </div><div class="line">    <span class="attr">create</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// make the sheet</span></div><div class="line">        mkSheet(game);</div><div class="line"> </div><div class="line">        <span class="comment">// make the tile sprite</span></div><div class="line">        mkTileSprite(game);</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="attr">update</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// just need to call by tick method</span></div><div class="line">        game.world.getByName(<span class="string">'tile'</span>).data.tick();</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line">game.state.start(<span class="string">'boot'</span>);</div></pre></td></tr></table></figure>
+<p>This results in a sprite with a repeating texture that scrolls around in a circular motion. In real projects this can of course be used to make repeating backgrounds, and other interesting sprites that call for such an effect. It is also possible to have more than one layer of these kinds of sprites <a href="/2018/08/24/phaser-groups/">in a Group</a> to make very interesting professional looking backgrounds.</p>
+<h2 id="3-Conclusion"><a href="#3-Conclusion" class="headerlink" title="3 - Conclusion"></a>3 - Conclusion</h2><p>So tile sprites are a great way to make any kind of sprite that involves the use of a repeating texture. There is also of course tile maps as well that allow for making display Objects that are composed of a bunch of different frames that represent different blocks, but that is a mater for another post.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/09/19/phaser-tilesprite/" data-id="cjmr08xs3000pa8v1ronapk4n" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/09/19/phaser-tilesprite/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/phaser/">phaser</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/09/20/phaser-tilemap/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Starting out with Tile maps in phaser
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/09/18/phaser-sprite-alpha/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Setting sprite transparency in phaser with Sprite.alpha</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2018/09/19/phaser-tilesprite/index.html';
+    this.page.identifier = '283';
+    this.page.title = 'Tile Sprites in phaser for repeating backgrounds.';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.22px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 11.67px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.56px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.22px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.78px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 16.67px;">express</a> <a href="/tags/games/" style="font-size: 18.33px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.44px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.67px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 17.78px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.89px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.11px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/10/01/lodash_extend/">The lodash _.extend method for combining objects, and alternatives</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/30/lodash_forin/">The lodash _.forIn method</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/29/phaser-group-get-closest-to/">Getting a sprite that is closest to another sprite in a group in phaser</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/28/phaser-group-align/">Aligning Sprites in a group into a grid in phaser ce with group.align</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/27/lodash_create/">The _.create method in lodash, and native Object.create</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2018/09/19/phaser-tilesprite/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
