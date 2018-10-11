@@ -12,7 +12,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2017/05/23/nodejs-request/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="In many node.js projects it is necessary to grab resources that may exist on some kind of external source. In general often you may just need to get what is there, just a simple get request, and thats">
-<meta property="og:updated_time" content="2018-08-16T11:47:22.000Z">
+<meta property="og:updated_time" content="2018-10-03T17:33:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The super simple http client for making requests in node.js called simply request">
 <meta name="twitter:description" content="In many node.js projects it is necessary to grab resources that may exist on some kind of external source. In general often you may just need to get what is there, just a simple get request, and thats">
@@ -114,10 +114,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/05/23/nodejs-request/" class="article-date"> Modified:
-  <time datetime="2018-08-16T11:47:22.000Z" itemprop="dateModified">2018-08-16</time>
+  <time datetime="2018-10-03T17:33:06.000Z" itemprop="dateModified">2018-10-03</time>
 </a>
 
-    <span class="article-date">V1.16</span>
+    <span class="article-date">V1.17</span>
 
     
   <div class="article-category">
@@ -165,7 +165,7 @@ ga('send', 'pageview');
 <h2 id="4-1-Using-stream-Transform-object-mode-to-log-out-“War-and-peace”-to-the-console"><a href="#4-1-Using-stream-Transform-object-mode-to-log-out-“War-and-peace”-to-the-console" class="headerlink" title="4.1 - Using stream.Transform object mode to log out “War and peace” to the console."></a>4.1 - Using stream.Transform object mode to log out “War and peace” to the console.</h2><p>So for a fun example of using streams with request, I thought about making something that logs out the text of the book “war and peace” that is a book that is well know for it’s very high word count of over five hundred thousand words. In this example I will be using the transform method of the node.js built in stream module.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> request = <span class="built_in">require</span>(<span class="string">'request'</span>),</div><div class="line">stream = <span class="built_in">require</span>(<span class="string">'stream'</span>);</div><div class="line"> </div><div class="line"><span class="comment">// requesting "War, and peace" (it's over 500,000 words)</span></div><div class="line">request(<span class="string">'http://www.textfiles.com/etext/FICTION/war_peace_text'</span>)</div><div class="line"> </div><div class="line">.pipe(<span class="keyword">new</span> stream.Transform(&#123;</div><div class="line"> </div><div class="line">        <span class="attr">objectMode</span>: <span class="literal">true</span>,</div><div class="line">        <span class="attr">transform</span>: <span class="function"><span class="keyword">function</span> (<span class="params">a, en, cb</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">// log each chunk as it comes in</span></div><div class="line">            <span class="built_in">console</span>.log(a.toString());</div><div class="line"> </div><div class="line">            cb();</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;))</div><div class="line"> </div><div class="line">.on(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(err);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p>Streaming is useful if I am ever dealing with a very large file, such as this. instead of having to wait for the whole thing to download, I can start logging it to the console as it comes in.</p>
-<h2 id="5-Like-promises"><a href="#5-Like-promises" class="headerlink" title="5 - Like promises?"></a>5 - Like promises?</h2><p>So one nice think about the http client axios, is that it has promise support out of the box. Nothing against axios, that is a great client as well, but this post is on request. So out of the box there is no promise support. However there are additional packages that can be used to quickly add promise support using either native promises using <a href="request-promise-native">request-promise-native</a>, <a href="https://www.npmjs.com/package/bluebird" target="_blank" rel="external">bluebird</a>  using <a href="https://www.npmjs.com/package/request-promise" target="_blank" rel="external">request-promise</a>, or another one using any-promise called <a href="https://www.npmjs.com/package/request-promise-any" target="_blank" rel="external">request-promise-any</a></p>
+<h2 id="5-Like-promises"><a href="#5-Like-promises" class="headerlink" title="5 - Like promises?"></a>5 - Like promises?</h2><p>So one nice think about the http client axios, is that it has promise support out of the box. Nothing against axios, that is a great client as well, but this post is on request. So out of the box there is no promise support. However there are additional packages that can be used to quickly add promise support using either native promises using <a href="https://www.npmjs.com/package/request-promise-native" target="_blank" rel="external">request-promise-native</a>, <a href="https://www.npmjs.com/package/bluebird" target="_blank" rel="external">bluebird</a>  using <a href="https://www.npmjs.com/package/request-promise" target="_blank" rel="external">request-promise</a>, or another one using any-promise called <a href="https://www.npmjs.com/package/request-promise-any" target="_blank" rel="external">request-promise-any</a></p>
 <h2 id="6-Conclusion"><a href="#6-Conclusion" class="headerlink" title="6 - Conclusion"></a>6 - Conclusion</h2><p>request is a descent http client, the out of box promises support might not be there, but with some projects I can do without it. Also When it comes to adding promise support I have more than one option to choose from which is nice. This rases all kinds of questions such as how does bluefish compare to just using native promises? So much to write about, and so little time. If you like this post be sure to check out my many other <a href="/categories/node-js/">posts on node.js and npm packages</a>.</p>
 
       
@@ -277,23 +277,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2018/10/01/lodash_extend/">The lodash _.extend method for combining objects, and alternatives</a>
+            <a href="/2018/10/10/phaser-sprite-lifespan/">Setting sprite lifespan in phaser ce</a>
           </li>
         
           <li>
-            <a href="/2018/09/30/lodash_forin/">The lodash _.forIn method</a>
+            <a href="/2018/10/09/phaser-plugins/">Starting out with plug-ins in phaser ce</a>
           </li>
         
           <li>
-            <a href="/2018/09/29/phaser-group-get-closest-to/">Getting a sprite that is closest to another sprite in a group in phaser</a>
+            <a href="/2018/10/07/phaser-create-grid/">Quickly create a grid in phaser ce</a>
           </li>
         
           <li>
-            <a href="/2018/09/28/phaser-group-align/">Aligning Sprites in a group into a grid in phaser ce with group.align</a>
+            <a href="/2018/10/06/phaser-group-on-child-input-down/">Input down events for all children in a group in phaser ce</a>
           </li>
         
           <li>
-            <a href="/2018/09/27/lodash_create/">The _.create method in lodash, and native Object.create</a>
+            <a href="/2018/10/06/phaser-create-texture/">Create textures in phaser with game.create</a>
           </li>
         
       </ul>

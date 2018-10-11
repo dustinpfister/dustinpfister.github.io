@@ -12,7 +12,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2018/09/17/phaser-sprite-health/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="With Phaser ce sprite objects there is a health property, this property can be used in conjunction with methods like Sprite.damage to manage hit points for the Sprite. Many kinds of games involve the">
-<meta property="og:updated_time" content="2018-09-18T18:25:20.000Z">
+<meta property="og:updated_time" content="2018-10-03T17:31:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Using Sprite.health to manage hit point in phaser ce.">
 <meta name="twitter:description" content="With Phaser ce sprite objects there is a health property, this property can be used in conjunction with methods like Sprite.damage to manage hit points for the Sprite. Many kinds of games involve the">
@@ -114,10 +114,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2018/09/17/phaser-sprite-health/" class="article-date"> Modified:
-  <time datetime="2018-09-18T18:25:20.000Z" itemprop="dateModified">2018-09-18</time>
+  <time datetime="2018-10-03T17:31:26.000Z" itemprop="dateModified">2018-10-03</time>
 </a>
 
-    <span class="article-date">V1.14</span>
+    <span class="article-date">V1.15</span>
 
     
   <div class="article-category">
@@ -143,7 +143,7 @@ ga('send', 'pageview');
         <p>With <a href="https://photonstorm.github.io/phaser-ce/" target="_blank" rel="external">Phaser ce</a> sprite objects there is a <a href="https://photonstorm.github.io/phaser-ce/Phaser.Sprite.html#health" target="_blank" rel="external">health property</a>, this property can be used in conjunction with methods like Sprite.damage to manage hit points for the Sprite. Many kinds of games involve the use of hit points, and when these hit point values reach zero or lower, that often will trigger death animations, and other events. Although it is fine to make hit points part of my own separate game logic, the built in health property can be used in conjunction with other properties and methods to help speed things along with managing health. In this post I will be writing about managing hit points in a phaser ce game using the Sprite.health property, and a few closely related methods and properties like Sprite.damage, and Sprite.events.onKilled.</p>
 <a id="more"></a>
 <h2 id="1-What-to-know"><a href="#1-What-to-know" class="headerlink" title="1 - What to know"></a>1 - What to know</h2><p>This is a post on the Sprite.health property, and other methods, and properties in phaser ce the community edition of phaser a javaScript powered game framework. This is not a getting started post on phaser, or the ins and outs of everything relating to javaScript in it entirety, so I ssume you have some background before hand.</p>
-<h2 id="1-1-This-is-a-phaser-ce-2-x-post"><a href="#1-1-This-is-a-phaser-ce-2-x-post" class="headerlink" title="1.1 - This is a phaser ce (2.x) post"></a>1.1 - This is a phaser ce (2.x) post</h2><p>In this post I am using phaser 2.11.0, also know as <a href="(https://photonstorm.github.io/phaser-ce/">phaser community edition</a>). I have been playing around with phaser 2.c on and off for a long time now, and feel as though I am just starting to get the hand of things. It is only a matter of time until I start to break ground with phaser 3, but for now I am sticking to the tired yet true version of <a href="https://phaser.io/" target="_blank" rel="external">phaser</a>.</p>
+<h2 id="1-1-This-is-a-phaser-ce-2-x-post"><a href="#1-1-This-is-a-phaser-ce-2-x-post" class="headerlink" title="1.1 - This is a phaser ce (2.x) post"></a>1.1 - This is a phaser ce (2.x) post</h2><p>In this post I am using phaser 2.11.0, also know as <a href="https://photonstorm.github.io/phaser-ce/" target="_blank" rel="external">phaser community edition</a>. I have been playing around with phaser 2.c on and off for a long time now, and feel as though I am just starting to get the hand of things. It is only a matter of time until I start to break ground with phaser 3, but for now I am sticking to the tired yet true version of <a href="https://phaser.io/" target="_blank" rel="external">phaser</a>.</p>
 <h2 id="2-A-Basic-example-of-Sprite-health"><a href="#2-A-Basic-example-of-Sprite-health" class="headerlink" title="2 - A Basic example of Sprite.health"></a>2 - A Basic example of Sprite.health</h2><p>For a basic example of using Sprite.health, I made a simple example that makes a Sprite and sets the health property to 100. I then also set up an onKilled event that will be used to set the exists property to true, and set the frame index to a frame that will represent a death frame. The reason for this is that when I use the Sprite.damage method the Sprite.alive, and Sprite.exists properties will be set to false. In this example I want to display a death frame, but in more advanced examples this might advance into a death animation.</p>
 <h3 id="2-1-A-helper-for-making-a-sprite-that-makes-use-of-Sprite-health"><a href="#2-1-A-helper-for-making-a-sprite-that-makes-use-of-Sprite-health" class="headerlink" title="2.1 - A helper for making a sprite that makes use of Sprite.health"></a>2.1 - A helper for making a sprite that makes use of Sprite.health</h3><p>So here is the method that makes the Sprite, I make a new sprite with game.add.sprite, and use a sheet called ‘sheet-block’ that I make with a canvas solution that I will briefly cover shortly. I set the player.health property with a number literal here, and also set up an event to define what to do when the Sprite is killed.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// make a player sprite</span></div><div class="line"><span class="keyword">var</span> mkPlayerSprite = <span class="function"><span class="keyword">function</span> (<span class="params">game</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// create player sprite, and attach name</span></div><div class="line">    <span class="keyword">var</span> player = game.add.sprite(<span class="number">0</span>, <span class="number">0</span>, <span class="string">'sheet-block'</span>, <span class="number">0</span>);</div><div class="line">    player.name = <span class="string">'player'</span>;</div><div class="line"> </div><div class="line">    <span class="comment">// set health to 100</span></div><div class="line">    player.health = <span class="number">100</span>;</div><div class="line"> </div><div class="line">    <span class="comment">// what to do if the player is killed</span></div><div class="line">    player.events.onKilled.add(<span class="function"><span class="keyword">function</span> (<span class="params">player</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// set exits to true, but leave the alive value as is</span></div><div class="line">        player.exists = <span class="literal">true</span>;</div><div class="line">        player.frame = <span class="number">1</span>; <span class="comment">// set to frame 1 (death frame);</span></div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
@@ -267,23 +267,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2018/10/01/lodash_extend/">The lodash _.extend method for combining objects, and alternatives</a>
+            <a href="/2018/10/10/phaser-sprite-lifespan/">Setting sprite lifespan in phaser ce</a>
           </li>
         
           <li>
-            <a href="/2018/09/30/lodash_forin/">The lodash _.forIn method</a>
+            <a href="/2018/10/09/phaser-plugins/">Starting out with plug-ins in phaser ce</a>
           </li>
         
           <li>
-            <a href="/2018/09/29/phaser-group-get-closest-to/">Getting a sprite that is closest to another sprite in a group in phaser</a>
+            <a href="/2018/10/07/phaser-create-grid/">Quickly create a grid in phaser ce</a>
           </li>
         
           <li>
-            <a href="/2018/09/28/phaser-group-align/">Aligning Sprites in a group into a grid in phaser ce with group.align</a>
+            <a href="/2018/10/06/phaser-group-on-child-input-down/">Input down events for all children in a group in phaser ce</a>
           </li>
         
           <li>
-            <a href="/2018/09/27/lodash_create/">The _.create method in lodash, and native Object.create</a>
+            <a href="/2018/10/06/phaser-create-texture/">Create textures in phaser with game.create</a>
           </li>
         
       </ul>
