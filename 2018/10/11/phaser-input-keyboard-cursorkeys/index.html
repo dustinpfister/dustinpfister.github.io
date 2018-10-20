@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Setting up keyboard cursor keys in phaser ce. | Dustin John Pfister at github pages</title>
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2018/10/11/phaser-input-keyboard-cursorkeys/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="For todays post on Phaser ce topics I thought I would put together a quick post on keyboard.createCursorKeys. This can be used to create an object containing a collection of four hot keys for up down">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Setting up keyboard cursor keys in phaser ce.">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/10/11/phaser-input-keyboard-cursorkeys/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="For todays post on Phaser ce topics I thought I would put together a quick post on keyboard.createCursorKeys. This can be used to create an object containing a collection of four hot keys for up down">
+<meta property="og:updated_time" content="2018-10-20T00:42:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Setting up keyboard cursor keys in phaser ce.">
+<meta name="twitter:description" content="For todays post on Phaser ce topics I thought I would put together a quick post on keyboard.createCursorKeys. This can be used to create an object containing a collection of four hot keys for up down">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense -->
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-phaser-input-keyboard-cursorkeys" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/11/phaser-input-keyboard-cursorkeys/" class="article-date"> Published:
+  <time datetime="2018-10-12T00:39:00.000Z" itemprop="datePublished">2018-10-11</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/10/11/phaser-input-keyboard-cursorkeys/" class="article-date"> Modified:
+  <time datetime="2018-10-20T00:42:59.000Z" itemprop="dateModified">2018-10-19</time>
+</a>
+
+    <span class="article-date">V1.15</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/phaser/">phaser</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Setting up keyboard cursor keys in phaser ce.
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>For todays post on <a href="https://photonstorm.github.io/phaser-ce/" target="_blank" rel="external">Phaser ce</a> topics I thought I would put together a quick post on <a href="https://photonstorm.github.io/phaser-ce/Phaser.Keyboard.html#createCursorKeys" target="_blank" rel="external">keyboard.createCursorKeys</a>. This can be used to create an object containing a collection of four hot keys for up down left and right. As such this can be used as a way to quickly get going with directional movement of a display object with the keyboard in phaser. Each hot key object can be used to pull the current state of a key in an update loop, as well as attach events via <a href="/2018/10/04/phaser-signal/">Phaser.signal</a> instances. So in this post I will be writing about how to go about getting keyboard movement up and running real quick in a phaser ce project with this method.</p>
+<a id="more"></a>
+<h2 id="1-What-to-know"><a href="#1-What-to-know" class="headerlink" title="1 - What to know"></a>1 - What to know</h2><p>This is a post on using keyboard.createCursor keys to quickly create an object of hot keys for the arrow keys of a keyboard. This is not a post on the <a href="/2017/10/13/phaser-gameobj-input-keyboard/">keyboard manager in general</a>, or other aspects of handling input such as with <a href="/2017/10/17/phaser-input-pointer-objects/">pointer objects</a>. This is not a getting started post on <a href="/2017/10/04/phaser-getting-started/">phaser ce</a>, or javaScript in general as well.</p>
+<h3 id="1-1-This-is-a-phaser-ce-2-x-post"><a href="#1-1-This-is-a-phaser-ce-2-x-post" class="headerlink" title="1.1 - This is a phaser ce 2.x post"></a>1.1 - This is a phaser ce 2.x post</h3><p>In this post I am using phaser community edition 2.11.0 of <a href="https://phaser.io/" target="_blank" rel="external">phaser</a>.</p>
+<h2 id="2-Simple-example-of-keyboard-createCursorKeys"><a href="#2-Simple-example-of-keyboard-createCursorKeys" class="headerlink" title="2 - Simple example of keyboard.createCursorKeys"></a>2 - Simple example of keyboard.createCursorKeys</h2><p>For a simple example of using keyboard.createCursorkeys I made a a project that involves calling a method in the update method of a state object that uses an instance of keyboard.createCursorkeys to pull the status of the arrow keys of the keyboard. The method uses the cursor keys to just move the position of a sprite and that is it.</p>
+<h3 id="2-1-The-moveSpriteWithCursors-helper"><a href="#2-1-The-moveSpriteWithCursors-helper" class="headerlink" title="2.1 - The moveSpriteWithCursors helper"></a>2.1 - The moveSpriteWithCursors helper</h3><p>So here is the helper method that will make use of keyboard.createCursorKeys. Here I feature test if an instance of cursor keys is present and if not create it. I then use the isDown booleans of the up, down, left, and right properties of the object that is created with createCursorKeys to poll if a key is down or not, and if so more the sprite.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> moveSpriteWithCursors = <span class="function"><span class="keyword">function</span> (<span class="params">game, sprite</span>) </span>&#123;</div><div class="line"> </div><div class="line">    game.data = game.data || &#123;&#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// create cursors</span></div><div class="line">    <span class="keyword">if</span> (!game.data.cursors) &#123;</div><div class="line">        game.data.cursors = game.input.keyboard.createCursorKeys();</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> cursors = game.data.cursors;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (cursors.up.isDown) &#123;</div><div class="line">        sprite.y -= <span class="number">10</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (cursors.down.isDown) &#123;</div><div class="line">        sprite.y += <span class="number">10</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (cursors.left.isDown) &#123;</div><div class="line">        sprite.x -= <span class="number">10</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (cursors.right.isDown) &#123;</div><div class="line">        sprite.x += <span class="number">10</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    sprite.y = Phaser.Math.wrap(sprite.y, <span class="number">-32</span>, game.world.height + <span class="number">32</span>);</div><div class="line">    sprite.x = Phaser.Math.wrap(sprite.x, <span class="number">-32</span>, game.world.width + <span class="number">32</span>);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>In a real project I might create the instance of cursorKeys elsewhere once rather than feature test, and I would likely change physics values rather than move the sprite directly. However A method like this helps to wrap everything that is need into a nice neat little package for the sake of this simple demo.</p>
+<h3 id="2-2-Create-the-ball-sheet"><a href="#2-2-Create-the-ball-sheet" class="headerlink" title="2.2 - Create the ball sheet"></a>2.2 - Create the ball sheet</h3><p>Here I am just creating a sprite sheet using canvas.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> createBallSheet = <span class="function"><span class="keyword">function</span> (<span class="params">game</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> canvas = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>);</div><div class="line">    ctx = canvas.getContext(<span class="string">'2d'</span>);</div><div class="line"> </div><div class="line">    canvas.width = <span class="number">32</span>;</div><div class="line">    canvas.height = <span class="number">32</span>;</div><div class="line"> </div><div class="line">    ctx.fillStyle = <span class="string">'#ffffff'</span>;</div><div class="line">    ctx.beginPath();</div><div class="line">    ctx.closePath();</div><div class="line">    ctx.arc(<span class="number">16</span>, <span class="number">16</span>, <span class="number">12</span>, <span class="number">0</span>, <span class="built_in">Math</span>.PI * <span class="number">2</span>);</div><div class="line">    ctx.fill();</div><div class="line"> </div><div class="line">    game.cache.addSpriteSheet(<span class="string">'sheet-ball'</span>, <span class="literal">null</span>, canvas, <span class="number">32</span>, <span class="number">32</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="2-3-The-Phaser-Game-instance"><a href="#2-3-The-Phaser-Game-instance" class="headerlink" title="2.3 - The Phaser.Game instance"></a>2.3 - The Phaser.Game instance</h3><p>Now I just need to pull everything together.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>);</div><div class="line"> </div><div class="line">game.state.add(<span class="string">'boot'</span>, &#123;</div><div class="line"> </div><div class="line">    <span class="attr">create</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        game.data = &#123;&#125;;</div><div class="line"> </div><div class="line">        createBallSheet(game);</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> sprite = game.data.sprite = game.add.sprite(<span class="number">0</span>, <span class="number">0</span>, <span class="string">'sheet-ball'</span>);</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="attr">update</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        moveSpriteWithCursors(game, game.data.sprite);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line">game.state.start(<span class="string">'boot'</span>);</div></pre></td></tr></table></figure>
+<p>When this demo is up and running I can more the sprite around with the cursor keys of my keyboard.</p>
+<h2 id="3-Conclusion"><a href="#3-Conclusion" class="headerlink" title="3 - Conclusion"></a>3 - Conclusion</h2><p>The cursor keys method is a great way to make a quick collection of Phaser key objects for the arrow keys. It is also possible to use the <a href="https://photonstorm.github.io/phaser-ce/Phaser.Key.html" target="_blank" rel="external">Phaser.Key</a> class to make a custom collection of objects like this depending on the project. I might get around to expansing this post, or writing another one on that topic at some time soon as I expand my phaser ce content more.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/10/11/phaser-input-keyboard-cursorkeys/" data-id="cjn92p0ba00012wv1d5l8j7xl" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/10/11/phaser-input-keyboard-cursorkeys/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/phaser/">phaser</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/10/12/phaser-components-core/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          The Core component in phaser ce
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/10/10/phaser-sprite-lifespan/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Setting sprite lifespan in phaser ce</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2018/10/11/phaser-input-keyboard-cursorkeys/index.html';
+    this.page.identifier = '303';
+    this.page.title = 'Setting up keyboard cursor keys in phaser ce.';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.22px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 11.67px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.56px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.22px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.78px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 16.67px;">express</a> <a href="/tags/games/" style="font-size: 18.33px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.44px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.67px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 17.78px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.89px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.11px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/10/19/phaser-components-autocull/">The autocull component in phaser ce</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/18/phaser-components-bounds/">The Bounds component in phaser ce</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/17/lodash_reverse/">Reversing an Array in javaScript with lodash _.reverse, and alternatives</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/15/lodash_bind/">The lodash _.bind method use examples.</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/12/phaser-components-core/">The Core component in phaser ce</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2018/10/11/phaser-input-keyboard-cursorkeys/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
