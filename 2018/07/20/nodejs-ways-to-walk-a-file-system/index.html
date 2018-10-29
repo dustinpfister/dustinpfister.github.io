@@ -15,7 +15,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2018/07/20/nodejs-ways-to-walk-a-file-system/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="As I work to expand my content on node.js, I have come around to working out some examples on how to walk a files system. This includes both my own vanilla js solutions, as well as some walkers that o">
-<meta property="og:updated_time" content="2018-07-23T15:24:37.000Z">
+<meta property="og:updated_time" content="2018-10-28T23:53:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Some Ways to walk a file system in node.js">
 <meta name="twitter:description" content="As I work to expand my content on node.js, I have come around to working out some examples on how to walk a files system. This includes both my own vanilla js solutions, as well as some walkers that o">
@@ -117,10 +117,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2018/07/20/nodejs-ways-to-walk-a-file-system/" class="article-date"> Modified:
-  <time datetime="2018-07-23T15:24:37.000Z" itemprop="dateModified">2018-07-23</time>
+  <time datetime="2018-10-28T23:53:11.000Z" itemprop="dateModified">2018-10-28</time>
 </a>
 
-    <span class="article-date">V1.6</span>
+    <span class="article-date">V1.7</span>
 
     
   <div class="article-category">
@@ -161,6 +161,8 @@ ga('send', 'pageview');
 <h3 id="2-4-node-dir"><a href="#2-4-node-dir" class="headerlink" title="2.4 - node-dir"></a>2.4 - node-dir</h3><p>So <a href="https://www.npmjs.com/package/node-dir" target="_blank" rel="external">node-dir</a> is an option that I have used in the past with some projects, although I do not use it much these days. It is an older project, and it looks like it is no longer supported, also it does not have many of the features that I like it in walker.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> dir = <span class="built_in">require</span>(<span class="string">'node-dir'</span>);</div><div class="line"> </div><div class="line">dir.readFiles(</div><div class="line"> </div><div class="line">    <span class="string">'./'</span>, <span class="comment">// the root path</span></div><div class="line"> </div><div class="line">    <span class="comment">// an options object</span></div><div class="line">    &#123;</div><div class="line"> </div><div class="line">        <span class="attr">match</span>: <span class="regexp">/.json$/</span>, <span class="comment">// only match json files</span></div><div class="line">        recursive: <span class="literal">false</span> <span class="comment">// only the root dir</span></div><div class="line"> </div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">function</span> (<span class="params">err, content, filename, next</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (err) &#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(err);</div><div class="line"> </div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(filename);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">);</div></pre></td></tr></table></figure>
 <p>I wrote a post on <a href="/2017/11/05/nodejs-node-dir/">node-dir</a> as well a while back.</p>
+<h3 id="2-5-Using-glob"><a href="#2-5-Using-glob" class="headerlink" title="2.5 - Using glob"></a>2.5 - Using glob</h3><p><a href="/2017/11/28/nodejs-glob/">Glob</a> is another <a href="https://www.npmjs.com/package/glob" target="_blank" rel="external">npm package</a> that can be used to match files using a glob pattern, another useful tool for making a file system walker.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> glob = <span class="built_in">require</span>(<span class="string">'glob'</span>),</div><div class="line">fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"> </div><div class="line"><span class="keyword">let</span> readFiles = <span class="function"><span class="keyword">function</span> (<span class="params">pat, forFile</span>) </span>&#123;</div><div class="line"> </div><div class="line">    pat = pat || <span class="string">'*.js'</span>;</div><div class="line">    forFile = forFile || <span class="function"><span class="keyword">function</span> (<span class="params">content</span>) </span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(content);</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    glob(<span class="string">'*.js'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, files</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (err) &#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(err);</div><div class="line"> </div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">            files.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">file</span>) </span>&#123;</div><div class="line"> </div><div class="line">                fs.readFile(file, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</div><div class="line"> </div><div class="line">                    <span class="keyword">if</span> (err) &#123;</div><div class="line"> </div><div class="line">                        <span class="built_in">console</span>.log(err);</div><div class="line"> </div><div class="line">                    &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">                        forFile(data.toString());</div><div class="line"> </div><div class="line">                    &#125;</div><div class="line"> </div><div class="line">                &#125;);</div><div class="line"> </div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line">readFiles();</div></pre></td></tr></table></figure>
 <h2 id="3-Conclusion"><a href="#3-Conclusion" class="headerlink" title="3 - Conclusion"></a>3 - Conclusion</h2><p>There are many more walkers out there, also there are other ways to make a walker with node.js by itself as well when it comes to making a walker from the ground up. Many of these projects make use of streams. As such I might update this post as I write more content on this subject.</p>
 
       
@@ -272,23 +274,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2018/10/19/phaser-components-autocull/">The autocull component in phaser ce</a>
+            <a href="/2018/10/28/phaser-physics-gravity/">Playing with gravity in phaser ce</a>
           </li>
         
           <li>
-            <a href="/2018/10/18/phaser-components-bounds/">The Bounds component in phaser ce</a>
+            <a href="/2018/10/27/phaser-physics-getting-started/">Getting started with physics using phaser ce</a>
           </li>
         
           <li>
-            <a href="/2018/10/17/lodash_reverse/">Reversing an Array in javaScript with lodash _.reverse, and alternatives</a>
+            <a href="/2018/10/26/phaser-time-elapsed/">Game time that is subject to pause in phaser ce</a>
           </li>
         
           <li>
-            <a href="/2018/10/15/lodash_bind/">The lodash _.bind method use examples.</a>
+            <a href="/2018/10/25/phaser-sprite-events-onoutofbounds/">Setting an out of bounds event in phaser ce</a>
           </li>
         
           <li>
-            <a href="/2018/10/12/phaser-components-core/">The Core component in phaser ce</a>
+            <a href="/2018/10/24/lodash_keyby/">Examples of the _.keyby method in lodash</a>
           </li>
         
       </ul>

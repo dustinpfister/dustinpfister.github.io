@@ -9,16 +9,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2017/11/28/nodejs-glob/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="If you have been using computers as long as I have you might have by now come across the use of glob patterns as a way to use * wildcard to represent any string of characters. I am pretty comfortable">
+  <meta name="description" content="If you have been using computers as long as I have you might have by now come across the use of glob patterns as a way to use a * wildcard to represent any string of characters. I am pretty comfortabl">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Working with glob patterns in node.js using the glob npm package">
 <meta property="og:url" content="https://dustinpfister.github.io/2017/11/28/nodejs-glob/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="If you have been using computers as long as I have you might have by now come across the use of glob patterns as a way to use * wildcard to represent any string of characters. I am pretty comfortable">
-<meta property="og:updated_time" content="2017-12-03T17:06:02.000Z">
+<meta property="og:description" content="If you have been using computers as long as I have you might have by now come across the use of glob patterns as a way to use a * wildcard to represent any string of characters. I am pretty comfortabl">
+<meta property="og:updated_time" content="2018-10-28T14:11:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Working with glob patterns in node.js using the glob npm package">
-<meta name="twitter:description" content="If you have been using computers as long as I have you might have by now come across the use of glob patterns as a way to use * wildcard to represent any string of characters. I am pretty comfortable">
+<meta name="twitter:description" content="If you have been using computers as long as I have you might have by now come across the use of glob patterns as a way to use a * wildcard to represent any string of characters. I am pretty comfortabl">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -117,10 +117,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/11/28/nodejs-glob/" class="article-date"> Modified:
-  <time datetime="2017-12-03T17:06:02.000Z" itemprop="dateModified">2017-12-03</time>
+  <time datetime="2018-10-28T14:11:33.000Z" itemprop="dateModified">2018-10-28</time>
 </a>
 
-    <span class="article-date">V1.5</span>
+    <span class="article-date">V1.9</span>
 
     
   <div class="article-category">
@@ -143,22 +143,25 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>If you have been using computers as long as I have you might have by now come across the use of <a href="https://en.wikipedia.org/wiki/Glob_(programming" target="_blank" rel="external">glob patterns</a> as a way to use * wildcard to represent any string of characters. I am pretty comfortable with this method of selecting files that fit a certain pattern, and the npm package <a href="https://www.npmjs.com/package/glob" target="_blank" rel="external">glob</a> is a great solution for selecting files in a workspace this way.</p>
+        <p>If you have been using computers as long as I have you might have by now come across the use of <a href="https://en.wikipedia.org/wiki/Glob_(programming" target="_blank" rel="external">glob patterns</a> as a way to use a * wildcard to represent any string of characters. I am pretty comfortable with this method of selecting files that fit a certain pattern, and the npm package <a href="https://www.npmjs.com/package/glob" target="_blank" rel="external">glob</a> is a great solution for selecting files in a <a href="https://nodejs.org/en/" target="_blank" rel="external">node.js</a> environment.</p>
 <a id="more"></a>
-<h2 id="what-are-globs-and-the-whildcard"><a href="#what-are-globs-and-the-whildcard" class="headerlink" title="what are globs and the * whildcard"></a>what are globs and the * whildcard</h2><p>It is a way of making use of a wildcard character * to represent any string of characters so that:</p>
+<h2 id="1-What-to-know"><a href="#1-What-to-know" class="headerlink" title="1 - What to know"></a>1 - What to know</h2><p>This is a post on the npm package known as glob that allows for matching files that fit a given glob pattern. Out of the box it is not a complete file system walker, but it is a great tool for making such a project with glob pattern support. For more information on file system walkers you might want to check out my <a href="/2018/07/20/nodejs-ways-to-walk-a-file-system/">post on them</a> to know about some options that are all ready out there before making your own solution. In this post I am also using version 7.1.3 of glob.</p>
+<h3 id="1-1-what-are-globs-and-the-wildcard"><a href="#1-1-what-are-globs-and-the-wildcard" class="headerlink" title="1.1 - what are globs and the * wildcard"></a>1.1 - what are globs and the * wildcard</h3><p>It is a way of making use of a wildcard character * to represent zero or more characters so that:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">*.txt</div></pre></td></tr></table></figure>
-<p>means any file with a .txt extension which will match helloworld.txt, and readme.txt, but not index.js in a given directory.</p>
-<h2 id="Basic-usage-of-glob-in-nodejs"><a href="#Basic-usage-of-glob-in-nodejs" class="headerlink" title="Basic usage of glob in nodejs"></a>Basic usage of glob in nodejs</h2><p>The name of the package is just simply glob, as such I can add it to a node.js project link this</p>
+<p>Will match any file with a .txt extension which will match helloworld.txt, and readme.txt, but not index.js in a given directory. This is something that I have been using for years when it comes to filtering files in file system managers, command line interface terminals an so forth. Globs might be less powerful then regEx patterns, but for most use case seniors simplified glob patterns are still good enough to get the job done.</p>
+<h2 id="2-Basic-usage-of-glob-in-nodejs"><a href="#2-Basic-usage-of-glob-in-nodejs" class="headerlink" title="2 - Basic usage of glob in nodejs"></a>2 - Basic usage of glob in nodejs</h2><p>The name of the package is just simply glob, as such I can add it to a node.js project link this</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install glob</div></pre></td></tr></table></figure>
 <p>In a test project folder I made a simple basic.js file that looks like this:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> glob = <span class="built_in">require</span>(<span class="string">'glob'</span>);</div><div class="line"> </div><div class="line">glob(<span class="string">'*.js'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, files</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (err) &#123;</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(err);</div><div class="line"> </div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// a list of paths to javaScript files in the current working directory</span></div><div class="line">        <span class="built_in">console</span>.log(files);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p>By default glob will search for files that fit the given pattern in the current working directory. When I call this from there it just gives me [basic.js] as that is the only javaScript file in my test folder as of this writing, but I can search recursively using the ** pattern.</p>
-<h2 id="The-wildcard"><a href="#The-wildcard" class="headerlink" title="The ** wildcard"></a>The ** wildcard</h2><p>The ** wildcard can be used to search for what is in the current working directory, and any additional subdirectories so that:</p>
+<h2 id="3-The-wildcard"><a href="#3-The-wildcard" class="headerlink" title="3 - The ** wildcard"></a>3 - The ** wildcard</h2><p>The ** wildcard can be used to search for what is in the current working directory, and any additional subdirectories so that:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> forFiles = <span class="function"><span class="keyword">function</span>(<span class="params">err,files</span>)</span>&#123; <span class="built_in">console</span>.log(files);&#125;;</div><div class="line">glob(<span class="string">'**/*.md'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, forFiles</span>);</span></div></pre></td></tr></table></figure>
 <p>will search for and compile a list a file names for each mark down file found in the current working path and any additional path in the current working folder.</p>
 <h2 id="Changing-the-current-working-path"><a href="#Changing-the-current-working-path" class="headerlink" title="Changing the current working path"></a>Changing the current working path</h2><p>If three arguments are passed to to glob the second can be an options object, and one of the many options that can be changed is the current working directory which by default is what is returned by process.cwd() in node.js.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> glob = <span class="built_in">require</span>(<span class="string">'glob'</span>),</div><div class="line"> </div><div class="line"><span class="comment">// some options</span></div><div class="line">options = &#123;</div><div class="line"> </div><div class="line">    <span class="attr">cwd</span>: <span class="string">'node_modules'</span></div><div class="line"> </div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">// for Files</span></div><div class="line">forFiles = <span class="function"><span class="keyword">function</span>(<span class="params">err,files</span>)</span>&#123; <span class="built_in">console</span>.log(files);&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// glob it.</span></div><div class="line">glob(<span class="string">'**/*.md'</span>, options, forFiles);</div></pre></td></tr></table></figure>
-<h2 id="conclusion"><a href="#conclusion" class="headerlink" title="conclusion"></a>conclusion</h2><p>This is a great node.js solution to get working with glob patterns quickly. I might expand more on this with respect to the many diffrent options that can be given, but for now there is the <a href="https://github.com/isaacs/node-glob/blob/master/README.md" target="_blank" rel="external">readme</a> of the project. ON MY GLOB!</p>
+<h2 id="4-Reading-files"><a href="#4-Reading-files" class="headerlink" title="4 - Reading files"></a>4 - Reading files</h2><p>I looks like glob is just for matching files, but when it comes to actually reading the contents of the files and additional solution will need to be used in conjunction with glob. So out of the box it is not really a complete file system walker, but it is a valuable tool to create a walker from the ground up that will have support for glob patterns.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> glob = <span class="built_in">require</span>(<span class="string">'glob'</span>),</div><div class="line">fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"> </div><div class="line"><span class="keyword">let</span> readFiles = <span class="function"><span class="keyword">function</span> (<span class="params">pat, forFile</span>) </span>&#123;</div><div class="line"> </div><div class="line">    pat = pat || <span class="string">'*.js'</span>;</div><div class="line">    forFile = forFile || <span class="function"><span class="keyword">function</span> (<span class="params">content</span>) </span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(content);</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    glob(<span class="string">'*.js'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, files</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (err) &#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(err);</div><div class="line"> </div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">            files.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">file</span>) </span>&#123;</div><div class="line"> </div><div class="line">                fs.readFile(file, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</div><div class="line"> </div><div class="line">                    <span class="keyword">if</span> (err) &#123;</div><div class="line"> </div><div class="line">                        <span class="built_in">console</span>.log(err);</div><div class="line"> </div><div class="line">                    &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">                        forFile(data.toString());</div><div class="line"> </div><div class="line">                    &#125;</div><div class="line"> </div><div class="line">                &#125;);</div><div class="line"> </div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line">readFiles();</div></pre></td></tr></table></figure>
+<h2 id="5-conclusion"><a href="#5-conclusion" class="headerlink" title="5 - conclusion"></a>5 - conclusion</h2><p>This is a great node.js solution to get working with glob patterns quickly. I might expand more on this with respect to the many diffrent options that can be given, but for now there is the <a href="https://github.com/isaacs/node-glob/blob/master/README.md" target="_blank" rel="external">readme</a> of the project. ON MY GLOB!</p>
 
       
     </div>
@@ -269,23 +272,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2018/10/19/phaser-components-autocull/">The autocull component in phaser ce</a>
+            <a href="/2018/10/28/phaser-physics-gravity/">Playing with gravity in phaser ce</a>
           </li>
         
           <li>
-            <a href="/2018/10/18/phaser-components-bounds/">The Bounds component in phaser ce</a>
+            <a href="/2018/10/27/phaser-physics-getting-started/">Getting started with physics using phaser ce</a>
           </li>
         
           <li>
-            <a href="/2018/10/17/lodash_reverse/">Reversing an Array in javaScript with lodash _.reverse, and alternatives</a>
+            <a href="/2018/10/26/phaser-time-elapsed/">Game time that is subject to pause in phaser ce</a>
           </li>
         
           <li>
-            <a href="/2018/10/15/lodash_bind/">The lodash _.bind method use examples.</a>
+            <a href="/2018/10/25/phaser-sprite-events-onoutofbounds/">Setting an out of bounds event in phaser ce</a>
           </li>
         
           <li>
-            <a href="/2018/10/12/phaser-components-core/">The Core component in phaser ce</a>
+            <a href="/2018/10/24/lodash_keyby/">Examples of the _.keyby method in lodash</a>
           </li>
         
       </ul>
