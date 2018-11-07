@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Setting Drag in phaser ce | Dustin John Pfister at github pages</title>
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2018/10/30/phaser-physics-drag/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="For many projects using phaser ce there will come a time now and then where it will be necessary to set some air resistance or drag for physics enabled display objects. In this post I will be coving t">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Setting Drag in phaser ce">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/10/30/phaser-physics-drag/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="For many projects using phaser ce there will come a time now and then where it will be necessary to set some air resistance or drag for physics enabled display objects. In this post I will be coving t">
+<meta property="og:updated_time" content="2018-11-04T13:46:07.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Setting Drag in phaser ce">
+<meta name="twitter:description" content="For many projects using phaser ce there will come a time now and then where it will be necessary to set some air resistance or drag for physics enabled display objects. In this post I will be coving t">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense -->
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-phaser-physics-drag" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/30/phaser-physics-drag/" class="article-date"> Published:
+  <time datetime="2018-10-31T01:10:00.000Z" itemprop="datePublished">2018-10-30</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/10/30/phaser-physics-drag/" class="article-date"> Modified:
+  <time datetime="2018-11-04T13:46:07.000Z" itemprop="dateModified">2018-11-04</time>
+</a>
+
+    <span class="article-date">V1.34</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/phaser/">phaser</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Setting Drag in phaser ce
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>For many projects using <a href="https://photonstorm.github.io/phaser-ce/index.html" target="_blank" rel="external">phaser ce</a> there will come a time now and then where it will be necessary to set some air resistance or drag for physics enabled display objects. In this post I will be coving the use of the body.drag property of the arcade physics engine in phaser ce, as a way to set drag for a physics body.</p>
+<a id="more"></a>
+<h2 id="1-What-to-know-before-continuing"><a href="#1-What-to-know-before-continuing" class="headerlink" title="1 - What to know before continuing."></a>1 - What to know before continuing.</h2><p>In this post I am writing about an example that I made that makes use of drag using the built in arcade physics engine in phaser ce. This is not a <a href="/2018/10/27/phaser-physics-getting-started/">getting started post on the arcade physics engine</a>, or <a href="/2017/10/04/phaser-getting-started/">phaser in general</a>. There are many aspects of the phaser ce game framework that are used in this post, and I will not be covering all of them. The drag property is an instance of <a href="/2018/11/03/phaser-point/">Phaser.Point</a> so I can use the set method or user the x and y properties to set the values for drag.</p>
+<h3 id="1-1-This-is-a-phaser-ce-2-x-post"><a href="#1-1-This-is-a-phaser-ce-2-x-post" class="headerlink" title="1.1 - This is a phaser ce 2.x post"></a>1.1 - This is a phaser ce 2.x post</h3><p>In this post I am using phaser community edition 2.11.1 of <a href="https://phaser.io/" target="_blank" rel="external">phaser</a>.</p>
+<h2 id="2-A-Cannon-ball-example-using-drag"><a href="#2-A-Cannon-ball-example-using-drag" class="headerlink" title="2 - A Cannon ball example using drag"></a>2 - A Cannon ball example using drag</h2><p>For an example of using drag in phaser ce I thought a simple game prototype that is the beginnings of a cannon launch type game. You know one of those many games that have come out over the years that involve shooting something at a certain angle, and starting velocity. Where the object is typically to get what it is that is begging launched as far of a distance as possible. As such making a prototype of that kind of game might prove to be a good example of not just using drag, but other aspects of physics as well such as gravity, and velocity.</p>
+<h3 id="2-1-The-update-Drag-method"><a href="#2-1-The-update-Drag-method" class="headerlink" title="2.1 - The update Drag method"></a>2.1 - The update Drag method</h3><p>Here I have a method that I worked out that will be used to update drag on each frame tick. There are a few methods that will be called before this is used, so when calling this method in the update method of the game state it will not be grabbing at undefined values for the cannon ball and so forth. </p>
+<p>I could just set drag in a way in which it is just fixed, always coming from one direction. The nice thing about game development is that all that really matters is how game play turns out, and realism is not always that important, unless for some reason it is. Still I decided that if I am going to make a post in which I am writing about drag I should make some complex example that updates drag on each tick, changing the direction of drag as the ball changes direction.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> updateDrag = <span class="function"><span class="keyword">function</span> (<span class="params">game</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> ball = game.data.ball,</div><div class="line">    disp = game.data.disp,</div><div class="line">    angle = ball.body.angle / <span class="built_in">Math</span>.PI * <span class="number">180</span>,</div><div class="line">    speed = ball.body.speed,</div><div class="line">    drag,</div><div class="line"> </div><div class="line">    <span class="comment">// drag percent formula</span></div><div class="line">    dragPer = <span class="number">.5</span> + <span class="number">.5</span> * (speed / <span class="number">250</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// cap dragPer</span></div><div class="line">    <span class="keyword">if</span> (dragPer &gt; <span class="number">1</span>) &#123;</div><div class="line">        dragPer = <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// set drag</span></div><div class="line">    drag = dragPer * <span class="number">40</span>;</div><div class="line">    ball.body.drag.set(</div><div class="line">        <span class="built_in">Math</span>.cos(angle) * drag,</div><div class="line">        <span class="built_in">Math</span>.sin(angle) * drag);</div><div class="line">    <span class="comment">// seting drag differently if on the floor</span></div><div class="line">    <span class="keyword">if</span> (ball.body.onFloor()) &#123;</div><div class="line">        ball.body.drag.set(drag, <span class="number">0</span>);</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// updating display text</span></div><div class="line">    disp.text = <span class="string">'drag: '</span> + drag.toFixed(<span class="number">2</span>) + <span class="string">', velocityX: '</span> + ball.body.velocity.x.toFixed(<span class="number">2</span>);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>So I get the current body angle of the ball via Sprite.body.angle, and use that with its speed via Sprite.body.speed to set the drag of the ball. However in the event that the ball is rolling along the floor I do make sure that the drag is coming directly from the right using the onFloor method to find out if that should happen or not.</p>
+<h3 id="2-2-The-launchBall-method"><a href="#2-2-The-launchBall-method" class="headerlink" title="2.2 - The launchBall method"></a>2.2 - The launchBall method</h3><p>So in this project when a cannon sprite is clicked it will cause the ball to launch from the cannon. So I will need a launchBall handler that will fire when the canon is clicked or when whatever cause the cannon to fire when making a user interface.</p>
+<p>So then in this method I set the position of the ball to the position of the cannon, revive the ball if it is in a dead state, have the camera follow the ball, and set the velocity of the ball based on certain values that are set before hand elsewhere.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> launchBall = <span class="function"><span class="keyword">function</span> (<span class="params">game</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> launch = game.data.launch,</div><div class="line">    ball = game.data.ball,</div><div class="line">    gfx = launch.gfx,</div><div class="line">    cannon = launch.cannon,</div><div class="line">    power;</div><div class="line"> </div><div class="line">    <span class="comment">// only do something if launch is not active</span></div><div class="line">    <span class="keyword">if</span> (!launch.active) &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// set active</span></div><div class="line">        launch.active = <span class="literal">true</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// set ball to position of the cannon</span></div><div class="line">        ball.x = cannon.centerX;</div><div class="line">        ball.y = cannon.centerY;</div><div class="line"> </div><div class="line">        <span class="comment">// revive the ball</span></div><div class="line">        ball.revive();</div><div class="line"> </div><div class="line">        <span class="comment">// have camera follow the ball</span></div><div class="line">        game.camera.follow(ball);</div><div class="line"> </div><div class="line">        <span class="comment">// launch power used to set velocity</span></div><div class="line">        power = launch.distance / <span class="number">200</span> * launch.maxPower;</div><div class="line"> </div><div class="line">        <span class="comment">// velocity</span></div><div class="line">        ball.body.velocity.set(</div><div class="line">            <span class="built_in">Math</span>.cos(launch.angle) * power,</div><div class="line">            <span class="built_in">Math</span>.sin(launch.angle) * power);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="2-3-Make-The-launch-pad-sprite"><a href="#2-3-Make-The-launch-pad-sprite" class="headerlink" title="2.3 - Make The launch pad sprite"></a>2.3 - Make The launch pad sprite</h3><p>This is a method that makes a sprite that just serves as part of the user interface.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mkLaunchPad = <span class="function"><span class="keyword">function</span> (<span class="params">game</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> launch = game.data.launch;</div><div class="line"> </div><div class="line">    launch.pad = game.add.graphics();</div><div class="line">    launch.pad.clear();</div><div class="line">    launch.pad.beginFill(<span class="number">0xff0000</span>, <span class="number">.2</span>);</div><div class="line">    launch.pad.drawRect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">240</span>, <span class="number">240</span>);</div><div class="line">    launch.pad.inputEnabled = <span class="literal">true</span>;</div><div class="line">    launch.pad.events.onInputDown.add(<span class="function"><span class="keyword">function</span> (<span class="params">gfx, pt</span>) </span>&#123;</div><div class="line">        <span class="comment">//game.input.onDown.add(function (pt) &#123;</span></div><div class="line">        <span class="keyword">var</span> angle = launch.cannon.position.angle(pt.position),</div><div class="line">        distance = launch.cannon.position.distance(pt.position);</div><div class="line"> </div><div class="line">        launch.angle = angle;</div><div class="line"> </div><div class="line">        distance = Phaser.Math.clamp(distance, <span class="number">0</span>, <span class="number">200</span>);</div><div class="line"> </div><div class="line">        launch.distance = distance;</div><div class="line"> </div><div class="line">        drawLaunchLines(game);</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(launch.angle);</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="2-4-Make-the-Cannon-sprite"><a href="#2-4-Make-the-Cannon-sprite" class="headerlink" title="2.4 - Make the Cannon sprite"></a>2.4 - Make the Cannon sprite</h3><p>Here I have a method that creates the cannon sprite. The way I have the user interface designed for this example the ball will launch when the cannon is clicked to the cannon sprite is input enabled.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mkCannonSprite = <span class="function"><span class="keyword">function</span> (<span class="params">game</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> launch = game.data.launch,</div><div class="line">    cannon = game.add.sprite(<span class="number">10</span>, game.world.height - <span class="number">32</span> - <span class="number">10</span>, <span class="string">'sheet-cannon'</span>, <span class="number">0</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// enable input for the cannon sprite</span></div><div class="line">    cannon.inputEnabled = <span class="literal">true</span>;</div><div class="line">    cannon.events.onInputDown.add(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        launchBall(game);</div><div class="line">    &#125;);</div><div class="line">    launch.cannon = cannon;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="2-5-Make-the-Ball-Sprite"><a href="#2-5-Make-the-Ball-Sprite" class="headerlink" title="2.5 - Make the Ball Sprite"></a>2.5 - Make the Ball Sprite</h3><p>So then I need to make the ball sprite as well. Here I enable physics for the ball sprite, and set gravity, and bounce for the sprite as well.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mkBallSprite = <span class="function"><span class="keyword">function</span> (<span class="params">game</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> ball = game.data.ball = game.add.sprite(<span class="number">0</span>, <span class="number">0</span>, <span class="string">'sheet-ball'</span>, <span class="number">0</span>);</div><div class="line">    ball.anchor.set(<span class="number">0.5</span>, <span class="number">0.5</span>);</div><div class="line">    ball.kill();</div><div class="line"> </div><div class="line">    <span class="comment">// enable physics</span></div><div class="line">    game.physics.enable(ball);</div><div class="line"> </div><div class="line">    <span class="comment">// gravity</span></div><div class="line">    ball.body.gravity.set(<span class="number">0</span>, <span class="number">100</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// bounce</span></div><div class="line">    ball.body.bounce.set(<span class="number">.4</span>, <span class="number">.4</span>);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="2-6-Make-a-Graphics-Object-for-drawing-lines"><a href="#2-6-Make-a-Graphics-Object-for-drawing-lines" class="headerlink" title="2.6 - Make a Graphics Object for drawing lines"></a>2.6 - Make a Graphics Object for drawing lines</h3><p>So I will want to draw some lines so I know the current direction and angle that I will be launching the ball, so I will want to make a <a href="/2017/10/21/phaser-graphics/">graphics object</a> for that. Graphics objects are great for drawing on the fly graphics that involve drawing lines, and simple shapes that need to be updated on a per frame basic rather than just a single still image. So in this project a Graphics display object will work great for drawing the lines that will show the direction, and current launch power of the ball when it will be launched.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mkGFX = <span class="function"><span class="keyword">function</span> (<span class="params">game</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> launch = game.data.launch;</div><div class="line">    <span class="keyword">var</span> gfx = game.add.graphics();</div><div class="line">    gfx.fixedToCamera = <span class="literal">true</span>;</div><div class="line">    launch.gfx = gfx;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h4 id="2-6-1-Draw-Grid-Lines"><a href="#2-6-1-Draw-Grid-Lines" class="headerlink" title="2.6.1 - Draw Grid Lines"></a>2.6.1 - Draw Grid Lines</h4><p>This draw method will be used with the graphics object when the ball is launched. It draws grid lines so that I know that the ball is in motion, otherwise it will just be a black background. Because I am using a graphics object I went with this draw method that will be used with the graphics object rather than the <a href="/2018/10/07/phaser-create-grid/">create.grid method</a> that could be used to create a texture that could be used with a sprite. In any case this grid solution will help to show reduction in speed as a result of the drag taking effect once that ball launches.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> drawGridLines = <span class="function"><span class="keyword">function</span> (<span class="params">game</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> launch = game.data.launch,</div><div class="line">    ball = game.data.ball,</div><div class="line">    gfx = launch.gfx;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> sx = -ball.x % <span class="number">32</span>,</div><div class="line">    sy = <span class="built_in">Math</span>.abs(ball.y - game.height) % <span class="number">32</span>;</div><div class="line"> </div><div class="line">    gfx.clear();</div><div class="line">    gfx.lineStyle(<span class="number">3</span>, <span class="number">0x00ff00</span>, <span class="number">.4</span>);</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> cy = <span class="number">0</span>;</div><div class="line">    <span class="keyword">while</span> (cy &lt; <span class="number">8</span>) &#123;</div><div class="line">        gfx.moveTo(<span class="number">0</span>, sy + <span class="number">32</span> * cy);</div><div class="line">        gfx.lineTo(<span class="number">320</span>, sy + <span class="number">32</span> * cy);</div><div class="line">        cy += <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> cx = <span class="number">0</span>;</div><div class="line">    <span class="keyword">while</span> (cx &lt; <span class="number">11</span>) &#123;</div><div class="line">        gfx.moveTo(sx + <span class="number">32</span> * cx, <span class="number">0</span>);</div><div class="line">        gfx.lineTo(sx + <span class="number">32</span> * cx, <span class="number">240</span>);</div><div class="line">        cx += <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h4 id="2-6-2-Draw-Launch-Lines"><a href="#2-6-2-Draw-Launch-Lines" class="headerlink" title="2.6.2 - Draw Launch Lines"></a>2.6.2 - Draw Launch Lines</h4><p>This draw method draws lines that show me the current direction and angle that the ball will be launched. Here is use Math.cos, and Math.sin to find the x and y positions that I need to to draw the lines from the position of the canvas out a given distance, as well as the lines that will indicate launch power as well.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> drawLaunchLines = <span class="function"><span class="keyword">function</span> (<span class="params">game</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> launch = game.data.launch,</div><div class="line">    cannon = launch.cannon,</div><div class="line">    gfx = launch.gfx;</div><div class="line"> </div><div class="line">    gfx.clear();</div><div class="line"> </div><div class="line">    gfx.lineStyle(<span class="number">3</span>, <span class="number">0x00ff00</span>, <span class="number">1</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// angle line</span></div><div class="line">    gfx.moveTo(cannon.centerX, cannon.centerY);</div><div class="line">    gfx.lineTo(cannon.centerX + <span class="built_in">Math</span>.cos(launch.angle) * <span class="number">200</span>, cannon.centerY + <span class="built_in">Math</span>.sin(launch.angle) * <span class="number">200</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// distance line</span></div><div class="line">    <span class="keyword">var</span> x = cannon.centerX + <span class="built_in">Math</span>.cos(launch.angle) * launch.distance,</div><div class="line">    y = cannon.centerY + <span class="built_in">Math</span>.sin(launch.angle) * launch.distance;</div><div class="line">    gfx.moveTo(x, y);</div><div class="line">    gfx.lineTo(x + <span class="built_in">Math</span>.cos(launch.angle - <span class="built_in">Math</span>.PI / <span class="number">2</span>) * <span class="number">32</span>, y + <span class="built_in">Math</span>.sin(launch.angle - <span class="built_in">Math</span>.PI / <span class="number">2</span>) * <span class="number">32</span>);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="2-7-Create-the-launch-Object"><a href="#2-7-Create-the-launch-Object" class="headerlink" title="2.7 - Create the launch Object"></a>2.7 - Create the launch Object</h3><p>This method sets up and object that contains properties for the state of the launched ball including the angle and distance values that will be used to set initial velocity of the ball.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> createLauncher = <span class="function"><span class="keyword">function</span> (<span class="params">game, cannon</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> launch = game.data.launch = &#123;&#125;;</div><div class="line"> </div><div class="line">    mkLaunchPad(game);</div><div class="line"> </div><div class="line">    launch.angle = <span class="number">0</span>;</div><div class="line">    launch.distance = <span class="number">0</span>;</div><div class="line">    launch.active = <span class="literal">false</span>;</div><div class="line">    launch.maxPower = <span class="number">500</span>;</div><div class="line"> </div><div class="line">    mkCannonSprite(game);</div><div class="line">    mkGFX(game);</div><div class="line">    mkBallSprite(game);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="2-8-Create-Sprite-Sheets"><a href="#2-8-Create-Sprite-Sheets" class="headerlink" title="2.8 - Create Sprite Sheets"></a>2.8 - Create Sprite Sheets</h3><p>So I will need to create some sprite sheets to use with the sprites as well. For simple examples like this I often use a <a href="/2018/08/04/phaser-spritesheet-from-canvas/">canvas solution</a> rather than bothering with external assets. With this kind of solution I just need to create a canvas element, draw to the 2d context, and then use game.cache.addSpriteSheet to convert the canvas to a sprite sheet that can be used when making sprites.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> createBallSheet = <span class="function"><span class="keyword">function</span> (<span class="params">game</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> canvas = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>);</div><div class="line">    ctx = canvas.getContext(<span class="string">'2d'</span>);</div><div class="line">    canvas.width = <span class="number">32</span>;</div><div class="line">    canvas.height = <span class="number">32</span>;</div><div class="line">    ctx.strokeStyle = <span class="string">'white'</span>;</div><div class="line">    ctx.fillStyle = <span class="string">'#8f0000'</span>;</div><div class="line">    ctx.beginPath();</div><div class="line">    ctx.arc(<span class="number">16.5</span>, <span class="number">16.5</span>, <span class="number">15</span>, <span class="number">0</span>, <span class="built_in">Math</span>.PI * <span class="number">2</span>);</div><div class="line">    ctx.fill();</div><div class="line">    ctx.stroke();</div><div class="line">    game.cache.addSpriteSheet(<span class="string">'sheet-ball'</span>, <span class="literal">null</span>, canvas, <span class="number">32</span>, <span class="number">32</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> createCannonSheet = <span class="function"><span class="keyword">function</span> (<span class="params">game</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> canvas = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>);</div><div class="line">    ctx = canvas.getContext(<span class="string">'2d'</span>);</div><div class="line">    canvas.width = <span class="number">32</span>;</div><div class="line">    canvas.height = <span class="number">32</span>;</div><div class="line">    ctx.fillStyle = <span class="string">'#8f0000'</span>;</div><div class="line">    ctx.fillRect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">32</span>, <span class="number">32</span>);</div><div class="line">    game.cache.addSpriteSheet(<span class="string">'sheet-cannon'</span>, <span class="literal">null</span>, canvas, <span class="number">32</span>, <span class="number">32</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="2-9-Phaser-Game"><a href="#2-9-Phaser-Game" class="headerlink" title="2.9 - Phaser.Game"></a>2.9 - Phaser.Game</h3><p>So now it is time to get this project working with a <a href="/2017/10/11/phaser-main-game-constructor/">Phaser.Game</a> instance. Here in the create method of the <a href="/2017/10/06/phaser-state-objects/">state object</a> I create my sprite sheets, and call my create launcher method. I also set up a <a href="/2017/10/14/phaser-text/">text object</a> to display the state of some values in my drag update method.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>);</div><div class="line"> </div><div class="line">game.state.add(<span class="string">'ball-bounce'</span>, &#123;</div><div class="line"> </div><div class="line">    <span class="attr">create</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        game.data = &#123;&#125;;</div><div class="line"> </div><div class="line">        createBallSheet(game);</div><div class="line">        createCannonSheet(game);</div><div class="line">        createLauncher(game);</div><div class="line">        drawLaunchLines(game);</div><div class="line"> </div><div class="line">        <span class="comment">// no bounds for camera</span></div><div class="line">        game.camera.bounds = <span class="literal">null</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// only have collision for the down boundary of the game world</span></div><div class="line">        game.physics.arcade.checkCollision.down = <span class="literal">true</span>;</div><div class="line">        game.physics.arcade.checkCollision.up = <span class="literal">false</span>;</div><div class="line">        game.physics.arcade.checkCollision.left = <span class="literal">false</span>;</div><div class="line">        game.physics.arcade.checkCollision.right = <span class="literal">false</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// create display text</span></div><div class="line">        <span class="keyword">var</span> disp = game.data.disp = game.add.text(<span class="number">0</span>, <span class="number">0</span>, <span class="string">''</span>, &#123;</div><div class="line">                <span class="attr">fill</span>: <span class="string">'white'</span>,</div><div class="line">                <span class="attr">font</span>: <span class="string">'10px courier'</span></div><div class="line">            &#125;);</div><div class="line">        disp.fixedToCamera = <span class="literal">true</span>;</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="attr">update</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> launch = game.data.launch;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (launch.active) &#123;</div><div class="line"> </div><div class="line">            drawGridLines(game);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        updateDrag(game);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line">game.state.start(<span class="string">'ball-bounce'</span>);</div></pre></td></tr></table></figure>
+<p>Here I also set the camera bounds to null so that the camera will leave the bounds of the set game world when I have it follow the ball that goes out of bounds. I need to do this because this is the kind of game where there is no set limit on how far the ball can potential go, so I need to camera to leave the bounds of the game world.</p>
+<p>I also of course call my updateDrag method for each frame tick, and draw the gird lines when the launch is active.</p>
+<h2 id="3-Conclusion"><a href="#3-Conclusion" class="headerlink" title="3 - Conclusion"></a>3 - Conclusion</h2><p>So setting drag is just a matter of coming up with the proper x and y values that can then be set to a sprites physics body. Coming up with those values depends on how it is that I want drag to behave. With some projects just setting simple static values will work just fine, for other projects in which I want to simulate wind or something to that effect a more complex solution will need to be used.</p>
+<p>This project could use a fair amount of fine tuning, and maybe I will get around to it if this post gets some traction. If you would like for me to give this project some more attention, or if you have any questions or concerns be sure to let me know in the comments. In any case thank you for reading, and have fun with physics and phaser.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/10/30/phaser-physics-drag/" data-id="cjo6hkkna00030gv1gyi1omrq" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/10/30/phaser-physics-drag/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/phaser/">phaser</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/11/01/threejs-export-webm-whammy/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Exporting a three.js animation to webm using whammy
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/10/29/phaser-physics-acceleration/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Playing with acceleration in phaser ce</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2018/10/30/phaser-physics-drag/index.html';
+    this.page.identifier = '317';
+    this.page.title = 'Setting Drag in phaser ce';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.35px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.59px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.12px;">angular</a> <a href="/tags/animation/" style="font-size: 11.76px;">animation</a> <a href="/tags/automation/" style="font-size: 12.94px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.53px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.88px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.06px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.94px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.18px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.76px;">ejs</a> <a href="/tags/express/" style="font-size: 16.47px;">express</a> <a href="/tags/games/" style="font-size: 18.24px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.71px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.76px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15.29px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.59px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.76px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.76px;">linux</a> <a href="/tags/lodash/" style="font-size: 17.65px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15.29px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.41px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.82px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.35px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.47px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/11/06/phaser-line-intersects/">Finding if two lines intersect in phaser ce</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/05/phaser-point-centroid/">Getting a center point in an array of points with Phaser ce</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/04/lodash_size/">Find the _.size of Arrays and Objects with lodash, and vanilla js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/03/phaser-point/">The Point Class in phaser ce</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/02/threejs-ambientlight/">Setting some ambient light in three.js</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2018/10/30/phaser-physics-drag/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
