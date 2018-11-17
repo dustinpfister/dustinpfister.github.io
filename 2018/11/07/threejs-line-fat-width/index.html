@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Fat width lines in three.js | Dustin John Pfister at github pages</title>
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2018/11/07/threejs-line-fat-width/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="When playing around with lines in three.js it would be nice to set the width of lines. Although there is a linewidth property of the lineBasicMaterial, on most platforms any width other than the defau">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fat width lines in three.js">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/11/07/threejs-line-fat-width/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="When playing around with lines in three.js it would be nice to set the width of lines. Although there is a linewidth property of the lineBasicMaterial, on most platforms any width other than the defau">
+<meta property="og:updated_time" content="2018-11-08T14:10:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fat width lines in three.js">
+<meta name="twitter:description" content="When playing around with lines in three.js it would be nice to set the width of lines. Although there is a linewidth property of the lineBasicMaterial, on most platforms any width other than the defau">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense -->
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-threejs-line-fat-width" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/07/threejs-line-fat-width/" class="article-date"> Published:
+  <time datetime="2018-11-07T22:52:00.000Z" itemprop="datePublished">2018-11-07</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/11/07/threejs-line-fat-width/" class="article-date"> Modified:
+  <time datetime="2018-11-08T14:10:13.000Z" itemprop="dateModified">2018-11-08</time>
+</a>
+
+    <span class="article-date">V1.14</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Fat width lines in three.js
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>When playing around with lines in <a href="https://threejs.org/" target="_blank" rel="external">three.js</a> it would be nice to set the width of lines. Although there is a linewidth property of the lineBasicMaterial, on most platforms any width other than the default value of 1 will not work anyway. However looking over the examples at the three.js site there are some official additional resources that can be used to make think lines that seems to work just fine.</p>
+<a id="more"></a>
+<h2 id="1-What-to-know"><a href="#1-What-to-know" class="headerlink" title="1 - What to know"></a>1 - What to know</h2><p>This is a post on using some additional assets with three.js to make fat lines, or lines that have a thickness larger than that of one pixel. This is not a getting started post with three.js, or javaScript in general so I trust that yo have at least some experience with these things before hand.</p>
+<h3 id="1-1-Version-numbers-matter"><a href="#1-1-Version-numbers-matter" class="headerlink" title="1.1 - Version numbers matter"></a>1.1 - Version numbers matter</h3><p>In this post I was using <a href="https://github.com/mrdoob/three.js/tree/r98" target="_blank" rel="external">three.js r98</a> that was released on October 31 2018.</p>
+<h3 id="1-2-The-demos-here-require-more-than-just-three-js"><a href="#1-2-The-demos-here-require-more-than-just-three-js" class="headerlink" title="1.2 - The demos here require more than just three.js"></a>1.2 - The demos here require more than just three.js</h3><p>In this post on top of the usual three.js file, I am also using some additional files that can be found in the <a href="https://github.com/mrdoob/three.js/tree/r98/examples/js/lines" target="_blank" rel="external">examples\/js\/lines</a> folder of the three.js git hub folder. These files bring additional constructors that are not present in three.js bu itself.</p>
+<p>So afetr loading three.js, load the additional files that are fond in the lines folder of the three.js github repository as well.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/js/three.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/js/linesegmentsgeometry.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/js/linegeometry.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/js/linematerial.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/js/linesegments2.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/js/line2.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="2-Creating-some-fat-lines-with-three-js"><a href="#2-Creating-some-fat-lines-with-three-js" class="headerlink" title="2 - Creating some fat lines with three.js"></a>2 - Creating some fat lines with three.js</h2><p>So once I have all the files I need downloaded and linked to with scrips tags in my html it is time to make use of them. In this example I made a few helper methods that make use of the classes that are added to Three.js with the additional files. </p>
+<p>If it is any additional help I also based this example off of one of the three.js examples on <a href="https://github.com/mrdoob/three.js/blob/master/examples/webgl_lines_fat.html" target="_blank" rel="external">making fat lines</a>. That example makes use of some more additional assets from the lines folder of the three.js repository. What I did here though is break things down into helpers to make things a little more fine grain, and cover each method in detail in order to help explain things better. When making your own example you might choose to do the same, improving on this, or just simply making it different in some way.</p>
+<h2 id="2-1-The-createFatLineGemomety-helper"><a href="#2-1-The-createFatLineGemomety-helper" class="headerlink" title="2.1 - The createFatLineGemomety helper"></a>2.1 - The createFatLineGemomety helper</h2><p>So for my first helper I made something that will create geometry using the LineGeometry file that I added to the project along with three.js. This method accepts a method that will be called for each point in the line. When the method is called for a point it is passed the current point index, and a percentage that I can then use when defining the x, y ,a and z values for the given point.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> createFatLineGeometry = <span class="function"><span class="keyword">function</span> (<span class="params">opt</span>) </span>&#123;</div><div class="line"> </div><div class="line">    opt = opt || &#123;&#125;;</div><div class="line">    opt.forPoint = opt.forPoint || <span class="function"><span class="keyword">function</span> (<span class="params">i, per</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> &#123;</div><div class="line">            <span class="attr">x</span>: i * <span class="number">5</span>,</div><div class="line">            <span class="attr">y</span>: <span class="number">0</span>,</div><div class="line">            <span class="attr">z</span>: <span class="number">0</span></div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">    opt.ptCount = opt.ptCount === <span class="literal">undefined</span> ? <span class="number">20</span> : opt.ptCount;</div><div class="line">    opt.colorSolid = opt.colorSolid === <span class="literal">undefined</span> ? <span class="literal">false</span> : opt.colorSolid;</div><div class="line">    opt.color = opt.color === <span class="literal">undefined</span> ? <span class="keyword">new</span> THREE.Color(<span class="number">0xffffff</span>) : opt.color;</div><div class="line"> </div><div class="line">    <span class="comment">// Position and Color Data</span></div><div class="line">    <span class="keyword">var</span> positions = [],</div><div class="line">    colors = [],</div><div class="line">    i = <span class="number">0</span>,</div><div class="line">    point,</div><div class="line">    geo;</div><div class="line"> </div><div class="line">    <span class="comment">// for each point</span></div><div class="line">    <span class="keyword">while</span> (i &lt; opt.ptCount) &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// push point</span></div><div class="line">        point = opt.forPoint(i, i / opt.ptCount);</div><div class="line">        positions.push(point.x, point.y, point.z);</div><div class="line"> </div><div class="line">        <span class="comment">// push color</span></div><div class="line">        <span class="keyword">if</span> (!opt.colorSolid) &#123;</div><div class="line">            opt.color.setHSL(i / opt.ptCount, <span class="number">1.0</span>, <span class="number">0.5</span>);</div><div class="line">        &#125;</div><div class="line">        colors.push(opt.color.r, opt.color.g, opt.color.b);</div><div class="line"> </div><div class="line">        i += <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// return geo</span></div><div class="line">    geo = <span class="keyword">new</span> THREE.LineGeometry();</div><div class="line">    geo.setPositions(positions);</div><div class="line">    geo.setColors(colors);</div><div class="line">    <span class="keyword">return</span> geo;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="2-1-The-cretaeFatLine-helper"><a href="#2-1-The-cretaeFatLine-helper" class="headerlink" title="2.1 - The cretaeFatLine helper"></a>2.1 - The cretaeFatLine helper</h2><p>This helper makes use of a geometry made with the createFatLineGemomety helper, using it with a material made with the LineMaterial class to return an instance of Line2.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> createFatLine = <span class="function"><span class="keyword">function</span> (<span class="params">opt</span>) </span>&#123;</div><div class="line"> </div><div class="line">    opt = opt || &#123;&#125;;</div><div class="line">    opt.width = opt.width || <span class="number">5</span>;</div><div class="line"> </div><div class="line">    <span class="comment">// LINE MATERIAL</span></div><div class="line">    <span class="keyword">var</span> matLine = <span class="keyword">new</span> THREE.LineMaterial(&#123;</div><div class="line">            <span class="attr">linewidth</span>: opt.width, <span class="comment">// in pixels</span></div><div class="line">            vertexColors: THREE.VertexColors</div><div class="line">        &#125;);</div><div class="line">    matLine.resolution.set(<span class="number">320</span>, <span class="number">240</span>);</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> line = <span class="keyword">new</span> THREE.Line2(opt.geo, matLine);</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> line;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="2-2-Pull-it-all-together"><a href="#2-2-Pull-it-all-together" class="headerlink" title="2.2 - Pull it all together"></a>2.2 - Pull it all together</h3><p>So now that I have my two helper methods I can now use them in a project. Here I created a three.js project using the WebGLRenderer, and append the dom element of the renderer to an element in my html. I then create a scene, and a camera as well like normal. In addition I also am using the official <a href="/2018/04/13/threejs-orbit-controls/">three.js orbit controls</a> in this post as well, which is another external file that can be added to a project.</p>
+<p>When using the createFatLine helper I then also call my createFatLineGeometry helper as well which will create and return the geometry for the line with the forPoint method that I give the helper. In this example I made one Fat line using a formula that I worked out that results in a spiral like line, and another that results in just a strait line.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// RENDER</span></div><div class="line">    <span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer(&#123;</div><div class="line">            <span class="attr">antialias</span>: <span class="literal">true</span></div><div class="line">        &#125;);</div><div class="line">    renderer.setPixelRatio(<span class="built_in">window</span>.devicePixelRatio);</div><div class="line">    renderer.setClearColor(<span class="number">0x000000</span>, <span class="number">0.0</span>);</div><div class="line">    renderer.setSize(<span class="number">320</span>, <span class="number">240</span>);</div><div class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"> </div><div class="line">    <span class="comment">// SCENE</span></div><div class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"> </div><div class="line">    <span class="comment">// CAMERA</span></div><div class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">40</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">1</span>, <span class="number">1000</span>);</div><div class="line">    camera.position.set(<span class="number">-40</span>, <span class="number">0</span>, <span class="number">60</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// CONTROLS</span></div><div class="line">    <span class="keyword">var</span> controls = <span class="keyword">new</span> THREE.OrbitControls(camera, renderer.domElement);</div><div class="line"> </div><div class="line">    <span class="comment">// CREATE FAT LINE</span></div><div class="line">    <span class="keyword">var</span> line = createFatLine(&#123;</div><div class="line">            <span class="attr">width</span>: <span class="number">8</span>,</div><div class="line">            <span class="attr">geo</span>: createFatLineGeometry(&#123;</div><div class="line">                <span class="attr">ptCount</span>: <span class="number">80</span>,</div><div class="line">                <span class="attr">colorSolid</span>: <span class="literal">true</span>,</div><div class="line">                <span class="attr">color</span>: <span class="keyword">new</span> THREE.Color(<span class="number">0x00ff00</span>),</div><div class="line">                <span class="attr">forPoint</span>: <span class="function"><span class="keyword">function</span> (<span class="params">i, per</span>) </span>&#123;</div><div class="line">                    <span class="keyword">return</span> &#123;</div><div class="line">                        <span class="attr">x</span>: i * <span class="number">1.5</span>,</div><div class="line">                        <span class="attr">y</span>: <span class="built_in">Math</span>.cos(<span class="built_in">Math</span>.PI * <span class="number">4</span> * (per)) * <span class="number">10</span>,</div><div class="line">                        <span class="attr">z</span>: <span class="built_in">Math</span>.sin(<span class="built_in">Math</span>.PI * <span class="number">4</span> * (per)) * <span class="number">10</span></div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;)</div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    scene.add(line);</div><div class="line"> </div><div class="line">    <span class="comment">// CREATE ANOTHER FAT LINE</span></div><div class="line">    line = createFatLine(&#123;</div><div class="line">            <span class="attr">width</span>: <span class="number">10</span>,</div><div class="line">            <span class="attr">geo</span>: createFatLineGeometry()</div><div class="line">        &#125;);</div><div class="line">    scene.add(line);</div><div class="line"> </div><div class="line">    <span class="comment">// LOOP</span></div><div class="line">    <span class="keyword">var</span> loop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        requestAnimationFrame(loop);</div><div class="line"> </div><div class="line">        <span class="comment">// main scene</span></div><div class="line">        renderer.setClearColor(<span class="number">0x000000</span>, <span class="number">0</span>);</div><div class="line">        renderer.setViewport(<span class="number">0</span>, <span class="number">0</span>, <span class="number">320</span>, <span class="number">240</span>);</div><div class="line"> </div><div class="line">        <span class="comment">// renderer will set this eventually</span></div><div class="line">        renderer.render(scene, camera);</div><div class="line">        renderer.setClearColor(<span class="number">0x222222</span>, <span class="number">1</span>);</div><div class="line">        renderer.clearDepth();</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    loop();</div><div class="line"> </div><div class="line">&#125;</div><div class="line">    ());</div></pre></td></tr></table></figure>
+<h2 id="3-Conclusion"><a href="#3-Conclusion" class="headerlink" title="3 - Conclusion"></a>3 - Conclusion</h2><p>So the process of making fat lines in three.js is a little complicated, but with a little will power it is not to hard to find a work around. If you enjoyed reading this post you might want to check out <a href="/categories/three-js/">my many other posts on three.js</a>. Also if you have any questions of concerns be sure to let me know in the comments, The more feedback I receive the more inclined I will be to get around to expanding the content on this post, and others like it. In any case thank you for reading and have fun with three.js.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/11/07/threejs-line-fat-width/" data-id="cjom3vs2d00062kv1gnlk28q9" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/11/07/threejs-line-fat-width/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/11/08/phaser-physics-immovable/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Making a Sprite physics body immovable in phaser ce
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/11/06/phaser-line-intersects/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Finding if two lines intersect in phaser ce</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2018/11/07/threejs-line-fat-width/index.html';
+    this.page.identifier = '324';
+    this.page.title = 'Fat width lines in three.js';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.22px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 11.67px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.56px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.22px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.78px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 16.11px;">express</a> <a href="/tags/games/" style="font-size: 18.33px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.44px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.67px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 17.78px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.89px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.67px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/11/15/lodash_sum/">Making a sum with lodash _.sum, _.reduce, and vanilla javaScript alternatives</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/14/threejs-examples-waves/">Making waves with thress.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/phaser-disable-visibility-change/">Game visibility change, and having code run when tabs change in phaser ce</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/12/phaser-plugins-examples-defence/">Defense game phaser plug-in examples</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/11/lodash_chain/">Chaining functions in javaScript with lodash or not</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2018/11/07/threejs-line-fat-width/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
