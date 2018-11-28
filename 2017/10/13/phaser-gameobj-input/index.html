@@ -9,16 +9,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2017/10/13/phaser-gameobj-input/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="This post is an overview of the main phaser input hander that can be found at game.input in a phaser game object instance. There is much to be said about Input (what is used via game.input), and Input">
+  <meta name="description" content="This post is an overview of the main phaser ce input hander that can be found at game.input in a phaser game object instance. There is much to be said about Input (what is used via game.input), and In">
 <meta property="og:type" content="article">
 <meta property="og:title" content="An overview of the main phaser input manager via game.input">
 <meta property="og:url" content="https://dustinpfister.github.io/2017/10/13/phaser-gameobj-input/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="This post is an overview of the main phaser input hander that can be found at game.input in a phaser game object instance. There is much to be said about Input (what is used via game.input), and Input">
-<meta property="og:updated_time" content="2018-07-16T17:31:07.000Z">
+<meta property="og:description" content="This post is an overview of the main phaser ce input hander that can be found at game.input in a phaser game object instance. There is much to be said about Input (what is used via game.input), and In">
+<meta property="og:updated_time" content="2018-11-26T17:00:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="An overview of the main phaser input manager via game.input">
-<meta name="twitter:description" content="This post is an overview of the main phaser input hander that can be found at game.input in a phaser game object instance. There is much to be said about Input (what is used via game.input), and Input">
+<meta name="twitter:description" content="This post is an overview of the main phaser ce input hander that can be found at game.input in a phaser game object instance. There is much to be said about Input (what is used via game.input), and In">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -117,10 +117,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/10/13/phaser-gameobj-input/" class="article-date"> Modified:
-  <time datetime="2018-07-16T17:31:07.000Z" itemprop="dateModified">2018-07-16</time>
+  <time datetime="2018-11-26T17:00:46.000Z" itemprop="dateModified">2018-11-26</time>
 </a>
 
-    <span class="article-date">V1.1</span>
+    <span class="article-date">V1.11</span>
 
     
   <div class="article-category">
@@ -143,9 +143,10 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>This post is an overview of the main <a href="http://phaser.io/" target="_blank" rel="external">phaser</a> input hander that can be found at game.input in a phaser game object instance. There is much to be said about <a href="http://phaser.io/docs/2.6.2/Phaser.Input.html" target="_blank" rel="external">Input</a> (what is used via game.input), and <a href="http://phaser.io/docs/2.6.2/Phaser.InputHandler.html" target="_blank" rel="external">InputHander</a> (what is used in game objects like sprites). However this post is mainly just an outline of what there is to work with via the Input instance at game.input.</p>
+        <p>This post is an overview of the main <a href="https://photonstorm.github.io/phaser-ce/" target="_blank" rel="external">phaser ce</a> input hander that can be found at game.input in a phaser game object instance. There is much to be said about <a href="http://phaser.io/docs/2.6.2/Phaser.Input.html" target="_blank" rel="external">Input</a> (what is used via game.input), and <a href="http://phaser.io/docs/2.6.2/Phaser.InputHandler.html" target="_blank" rel="external">InputHander</a> (what is used in game objects like sprites). However this post is mainly just an outline of what there is to work with via the Input instance at game.input.</p>
 <a id="more"></a>
 <h2 id="1-What-to-know"><a href="#1-What-to-know" class="headerlink" title="1 - What to know"></a>1 - What to know</h2><p>This is a post in the main input handler that is used at game.input in the game framework known as phaser. It is not a getting started post on phaser, javaScript or any additional skills that are required before hand. If you are new to phaser you might prefer to start with my <a href="/2017/10/04/phaser-getting-started/">getting started post on phaser</a>.</p>
+<h2 id="1-1-This-is-a-phaser-ce-2-x-post"><a href="#1-1-This-is-a-phaser-ce-2-x-post" class="headerlink" title="1.1 - This is a phaser ce 2.x post"></a>1.1 - This is a phaser ce 2.x post</h2><p>In this post I am using phaser community edition 2.11.1 of <a href="https://phaser.io/" target="_blank" rel="external">phaser</a>.</p>
 <h2 id="1-1-Two-general-approaches-with-input"><a href="#1-1-Two-general-approaches-with-input" class="headerlink" title="1.1 - Two general approaches with input"></a>1.1 - Two general approaches with input</h2><p>There are two general ways of handling input with phaser. One is to poll certain objects, or setup certain event handlers via game.input, of which this post is mainly about. The other approach is to do something involving the input handlers for game objects like sprites, if you are more interested in the approce you might want to check out my post on <a href="/2017/10/23/phaser-components-input-enabled/">enabling input with a sprite</a>, and another relevant post on that subject about <a href="/2017/10/24/phaser-inputhandler-draggable/">making sprites draggable</a>.</p>
 <h2 id="1-2-Confusion-over-input-and-inputHander"><a href="#1-2-Confusion-over-input-and-inputHander" class="headerlink" title="1.2 - Confusion over input and inputHander"></a>1.2 - Confusion over input and inputHander</h2><p>What is given at game.input is an instance of input which differs from Phasers inputHander which is used in game objects like sprites. If you just want to know what the current status of some device is, then you would want to check out what is going on with instance of input at game.input. However if you want to attach some kind of event handler to a game object, which in many cases may be a better alternative, then you want to look into the Phaser inputHander, which is outside the scope of this post.</p>
 <h2 id="3-Demo-using-game-input"><a href="#3-Demo-using-game-input" class="headerlink" title="3 -Demo using game.input"></a>3 -Demo using game.input</h2><p>I put together a quick demo for getting started with doing something with some values that are available at game.input. It’s not my best work, but you should get the idea at least. In this demo I am using values at game.input.activePointer To get values for the latest pointer object (mouse or touch event) to move a chicken.</p>
@@ -267,23 +268,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2018/11/15/lodash_sum/">Making a sum with lodash _.sum, _.reduce, and vanilla javaScript alternatives</a>
+            <a href="/2018/11/27/js-getting-started/">Getting started with javaScript</a>
           </li>
         
           <li>
-            <a href="/2018/11/14/threejs-examples-waves/">Making waves with thress.js</a>
+            <a href="/2018/11/26/phaser-sprite/">Sprites in phaser ce, what to know.</a>
           </li>
         
           <li>
-            <a href="/2018/11/13/phaser-disable-visibility-change/">Game visibility change, and having code run when tabs change in phaser ce</a>
+            <a href="/2018/11/24/threejs-webglrenderer/">The webGL renderer in three.js</a>
           </li>
         
           <li>
-            <a href="/2018/11/12/phaser-plugins-examples-defence/">Defense game phaser plug-in examples</a>
+            <a href="/2018/11/20/phaser-graphics-generate-texture/">Generating a texture with graphics to use with sprites in phaser ce</a>
           </li>
         
           <li>
-            <a href="/2018/11/11/lodash_chain/">Chaining functions in javaScript with lodash or not</a>
+            <a href="/2018/11/19/lodash_flow/">Using _.flow as a way to chain methods with lodash, and javaScript</a>
           </li>
         
       </ul>

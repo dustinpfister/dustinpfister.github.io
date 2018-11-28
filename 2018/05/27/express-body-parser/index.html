@@ -15,7 +15,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2018/05/27/express-body-parser/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="Being able to parse a payload given to a node.js back end typically via a post request is a very common task when doing something with express.js. As such there is a built in way to quickly do this th">
-<meta property="og:updated_time" content="2018-06-04T19:17:55.000Z">
+<meta property="og:updated_time" content="2018-11-26T22:39:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The express.js body parser module, and basic full stack development.">
 <meta name="twitter:description" content="Being able to parse a payload given to a node.js back end typically via a post request is a very common task when doing something with express.js. As such there is a built in way to quickly do this th">
@@ -117,10 +117,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2018/05/27/express-body-parser/" class="article-date"> Modified:
-  <time datetime="2018-06-04T19:17:55.000Z" itemprop="dateModified">2018-06-04</time>
+  <time datetime="2018-11-26T22:39:23.000Z" itemprop="dateModified">2018-11-26</time>
 </a>
 
-    <span class="article-date">V1.24</span>
+    <span class="article-date">V1.28</span>
 
     
   <div class="article-category">
@@ -143,10 +143,13 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>Being able to parse a payload given to a node.js back end typically via a post request is a very common task when doing something with <a href="https://expressjs.com/" target="_blank" rel="external">express.js</a>. As such there is a built in way to quickly do this thanks to the <a href="https://www.npmjs.com/package/body-parser" target="_blank" rel="external">body-parser</a> module that is included with every express.js install. In order to get into body parsing it is necessary to put together at least a basic full stack application. So in this post I will be giving a an example that will include both front and back end code. However this is a post mainly on req.body, and how to parse that using the body parser module so I will be mostly covering that.</p>
+        <p>Being able to parse a payload given to a node.js back end typically via a post request is a very common task when doing something with <a href="https://expressjs.com/" target="_blank" rel="external">express.js</a>. As such there is a built in way to quickly do this thanks to the <a href="https://www.npmjs.com/package/body-parser" target="_blank" rel="external">body-parser</a> module that is included with every express.js install (at least with the versions I have used thus far). In order to get into body parsing it is necessary to put together at least a basic full stack application. So in this post I will be giving a an example that will include both front and back end code. However this is a post mainly on req.body, and how to parse that using the body parser module so I will be mostly covering that.</p>
 <a id="more"></a>
 <h2 id="Before-you-continue-reading"><a href="#Before-you-continue-reading" class="headerlink" title="Before you continue reading"></a>Before you continue reading</h2><p>This is a post on the use of the body-parser module that is used in express.js to parse incoming payloads from requests made from a front end system in a full stack node.js web application. In this post I am also using routers, and ejs for rendering templates. You will want to have at least a basic working knowledge of javaScript, and node.js. Full stack development is a little complicated, even when you are trying to simplify it.</p>
 <h2 id="A-word-about-version-numbers"><a href="#A-word-about-version-numbers" class="headerlink" title="A word about version numbers"></a>A word about version numbers</h2><p>I have been trying to make it a habit to mention what version of a javaScript project I am using clear in my posts on such things. There are many reasons why this is a good idea beyond just the usual date published, and date last updated. In this post I am using express 4.16.3, and ejs 2.6.1.</p>
+<h2 id="A-Simple-Body-parser-example"><a href="#A-Simple-Body-parser-example" class="headerlink" title="A Simple Body parser example"></a>A Simple Body parser example</h2><p>First off how about a very simple example of using body-parser. In this example I will just be serving up a very simple client system using res.send to send a string that is just a single script tag. In this script tag I am using xmlHttpRequest to send a post request back to the sever that is just a single object serialized with JSON.stringify. I then use the json body parser to parse this json that was sent from the client into a workable object. I can then do something with that object, and send it back.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>),</div><div class="line">app = express(),</div><div class="line"> </div><div class="line"><span class="comment">// getting port this way</span></div><div class="line">port = process.env.PORT || process.argv[<span class="number">2</span>] || <span class="number">8080</span>;</div><div class="line"> </div><div class="line"><span class="comment">// using the JSON body parser</span></div><div class="line">app.use(<span class="built_in">require</span>(<span class="string">'body-parser'</span>).json());</div><div class="line"> </div><div class="line"><span class="comment">// what to do for get requests to root</span></div><div class="line">app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// sending a crude yet effective client system</span></div><div class="line">    res.send(<span class="string">'&lt;script&gt;'</span> +</div><div class="line">        <span class="string">'var xhr = new XMLHttpRequest();'</span> +</div><div class="line">        <span class="string">'xhr.open(\'POST\', \'/\', true);'</span> +</div><div class="line">        <span class="string">'xhr.onreadystatechange = function()&#123;console.log(this.response)&#125;;'</span> +</div><div class="line">        <span class="string">'xhr.setRequestHeader(\'Content-type\', \'application/json\');'</span> +</div><div class="line">        <span class="string">'xhr.send(JSON.stringify(&#123;foo:\'bar\',n:40&#125;));&lt;/script&gt;'</span>);</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line"><span class="comment">// what to do for post requests to root</span></div><div class="line">app.post(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// body parser works, I have the object sent</span></div><div class="line">    <span class="comment">//from the client system</span></div><div class="line">    <span class="built_in">console</span>.log(req.body); <span class="comment">// &#123;foo:'bar',n:40&#125;</span></div><div class="line"> </div><div class="line">    <span class="comment">// I can do something with it and send a response</span></div><div class="line">    req.body.n += <span class="number">2</span>;</div><div class="line">    res.json(req.body);</div><div class="line"> </div><div class="line">&#125;)</div><div class="line"> </div><div class="line">app.listen(port, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'body-parser demo is up on port: '</span> + port);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>A real example that makes use of the body parser in express would be a little more complex than this, it would involve a more complex client system, that gathers information from the client, or sends requests when the user does something. However the same basic idea is in effect, data gets serialized, send to the sever and then parsed back into a workable object that is used in the back end system in some way.</p>
 <h2 id="An-express-js-Body-Parser-example"><a href="#An-express-js-Body-Parser-example" class="headerlink" title="An express.js Body Parser example"></a>An express.js Body Parser example</h2><p>In this example I will of course be using express.js as a node.js back end framework, but I will also be installing ejs as a rendering engine, in terms of npm packages that is all that I installed in my demo folder. Everything else I used in this demo is just my own vanilla code. In a more advanced project I might be using additional javaScript projects like angular, and mongoose, but I do not want to take the focus away from express.js, and body-parser at least not in this post.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ mkdir body-parser</div><div class="line">$ cd body-parser</div><div class="line">$ npm init</div><div class="line">$ npm install express@4.16.3</div><div class="line">$ npm install ejs@2.6.1</div><div class="line">$ mkdir public</div><div class="line">$ mkdir routes</div><div class="line">$ mkdir views</div></pre></td></tr></table></figure>
 <h2 id="The-routes-folder"><a href="#The-routes-folder" class="headerlink" title="The routes folder"></a>The routes folder</h2><p>It has become standard practice to always have a routes folder in which I am using routers to help better manage paths when making an express application. In this demo I am using a separate javaScript file for both json and text paths that will serve as two separate examples of using the body parser to parse json, and plain old text given from the client system. </p>
@@ -299,23 +302,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2018/11/15/lodash_sum/">Making a sum with lodash _.sum, _.reduce, and vanilla javaScript alternatives</a>
+            <a href="/2018/11/27/js-getting-started/">Getting started with javaScript</a>
           </li>
         
           <li>
-            <a href="/2018/11/14/threejs-examples-waves/">Making waves with thress.js</a>
+            <a href="/2018/11/26/phaser-sprite/">Sprites in phaser ce, what to know.</a>
           </li>
         
           <li>
-            <a href="/2018/11/13/phaser-disable-visibility-change/">Game visibility change, and having code run when tabs change in phaser ce</a>
+            <a href="/2018/11/24/threejs-webglrenderer/">The webGL renderer in three.js</a>
           </li>
         
           <li>
-            <a href="/2018/11/12/phaser-plugins-examples-defence/">Defense game phaser plug-in examples</a>
+            <a href="/2018/11/20/phaser-graphics-generate-texture/">Generating a texture with graphics to use with sprites in phaser ce</a>
           </li>
         
           <li>
-            <a href="/2018/11/11/lodash_chain/">Chaining functions in javaScript with lodash or not</a>
+            <a href="/2018/11/19/lodash_flow/">Using _.flow as a way to chain methods with lodash, and javaScript</a>
           </li>
         
       </ul>

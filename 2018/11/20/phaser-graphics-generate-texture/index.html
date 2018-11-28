@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Generating a texture with graphics to use with sprites in phaser ce | Dustin John Pfister at github pages</title>
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2018/11/20/phaser-graphics-generate-texture/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="So I have wrote a post on how to make sprite sheets with canvas, which seems to work okay as a way to generate graphics to use in a phaser ce game project without loading an external image. However in">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Generating a texture with graphics to use with sprites in phaser ce">
+<meta property="og:url" content="https://dustinpfister.github.io/2018/11/20/phaser-graphics-generate-texture/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="So I have wrote a post on how to make sprite sheets with canvas, which seems to work okay as a way to generate graphics to use in a phaser ce game project without loading an external image. However in">
+<meta property="og:updated_time" content="2018-11-24T16:38:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Generating a texture with graphics to use with sprites in phaser ce">
+<meta name="twitter:description" content="So I have wrote a post on how to make sprite sheets with canvas, which seems to work okay as a way to generate graphics to use in a phaser ce game project without loading an external image. However in">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense -->
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-phaser-graphics-generate-texture" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/20/phaser-graphics-generate-texture/" class="article-date"> Published:
+  <time datetime="2018-11-20T21:17:00.000Z" itemprop="datePublished">2018-11-20</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/11/20/phaser-graphics-generate-texture/" class="article-date"> Modified:
+  <time datetime="2018-11-24T16:38:35.000Z" itemprop="dateModified">2018-11-24</time>
+</a>
+
+    <span class="article-date">V1.1</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/phaser/">phaser</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Generating a texture with graphics to use with sprites in phaser ce
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>So I have wrote a <a href="/2018/08/04/phaser-spritesheet-from-canvas/">post on how to make sprite sheets with canvas</a>, which seems to work okay as a way to generate graphics to use in a <a href="https://photonstorm.github.io/phaser-ce/index.html" target="_blank" rel="external">phaser ce</a> game project without loading an external image. However in this post I will be writing about how to go about doing so with phaser graphics display objects. Also for whatever the reason it might be nice to just generate textures in generate for whatever the reason using phaser graphics, so in this post I will be writing about some use examples of the <a href="https://photonstorm.github.io/phaser-ce/Phaser.Graphics.html#generateTexture" target="_blank" rel="external">generateTexture method</a> of the Phaser Graphics class.</p>
+<a id="more"></a>
+<h2 id="1-what-to-know"><a href="#1-what-to-know" class="headerlink" title="1 - what to know"></a>1 - what to know</h2><p>In the content of this post I am writing about a method in the graphics class of phaser ce that can be used to convert the current state of a graphics display object to a texture that can then be used to skin sprites. If you are new to phaser ce you might want to start with <a href="/2017/10/04/phaser-getting-started/">my getting started post on phaser ce</a>, also if you are new to using graphics display objects you might want to start with my <a href="/2017/10/21/phaser-graphics/">post on graphics in general</a> as well.</p>
+<h2 id="1-1-This-is-a-phaser-ce-2-x-post"><a href="#1-1-This-is-a-phaser-ce-2-x-post" class="headerlink" title="1.1 - This is a phaser ce 2.x post"></a>1.1 - This is a phaser ce 2.x post</h2><p>In this post I am using phaser community edition 2.11.1 of <a href="https://phaser.io/" target="_blank" rel="external">phaser</a>.</p>
+<h2 id="2-Basic-example-of-Graphics-generateTexture"><a href="#2-Basic-example-of-Graphics-generateTexture" class="headerlink" title="2 - Basic example of Graphics.generateTexture."></a>2 - Basic example of Graphics.generateTexture.</h2><p>Whenever I create a graphics object the generateTextxure method can eb called to create an instance of <a href="https://photonstorm.github.io/phaser-ce/PIXI.Texture.html" target="_blank" rel="external">PIXI.texture</a> this can the be used anywhere where a texture can be used such as with a sprite.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>);</div><div class="line"></div><div class="line">game.state.add(<span class="string">'basic'</span>, &#123;</div><div class="line"></div><div class="line">    <span class="comment">// create method</span></div><div class="line">    create: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> gfx = game.add.graphics(<span class="number">0</span>, <span class="number">0</span>);</div><div class="line"> </div><div class="line">        gfx.beginFill(<span class="number">0x00ff00</span>);</div><div class="line">        gfx.drawRect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">32</span>, <span class="number">32</span>);</div><div class="line">        gfx.visible = <span class="literal">false</span>;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> texture = gfx.generateTexture();</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> sprite = game.add.sprite(<span class="number">32</span>, <span class="number">32</span>, texture);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line">game.state.start(<span class="string">'basic'</span>);</div></pre></td></tr></table></figure>
+<p>In this example I cam creating a graphics object and making it so it is not visible. However I am creating a texture from that graphics object and then using it to skin a sprite that is visible.</p>
+<h2 id="2-Making-a-sprite-sheet-with-graphics"><a href="#2-Making-a-sprite-sheet-with-graphics" class="headerlink" title="2 - Making a sprite sheet with graphics"></a>2 - Making a sprite sheet with graphics</h2><p>So another use case example of Graphics.generateTexture would be to use it to create a sprite sheet with at least two or more frames. Doing so involves creating the state of the graphics that I want with the usual drawing methods, and then creating a texture like before for starters. However this time I need to pass the source property of the baseTexture property of the texture that is returned with Graphics.generateTexture. The image that is located at the source property is what I can pass as data for the game.cache.addSpriteSheet method.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>);</div><div class="line"> </div><div class="line">game.state.add(<span class="string">'mksheet'</span>, &#123;</div><div class="line"> </div><div class="line">    <span class="comment">// create method</span></div><div class="line">    create: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// create graphics</span></div><div class="line">        <span class="keyword">var</span> gfx = game.make.graphics(<span class="number">0</span>, <span class="number">0</span>);</div><div class="line">        gfx.lineStyle(<span class="number">3</span>, <span class="number">0xffffff</span>, <span class="number">1</span>);</div><div class="line">        gfx.visible = <span class="literal">false</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// draw frame 0</span></div><div class="line">        gfx.moveTo(<span class="number">16</span>, <span class="number">3</span>);</div><div class="line">        gfx.lineTo(<span class="number">29</span>, <span class="number">29</span>);</div><div class="line">        gfx.lineTo(<span class="number">3</span>, <span class="number">29</span>);</div><div class="line">        gfx.currentPath.shape.closed = <span class="literal">true</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// draw frame 1</span></div><div class="line">        gfx.moveTo(<span class="number">48</span>, <span class="number">29</span>);</div><div class="line">        gfx.lineTo(<span class="number">35</span>, <span class="number">3</span>);</div><div class="line">        gfx.lineTo(<span class="number">61</span>, <span class="number">3</span>);</div><div class="line">        gfx.currentPath.shape.closed = <span class="literal">true</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// creating a sprite sheet with generateTexture</span></div><div class="line">        game.cache.addSpriteSheet(<span class="string">'sheet'</span>, <span class="literal">null</span>, gfx.generateTexture().baseTexture.source, <span class="number">32</span>, <span class="number">32</span>, <span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"> </div><div class="line">        <span class="comment">// creating a sprite with the sheet</span></div><div class="line">        <span class="keyword">var</span> sprite = game.add.sprite(game.world.centerX, game.world.centerY, <span class="string">'sheet'</span>, <span class="number">0</span>);</div><div class="line">        sprite.anchor.set(<span class="number">0.5</span>, <span class="number">0.5</span>);</div><div class="line">        sprite.width = <span class="number">100</span>;</div><div class="line">        sprite.height = <span class="number">100</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// step frame index every second</span></div><div class="line">        game.time.events.loop(<span class="number">1000</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">            sprite.frame += <span class="number">1</span>;</div><div class="line">            sprite.frame = sprite.frame %= <span class="number">2</span>;</div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line">game.state.start(<span class="string">'mksheet'</span>);</div></pre></td></tr></table></figure>
+<h2 id="3-Custom-resolution"><a href="#3-Custom-resolution" class="headerlink" title="3 - Custom resolution"></a>3 - Custom resolution</h2><p>Another thing about Graphics.generateTexture is that the resolution can be set with the first argument that by default has a value of 1. The documentation does not explain what the standard is with it, but it looks like it is a value that can be between 0 and 1.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">320</span>, <span class="number">240</span>, Phaser.AUTO, <span class="string">'gamearea'</span>);</div><div class="line"> </div><div class="line">game.state.add(<span class="string">'res'</span>, &#123;</div><div class="line"> </div><div class="line">    <span class="comment">// create method</span></div><div class="line">    create: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// create graphics</span></div><div class="line">        <span class="keyword">var</span> gfx = game.add.graphics(<span class="number">0</span>, <span class="number">0</span>);</div><div class="line">        gfx.lineStyle(<span class="number">3</span>, <span class="number">0xffffff</span>, <span class="number">1</span>);</div><div class="line">        gfx.moveTo(<span class="number">16</span>, <span class="number">3</span>);</div><div class="line">        gfx.lineTo(<span class="number">29</span>, <span class="number">29</span>);</div><div class="line">        gfx.lineTo(<span class="number">3</span>, <span class="number">29</span>);</div><div class="line">        gfx.currentPath.shape.closed = <span class="literal">true</span>;</div><div class="line">        gfx.visible = <span class="literal">false</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// create textures with different resolutions</span></div><div class="line">        <span class="keyword">var</span> i = <span class="number">0</span>,</div><div class="line">        sprite,</div><div class="line">        texture,</div><div class="line">        len = <span class="number">9</span>;</div><div class="line">        <span class="keyword">while</span> (i &lt; len) &#123;</div><div class="line"> </div><div class="line">            texture = gfx.generateTexture(<span class="number">.15</span> + <span class="number">0.85</span> * (i / len));</div><div class="line">            game.add.sprite(<span class="number">0</span> + <span class="number">32</span> * i, <span class="number">32</span>, texture);</div><div class="line"> </div><div class="line">            i += <span class="number">1</span>;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line">game.state.start(<span class="string">'res'</span>);</div></pre></td></tr></table></figure>
+<h2 id="4-Conclusion"><a href="#4-Conclusion" class="headerlink" title="4 - Conclusion"></a>4 - Conclusion</h2><p>So the Graphics.generateTexture method can be used as a way to generate textures from generated graphics that can then be used to skin sprites. This allows for graphics objects to function as one way to go about making assets by way of javaScript code rather than an external image.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/11/20/phaser-graphics-generate-texture/" data-id="cjp0ixc0d000f64v1ake4izi4" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/11/20/phaser-graphics-generate-texture/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/games/">games</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/phaser/">phaser</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/11/24/threejs-webglrenderer/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          The webGL renderer in three.js
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/11/19/lodash_flow/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Using _.flow as a way to chain methods with lodash, and javaScript</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2018/11/20/phaser-graphics-generate-texture/index.html';
+    this.page.identifier = '334';
+    this.page.title = 'Generating a texture with graphics to use with sprites in phaser ce';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.22px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 11.67px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.56px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.22px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.78px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 16.11px;">express</a> <a href="/tags/games/" style="font-size: 18.33px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.44px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.67px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 17.78px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.89px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.67px;">three.js</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/11/27/js-getting-started/">Getting started with javaScript</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/26/phaser-sprite/">Sprites in phaser ce, what to know.</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/24/threejs-webglrenderer/">The webGL renderer in three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/20/phaser-graphics-generate-texture/">Generating a texture with graphics to use with sprites in phaser ce</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/19/lodash_flow/">Using _.flow as a way to chain methods with lodash, and javaScript</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2018/11/20/phaser-graphics-generate-texture/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
