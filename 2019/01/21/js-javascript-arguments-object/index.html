@@ -15,7 +15,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2019/01/21/js-javascript-arguments-object/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="When writing a function in javaScript, inside the body of that function there is an special identifier that can be used to access any and all arguments that have been passed to the function when it is">
-<meta property="og:updated_time" content="2019-01-24T02:26:50.000Z">
+<meta property="og:updated_time" content="2019-02-05T17:39:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="javaScript arguments object in action">
 <meta name="twitter:description" content="When writing a function in javaScript, inside the body of that function there is an special identifier that can be used to access any and all arguments that have been passed to the function when it is">
@@ -117,10 +117,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2019/01/21/js-javascript-arguments-object/" class="article-date"> Modified:
-  <time datetime="2019-01-24T02:26:50.000Z" itemprop="dateModified">2019-01-23</time>
+  <time datetime="2019-02-05T17:39:52.000Z" itemprop="dateModified">2019-02-05</time>
 </a>
 
-    <span class="article-date">V1.4</span>
+    <span class="article-date">V1.6</span>
 
     
   <div class="article-category">
@@ -148,8 +148,10 @@ ga('send', 'pageview');
 <h2 id="1-javaScript-arguments-object-basic-example"><a href="#1-javaScript-arguments-object-basic-example" class="headerlink" title="1 - javaScript arguments object basic example"></a>1 - javaScript arguments object basic example</h2><p>For a basic example of the javaScript arguments object here is a simple function that uses this as a way to return a different result depending on the number of arguments that is given when the function is called.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> func1 = <span class="function"><span class="keyword">function</span> (<span class="params">a, b</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (<span class="built_in">arguments</span>.length == <span class="number">2</span>) &#123;</div><div class="line">        <span class="keyword">return</span> a + b;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> a;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(func1(<span class="number">40</span>,<span class="number">2</span>)); <span class="comment">// 42</span></div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(func1(<span class="number">42</span>)); <span class="comment">// 42</span></div></pre></td></tr></table></figure>
 <p>Without using the arguments object to find the number of arguments that is given the function would return NaN when used with just a single argument. So the arguments object is there to help write functions that will work differently depending on the number of arguments that is given.</p>
-<h2 id="2-Why-it-is-the-arguments-object-rather-than-arguments-array"><a href="#2-Why-it-is-the-arguments-object-rather-than-arguments-array" class="headerlink" title="2 - Why it is the arguments object rather than arguments array"></a>2 - Why it is the arguments object rather than arguments array</h2><p>The arguments object is called the arguments object because it is not an instance of an Array. So it is actually just a plain old object, however it can be considered an array like object. This is because although it is not an instance of an Array it is structured link an array, so some Array methods can be used with it via something like Function.call.</p>
-
+<h2 id="2-Why-it-is-the-arguments-object-rather-than-arguments-array"><a href="#2-Why-it-is-the-arguments-object-rather-than-arguments-array" class="headerlink" title="2 - Why it is the arguments object rather than arguments array"></a>2 - Why it is the arguments object rather than arguments array</h2><p>The arguments object is called the arguments object because it is not an instance of an Array. So it is actually just a plain old object, however it can be considered an array like object. This is because although it is not an instance of an Array it is structured like an array, so some Array methods can be used with it via something like Function.call.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> func = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">let</span> i = <span class="number">0</span>;</div><div class="line"> </div><div class="line">    [].forEach.call(<span class="built_in">arguments</span>, (n) =&gt; &#123;</div><div class="line"> </div><div class="line">        i += n;</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> i;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log( func(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>)); <span class="comment">// 15</span></div></pre></td></tr></table></figure>
+<h2 id="3-The-length-property"><a href="#3-The-length-property" class="headerlink" title="3 - The length property"></a>3 - The length property</h2><p>The length property can be used to know the number of arguments that where passed to the function when it was called. This can then be used as a way to have more than one expression that is used for something depending on the number of arguments that are given. For example say I want a method that will just get an element in an array by index if it is given one argument, but will use a more complex expression when given two arguments. </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> mod = &#123;</div><div class="line"> </div><div class="line">    <span class="attr">grid</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>],</div><div class="line"> </div><div class="line">    <span class="attr">w</span>: <span class="number">3</span>,</div><div class="line"> </div><div class="line">    <span class="attr">get</span>: <span class="function"><span class="keyword">function</span> (<span class="params">xi, y</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (<span class="built_in">arguments</span>.length &lt; <span class="number">1</span>) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (<span class="built_in">arguments</span>.length === <span class="number">1</span>) &#123;</div><div class="line"> </div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>.grid[xi];</div><div class="line"> </div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>.grid[y * <span class="keyword">this</span>.w + xi];</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"><span class="built_in">console</span>.log(mod.get(<span class="number">1</span>)); <span class="comment">// 2</span></div><div class="line"><span class="built_in">console</span>.log(mod.get(<span class="number">2</span>,<span class="number">1</span>)); <span class="comment">// 6</span></div></pre></td></tr></table></figure>
       
     </div>
     <footer class="article-footer">
@@ -165,6 +167,15 @@ ga('send', 'pageview');
   
     
 <nav id="article-nav">
+  
+    <a href="/2019/01/24/js-javascript-number/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          javaScript numbers the basics and more.
+        
+      </div>
+    </a>
   
   
     <a href="/2019/01/19/js-script-tag/" id="article-nav-older" class="article-nav-link-wrap">
@@ -237,7 +248,7 @@ s.setAttribute('data-timestamp', +new Date());
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
     </div>
   </div>
 
@@ -250,23 +261,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/01/21/js-javascript-arguments-object/">javaScript arguments object in action</a>
+            <a href="/2019/02/10/js-javascript-iframe/">Javascript iframe basics</a>
           </li>
         
           <li>
-            <a href="/2019/01/19/js-script-tag/">script tags in client side javaScript</a>
+            <a href="/2019/02/09/js-javascript-let/">Javascript let keyword for declaring block scoped variables</a>
           </li>
         
           <li>
-            <a href="/2019/01/16/js-event-listeners/">Event listeners in javaScript</a>
+            <a href="/2019/02/08/js-javascript-new/">Javascript new operator examples</a>
           </li>
         
           <li>
-            <a href="/2019/01/13/js-innerhtml/">innerhtml and alternatives for creating and appending html with javaScript</a>
+            <a href="/2019/02/06/js-javascript-equals/">Javascript == ,===, and more.</a>
           </li>
         
           <li>
-            <a href="/2019/01/08/js-onblur/">On blur event in javaScript</a>
+            <a href="/2019/02/02/js-operator-precedence/">Operator precedence AKA order of operations in javaScript</a>
           </li>
         
       </ul>
