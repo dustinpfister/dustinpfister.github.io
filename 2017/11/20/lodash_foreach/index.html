@@ -15,7 +15,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2017/11/20/lodash_foreach/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="I have been writing about lodash a lot these days, I feel that it is something that is still worth covering. It is true that many of the methods are now native in the late javaScript specs, but there">
-<meta property="og:updated_time" content="2017-11-20T16:03:49.000Z">
+<meta property="og:updated_time" content="2019-02-15T15:24:08.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="_.forEach in lodash vs javaScripts native Array.forEach">
 <meta name="twitter:description" content="I have been writing about lodash a lot these days, I feel that it is something that is still worth covering. It is true that many of the methods are now native in the late javaScript specs, but there">
@@ -117,10 +117,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/11/20/lodash_foreach/" class="article-date"> Modified:
-  <time datetime="2017-11-20T16:03:49.000Z" itemprop="dateModified">2017-11-20</time>
+  <time datetime="2019-02-15T15:24:08.000Z" itemprop="dateModified">2019-02-15</time>
 </a>
 
-    <span class="article-date">V1</span>
+    <span class="article-date">V1.3</span>
 
     
   <div class="article-category">
@@ -145,11 +145,12 @@ ga('send', 'pageview');
       
         <p>I have been writing about <a href="https://lodash.com/" target="_blank" rel="external">lodash</a> a lot these days, I feel that it is something that is still worth covering. It is true that many of the methods are now native in the late javaScript specs, but there are of course methods that are not. In addition it is true that many of the methods in lodash work a little differently then its native js counterpart, this appears to be the case with <a href="https://lodash.com/docs/4.17.4#forEach" target="_blank" rel="external">_.forEach</a>.</p>
 <a id="more"></a>
-<h2 id="forEach-Array-iteratee-vs-Array-forEach-iteratee"><a href="#forEach-Array-iteratee-vs-Array-forEach-iteratee" class="headerlink" title="_.forEach(Array,iteratee) vs Array.forEach(iteratee)"></a>_.forEach(Array,iteratee) vs Array.forEach(iteratee)</h2><p>The main difference that comes to mind is that I can define a condition that causes the looping of the array to stop.</p>
+<h2 id="1-lodash-forEach"><a href="#1-lodash-forEach" class="headerlink" title="1 - lodash forEach"></a>1 - lodash forEach</h2><p>The lodash _.forEach method is one of the many methods in lodash that is a collection method meaning it will work well with just about any object that is a collection of key value pairs in general, not just keys that are numbered and an instance of the javaScript array constructor.</p>
+<h2 id="2-forEach-Array-iteratee-vs-Array-forEach-iteratee"><a href="#2-forEach-Array-iteratee-vs-Array-forEach-iteratee" class="headerlink" title="2 - _.forEach(Array,iteratee) vs Array.forEach(iteratee)"></a>2 - _.forEach(Array,iteratee) vs Array.forEach(iteratee)</h2><p>The main difference that comes to mind is that I can define a condition that causes the looping of the array to stop.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// lodash _.forEach</span></div><div class="line">_.forEach([<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>],<span class="function"><span class="keyword">function</span>(<span class="params">el,index,arr</span>)</span>&#123;</div><div class="line"></div><div class="line">   <span class="built_in">console</span>.log(index + <span class="string">' : '</span> +el + <span class="string">' : '</span> + arr);</div><div class="line"></div><div class="line">   <span class="keyword">if</span>(el === <span class="string">'b'</span>)&#123;</div><div class="line"></div><div class="line">       <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line"></div><div class="line">   &#125;</div><div class="line"></div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">// 0 : a : a,b,c</span></div><div class="line"><span class="comment">// 1 : b : a,b,c</span></div><div class="line"></div><div class="line"><span class="comment">// native Array.forEach</span></div><div class="line">[<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>].forEach(<span class="function"><span class="keyword">function</span>(<span class="params">el,index,arr</span>)</span>&#123;</div><div class="line"></div><div class="line">   <span class="built_in">console</span>.log(index + <span class="string">' : '</span> +el + <span class="string">' : '</span> + arr);</div><div class="line"></div><div class="line">   <span class="keyword">if</span>(el === <span class="string">'b'</span>)&#123;</div><div class="line"></div><div class="line">       <span class="keyword">return</span> <span class="literal">false</span>; <span class="comment">// does nothing to stop it</span></div><div class="line"></div><div class="line">   &#125;</div><div class="line"></div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">// 0 : a : a,b,c</span></div><div class="line"><span class="comment">// 1 : b : a,b,c</span></div><div class="line"><span class="comment">// 2 : c : a,b,c</span></div></pre></td></tr></table></figure>
 <p>One of the main reasons why I choose to use a loop of some kind over Array.forEach is to have the ability to use the break, and continue keywords to cause looping to come to and end. However with the foreach method in lodash, I can return false in the body of the function I pass to it to break at least.</p>
-<h2 id="forEach-vs-while-and-for-loops"><a href="#forEach-vs-while-and-for-loops" class="headerlink" title="_.forEach vs while, and for loops"></a>_.forEach vs while, and for loops</h2><p>Just like with Array.forEach it some times makes sense to just use a loop of some kind. This allows for full control with respect to use of defining conditions with break, and continue, as well as complex conditions for starting, continuing, stepping, and additional escape conditions. There is also the matter that in some cases a loop is faster, but most of the time it does not make much of a difference, and I often view it as a nano pick issue.</p>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Hopefully answering a certain question many javaScript developers have these days. Which is the question of the relevance of lodash today. I would say the answer is to some effect yes, but if you say otherwise I understand why.</p>
+<h2 id="3-forEach-vs-while-and-for-loops"><a href="#3-forEach-vs-while-and-for-loops" class="headerlink" title="3 - _.forEach vs while, and for loops"></a>3 - _.forEach vs while, and for loops</h2><p>Just like with Array.forEach it some times makes sense to just use a loop of some kind. This allows for full control with respect to use of defining conditions with break, and continue, as well as complex conditions for starting, continuing, stepping, and additional escape conditions. There is also the matter that in some cases a loop is faster, but most of the time it does not make much of a difference, and I often view it as a nano pick issue.</p>
+<h2 id="4-Conclusion"><a href="#4-Conclusion" class="headerlink" title="4 - Conclusion"></a>4 - Conclusion</h2><p>Hopefully this post answered a certain question many javaScript developers may have these days, which is the question of the relevance of lodash today. I would say yes, but I can also understand the alternative mindset with this as well. If you enjoyed this post you might want to check out my main post on <a href="/2019/02/15/lodash/">lodash in general</a>, in any case thank you for reading.</p>
 
       
     </div>
@@ -171,7 +172,7 @@ ga('send', 'pageview');
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          Using _.includes in lodash to check Strings, Arrays, and Objects for a value
+          lodash includes method to check Strings, Arrays, and Objects for a value
         
       </div>
     </a>
@@ -260,23 +261,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/02/10/js-javascript-iframe/">Javascript iframe basics</a>
+            <a href="/2019/02/19/js-javascript-break/">javaScript break statement examples</a>
           </li>
         
           <li>
-            <a href="/2019/02/09/js-javascript-let/">Javascript let keyword for declaring block scoped variables</a>
+            <a href="/2019/02/17/js-arrow-functions/">Arrow Functions</a>
           </li>
         
           <li>
-            <a href="/2019/02/08/js-javascript-new/">Javascript new operator examples</a>
+            <a href="/2019/02/16/js-javascript-foreach/">JavaScript forEach with arrays and objects in general</a>
           </li>
         
           <li>
-            <a href="/2019/02/06/js-javascript-equals/">Javascript == ,===, and more.</a>
+            <a href="/2019/02/15/js-javascript-typeof/">javaScript typeof operator</a>
           </li>
         
           <li>
-            <a href="/2019/02/02/js-operator-precedence/">Operator precedence AKA order of operations in javaScript</a>
+            <a href="/2019/02/15/lodash/">lodash</a>
           </li>
         
       </ul>

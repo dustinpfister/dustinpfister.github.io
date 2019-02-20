@@ -15,7 +15,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2018/02/01/lodash_zip/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="The lodash _.zip method can be used to zip some separate arrays into one array of arrays. It is one of several helpful methods in lodash for working with multi-definitional arrays, as _.zip can be use">
-<meta property="og:updated_time" content="2018-07-14T00:34:14.000Z">
+<meta property="og:updated_time" content="2019-02-14T23:30:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The lodash _.zip method">
 <meta name="twitter:description" content="The lodash _.zip method can be used to zip some separate arrays into one array of arrays. It is one of several helpful methods in lodash for working with multi-definitional arrays, as _.zip can be use">
@@ -117,10 +117,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2018/02/01/lodash_zip/" class="article-date"> Modified:
-  <time datetime="2018-07-14T00:34:14.000Z" itemprop="dateModified">2018-07-13</time>
+  <time datetime="2019-02-14T23:30:55.000Z" itemprop="dateModified">2019-02-14</time>
 </a>
 
-    <span class="article-date">V1.2</span>
+    <span class="article-date">V1.3</span>
 
     
   <div class="article-category">
@@ -145,7 +145,7 @@ ga('send', 'pageview');
       
         <p>The <a href="https://lodash.com/" target="_blank" rel="external">lodash</a> <a href="https://lodash.com/docs/4.17.4#zip" target="_blank" rel="external">_.zip method</a> can be used to zip some separate arrays into one array of arrays. It is one of several helpful methods in lodash for working with multi-definitional arrays, as _.zip can be used as a way to create them. Another such method is <a href="/2017/09/13/lodash-chunk/">_.chunk</a> that can be used to make a multi deferential array from a single array, while _.zip can make them from two, or more arrays.</p>
 <a id="more"></a>
-<h2 id="1-What-to-know"><a href="#1-What-to-know" class="headerlink" title="1 - What to know"></a>1 - What to know</h2><p>This is a post on the _.zip method in lodash. I will be writing about this method, and some use case examples with it. I assume that you have at least some background with javaScript, and are just currently exploring lodash, and what it has to offer.</p>
+<h2 id="1-What-to-know"><a href="#1-What-to-know" class="headerlink" title="1 - What to know"></a>1 - What to know</h2><p>This is a post on the _.zip method in lodash one of the many <a href="/2019/02/14/lodash_array/">array methods in lodash</a>. I will be writing about this method, and some use case examples with it. I assume that you have at least some background with javaScript, and are just currently exploring lodash, and what it has to offer.</p>
 <h2 id="2-Some-background-on-multi-deferential-arrays-in-javaScript"><a href="#2-Some-background-on-multi-deferential-arrays-in-javaScript" class="headerlink" title="2 - Some background on multi-deferential arrays in javaScript"></a>2 - Some background on multi-deferential arrays in javaScript</h2><p>In javaScript I can have an array of arrays, or just a single array that follows a certain formula.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// array of arrays</span></div><div class="line"><span class="keyword">var</span> matrix = [</div><div class="line"> </div><div class="line">    [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>],</div><div class="line">    [<span class="number">1</span>,<span class="number">0</span>,<span class="number">5</span>,<span class="number">1</span>],</div><div class="line">    [<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>],</div><div class="line">    [<span class="number">2</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">3</span>]</div><div class="line"> </div><div class="line">];</div><div class="line"> </div><div class="line"><span class="keyword">var</span> x = <span class="number">2</span>, y = <span class="number">1</span>,</div><div class="line"> </div><div class="line"><span class="comment">// I can get a single element like this</span></div><div class="line">el = matrix[y][x];</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log( el ); <span class="comment">// 5</span></div><div class="line"> </div><div class="line"><span class="comment">// just a single array</span></div><div class="line"><span class="keyword">var</span> matrix = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">5</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">3</span>],</div><div class="line">w = <span class="number">4</span>;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> x = <span class="number">2</span>, y = <span class="number">1</span>,</div><div class="line"> </div><div class="line"><span class="comment">// I can do the same thing with a single array</span></div><div class="line"><span class="comment">// if I know the width</span></div><div class="line">el = matrix[ y * w + x];</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(el); <span class="comment">// 5</span></div></pre></td></tr></table></figure>
 <p>It’s just two different ways of doing the same thing. In lodash there are a few methods of interest that help make quick work of converting between these two ways have having data organized in arrays. In this post I will be covering mainly how _.zip can be useful in these situations.</p>
@@ -264,23 +264,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/02/10/js-javascript-iframe/">Javascript iframe basics</a>
+            <a href="/2019/02/19/js-javascript-break/">javaScript break statement examples</a>
           </li>
         
           <li>
-            <a href="/2019/02/09/js-javascript-let/">Javascript let keyword for declaring block scoped variables</a>
+            <a href="/2019/02/17/js-arrow-functions/">Arrow Functions</a>
           </li>
         
           <li>
-            <a href="/2019/02/08/js-javascript-new/">Javascript new operator examples</a>
+            <a href="/2019/02/16/js-javascript-foreach/">JavaScript forEach with arrays and objects in general</a>
           </li>
         
           <li>
-            <a href="/2019/02/06/js-javascript-equals/">Javascript == ,===, and more.</a>
+            <a href="/2019/02/15/js-javascript-typeof/">javaScript typeof operator</a>
           </li>
         
           <li>
-            <a href="/2019/02/02/js-operator-precedence/">Operator precedence AKA order of operations in javaScript</a>
+            <a href="/2019/02/15/lodash/">lodash</a>
           </li>
         
       </ul>
