@@ -3,7 +3,9 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Using app.get in express to get app settings, and handle get requests. | Dustin John Pfister at github pages</title>
+  <title>Express.get app method to get app settings, and handle get requests. | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
   
   
   <link rel="canonical" href="https://dustinpfister.github.io/2018/06/20/express-get/" />
@@ -11,13 +13,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="The app.get method in express.js has two uses, one is for getting the value of a local app setting, and the other is to define what to do with http GET requests. So in other words it’s behavior is ver">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Using app.get in express to get app settings, and handle get requests.">
+<meta property="og:title" content="Express.get app method to get app settings, and handle get requests.">
 <meta property="og:url" content="https://dustinpfister.github.io/2018/06/20/express-get/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="The app.get method in express.js has two uses, one is for getting the value of a local app setting, and the other is to define what to do with http GET requests. So in other words it’s behavior is ver">
-<meta property="og:updated_time" content="2018-06-20T17:28:54.000Z">
+<meta property="og:updated_time" content="2019-04-19T01:14:34.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Using app.get in express to get app settings, and handle get requests.">
+<meta name="twitter:title" content="Express.get app method to get app settings, and handle get requests.">
 <meta name="twitter:description" content="The app.get method in express.js has two uses, one is for getting the value of a local app setting, and the other is to define what to do with http GET requests. So in other words it’s behavior is ver">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
@@ -59,7 +61,8 @@ ga('send', 'pageview');
 </script>
 <!-- end structured data -->
   
-  <!-- adsense -->
+  <!-- adsense if indexed -->
+  
   <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <script>
   (adsbygoogle = window.adsbygoogle || []).push({
@@ -67,6 +70,7 @@ ga('send', 'pageview');
     enable_page_level_ads: true
   });
   </script>
+  
   
 </head>
 
@@ -117,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2018/06/20/express-get/" class="article-date"> Modified:
-  <time datetime="2018-06-20T17:28:54.000Z" itemprop="dateModified">2018-06-20</time>
+  <time datetime="2019-04-19T01:14:34.000Z" itemprop="dateModified">2019-04-18</time>
 </a>
 
-    <span class="article-date">V1.4</span>
+    <span class="article-date">V1.6</span>
 
     
   <div class="article-category">
@@ -135,7 +139,7 @@ ga('send', 'pageview');
         
   
     <h1 class="article-title" itemprop="name">
-      Using app.get in express to get app settings, and handle get requests.
+      Express.get app method to get app settings, and handle get requests.
     </h1>
   
 
@@ -145,8 +149,8 @@ ga('send', 'pageview');
       
         <p>The app.get method in <a href="https://expressjs.com/" target="_blank" rel="external">express.js</a> has two uses, one is for getting the value of a local app setting, and the other is to define what to do with http GET requests. So in other words it’s behavior is very different depending on the number of arguments that are given to it. If I just want to get the value of a certain app setting I only need to give the key of that setting to receive the corresponding key value. However if I want to do something with get requests I will want to not just give the path or pattern, but one or more functions that will do something with that incoming http get request. So this dual use of app.get works out okay, and as such I do not find it that confusing. So this will be a quick post on the ins and outs of app.get.</p>
 <a id="more"></a>
-<h3 id="1-What-to-know"><a href="#1-What-to-know" class="headerlink" title="1 - What to know"></a>1 - What to know</h3><p>This is a post on the app.get method in express.js, I will noe be getting into detail with eveything else about express, and node.js in this post. If interested you might want to check out my <a href="/2018/06/12/express/">main post on express.js</a>, if you are new to express.</p>
-<h3 id="2-Using-app-get-to-get-app-settings-values"><a href="#2-Using-app-get-to-get-app-settings-values" class="headerlink" title="2 - Using app.get to get app settings values"></a>2 - Using app.get to get app settings values</h3><p>When only giving one value to app.get that value is treated as a key in an object of key value pairs that are various settings for the app. There are many settings there to begin with, and it is also possible to set values with app.set to be used in various places in the body of an express.js app.</p>
+<h3 id="1-Express-get-method-basics"><a href="#1-Express-get-method-basics" class="headerlink" title="1 - Express get method basics"></a>1 - Express get method basics</h3><p>This is a post on the app.get method in express.js, I will noe be getting into detail with eveything else about express, and node.js in this post. If interested you might want to check out my <a href="/2018/06/12/express/">main post on express.js</a>, if you are new to express.</p>
+<h3 id="2-Using-app-get-to-get-app-settings-values"><a href="#2-Using-app-get-to-get-app-settings-values" class="headerlink" title="2 - Using app.get to get app settings values"></a>2 - Using app.get to get app settings values</h3><p>When only giving one value to app.get that value is treated as a key in an object of key value pairs that are various settings for the app. There are many settings there to begin with, and it is also possible to set values with <a href="/2019/04/18/express-set">app.set</a> to be used in various places in the body of an express.js app.</p>
 <h3 id="2-1-Getting-the-environment-value"><a href="#2-1-Getting-the-environment-value" class="headerlink" title="2.1 - Getting the environment value"></a>2.1 - Getting the environment value</h3><p>One value that should be there to begin with is the env setting. This is a setting that is used to find out if the app is in development or production mode.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(app.get(<span class="string">'env'</span>)); <span class="comment">// development</span></div></pre></td></tr></table></figure>
 <h3 id="2-2-Setting-the-full-list-of-settings"><a href="#2-2-Setting-the-full-list-of-settings" class="headerlink" title="2.2 - Setting the full list of settings"></a>2.2 - Setting the full list of settings</h3><p>If you want to know the full list of setting that currently exist in an app, the object of interest is at app.locals.</p>
@@ -184,7 +188,7 @@ ga('send', 'pageview');
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          Using app.delete, to delete a server side file via the http delete method in express.
+          Express app.delete, to delete a server side file via the http delete method.
         
       </div>
     </a>
@@ -210,7 +214,7 @@ ga('send', 'pageview');
 var disqus_config = function () {
     this.page.url = 'https://dustinpfister.github.io/2018/06/20/express-get/index.html';
     this.page.identifier = '212';
-    this.page.title = 'Using app.get in express to get app settings, and handle get requests.';
+    this.page.title = 'Express.get app method to get app settings, and handle get requests.';
 };
 
 (function() {
@@ -251,7 +255,7 @@ s.setAttribute('data-timestamp', +new Date());
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/JSON/" style="font-size: 12.22px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 12.78px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.56px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.22px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.78px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 16.11px;">express</a> <a href="/tags/games/" style="font-size: 17.78px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.44px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.67px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.33px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.89px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.67px;">three.js</a>
+      <a href="/tags/JSON/" style="font-size: 12.22px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 12.78px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.56px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.22px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.78px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 16.67px;">express</a> <a href="/tags/games/" style="font-size: 17.78px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.44px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.67px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.33px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.89px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.11px;">three.js</a>
     </div>
   </div>
 
@@ -273,23 +277,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/04/11/js-function-declaration/">Function Declarations in javaScript</a>
+            <a href="/2019/04/22/express-middleware-applaction-level/">Express Middleware Example Read and Write to a file</a>
           </li>
         
           <li>
-            <a href="/2019/04/08/js-string-replace/">String Replace prototype method in javaScript</a>
+            <a href="/2019/04/21/express-middleware-example-read-write-file/">Express Middleware Example Read and Write to a file</a>
           </li>
         
           <li>
-            <a href="/2019/04/06/js-string-match/">String Match prototype method in javaScript</a>
+            <a href="/2019/04/20/express-middleware-example-keyword-viewer/">Express Middleware Example Keyword Viewer App</a>
           </li>
         
           <li>
-            <a href="/2019/04/05/lodash_template/">lodash template</a>
+            <a href="/2019/04/19/express-middleware-basics/">Express Middleware Basics</a>
           </li>
         
           <li>
-            <a href="/2019/04/02/lodash_over/">lodash over</a>
+            <a href="/2019/04/18/express-set/">Express set</a>
           </li>
         
       </ul>
