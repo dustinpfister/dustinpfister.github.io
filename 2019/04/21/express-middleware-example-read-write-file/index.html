@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2019/04/21/express-middleware-example-read-write-file/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="maybe one of the best ways to learn about the value of express middleware is to just start developing example after example in which one uses express middleware to accomplish all kids of tasks. So thi">
-<meta property="og:updated_time" content="2019-04-22T12:05:16.000Z">
+<meta property="og:updated_time" content="2019-04-27T16:31:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Express Middleware Example Read and Write to a file">
 <meta name="twitter:description" content="maybe one of the best ways to learn about the value of express middleware is to just start developing example after example in which one uses express middleware to accomplish all kids of tasks. So thi">
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2019/04/21/express-middleware-example-read-write-file/" class="article-date"> Modified:
-  <time datetime="2019-04-22T12:05:16.000Z" itemprop="dateModified">2019-04-22</time>
+  <time datetime="2019-04-27T16:31:49.000Z" itemprop="dateModified">2019-04-27</time>
 </a>
 
-    <span class="article-date">V1.12</span>
+    <span class="article-date">V1.13</span>
 
     
   <div class="article-category">
@@ -149,7 +149,7 @@ ga('send', 'pageview');
       
         <p>maybe one of the best ways to learn about the value of <a href="https://expressjs.com/en/guide/using-middleware.html" target="_blank" rel="external">express middleware</a> is to just start developing example after example in which one uses express middleware to accomplish all kids of tasks. So this post will be one of several posts on express middleware examples. Today in this post I will be going over a very simple example of router level middleware that just reads and writes to a file. It will also involve a very basic client system that exists as some static files hosted via express.static.</p>
 <a id="more"></a>
-<h2 id="1-Express-Middleware-and-what-to-know-before-continuing"><a href="#1-Express-Middleware-and-what-to-know-before-continuing" class="headerlink" title="1 - Express Middleware and what to know before continuing"></a>1 - Express Middleware and what to know before continuing</h2><p>I have wrote a post before hand in which I cover <a href="/2019/04/19/express-middleware-basics/">the basics of express middleware</a>, and I also have another post on <a href="/2018/06/25/express-middleware/">express middleware in general</a> also. So I will not be getting into detail about the basics of express here, I also assume that you have at least some background with node.js, and javaScript in general.</p>
+<h2 id="1-Express-Middleware-and-what-to-know-before-continuing"><a href="#1-Express-Middleware-and-what-to-know-before-continuing" class="headerlink" title="1 - Express Middleware and what to know before continuing"></a>1 - Express Middleware and what to know before continuing</h2><p>I have wrote a post before hand in which I cover <a href="/2019/04/19/express-middleware-basics/">the basics of express middleware</a>, and I also have another post on <a href="/2018/06/25/express-middleware/">express middleware in general</a> also. So I will not be getting into detail about the basics of express here, I also assume that you have at least some background with node.js, and javaScript in general. For more on express realted topics be sure to check out my <a href="/2018/06/12/express">main post on expressjs</a>.</p>
 <h2 id="2-The-Middleware-that-will-read-and-write-to-the-file"><a href="#2-The-Middleware-that-will-read-and-write-to-the-file" class="headerlink" title="2 - The Middleware that will read and write to the file"></a>2 - The Middleware that will read and write to the file</h2><p>Here I have the router level middleware file that will use the node.js fs module to read and write just a simple plain text file that can be created and edited from a basic client system that I will be getting to later in this post. For more on router level middleware be sure to check out my post on <a href="/2018/05/22/express-routers/">routers in express.js</a>.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>),</div><div class="line">fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line">dir_file = <span class="string">'./file.txt'</span>;</div><div class="line"></div><div class="line"><span class="comment">// create a router, and use body-parser</span></div><div class="line">router = <span class="built_in">module</span>.exports = express.Router();</div><div class="line">router.use(<span class="built_in">require</span>(<span class="string">'body-parser'</span>).json());</div><div class="line"></div><div class="line"><span class="comment">// what to do for GET and Post requests</span></div><div class="line">router.get(<span class="string">'*'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line">    fs.readFile(dir_file, <span class="string">'utf-8'</span>, (e, text) =&gt; &#123;</div><div class="line">        <span class="keyword">if</span> (e) &#123;</div><div class="line">            res.send(<span class="string">''</span>);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            res.send(text);</div><div class="line">        &#125;</div><div class="line">    &#125;)</div><div class="line">&#125;);</div><div class="line">router.post(<span class="string">'*'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line">    fs.writeFile(dir_file, req.body.text, (e) =&gt; &#123;</div><div class="line">        res.send(<span class="built_in">JSON</span>.stringify(&#123;</div><div class="line">                <span class="attr">e</span>: e</div><div class="line">            &#125;))</div><div class="line">    &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p>In this file I am creating and exporting an express router, and defining what will happen for all get and post requests when this middleware is used in a main app.js file with the <a href="/2018/06/18/express-app-use/">app.use method</a>. For get requests I am just simply reading the file and sending the data of that file or an empty string in the event of an error. For post requests I am parsing some incoming json and using the text property of that object sent from the client to write the contents of the file.</p>
@@ -250,7 +250,7 @@ s.setAttribute('data-timestamp', +new Date());
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/JSON/" style="font-size: 12.22px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 12.78px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.56px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.22px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.78px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 16.67px;">express</a> <a href="/tags/games/" style="font-size: 17.78px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.44px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.67px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.33px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.89px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.11px;">three.js</a>
+      <a href="/tags/JSON/" style="font-size: 12.22px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 12.78px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.56px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.67px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.78px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 17.22px;">express</a> <a href="/tags/games/" style="font-size: 17.78px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.44px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.67px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.33px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.89px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.11px;">three.js</a>
     </div>
   </div>
 
@@ -272,23 +272,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/04/22/express-middleware-applaction-level/">Express Middleware Example Read and Write to a file</a>
+            <a href="/2019/04/29/express-status/">Express status getting and setting a http status code</a>
           </li>
         
           <li>
-            <a href="/2019/04/21/express-middleware-example-read-write-file/">Express Middleware Example Read and Write to a file</a>
+            <a href="/2019/04/28/express-end/">Express end response method</a>
           </li>
         
           <li>
-            <a href="/2019/04/20/express-middleware-example-keyword-viewer/">Express Middleware Example Keyword Viewer App</a>
+            <a href="/2019/04/27/express-response-objects/">Express response objects</a>
           </li>
         
           <li>
-            <a href="/2019/04/19/express-middleware-basics/">Express Middleware Basics</a>
+            <a href="/2019/04/26/express-redirect/">Express redirect</a>
           </li>
         
           <li>
-            <a href="/2019/04/18/express-set/">Express set</a>
+            <a href="/2019/04/25/express-view/">Express view</a>
           </li>
         
       </ul>
