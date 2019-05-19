@@ -11,16 +11,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2017/02/09/api-fixer/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Lately I was helping a friend of mine prepare for a trip to India. While doing so one of the things she wanted to get done was to type up a table that included US dollar amounts on one column, and t">
+  <meta name="description" content="Lately I was helping a friend of mine prepare for a trip to India. While doing so one of the things she wanted to get done was to type up a table that included US dollar amounts on one column, and the">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Fixer.io JSON API">
 <meta property="og:url" content="https://dustinpfister.github.io/2017/02/09/api-fixer/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="Lately I was helping a friend of mine prepare for a trip to India. While doing so one of the things she wanted to get done was to type up a table that included US dollar amounts on one column, and t">
-<meta property="og:updated_time" content="2017-05-19T19:55:50.000Z">
+<meta property="og:description" content="Lately I was helping a friend of mine prepare for a trip to India. While doing so one of the things she wanted to get done was to type up a table that included US dollar amounts on one column, and the">
+<meta property="og:updated_time" content="2019-05-10T22:43:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Fixer.io JSON API">
-<meta name="twitter:description" content="Lately I was helping a friend of mine prepare for a trip to India. While doing so one of the things she wanted to get done was to type up a table that included US dollar amounts on one column, and t">
+<meta name="twitter:description" content="Lately I was helping a friend of mine prepare for a trip to India. While doing so one of the things she wanted to get done was to type up a table that included US dollar amounts on one column, and the">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/02/09/api-fixer/" class="article-date"> Modified:
-  <time datetime="2017-05-19T19:55:50.000Z" itemprop="dateModified">2017-05-19</time>
+  <time datetime="2019-05-10T22:43:04.000Z" itemprop="dateModified">2019-05-10</time>
 </a>
 
-    <span class="article-date">V1.2</span>
+    <span class="article-date">V1.4</span>
 
     
   <div class="article-category">
@@ -147,139 +147,110 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        
-<meta itemprop="keywords" content="fixer.io,api&#32;fixer,jsonp">
-
-<p>Lately I was helping a friend of mine prepare for a trip to India. While doing so one of the things she wanted to get done was to type up a table that included US dollar amounts on one column, and the rupee equivalent in the other.</p>
+        <p>Lately I was helping a friend of mine prepare for a trip to India. While doing so one of the things she wanted to get done was to type up a table that included US dollar amounts on one column, and the rupee equivalent in the other. The <a href="http://fixer.io" target="_blank" rel="external">fixer api</a> is one way to go about getting up to date exchange rates.</p>
 <a id="more"></a>
-<p>I have been developing scripts involving finding ways of automating a great deal of my work flow to help reduce the amount of time I spend on repetitive tasks, so I have more time to spend on the novel stuff. That got me thinking that maybe it would be fun to see if I could automate the process of making her table, for the heck of it, and maybe doing so would be a bit helpful for her. Exchange rates are always jumping up and down, and every time a significant change happens she would have to write the table again.</p>
+<h2 id="1-API-fixer-is-no-longer-free"><a href="#1-API-fixer-is-no-longer-free" class="headerlink" title="1 - API fixer is no longer free"></a>1 - API fixer is no longer free</h2><p>The fixer api was once a free way to go about getting up to date exchange rates, but now it costs money. There is still a free account plan, but an account still needs to be set up to get an access token and use the api.</p>
+<h2 id="2-The-problem-API-fixer-can-solve"><a href="#2-The-problem-API-fixer-can-solve" class="headerlink" title="2 - The problem API fixer can solve"></a>2 - The problem API fixer can solve</h2><p>I have been developing scripts involving finding ways of automating a great deal of my work flow to help reduce the amount of time I spend on repetitive tasks, so I have more time to spend on the novel stuff. That got me thinking that maybe it would be fun to see if I could automate the process of making her table, for the heck of it, and maybe doing so would be a bit helpful for her. Exchange rates are always jumping up and down, and every time a significant change happens she would have to write the table again.</p>
 <p>So typing up a simple little script that loops over an array of amounts, and multiplies the amount by an exchange rate is pretty darn simple. I love fun little exercises like that, so I put this together in a flash.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> rate = <span class="number">67</span>,</div><div class="line">dollars = [<span class="number">.01</span>,<span class="number">.25</span>,<span class="number">1</span>,<span class="number">5</span>,<span class="number">10</span>,<span class="number">20</span>,<span class="number">50</span>,<span class="number">100</span>,<span class="number">500</span>,<span class="number">100</span>],</div><div class="line">rupees = [];</div><div class="line"> </div><div class="line">dollars.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">amount</span>)</span>&#123;</div><div class="line"> </div><div class="line">    rupees.push(amount * rate);</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(rupees);</div></pre></td></tr></table></figure>
 <p>Then of course it is just a matter of rendering these two parallel arrays into an HTML table. However there is just one problem, she would have to still manually edit the exchange rate value to generate an up to date list. Thats when I thought that there must be some kind of JSONP service that spits out up to date exchange rate values for say US Dollars, and Indian Rupees. After some quick google searches I was able to find a few API’s that do just that. </p>
-<p>Most of the sites that offer this service cost money, or there is a limit on the number of requests per month. A lot of them give current rates up to the second, which is cool. However I thought that maybe there was a free service that updates just once a day, as that would work okay for now. To my satisfaction I was able to find one that was just what I was looking for called <a href="http://fixer.io" target="_blank" rel="external">fixer.io</a></p>
+<h2 id="2-Api-fixer-basic-example"><a href="#2-Api-fixer-basic-example" class="headerlink" title="2 - Api fixer basic example"></a>2 - Api fixer basic example</h2><p>Most of the sites that offer this service cost money, or there is a limit on the number of requests per month. A lot of them give current rates up to the second, which is cool. However I thought that maybe there was a free service that updates just once a day, as that would work okay for now. To my satisfaction I was able to find one that was just what I was looking for called fixer.io</p>
 <p>With fixer if I make a GET request with a url like this.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://api.fixer.io/latest?base=INR;symbols=USD</div></pre></td></tr></table></figure></p>
 <p>fixer will give me this JSON Data.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;<span class="string">"base"</span>:<span class="string">"INR"</span>,<span class="string">"date"</span>:<span class="string">"2017-02-10"</span>,<span class="string">"rates"</span>:&#123;<span class="string">"USD"</span>:<span class="number">0.01494</span>&#125;&#125;</div></pre></td></tr></table></figure>
 <p>There’s my up to date rate, to help make life yet even more lazy. Now I just need to generate a table with that rate and my friend can have an up to date table of rates each time she visits a page, say maybe this one. Yeah that sounds good, why not, I’ll put it here.</p>
-<p><div id="fixer_table"></div></p>
+<p><div id="fixer_table"></div><br>&lt;!–</p>
 <script>
 
-// default data
-var defaults = {
+<p>// default data<br>var defaults = {</p>
+<pre><code>rates : {
 
-    rates : {
-
-        INR : 67.36,
-        USD : 0.01494
-
-    },
-
-    date : '2-8-17'
-
-},
-data = defaults,
-base = 'INR',
-compare = 'USD',
-id = 'fixer_table',
-
-render = function (reverse) {
-
-    var html = '',
-
-    rate,
-
-    amounts = [.01, .05, .10, .25, .5, .75, 1, 2, 5, 10, 20, 50, 67, 100, 150,200,250,500, 750,1000,2000,5000,10000];
-
-    rate = data.rates[compare];
-    if (reverse) {
-
-        rate = 1 / data.rates[compare];
-
-    }
-
-    html += '<p>Date of rate: ' + data.date + '<\/p>';
-
-    html += '<table>';
-
-    if (reverse) {
-
-        html += '<tr><td colspan=\"2\">' + compare + ' to ' + base + ' rate : ' + rate.toFixed(3) + '<\/td><\/tr>';
-        html += '<tr><th>' + compare + '<\/th><th>' + base + '<\/th><\/tr>';
-
-    } else {
-
-        html += '<tr><td colspan=\"2\">' + base + ' to ' + compare + ' rate : ' + rate.toFixed(3) + '<\/td><\/tr>';
-        html += '<tr><th>' + base + '<\/th><th>' + compare + '<\/th><\/tr>';
-
-    }
-
-    amounts.forEach(function (amount) {
-
-        var convert = Number(amount * rate).toFixed(2);
-
-        html += '<tr>';
-        html += '<td>' + amount + '<\/td>';
-        html += '<td>' + convert + '<\/td>';
-        html += '<\/tr>';
-
-    });
-    html += '<\/table>';
-
-    document.getElementById(id).innerHTML += html;
+    INR : 67.36,
+    USD : 0.01494
 
 },
 
-// what to do on readystate 4 (status 200 or 0)
-update = function (req) {
+date : &apos;2-8-17&apos;
+</code></pre><p>},<br>data = defaults,<br>base = ‘INR’,<br>compare = ‘USD’,<br>id = ‘fixer_table’,</p>
+<p>render = function (reverse) {</p>
+<pre><code>var html = &apos;&apos;,
 
-    if (req.response) {
+rate,
 
-        try {
+amounts = [.01, .05, .10, .25, .5, .75, 1, 2, 5, 10, 20, 50, 67, 100, 150,200,250,500, 750,1000,2000,5000,10000];
 
-            data = JSON.parse(req.response);
+rate = data.rates[compare];
+if (reverse) {
 
-        } catch (e) {
+    rate = 1 / data.rates[compare];
 
-            data = defaults;
+}
 
-        }
+html += &apos;&lt;p&gt;Date of rate: &apos; + data.date + &apos;&lt;\/p&gt;&apos;;
 
-    } else {
+html += &apos;&lt;table&gt;&apos;;
+
+if (reverse) {
+
+    html += &apos;&lt;tr&gt;&lt;td colspan=\&quot;2\&quot;&gt;&apos; + compare + &apos; to &apos; + base + &apos; rate : &apos; + rate.toFixed(3) + &apos;&lt;\/td&gt;&lt;\/tr&gt;&apos;;
+    html += &apos;&lt;tr&gt;&lt;th&gt;&apos; + compare + &apos;&lt;\/th&gt;&lt;th&gt;&apos; + base + &apos;&lt;\/th&gt;&lt;\/tr&gt;&apos;;
+
+} else {
+
+    html += &apos;&lt;tr&gt;&lt;td colspan=\&quot;2\&quot;&gt;&apos; + base + &apos; to &apos; + compare + &apos; rate : &apos; + rate.toFixed(3) + &apos;&lt;\/td&gt;&lt;\/tr&gt;&apos;;
+    html += &apos;&lt;tr&gt;&lt;th&gt;&apos; + base + &apos;&lt;\/th&gt;&lt;th&gt;&apos; + compare + &apos;&lt;\/th&gt;&lt;\/tr&gt;&apos;;
+
+}
+
+amounts.forEach(function (amount) {
+
+    var convert = Number(amount * rate).toFixed(2);
+
+    html += &apos;&lt;tr&gt;&apos;;
+    html += &apos;&lt;td&gt;&apos; + amount + &apos;&lt;\/td&gt;&apos;;
+    html += &apos;&lt;td&gt;&apos; + convert + &apos;&lt;\/td&gt;&apos;;
+    html += &apos;&lt;\/tr&gt;&apos;;
+
+});
+html += &apos;&lt;\/table&gt;&apos;;
+
+document.getElementById(id).innerHTML += html;
+</code></pre><p>},</p>
+<p>// what to do on readystate 4 (status 200 or 0)<br>update = function (req) {</p>
+<pre><code>if (req.response) {
+
+    try {
+
+        data = JSON.parse(req.response);
+
+    } catch (e) {
 
         data = defaults;
 
     }
 
-    render(false);
-    render(true);
+} else {
 
-},
+    data = defaults;
 
-// make a request
-req = new XMLHttpRequest();
+}
 
-// I want JSON from fixer.io with the given base currency
-req.open('get', 'https://api.fixer.io/latest?base=' + base + ';symbols=' + compare);
+render(false);
+render(true);
+</code></pre><p>},</p>
+<p>// make a request<br>req = new XMLHttpRequest();</p>
+<p>// I want JSON from fixer.io with the given base currency<br>req.open(‘get’, ‘<a href="https://api.fixer.io/latest?base=">https://api.fixer.io/latest?base=</a>‘ + base + ‘;symbols=’ + compare);</p>
+<p>req.onreadystatechange = function () {</p>
+<pre><code>if (req.readyState === 4) {
 
-req.onreadystatechange = function () {
+    update(req);
 
-    if (req.readyState === 4) {
-
-        update(req);
-
-    }
-
-};
-
-req.onerror = function (e) {}
-
-req.send();
-
-
-
-</script>
-
-<h2 id="UPDATE-Using-data-from-fixer-in-a-tag-and-other-concerns"><a href="#UPDATE-Using-data-from-fixer-in-a-tag-and-other-concerns" class="headerlink" title="UPDATE: Using data from fixer in a tag, and other concerns"></a>UPDATE: Using data from fixer in a tag, and other concerns</h2><p>When I first wrote this post a few months ago I have not yet figured out how to go about directly writing html content with a hexo tag. In this post I am directly rendering html content with data from an scripted http request, without any static fall back. Sense then I have <a href="/2017/05/19/hexo-tags-http-requests/">wrote a post on how to do that</a>, as well as another <a href="/2017/05/18/api-fixer-progressive-enhancement/">post on progressive enhancement</a>.</p>
+}
+</code></pre><p>};</p>
+<p>req.onerror = function (e) {}</p>
+<p>req.send();</p>
+<p></script><br>–&gt;<p></p>
+<h2 id="3-UPDATE-Using-data-from-fixer-in-a-tag-and-other-concerns"><a href="#3-UPDATE-Using-data-from-fixer-in-a-tag-and-other-concerns" class="headerlink" title="3 - UPDATE: Using data from fixer in a tag, and other concerns"></a>3 - UPDATE: Using data from fixer in a tag, and other concerns</h2><p>When I first wrote this post a few months ago I have not yet figured out how to go about directly writing html content with a hexo tag. In this post I am directly rendering html content with data from an scripted http request, without any static fall back. Sense then I have <a href="/2017/05/19/hexo-tags-http-requests/">wrote a post on how to do that</a>, as well as another <a href="/2017/05/18/api-fixer-progressive-enhancement/">post on progressive enhancement</a>.</p>
 
       
     </div>
@@ -368,7 +339,7 @@ s.setAttribute('data-timestamp', +new Date());
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/JSON/" style="font-size: 12.22px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 12.78px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.56px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.67px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.78px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 17.22px;">express</a> <a href="/tags/games/" style="font-size: 17.78px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.44px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.67px;">heroku</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.33px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 15px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.89px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.11px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 12.22px;">vuejs</a>
+      <a href="/tags/JSON/" style="font-size: 12.11px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.53px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.68px;">angular</a> <a href="/tags/animation/" style="font-size: 12.63px;">animation</a> <a href="/tags/automation/" style="font-size: 12.63px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.16px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.79px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.84px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.63px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.05px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.58px;">ejs</a> <a href="/tags/express/" style="font-size: 17.37px;">express</a> <a href="/tags/games/" style="font-size: 17.89px;">games</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.21px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.58px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.74px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.53px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.58px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.58px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.42px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.74px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.47px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.95px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.11px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.32px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.26px;">vuejs</a>
     </div>
   </div>
 
@@ -390,23 +361,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/05/09/vuejs-extend/">The vue extend global api method in vuejs</a>
+            <a href="/2019/05/18/vuejs-data/">vue data in components and plain old vue instances</a>
           </li>
         
           <li>
-            <a href="/2019/05/08/vuejs-set/">vue set for setting reactive properties in vuejs</a>
+            <a href="/2019/05/17/vuejs-slot/">vue slots</a>
           </li>
         
           <li>
-            <a href="/2019/05/07/vuejs-template/">vue template option for defining templates in vuejs</a>
+            <a href="/2019/05/16/vuejs-component/">vue components</a>
           </li>
         
           <li>
-            <a href="/2019/05/06/vuejs-el/">vue el option for selecting a vuejs DOM mount point</a>
+            <a href="/2019/05/15/js-parseint/">parseInt and other options for parsing numbers in javaScript</a>
           </li>
         
           <li>
-            <a href="/2019/05/05/vuejs-getting-started/">vue start with setup and some basic examples</a>
+            <a href="/2019/05/15/lodash_has/">lodash has method</a>
           </li>
         
       </ul>
