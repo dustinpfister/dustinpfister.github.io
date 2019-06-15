@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2019/01/29/js-javascript-scope/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="The variable scope of a variable in javaScipt is the area in code where the variable is defined. If a variable is inside the scope of a section of code it is of use there, else it can not be accessed.">
-<meta property="og:updated_time" content="2019-02-09T17:25:55.000Z">
+<meta property="og:updated_time" content="2019-06-11T23:46:41.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Variable scope in javaScript">
 <meta name="twitter:description" content="The variable scope of a variable in javaScipt is the area in code where the variable is defined. If a variable is inside the scope of a section of code it is of use there, else it can not be accessed.">
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2019/01/29/js-javascript-scope/" class="article-date"> Modified:
-  <time datetime="2019-02-09T17:25:55.000Z" itemprop="dateModified">2019-02-09</time>
+  <time datetime="2019-06-11T23:46:41.000Z" itemprop="dateModified">2019-06-11</time>
 </a>
 
-    <span class="article-date">V1.5</span>
+    <span class="article-date">V1.7</span>
 
     
   <div class="article-category">
@@ -156,7 +156,10 @@ ga('send', 'pageview');
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> n = <span class="number">1</span>;</div><div class="line"><span class="keyword">var</span> mod = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> n = <span class="number">2</span>;</div><div class="line">    <span class="keyword">var</span> foo = <span class="function"><span class="keyword">function</span> (<span class="params">a</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> n = <span class="number">3</span>;</div><div class="line">        <span class="keyword">return</span> n + a;</div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">b</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> foo(n + b);</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line">    ());</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(mod(n)); <span class="comment">// 6</span></div></pre></td></tr></table></figure>
 <p>If I want to access a variable of the same name lower down the scope chain I will want to omit the use of the var keyword to do so.</p>
 <h2 id="2-block-variable-scope-with-let"><a href="#2-block-variable-scope-with-let" class="headerlink" title="2 - block variable scope with let"></a>2 - block variable scope with let</h2><p>With let block scope is possible rather than just function level scope. So the same situation is possible as with var, only now it is something that is in effect each time there is any kind of block of code. This can also be a function as well, but it can also be an if statement or a loop of one kind or another.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> n = <span class="number">40</span>;</div><div class="line"> </div><div class="line"><span class="keyword">if</span> (n &gt; <span class="number">32</span>) &#123;</div><div class="line">    <span class="keyword">let</span> n = <span class="number">16</span>;</div><div class="line">    <span class="built_in">console</span>.log(n);</div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(n);</div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> n = <span class="number">40</span>;</div><div class="line"> </div><div class="line"><span class="keyword">if</span> (n &gt; <span class="number">32</span>) &#123;</div><div class="line">    <span class="keyword">let</span> n = <span class="number">16</span>;</div><div class="line">    <span class="built_in">console</span>.log(n); <span class="comment">// 16</span></div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(n); <span class="comment">// 40</span></div></pre></td></tr></table></figure>
+<p>In the above example the value for n in the body of the if statement differs from the value of n outside of the if statement. If all instances of let where to be replaced with var this would not be the case, it would be the same scoped variable that is changed inside the if statement then.</p>
+<h2 id="3-Block-variable-scope-with-const"><a href="#3-Block-variable-scope-with-const" class="headerlink" title="3 - Block variable scope with const"></a>3 - Block variable scope with const</h2><p>Another option for declaring variables that was introduced in es2015 javaScript was by using the const keyword as yet another option to var. Like let this also results in block level variable scope rather than the function level scope that is the result of using var. However unlike bolt var and let const is intended to be used for constants, and thus whatever is define with const can only be declared once. After than any attempt to change a vale set with const will result in an error.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> n = <span class="number">40</span>;</div><div class="line"> </div><div class="line"><span class="comment">// changing the value of n here</span></div><div class="line"><span class="comment">// will result in an error</span></div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    n = <span class="number">42</span>;</div><div class="line">&#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">    <span class="built_in">console</span>.log(e.message);</div><div class="line">    <span class="comment">// Assignment to constant variable.</span></div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="comment">// however a new n can be declared in any</span></div><div class="line"><span class="comment">// block because like let it has block scope</span></div><div class="line"><span class="keyword">if</span> (n &gt; <span class="number">32</span>) &#123;</div><div class="line">    <span class="keyword">const</span> n = <span class="number">16</span>;</div><div class="line">    <span class="built_in">console</span>.log(n); <span class="comment">// 16</span></div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(n); <span class="comment">// 40</span></div></pre></td></tr></table></figure>
       
     </div>
     <footer class="article-footer">
@@ -266,23 +269,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/06/05/threejs-plane/">Three js plane geometry checker style</a>
+            <a href="/2019/06/14/nodejs-filesystem-write-file/">Nodejs write file method basics and more</a>
           </li>
         
           <li>
-            <a href="/2019/06/04/threejs-directional-light/">directional light in three js</a>
+            <a href="/2019/06/13/nodejs-require/">Nodejs require for importing modules and more</a>
           </li>
         
           <li>
-            <a href="/2019/06/03/threejs-face3-color/">Face3 and vertex color in threejs</a>
+            <a href="/2019/06/12/nodejs-json/">Nodejs json read write and convert</a>
           </li>
         
           <li>
-            <a href="/2019/06/02/threejs-point-light/">Point lights in threejs for shining light everywhere.</a>
+            <a href="/2019/06/11/threejs-webgl/">Three js and webGL support</a>
           </li>
         
           <li>
-            <a href="/2019/06/01/vuejs-destroy/">vue destroy</a>
+            <a href="/2019/06/10/threejs-box-helper/">Three js Box Helper</a>
           </li>
         
       </ul>

@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2018/11/24/threejs-webglrenderer/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="There are a few core components to making a three.js, there needs to be a scene, at least one mesh to look at that is composed of a geometry, and a material. There also needs to be a camera to set the">
-<meta property="og:updated_time" content="2018-11-28T00:26:30.000Z">
+<meta property="og:updated_time" content="2019-06-11T19:06:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The webGL renderer in three.js">
 <meta name="twitter:description" content="There are a few core components to making a three.js, there needs to be a scene, at least one mesh to look at that is composed of a geometry, and a material. There also needs to be a camera to set the">
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2018/11/24/threejs-webglrenderer/" class="article-date"> Modified:
-  <time datetime="2018-11-28T00:26:30.000Z" itemprop="dateModified">2018-11-27</time>
+  <time datetime="2019-06-11T19:06:42.000Z" itemprop="dateModified">2019-06-11</time>
 </a>
 
-    <span class="article-date">V1.9</span>
+    <span class="article-date">V1.1</span>
 
     
   <div class="article-category">
@@ -157,6 +157,8 @@ ga('send', 'pageview');
 <p>To render the scene I just need to pass the scene, and camera to the render method of the webGLRenderer instance.</p>
 <h2 id="3-Making-a-render-loop"><a href="#3-Making-a-render-loop" class="headerlink" title="3 - Making a render loop"></a>3 - Making a render loop</h2><p>Many of the projects I make with three.js are just simple looping animations. To have a loop I just need to call the render method in a method that is going to be called over and over again. In this example I am using requestAnimationFrame to do so.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// RENDER</span></div><div class="line">    <span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">    renderer.setSize(<span class="number">320</span>, <span class="number">240</span>);</div><div class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"> </div><div class="line">    <span class="comment">// SCENE</span></div><div class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"> </div><div class="line">    <span class="comment">// CAMERA</span></div><div class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">40</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">.5</span>, <span class="number">1000</span>);</div><div class="line">    camera.position.set(<span class="number">3</span>, <span class="number">3</span>, <span class="number">3</span>);</div><div class="line">    camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// add something to the scene</span></div><div class="line">    <span class="keyword">var</span> cube = <span class="keyword">new</span> THREE.Mesh(<span class="keyword">new</span> THREE.CubeGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>), <span class="keyword">new</span> THREE.MeshBasicMaterial(&#123;</div><div class="line">                <span class="attr">color</span>: <span class="number">0xff0000</span></div><div class="line">            &#125;));</div><div class="line">    scene.add(cube);</div><div class="line"> </div><div class="line">    <span class="comment">// render the scene with the camera</span></div><div class="line">    <span class="keyword">var</span> frame = <span class="number">0</span>,</div><div class="line">    frameMax = <span class="number">50</span>;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> loop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        requestAnimationFrame(loop);</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> per = frame / frameMax,</div><div class="line">        a = <span class="built_in">Math</span>.PI * <span class="number">2</span> * per;</div><div class="line"> </div><div class="line">        cube.rotation.y = a;</div><div class="line"> </div><div class="line">        renderer.render(scene, camera);</div><div class="line"> </div><div class="line">        frame += <span class="number">1</span>;</div><div class="line">        frame %= frameMax;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    loop();</div><div class="line"> </div><div class="line">&#125;</div><div class="line">    ());</div></pre></td></tr></table></figure>
+<h2 id="4-WebGL-browser-support"><a href="#4-WebGL-browser-support" class="headerlink" title="4 - WebGL browser support"></a>4 - WebGL browser support</h2><p>In the event that there is no support for webGL in a client browser there are ways of feature testing for webGL and then using another kind of renderer to render a scene that makes use of the 2d canvas drawing api, or some other way or rendering other than that of webGL. For more on this topic check out my other post that has to do with <a href="/2019/06/11/threejs-webgl/">feature testing on webGL</a>.</p>
+
       
     </div>
     <footer class="article-footer">
@@ -266,23 +268,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/06/05/threejs-plane/">Three js plane geometry checker style</a>
+            <a href="/2019/06/14/nodejs-filesystem-write-file/">Nodejs write file method basics and more</a>
           </li>
         
           <li>
-            <a href="/2019/06/04/threejs-directional-light/">directional light in three js</a>
+            <a href="/2019/06/13/nodejs-require/">Nodejs require for importing modules and more</a>
           </li>
         
           <li>
-            <a href="/2019/06/03/threejs-face3-color/">Face3 and vertex color in threejs</a>
+            <a href="/2019/06/12/nodejs-json/">Nodejs json read write and convert</a>
           </li>
         
           <li>
-            <a href="/2019/06/02/threejs-point-light/">Point lights in threejs for shining light everywhere.</a>
+            <a href="/2019/06/11/threejs-webgl/">Three js and webGL support</a>
           </li>
         
           <li>
-            <a href="/2019/06/01/vuejs-destroy/">vue destroy</a>
+            <a href="/2019/06/10/threejs-box-helper/">Three js Box Helper</a>
           </li>
         
       </ul>
