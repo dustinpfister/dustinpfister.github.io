@@ -11,16 +11,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2017/09/22/jquery-core-each/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="So the $.each method is a simple tool to loop over an object or array. This is not the first post I have written on a tool that does this, I wrote a post on the npm package traverse that is another to">
+  <meta name="description" content="So the jQuery each method is a simple tool to loop over an object or array. This is not the first post I have written on a tool that does this, I wrote a post on the npm package traverse that is anoth">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Using jQuerys core $.each method to loop over objects and Arrays">
 <meta property="og:url" content="https://dustinpfister.github.io/2017/09/22/jquery-core-each/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="So the $.each method is a simple tool to loop over an object or array. This is not the first post I have written on a tool that does this, I wrote a post on the npm package traverse that is another to">
-<meta property="og:updated_time" content="2017-09-23T01:57:21.000Z">
+<meta property="og:description" content="So the jQuery each method is a simple tool to loop over an object or array. This is not the first post I have written on a tool that does this, I wrote a post on the npm package traverse that is anoth">
+<meta property="og:updated_time" content="2019-06-23T14:26:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Using jQuerys core $.each method to loop over objects and Arrays">
-<meta name="twitter:description" content="So the $.each method is a simple tool to loop over an object or array. This is not the first post I have written on a tool that does this, I wrote a post on the npm package traverse that is another to">
+<meta name="twitter:description" content="So the jQuery each method is a simple tool to loop over an object or array. This is not the first post I have written on a tool that does this, I wrote a post on the npm package traverse that is anoth">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/09/22/jquery-core-each/" class="article-date"> Modified:
-  <time datetime="2017-09-23T01:57:21.000Z" itemprop="dateModified">2017-09-22</time>
+  <time datetime="2019-06-23T14:26:39.000Z" itemprop="dateModified">2019-06-23</time>
 </a>
 
-    <span class="article-date">V1.1</span>
+    <span class="article-date">V1.3</span>
 
     
   <div class="article-category">
@@ -147,21 +147,21 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>So the $.each method is a simple tool to loop over an object or array. This is not the first post I have written on a tool that does this, I wrote a post on the npm package traverse that is another tool that does basically the same thing. yes there is Array.forEach, the for in loop, and a wide range of other options that come to mind, but for now lets just keep it with an option in jQuery.</p>
+        <p>So the <a href="https://api.jquery.com/jquery.each/" target="_blank" rel="external">jQuery each</a> method is a simple tool to loop over an object or array. This is not the first post I have written on a tool that does this, I wrote a post on the npm package traverse that is another tool that does basically the same thing. yes there is Array.forEach, the for in loop, and a wide range of other options that come to mind, but for now lets just keep it with an option in jQuery.</p>
 <a id="more"></a>
-<h2 id="The-basics-of-looping-over-an-object"><a href="#The-basics-of-looping-over-an-object" class="headerlink" title="The basics of looping over an object"></a>The basics of looping over an object</h2><p>In vanilla js typically looping over an object is done with a for in loop. It is not that hard to quickly write my own methods for this one.</p>
+<h2 id="1-jQuery-each-as-a-way-of-looping-over-an-object"><a href="#1-jQuery-each-as-a-way-of-looping-over-an-object" class="headerlink" title="1 - jQuery each as a way of looping over an object"></a>1 - jQuery each as a way of looping over an object</h2><p>In vanilla js typically looping over an object in general is done with a for in loop. It is not that hard to quickly write my own methods for this one.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// here is my own each method using a for in</span></div><div class="line"><span class="keyword">var</span> each = <span class="function"><span class="keyword">function</span>(<span class="params">obj, func</span>)</span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> obj)&#123;</div><div class="line"> </div><div class="line">        func(key,obj[key],obj);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// it works with objects, and arrays</span></div><div class="line"><span class="keyword">var</span> obj = &#123;<span class="attr">x</span>: <span class="number">42</span>,<span class="attr">y</span>: <span class="number">70</span>,<span class="attr">w</span>: <span class="number">32</span>,<span class="attr">h</span>: <span class="number">32</span>&#125;,</div><div class="line">arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>],</div><div class="line">forEach = <span class="function"><span class="keyword">function</span>(<span class="params">k,v,o</span>)</span>&#123;</div><div class="line"> </div><div class="line">     <span class="built_in">console</span>.log(k + <span class="string">':'</span> + v);</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line">each(obj,forEach); <span class="comment">// list properties</span></div><div class="line">each(arr,forEach); <span class="comment">// list elements</span></div></pre></td></tr></table></figure>
 <p>There are many other ways to do so, there is of course Array.forEach, and also while loops. However Array.forEach is only for Arrays, or regular Objects that look like arrays.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[].forEach.call(</div><div class="line">    &#123;<span class="number">0</span>:<span class="string">'foo'</span>,<span class="number">1</span>:<span class="string">'man'</span>,<span class="number">2</span>:<span class="string">'chew'</span>,<span class="attr">length</span>: <span class="number">3</span>&#125;, </div><div class="line">    <span class="function"><span class="keyword">function</span>(<span class="params">el</span>)</span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(el);</div><div class="line">    &#125;</div><div class="line">);</div></pre></td></tr></table></figure>
 <p>However the use of a while loop might be a nice change to my each method</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> each = <span class="function"><span class="keyword">function</span>(<span class="params">obj, func</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> keys = <span class="built_in">Object</span>.keys(obj),</div><div class="line">    l = keys.length,</div><div class="line">    i = <span class="number">0</span>;</div><div class="line"> </div><div class="line">    <span class="keyword">while</span> (i &lt; l) &#123;</div><div class="line"> </div><div class="line">        func(keys[i], obj[keys[i]], obj);</div><div class="line">        i += <span class="number">1</span>;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
 <p>But what am I doing wasting time writing my own methods for something that is so basic and trivial? Good question that is why there are all ready methods like this in many popular projects like jQuery.</p>
-<h2 id="So-why-not-just-use-each-if-jQuery-is-being-used"><a href="#So-why-not-just-use-each-if-jQuery-is-being-used" class="headerlink" title="So why not just use $.each() if jQuery is being used."></a>So why not just use $.each() if jQuery is being used.</h2><p>yes there is no need to write that method, if there is something that will get the job done to begin with.</p>
+<h2 id="2-So-why-not-just-use-each-if-jQuery-is-being-used"><a href="#2-So-why-not-just-use-each-if-jQuery-is-being-used" class="headerlink" title="2 - So why not just use $.each() if jQuery is being used."></a>2 - So why not just use $.each() if jQuery is being used.</h2><p>yes there is no need to write that method, if there is something that will get the job done to begin with.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$.each(&#123;<span class="attr">x</span>: <span class="number">42</span>,<span class="attr">y</span>: <span class="number">70</span>,<span class="attr">w</span>: <span class="number">32</span>,<span class="attr">h</span>: <span class="number">32</span>&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">k,v</span>)</span>&#123;</div><div class="line">     <span class="built_in">console</span>.log(k + <span class="string">':'</span> + v);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<h2 id="Use-each-to-loop-over"><a href="#Use-each-to-loop-over" class="headerlink" title="Use $.each to loop over $"></a>Use $.each to loop over $</h2><p>So one idea that comes to mind is to use jQuerys each method to look over jQuerys core object. </p>
+<h2 id="3-Use-each-to-loop-over"><a href="#3-Use-each-to-loop-over" class="headerlink" title="3 - Use $.each to loop over $"></a>3 - Use $.each to loop over $</h2><p>So one idea that comes to mind is to use jQuerys each method to look over jQuerys core object. </p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$.each($, <span class="function"><span class="keyword">function</span>(<span class="params">prop</span>)</span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(prop);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p>This is something that I like to do whenever working with something new, just to get a sense of what it is that I am working with.</p>
-<h2 id="Thats-it-for-now"><a href="#Thats-it-for-now" class="headerlink" title="Thats it for now"></a>Thats it for now</h2><p>I have been writing posts at the rate of about one per day lately, as such quality is taking a hit. Maybe I will come back to this one at some point but there is not much to write about on it. Just another way to loop over an object.</p>
+<h2 id="4-Thats-it-for-now"><a href="#4-Thats-it-for-now" class="headerlink" title="4 - Thats it for now"></a>4 - Thats it for now</h2><p>I have been writing posts at the rate of about one per day lately, as such quality is taking a hit. Maybe I will come back to this one at some point but there is not much to write about on it. Just another way to loop over an object.</p>
 
       
     </div>
@@ -250,7 +250,7 @@ s.setAttribute('data-timestamp', +new Date());
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/JSON/" style="font-size: 12.11px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.53px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.68px;">angular</a> <a href="/tags/animation/" style="font-size: 12.63px;">animation</a> <a href="/tags/automation/" style="font-size: 12.63px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.16px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.26px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.84px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.63px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.05px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.58px;">ejs</a> <a href="/tags/express/" style="font-size: 17.37px;">express</a> <a href="/tags/games/" style="font-size: 17.89px;">games</a> <a href="/tags/git/" style="font-size: 10.53px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.21px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.58px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.74px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.53px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.58px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.58px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.42px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.74px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.47px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.95px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.11px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.32px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.79px;">vuejs</a>
+      <a href="/tags/JSON/" style="font-size: 12.22px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 12.78px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.67px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.78px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 17.22px;">express</a> <a href="/tags/games/" style="font-size: 17.78px;">games</a> <a href="/tags/git/" style="font-size: 10.56px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.67px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.44px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.33px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.44px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.89px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.11px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.56px;">vuejs</a>
     </div>
   </div>
 
@@ -272,23 +272,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/06/14/nodejs-filesystem-write-file/">Nodejs write file method basics and more</a>
+            <a href="/2019/06/26/lodash_indexof/">loash _.indexOf</a>
           </li>
         
           <li>
-            <a href="/2019/06/13/nodejs-require/">Nodejs require for importing modules and more</a>
+            <a href="/2019/06/26/hapi-routing/">Routing in hapi js</a>
           </li>
         
           <li>
-            <a href="/2019/06/12/nodejs-json/">Nodejs json read write and convert</a>
+            <a href="/2019/06/25/js-async-await/">JavaScript async await</a>
           </li>
         
           <li>
-            <a href="/2019/06/11/threejs-webgl/">Three js and webGL support</a>
+            <a href="/2019/06/25/hapi-plugins/">Plugins in hapi js</a>
           </li>
         
           <li>
-            <a href="/2019/06/10/threejs-box-helper/">Three js Box Helper</a>
+            <a href="/2019/06/24/js-promise-all/">Promise all method for a collection of promises</a>
           </li>
         
       </ul>
