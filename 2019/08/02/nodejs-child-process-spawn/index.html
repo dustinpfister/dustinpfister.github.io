@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>The node spawn child process method in action | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2019/08/02/nodejs-child-process-spawn/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="I find myself using the node spawn child process module method often, but still have not mastered all the little aspects of this method as well as the child process module in general. So one way to go">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The node spawn child process method in action">
+<meta property="og:url" content="https://dustinpfister.github.io/2019/08/02/nodejs-child-process-spawn/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="I find myself using the node spawn child process module method often, but still have not mastered all the little aspects of this method as well as the child process module in general. So one way to go">
+<meta property="og:updated_time" content="2019-08-09T22:56:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The node spawn child process method in action">
+<meta name="twitter:description" content="I find myself using the node spawn child process module method often, but still have not mastered all the little aspects of this method as well as the child process module in general. So one way to go">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-child-process-spawn" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/08/02/nodejs-child-process-spawn/" class="article-date"> Published:
+  <time datetime="2019-08-02T18:22:00.000Z" itemprop="datePublished">2019-08-02</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2019/08/02/nodejs-child-process-spawn/" class="article-date"> Modified:
+  <time datetime="2019-08-09T22:56:22.000Z" itemprop="dateModified">2019-08-09</time>
+</a>
+
+    <span class="article-date">V1.19</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      The node spawn child process method in action
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>I find myself using the <a href="https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options" target="_blank" rel="external">node spawn</a> child process module method often, but still have not mastered all the little aspects of this method as well as the child process module in general. So one way to go about getting more proficient on the subject would be to write a whole bunch of little demos on the node span method and write a post on them.</p>
+<a id="more"></a>
+<h2 id="1-lets-start-out-with-the-node-spawn-method-with-some-basic-examples"><a href="#1-lets-start-out-with-the-node-spawn-method-with-some-basic-examples" class="headerlink" title="1 - lets start out with the node spawn method with some basic examples"></a>1 - lets start out with the node spawn method with some basic examples</h2><p>So lets start out with the node spawn method by quickly getting together a basic example that I often start a post like this with. In this example I am just using the node spawn method to launch another instance of node and run a different script that just logs something to the standard output with the console log method.</p>
+<p>When writing my basic.js file I start out my requiring in the spawn method from the child process module. Once I have that I can call the spawn method to create a new instance of the child process class. When doing so I pass a string of the command that I want to run in the command line as the first argument. Arguments can then also be passed as a second argument in the form of an array where each option is a string. So in this case the first argument is the string \’node\’, and then second argument is an array with one one string value that is path of the script that I want to run.</p>
+<p>So then basic.js looks like this:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// using spawn</span></div><div class="line"><span class="keyword">let</span> spawn = <span class="built_in">require</span>(<span class="string">'child_process'</span>).spawn,</div><div class="line"> </div><div class="line"><span class="comment">// spawn test.js</span></div><div class="line">script = spawn(<span class="string">'node'</span>, [<span class="string">'basic_test.js'</span>]);</div><div class="line"> </div><div class="line"><span class="comment">// what to do for the standard output for</span></div><div class="line"><span class="comment">// test.js launched via the node spawn</span></div><div class="line"><span class="comment">// child process method</span></div><div class="line">script.stdout.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(data.toString()); <span class="comment">// 'this is a test'</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>The stdout property of the child process instance that is returned by the node spawn method can be used to set some events for the standard output of the child process. For this basic example I am just logging the output from the basic_test.js file, if I did not do this nothing would be displayed.</p>
+<p>The basic_test.js file that I am calling looks like this:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">'this is a test'</span>);</div></pre></td></tr></table></figure>
+<p>I can then call the main basic.js file which in turn calls the basic_test.js file from within the main basic.js file as a child process with the node spawn method.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ node basic</div><div class="line">this is a test</div></pre></td></tr></table></figure>
+<p>So there we have a simple example of the node spawn child process method in action. However there are some more basics at least to cover when it comes to command line arguments for the child process, and also the different kinds of steams and events. So lets look at a few more basic examples of spawn in action.</p>
+<h3 id="1-1-Using-arguments"><a href="#1-1-Using-arguments" class="headerlink" title="1.1 - Using arguments"></a>1.1 - Using arguments</h3><p>So many commands accept one or more arguments, options or whatever you might call them when called from the command line. These arguments are to be given to spawn in the form of an array where each element is a string of the sub command, argument name, value, or anything else that is separated by spaces when using them in the command line.</p>
+<p>So lets say I have a script that adds to arguments together like this.<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> a = process.argv[<span class="number">2</span>] === <span class="literal">undefined</span> ? <span class="number">0</span> : process.argv[<span class="number">2</span>];</div><div class="line">b = process.argv[<span class="number">3</span>] === <span class="literal">undefined</span> ? <span class="number">0</span> : process.argv[<span class="number">3</span>];</div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Number</span>(a) + <span class="built_in">Number</span>(b));</div></pre></td></tr></table></figure></p>
+<p>I can then use those arguments when using the node spawn method like this.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> spawn = <span class="built_in">require</span>(<span class="string">'child_process'</span>).spawn,</div><div class="line">a = process.argv[<span class="number">2</span>] || <span class="number">25</span>,</div><div class="line">b = process.argv[<span class="number">3</span>] || <span class="number">75</span>,</div><div class="line">script = spawn(<span class="string">'node'</span>, [<span class="string">'argu_test.js'</span>, a, b]);</div><div class="line">script.stdout.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(data.toString()); <span class="comment">// 100</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ node argu</div><div class="line">100</div><div class="line">$ node argu 5</div><div class="line">80</div><div class="line">$ node argu 1 1</div><div class="line">2</div></pre></td></tr></table></figure>
+<h3 id="1-2-Standard-error-when-using-spawn"><a href="#1-2-Standard-error-when-using-spawn" class="headerlink" title="1.2 - Standard error when using spawn"></a>1.2 - Standard error when using spawn</h3><p>The standard error is a stream that has to do with data that logs what is going wrong with a child process. When using a script that logs something to the standard error it often gets displayed in the console. However when using the node spawn child process method to launch the script any errors that occur when doing so will not display in the console unless you do so my attaching a handler for it.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line">filename = process.argv[<span class="number">2</span>] || <span class="string">'not-there.txt'</span>;</div><div class="line"><span class="built_in">console</span>.log(filename);</div><div class="line">fs.readFile(filename, <span class="string">'utf8'</span>, (e, data) =&gt; &#123;</div><div class="line">    <span class="keyword">if</span> (e) &#123;</div><div class="line">        <span class="built_in">console</span>.warn(<span class="string">'\u001b[31m'</span> + e.message + <span class="string">'\u001b[39m'</span>);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'\u001b[32m'</span> + data.toString() + <span class="string">'\u001b[39m'</span>);</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> spawn = <span class="built_in">require</span>(<span class="string">'child_process'</span>).spawn,</div><div class="line">script = spawn(<span class="string">'node'</span>, [<span class="string">'stderror_test.js'</span>, process.argv[<span class="number">2</span>]]);</div><div class="line">script.stdout.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(data.toString()); <span class="comment">// 'this is a test'</span></div><div class="line">&#125;);</div><div class="line"><span class="comment">// what to do for the standard error output</span></div><div class="line">script.stderr.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(data.toString()); <span class="comment">// 'this is a test'</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="1-3-The-standard-in"><a href="#1-3-The-standard-in" class="headerlink" title="1.3 - The standard in"></a>1.3 - The standard in</h3><p>The standard input of a child process created with the node span method is another subject of interest. The write method of the stdin property of the spawn child process can be used to write some data to the standard input of the script that is being launched with spawn.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">process.stdin.on(<span class="string">'data'</span>, (data) =&gt; &#123;</div><div class="line">    process.stdout.write(data.toString());</div><div class="line">    process.stdout.write(data.toString(<span class="string">'hex'</span>))</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> spawn = <span class="built_in">require</span>(<span class="string">'child_process'</span>).spawn,</div><div class="line">script = spawn(<span class="string">'node'</span>, [<span class="string">'stdin_test.js'</span>]);</div><div class="line"></div><div class="line">script.stdout.on(<span class="string">'data'</span>, (data) =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(data.toString());</div><div class="line">    script.kill();</div><div class="line">&#125;);</div><div class="line"></div><div class="line">script.stdin.write(<span class="string">'um yeah I would think so'</span>);</div></pre></td></tr></table></figure>
+<h2 id="2-node-spawn-child-process-method-options"><a href="#2-node-spawn-child-process-method-options" class="headerlink" title="2 - node spawn child process method options"></a>2 - node spawn child process method options</h2><p>There are a number of options for the node spawn child process method. In this section I will touching base with a few of these options that can be used to do things like changing what the standard input is tied to and so forth..</p>
+<h3 id="2-1-The-cwd-option-for-changing-the-working-director-of-the-child-process"><a href="#2-1-The-cwd-option-for-changing-the-working-director-of-the-child-process" class="headerlink" title="2.1 - The cwd option for changing the working director of the child process"></a>2.1 - The cwd option for changing the working director of the child process</h3><p>There is a cwd option that can set the working directory of the child process. By default this will of course be the same as the parent process that launched the child process with spawn.</p>
+<h3 id="2-2-The-stdio-option-and-IPC"><a href="#2-2-The-stdio-option-and-IPC" class="headerlink" title="2.2 - The stdio option and IPC"></a>2.2 - The stdio option and IPC</h3><p>I was wondering if IPC (Inter-Process Communication )[<a href="https://en.wikipedia.org/wiki/Inter-process_communication" target="_blank" rel="external">https://en.wikipedia.org/wiki/Inter-process_communication</a>] can be done with the spawn method. I was able to see a lot of examples for IPC in node, but it seems like all of them use Fork rather than Spawn. Maybe in most cases that might be the way to go about doing it, but I would think that there is a way to do so with Spawn. Well it turns out that there is, and it can be done with the stdio option.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> spawn = <span class="built_in">require</span>(<span class="string">'child_process'</span>).spawn,</div><div class="line"><span class="comment">// set up io as ipc</span></div><div class="line">options = &#123;</div><div class="line">    <span class="attr">stdio</span>: [<span class="string">'ipc'</span>, <span class="string">'pipe'</span>, <span class="string">'pipe'</span>]</div><div class="line">&#125;,</div><div class="line">script = spawn(<span class="string">'node'</span>, [<span class="string">'option_stdio_test.js'</span>], options);</div><div class="line"><span class="comment">// what to do when this parent process</span></div><div class="line"><span class="comment">// receives a message from the node child process</span></div><div class="line">script.on(<span class="string">'message'</span>, (m) =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(m.b); <span class="comment">// 12</span></div><div class="line">    script.kill();</div><div class="line">&#125;);</div><div class="line"><span class="comment">// send an IPC message to the</span></div><div class="line"><span class="comment">// child process</span></div><div class="line">script.send(&#123;</div><div class="line">    <span class="attr">a</span>: <span class="number">5</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">process.on(<span class="string">'message'</span>, (m) =&gt; &#123;</div><div class="line">    process.send(&#123;</div><div class="line">        <span class="attr">b</span>: m.a + <span class="number">7</span></div><div class="line">    &#125;)</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>By default the pipe value is set for the standard input, output and error. However that can be changed by setting the ipc value for the desired out or in.</p>
+<h2 id="3-node-spawn-and-read-streams"><a href="#3-node-spawn-and-read-streams" class="headerlink" title="3 - node spawn and read streams"></a>3 - node spawn and read streams</h2><p>So in a recent project of mine I started making all kinds of CLI tools that accept input via the standard input that does something to that input and then spits something out to the standard output. In a previous section I touched base on the standard input, but things do start to get a little complicated when it comes to working with streams. So in this section I thought I would put together a little example of something that I am running into with this project of mine.</p>
+<p>In the parent script of this example I am creating a file read stream, and then I am piping the output of that read stream to thee standard input of a child process that I have created with node spawn.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> spawn = <span class="built_in">require</span>(<span class="string">'child_process'</span>).spawn,</div><div class="line">fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"><span class="keyword">let</span> script = spawn(<span class="string">'node'</span>, [<span class="string">'stdin_filestream_process.js'</span>]);</div><div class="line">script.stdout.on(<span class="string">'data'</span>, (data) =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(data.toString());</div><div class="line">&#125;);</div><div class="line">script.stdout.on(<span class="string">'close'</span>, (data) =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'done'</span>);</div><div class="line">&#125;);</div><div class="line">fs.createReadStream(<span class="string">'foo.txt'</span>).pipe(script.stdin);</div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">process.stdin.on(<span class="string">'data'</span>, (data) =&gt; &#123;</div><div class="line">    process.stdout.write(data.toString(<span class="string">'hex'</span>));</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ node stdin_filestream</div><div class="line"><span class="number">54686973206973206</span>a757374206120666f6f2062617220746578742066696c65</div><div class="line">done</div></pre></td></tr></table></figure>
+<h2 id="4-Conclusion"><a href="#4-Conclusion" class="headerlink" title="4 - Conclusion"></a>4 - Conclusion</h2><p>The node spawn method is great, I use it all the time to launch process from within a node script. As I write more projects that make use of it I might very well come back to this post to update and expand my content on this one with more examples.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2019/08/02/nodejs-child-process-spawn/" data-id="cjz4pv4zj0006o8v15g2n2vqe" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2019/08/02/nodejs-child-process-spawn/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/08/05/nodejs-buffer-length/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          The buffer length property and data length in nodejs
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/08/01/lodash_every/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">lodash every collection method and vanilla js alternative</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2019/08/02/nodejs-child-process-spawn/index.html';
+    this.page.identifier = '514';
+    this.page.title = 'The node spawn child process method in action';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.11px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.53px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.68px;">angular</a> <a href="/tags/animation/" style="font-size: 12.63px;">animation</a> <a href="/tags/automation/" style="font-size: 12.63px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.16px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.74px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.84px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.63px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.05px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.58px;">ejs</a> <a href="/tags/express/" style="font-size: 17.37px;">express</a> <a href="/tags/games/" style="font-size: 17.89px;">games</a> <a href="/tags/git/" style="font-size: 11.58px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.26px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.68px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.21px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.53px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.58px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 11.58px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.42px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.21px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.47px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.95px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.11px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.32px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.79px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/08/09/express-stream/">Express stream and the XMLHttprequest on process event</a>
+          </li>
+        
+          <li>
+            <a href="/2019/08/08/nodejs-stream/">The node stream module and making custom readable and writable streams</a>
+          </li>
+        
+          <li>
+            <a href="/2019/08/07/nodejs-child-process-fork/">The node fork child process method.</a>
+          </li>
+        
+          <li>
+            <a href="/2019/08/06/nodejs-buffer-write/">The buffer write method for writing to buffers in nodejs.</a>
+          </li>
+        
+          <li>
+            <a href="/2019/08/05/nodejs-buffer-length/">The buffer length property and data length in nodejs</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2019/08/02/nodejs-child-process-spawn/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
