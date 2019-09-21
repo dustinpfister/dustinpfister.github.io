@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2017/12/11/nodejs-natural-language-facility/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="I have been writing this blog for the better part of a year, and so far it seems like it is just starting to take off. I am not spaming my content on social media (as of this writing at least), and I">
-<meta property="og:updated_time" content="2017-12-14T14:43:19.000Z">
+<meta property="og:updated_time" content="2019-09-17T18:38:21.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Natural language analyses tool for node.js called natural">
 <meta name="twitter:description" content="I have been writing this blog for the better part of a year, and so far it seems like it is just starting to take off. I am not spaming my content on social media (as of this writing at least), and I">
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/12/11/nodejs-natural-language-facility/" class="article-date"> Modified:
-  <time datetime="2017-12-14T14:43:19.000Z" itemprop="dateModified">2017-12-14</time>
+  <time datetime="2019-09-17T18:38:21.000Z" itemprop="dateModified">2019-09-17</time>
 </a>
 
-    <span class="article-date">V1.6</span>
+    <span class="article-date">V1.7</span>
 
     
   <div class="article-category">
@@ -168,9 +168,9 @@ ga('send', 'pageview');
 <h2 id="Getting-started-with-the-natural-npm-package"><a href="#Getting-started-with-the-natural-npm-package" class="headerlink" title="Getting started with the natural npm package"></a>Getting started with the natural npm package</h2><p>First I assume you have node.js and npm installed, and you have a decent understanding of jaavScript. In which case what I did is i stared a new project folder and installed natural with npm like normal.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ mkdir test_natural</div><div class="line">$ cd test_natural</div><div class="line">$ npm init</div><div class="line">$ npm install natural --save</div></pre></td></tr></table></figure>
 <p>At the time of this writing the readme states that natural is still in development I am using version 0.5.4. I have published the demos in this post to by <a href="https://github.com/dustinpfister/test_natural" target="_blank" rel="external">github account</a> as well. Be sure to keep and eye on the <a href="https://github.com/NaturalNode/natural" target="_blank" rel="external">projects repo</a> as well, it looks like there is not a lot of activity, but I would not say it is a dead project just yet.</p>
-<h2 id="Naturals-word-tokenizer"><a href="#Naturals-word-tokenizer" class="headerlink" title="Naturals word tokenizer"></a>Naturals word tokenizer</h2><p>Natural has it’s own word tokenizer like the vanilla js one I gave earler in this post. To use it just use the natural.WordTokenizer constructor. In my project folder I made a token.js demo file in the root space that looks like this:</p>
+<h2 id="Naturals-word-tokenizer"><a href="#Naturals-word-tokenizer" class="headerlink" title="Naturals word tokenizer"></a>Naturals word tokenizer</h2><p>Natural has it’s own word tokenizer like the vanilla js one I gave earlier in this post. To use it just use the natural.WordTokenizer constructor. In my project folder I made a token.js demo file in the root space that looks like this:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> natural = <span class="built_in">require</span>(<span class="string">'natural'</span>),</div><div class="line"> </div><div class="line"><span class="comment">// use this constructor</span></div><div class="line">tokenizer = <span class="keyword">new</span> natural.WordTokenizer(),</div><div class="line"> </div><div class="line">content = <span class="string">'I like the javaScript it is the best.'</span>;</div><div class="line">tokens = tokenizer.tokenize(content);</div><div class="line"> </div><div class="line"><span class="comment">// gives me an array of the words</span></div><div class="line"><span class="built_in">console</span>.log( tokens );</div><div class="line"><span class="comment">// [ 'I', 'like', 'the', 'javaScript', 'it', 'is', 'the', 'best' ]</span></div></pre></td></tr></table></figure>
-<h2 id="naturals-jaro-winkler-string-distance"><a href="#naturals-jaro-winkler-string-distance" class="headerlink" title="naturals jaro winkler string distance"></a>naturals jaro winkler string distance</h2><p>natural has a jaavScript implmantation of the <a href="https://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance" target="_blank" rel="external">Jaro Winkler</a> string edit distance method.</p>
+<h2 id="naturals-jaro-winkler-string-distance"><a href="#naturals-jaro-winkler-string-distance" class="headerlink" title="naturals jaro winkler string distance"></a>naturals jaro winkler string distance</h2><p>natural has a jaavScript implementation of the <a href="https://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance" target="_blank" rel="external">Jaro Winkler</a> string edit distance method.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> natural = <span class="built_in">require</span>(<span class="string">'natural'</span>),</div><div class="line"> </div><div class="line">term = <span class="string">'javaScript'</span>,</div><div class="line"> </div><div class="line">dist = <span class="function"><span class="keyword">function</span> (<span class="params">b, a</span>) </span>&#123;</div><div class="line"> </div><div class="line">    a = a || term;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> natural.JaroWinklerDistance(a, b);</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log( dist(<span class="string">'javaScript'</span>) ); <span class="comment">// 1</span></div><div class="line"><span class="built_in">console</span>.log( dist(<span class="string">'java'</span>) ); <span class="comment">// 0.88</span></div><div class="line"><span class="built_in">console</span>.log( dist(<span class="string">'lightScript'</span>) ); <span class="comment">// 0.715...</span></div><div class="line"><span class="built_in">console</span>.log( dist(<span class="string">'python'</span>) ); <span class="comment">// 0</span></div></pre></td></tr></table></figure>
 <p>As you can see this can be used as a way to find how close to strings resemble each other.</p>
 
@@ -283,23 +283,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/09/06/js-bigint/">BigInt basics in javaScript for numbers beyond max safe int</a>
+            <a href="/2019/09/19/nodejs-ansi-escape-codes/">Using ANSI escape codes in nodejs</a>
           </li>
         
           <li>
-            <a href="/2019/09/04/js-select-tag/">javaScript and select tags</a>
+            <a href="/2019/09/18/js-promise-resolve-reject/">Promise resolve and reject methods for just creating a resolve or rejected promise</a>
           </li>
         
           <li>
-            <a href="/2019/09/01/lodash_isempty/">The lodash is empty object method for finding out if an object is empty or not</a>
+            <a href="/2019/09/17/lodash_words/">Get an array of words from a string using Lodash or native javaScript AKA Lexical Analysis Tokenization</a>
           </li>
         
           <li>
-            <a href="/2019/08/27/js-path-find/">Path finding with javaScript</a>
+            <a href="/2019/09/11/nodejs-command-line/">node command line options and command use examples</a>
           </li>
         
           <li>
-            <a href="/2019/08/21/canvas-example-space-shooter/">A Canvas Example that is a basic Space Shooter game</a>
+            <a href="/2019/09/10/nodejs-semver/">node semver version standard and npm package</a>
           </li>
         
       </ul>

@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2019/02/02/js-operator-precedence/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="When writing javaScript expressions knowing the order in which operations are preformed is important to make sure that desired results will always be achieved. Each type of operator has a kind of prec">
-<meta property="og:updated_time" content="2019-08-13T17:56:28.000Z">
+<meta property="og:updated_time" content="2019-09-08T18:25:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Operator precedence AKA order of operations in javaScript">
 <meta name="twitter:description" content="When writing javaScript expressions knowing the order in which operations are preformed is important to make sure that desired results will always be achieved. Each type of operator has a kind of prec">
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2019/02/02/js-operator-precedence/" class="article-date"> Modified:
-  <time datetime="2019-08-13T17:56:28.000Z" itemprop="dateModified">2019-08-13</time>
+  <time datetime="2019-09-08T18:25:02.000Z" itemprop="dateModified">2019-09-08</time>
 </a>
 
-    <span class="article-date">V1.3</span>
+    <span class="article-date">V1.31</span>
 
     
   <div class="article-category">
@@ -180,6 +180,8 @@ ga('send', 'pageview');
 <h3 id="4-3-Getting-my-cell-phone-plan-data-target-for-the-day"><a href="#4-3-Getting-my-cell-phone-plan-data-target-for-the-day" class="headerlink" title="4.3 - Getting my cell phone plan data target for the day"></a>4.3 - Getting my cell phone plan data target for the day</h3><p>So where I live I do not have and kind of hard wired broadband Internet access, just mobile broadband via my cell phone. So with my plan I only have so much high speed data until I get throttled down to 128kbps, as such I need to budget my data or pay out the node for a higher data cap.</p>
 <p>With that in mind it would be nice to know a certain figure each day that will tell be if I am above or below budget when it comes to data. If I am above budget I can watch a video or two, if not I have to change my browsing habits and focus more on work which does not eat up a whole lot of data as I just need to push and pull text. So to write some kind of function that can help me get that data target figure I can exercise my knowledge of operator precedence to work out an expression that will do just that.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// the expression I would out is like this</span></div><div class="line"><span class="built_in">console</span>.log(<span class="number">80192</span> - <span class="number">80192</span> / <span class="number">31</span> * <span class="number">13</span>); <span class="comment">// 46563.096774193546</span></div><div class="line"> </div><div class="line"><span class="comment">// grouping like this is not necessary but might help</span></div><div class="line"><span class="comment">// make what is going on more clear</span></div><div class="line"><span class="built_in">console</span>.log(<span class="number">80192</span> - ((<span class="number">80192</span> / <span class="number">31</span>) * <span class="number">13</span>)); <span class="comment">// 46563.096774193546</span></div><div class="line"> </div><div class="line"><span class="comment">// now to replace the literals with variables</span></div><div class="line"><span class="keyword">let</span> dataCap = <span class="number">80192</span>,</div><div class="line">daysInMonth = <span class="number">31</span>,</div><div class="line">currentDayOfMonth = <span class="number">13</span>;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(dataCap - ((dataCap / daysInMonth) * currentDayOfMonth)); <span class="comment">// 46563.096774193546</span></div><div class="line"> </div><div class="line"><span class="comment">// And now I can make a method</span></div><div class="line"><span class="keyword">let</span> getDataCap = <span class="function">(<span class="params">dataCap, now</span>) =&gt;</span> &#123;</div><div class="line"> </div><div class="line">    <span class="comment">// assume 8GB and todays date if nothing</span></div><div class="line">    <span class="comment">// is given</span></div><div class="line">    dataCap = dataCap || <span class="number">1024</span> * <span class="number">8</span>;</div><div class="line">    now = now || <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"> </div><div class="line">    <span class="comment">// get number of days, and day of month, from the given now date object.</span></div><div class="line">    <span class="keyword">let</span> daysInMonth = <span class="keyword">new</span> <span class="built_in">Date</span>(now.getFullYear(), now.getMonth(), <span class="number">0</span>).getDate(),</div><div class="line">    currentDayOfMonth = now.getDate();</div><div class="line"> </div><div class="line">    <span class="comment">// return the result with the expression I worked out with a knowledge</span></div><div class="line">    <span class="comment">// of operator precedence in javaScript</span></div><div class="line">    <span class="keyword">return</span> dataCap - ((dataCap / daysInMonth) * currentDayOfMonth);</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"><span class="built_in">console</span>.log( getDataCap(<span class="number">80192</span>,<span class="keyword">new</span> <span class="built_in">Date</span>(<span class="number">2019</span>,<span class="number">7</span>,<span class="number">13</span>)) ); <span class="comment">// 46563.096774193546</span></div></pre></td></tr></table></figure>
+<h2 id="5-Conclusion"><a href="#5-Conclusion" class="headerlink" title="5 - Conclusion"></a>5 - Conclusion</h2><p>So order of operations in javaScript is not so hard to understand when one takes the time to just sit down, study, and work out a few examples. It might take a while, but eventually I have started to get more proficient at writing expressions with javaScipt using grouping operators only when they are needed as I understand the order of operations as well as associativity of operators. Reading a post or two on the subject such as this one might help, but what will really help is to just get busy working on your own exercises.</p>
+
       
     </div>
     <footer class="article-footer">
@@ -289,23 +291,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/09/06/js-bigint/">BigInt basics in javaScript for numbers beyond max safe int</a>
+            <a href="/2019/09/19/nodejs-ansi-escape-codes/">Using ANSI escape codes in nodejs</a>
           </li>
         
           <li>
-            <a href="/2019/09/04/js-select-tag/">javaScript and select tags</a>
+            <a href="/2019/09/18/js-promise-resolve-reject/">Promise resolve and reject methods for just creating a resolve or rejected promise</a>
           </li>
         
           <li>
-            <a href="/2019/09/01/lodash_isempty/">The lodash is empty object method for finding out if an object is empty or not</a>
+            <a href="/2019/09/17/lodash_words/">Get an array of words from a string using Lodash or native javaScript AKA Lexical Analysis Tokenization</a>
           </li>
         
           <li>
-            <a href="/2019/08/27/js-path-find/">Path finding with javaScript</a>
+            <a href="/2019/09/11/nodejs-command-line/">node command line options and command use examples</a>
           </li>
         
           <li>
-            <a href="/2019/08/21/canvas-example-space-shooter/">A Canvas Example that is a basic Space Shooter game</a>
+            <a href="/2019/09/10/nodejs-semver/">node semver version standard and npm package</a>
           </li>
         
       </ul>

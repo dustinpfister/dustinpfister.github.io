@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Using ANSI escape codes in nodejs | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2019/09/19/nodejs-ansi-escape-codes/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="The use of ANSI escape codes is what can be used to control the format and behavior of a command line interface when making some kind of node cli tool. in node npm packages like chalk use ANSI escape">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Using ANSI escape codes in nodejs">
+<meta property="og:url" content="https://dustinpfister.github.io/2019/09/19/nodejs-ansi-escape-codes/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="The use of ANSI escape codes is what can be used to control the format and behavior of a command line interface when making some kind of node cli tool. in node npm packages like chalk use ANSI escape">
+<meta property="og:updated_time" content="2019-09-20T21:06:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Using ANSI escape codes in nodejs">
+<meta name="twitter:description" content="The use of ANSI escape codes is what can be used to control the format and behavior of a command line interface when making some kind of node cli tool. in node npm packages like chalk use ANSI escape">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-ansi-escape-codes" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/19/nodejs-ansi-escape-codes/" class="article-date"> Published:
+  <time datetime="2019-09-19T17:47:00.000Z" itemprop="datePublished">2019-09-19</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2019/09/19/nodejs-ansi-escape-codes/" class="article-date"> Modified:
+  <time datetime="2019-09-20T21:06:25.000Z" itemprop="dateModified">2019-09-20</time>
+</a>
+
+    <span class="article-date">V1.7</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Using ANSI escape codes in nodejs
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>The use of <a href="https://en.wikipedia.org/wiki/ANSI_escape_code" target="_blank" rel="external">ANSI escape codes</a> is what can be used to control the format and behavior of a command line interface when making some kind of node cli tool. in node npm packages like chalk use ANSI escape codes to control the color of text, but they can be used to do far more than just that in the terminal. In this post I will be covering some basic examples of the use of ANSI escape codes to control things like the color of text, as well as cursor movement and more in nodejs.</p>
+<a id="more"></a>
+<h2 id="1-using-ANSI-escape-codes-to-set-color-in-the-terminal"><a href="#1-using-ANSI-escape-codes-to-set-color-in-the-terminal" class="headerlink" title="1 - using ANSI escape codes to set color in the terminal"></a>1 - using ANSI escape codes to set color in the terminal</h2><p>So I have wrote a post on using chalk to change color a long time ago, and I have notices that it works by sending a text pattern to the standard output of the console that the console uses to set the color of the terminal text. This pattern is of course and ANSI escape code sequence. In this section I will be writing about using these text patterns to control the color of the terminal output.</p>
+<h3 id="1-1-Basic-foreground-color-change"><a href="#1-1-Basic-foreground-color-change" class="headerlink" title="1.1 - Basic foreground color change"></a>1.1 - Basic foreground color change</h3><p>Lets start with just foreground color. Some terminals support a wide range of color options but for the most part I like to stick to the original standard that just supports eight color options for the foreground as well as background color of the text. The pattern must start with an escape character followed by an open bracket and then a color number finished with the m character.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> mess = <span class="string">'Hello world'</span>,</div><div class="line">colorFG = <span class="string">'\u001b[31m'</span>,</div><div class="line">resetFG = <span class="string">'\u001b[39m'</span>;</div><div class="line"><span class="built_in">console</span>.log(colorFG + mess + resetFG);</div></pre></td></tr></table></figure>
+<p>The numbers for colors range from 30 to 37, and then the number 39 can be used to reset the foreground color to the default of the terminal.</p>
+<h3 id="1-2-basic-color-change-utility-object-with-foreground-color-change"><a href="#1-2-basic-color-change-utility-object-with-foreground-color-change" class="headerlink" title="1.2 - basic color change utility object with foreground color change"></a>1.2 - basic color change utility object with foreground color change</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> color = &#123;</div><div class="line">    <span class="attr">byNum</span>: <span class="function">(<span class="params">mess, fgNum, bgNum</span>) =&gt;</span> &#123;</div><div class="line">        mess = mess || <span class="string">''</span>;</div><div class="line">        fgNum = fgNum === <span class="literal">undefined</span> ? <span class="number">31</span> : fgNum;</div><div class="line">        bgNum = bgNum === <span class="literal">undefined</span> ? <span class="number">47</span> : bgNum;</div><div class="line">        <span class="keyword">return</span> <span class="string">'\u001b['</span> + fgNum + <span class="string">'m'</span> + <span class="string">'\u001b['</span> + bgNum + <span class="string">'m'</span> + mess + <span class="string">'\u001b[39m\u001b[49m'</span>;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">black</span>: <span class="function">(<span class="params">mess, fgNum</span>) =&gt;</span> color.byNum(mess, <span class="number">30</span>, fgNum),</div><div class="line">    <span class="attr">red</span>: <span class="function">(<span class="params">mess, fgNum</span>) =&gt;</span> color.byNum(mess, <span class="number">31</span>, fgNum),</div><div class="line">    <span class="attr">green</span>: <span class="function">(<span class="params">mess, fgNum</span>) =&gt;</span> color.byNum(mess, <span class="number">32</span>, fgNum),</div><div class="line">    <span class="attr">yellow</span>: <span class="function">(<span class="params">mess, fgNum</span>) =&gt;</span> color.byNum(mess, <span class="number">33</span>, fgNum),</div><div class="line">    <span class="attr">blue</span>: <span class="function">(<span class="params">mess, fgNum</span>) =&gt;</span> color.byNum(mess, <span class="number">34</span>, fgNum),</div><div class="line">    <span class="attr">magenta</span>: <span class="function">(<span class="params">mess, fgNum</span>) =&gt;</span> color.byNum(mess, <span class="number">35</span>, fgNum),</div><div class="line">    <span class="attr">cyan</span>: <span class="function">(<span class="params">mess, fgNum</span>) =&gt;</span> color.byNum(mess, <span class="number">36</span>, fgNum),</div><div class="line">    <span class="attr">white</span>: <span class="function">(<span class="params">mess, fgNum</span>) =&gt;</span> color.byNum(mess, <span class="number">37</span>, fgNum)</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="keyword">let</span> text = <span class="string">'hello world.'</span>;</div><div class="line"><span class="built_in">console</span>.log(color.black(text));</div><div class="line"><span class="built_in">console</span>.log(color.red(text));</div><div class="line"><span class="built_in">console</span>.log(color.green(text));</div><div class="line"><span class="built_in">console</span>.log(color.yellow(text));</div><div class="line"><span class="built_in">console</span>.log(color.blue(text));</div><div class="line"><span class="built_in">console</span>.log(color.magenta(text));</div><div class="line"><span class="built_in">console</span>.log(color.cyan(text));</div><div class="line"><span class="built_in">console</span>.log(color.white(text, <span class="number">40</span>));</div></pre></td></tr></table></figure>
+<h2 id="2-Cursor-Movement-plus-save-and-restore"><a href="#2-Cursor-Movement-plus-save-and-restore" class="headerlink" title="2 - Cursor Movement plus save and restore"></a>2 - Cursor Movement plus save and restore</h2><p>There is much more to ANSI escape codes beyond that of just setting the foreground and background colors of text. The escape codes can also be used to control the movement of the cursor in the console as well. So then this can be used as a way to create a terminal based interface. In this section I will be covering some of these escape codes that can control cursor movement when making a node cli tool.</p>
+<h3 id="2-1-Move-a-cursor-and-also-save-and-restore"><a href="#2-1-Move-a-cursor-and-also-save-and-restore" class="headerlink" title="2.1 - Move a cursor and also save and restore"></a>2.1 - Move a cursor and also save and restore</h3><p>In this example I am not just moving the cursor I am also saving the position of the cursor after drawing the display area so that when I am done I can then restore to that location. This works more or less the same as the codes that are used to change the color of the text only there are are range of characters that can be used to move a cursor a number of positions up down left or right there are also characters that can be used to save and restore the cursor position.</p>
+<p>In this example I am using what we have covered with colors to create a few lines of text that represent and area, and then an at symbol for the current cursor position. I use the ANSI escape codes to move the cursor to the beginning of this area, and then write that at symbol. In addition I also use save and restore options.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">process.stdout.write(<span class="string">'\u001b[47m'</span>);</div><div class="line">process.stdout.write(<span class="string">'\u001b[30m'</span>);</div><div class="line">process.stdout.write(<span class="string">'..........\n'</span>);</div><div class="line">process.stdout.write(<span class="string">'..........\n'</span>);</div><div class="line">process.stdout.write(<span class="string">'..........\n'</span>);</div><div class="line">process.stdout.write(<span class="string">'..........\n'</span>);</div><div class="line">process.stdout.write(<span class="string">'\u001b[s'</span>);</div><div class="line"><span class="comment">// move up 4 and back 5</span></div><div class="line">process.stdout.write(<span class="string">'\u001b[4A'</span>);</div><div class="line">process.stdout.write(<span class="string">'\u001b[5D@'</span>);</div><div class="line"><span class="comment">// reset colors</span></div><div class="line">process.stdout.write(<span class="string">'\u001b[39m\u001b[49m'</span>);</div><div class="line"><span class="comment">// restore cursor</span></div><div class="line">process.stdout.write(<span class="string">'\u001b[u'</span>);</div><div class="line"> </div><div class="line"><span class="comment">/*</span></div><div class="line">@.........</div><div class="line">..........</div><div class="line">..........</div><div class="line">..........</div><div class="line">*/</div></pre></td></tr></table></figure>
+<p>The first value I give after the open bracket is the number of positions I want to move the cursor and then I want to give the letter A to move up, B to move down, C to move forward or right, and D to move backward or left.</p>
+<h3 id="2-2-Cursor-set-example"><a href="#2-2-Cursor-set-example" class="headerlink" title="2.2 - Cursor set example"></a>2.2 - Cursor set example</h3><p>here I have an example that sets the position of the cursor with wasd key style movement from the keyboard. This also features setting the standard input stream into raw mode, and is starting to work like an actual terminal base application.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> out = process.stdout;</div><div class="line"><span class="comment">// Set the position of a cursor</span></div><div class="line"><span class="keyword">let</span> setCur = <span class="function">(<span class="params">x, y</span>) =&gt;</span> &#123;</div><div class="line">    x = x || <span class="number">0</span>;</div><div class="line">    y = y || <span class="number">0</span>;</div><div class="line">    out.write(<span class="string">'\u001b['</span> + y + <span class="string">';'</span> + x + <span class="string">'H'</span>);</div><div class="line">&#125;</div><div class="line"><span class="keyword">let</span> clearScreen = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    out.write(<span class="string">'\u001b[2J'</span>);</div><div class="line">&#125;</div><div class="line"><span class="keyword">let</span> colorsSet = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    out.write(<span class="string">'\u001b[47m'</span>);</div><div class="line">    out.write(<span class="string">'\u001b[30m'</span>);</div><div class="line">&#125;;</div><div class="line"><span class="keyword">let</span> colorsDefault = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    out.write(<span class="string">'\u001b[39m\u001b[49m'</span>);</div><div class="line">&#125;;</div><div class="line"><span class="comment">// draw the area and at symbol</span></div><div class="line"><span class="keyword">let</span> draw = <span class="function">(<span class="params">opt</span>) =&gt;</span> &#123;</div><div class="line">    opt = opt || &#123;&#125;;</div><div class="line">    opt.x = opt.x || <span class="number">1</span>;</div><div class="line">    opt.y = opt.y || <span class="number">1</span>;</div><div class="line">    clearScreen();</div><div class="line">    setCur(<span class="number">1</span>, <span class="number">1</span>);</div><div class="line">    colorsSet();</div><div class="line">    <span class="comment">// draw area</span></div><div class="line">    out.write(<span class="string">'..........\n'</span>);</div><div class="line">    out.write(<span class="string">'..........\n'</span>);</div><div class="line">    out.write(<span class="string">'..........\n'</span>);</div><div class="line">    out.write(<span class="string">'..........\n'</span>);</div><div class="line">    out.write(<span class="string">'move: wasd; exit: x'</span>);</div><div class="line">    <span class="comment">// draw at symbol</span></div><div class="line">    setCur(opt.x, opt.y);</div><div class="line">    out.write(<span class="string">'@'</span>);</div><div class="line">    colorsDefault();</div><div class="line">&#125;;</div><div class="line"><span class="comment">// start position</span></div><div class="line"><span class="keyword">let</span> pos = &#123;</div><div class="line">    <span class="attr">x</span>: <span class="number">1</span>,</div><div class="line">    <span class="attr">y</span>: <span class="number">1</span>,</div><div class="line">    <span class="attr">w</span>: <span class="number">10</span>,</div><div class="line">    <span class="attr">h</span>: <span class="number">4</span></div><div class="line">&#125;;</div><div class="line">draw(pos);</div><div class="line">setCur(<span class="number">1</span>, <span class="number">6</span>);</div><div class="line"><span class="comment">// set in raw mode and capture key strokes</span></div><div class="line">process.stdin.setRawMode(<span class="literal">true</span>)</div><div class="line">process.stdin.on(<span class="string">'data'</span>, (data) =&gt; &#123;</div><div class="line">    <span class="keyword">let</span> input = data.toString().trim();</div><div class="line">    <span class="keyword">if</span> (input === <span class="string">'d'</span>) &#123;</div><div class="line">        pos.x += <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (input === <span class="string">'a'</span>) &#123;</div><div class="line">        pos.x -= <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (input === <span class="string">'w'</span>) &#123;</div><div class="line">        pos.y -= <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (input === <span class="string">'s'</span>) &#123;</div><div class="line">        pos.y += <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (input === <span class="string">'x'</span>) &#123;</div><div class="line">        process.exit()</div><div class="line">    &#125;</div><div class="line">    pos.x = pos.x &gt; pos.w ? pos.w: pos.x;</div><div class="line">    pos.y = pos.y &gt; pos.h ? pos.h: pos.y;</div><div class="line">    draw(pos);</div><div class="line">    setCur(<span class="number">1</span>, <span class="number">6</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="3-Conclusion"><a href="#3-Conclusion" class="headerlink" title="3 - Conclusion"></a>3 - Conclusion</h2><p>So ANSI escape codes are a way to control the presentation of a console allowing a developer to create terminal based interfaces. It is much more than just color allowing for control over the position of a cursor, and the deletion of content as well. It is a way to go about making terminal based games, and other apparitions such as terminal based text editors.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2019/09/19/nodejs-ansi-escape-codes/" data-id="ck0u2b4tw000bj8v1m7euqk5i" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2019/09/19/nodejs-ansi-escape-codes/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/09/18/js-promise-resolve-reject/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Promise resolve and reject methods for just creating a resolve or rejected promise</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2019/09/19/nodejs-ansi-escape-codes/index.html';
+    this.page.identifier = '537';
+    this.page.title = 'Using ANSI escape codes in nodejs';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.11px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.53px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.68px;">angular</a> <a href="/tags/animation/" style="font-size: 12.63px;">animation</a> <a href="/tags/automation/" style="font-size: 12.63px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.16px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.74px;">blog</a> <a href="/tags/canvas/" style="font-size: 16.84px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.63px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.05px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.58px;">ejs</a> <a href="/tags/express/" style="font-size: 17.37px;">express</a> <a href="/tags/games/" style="font-size: 17.89px;">games</a> <a href="/tags/git/" style="font-size: 11.58px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.26px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.68px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.21px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.53px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.58px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 12.63px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.42px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.21px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.47px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.95px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.11px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.32px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.79px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/09/19/nodejs-ansi-escape-codes/">Using ANSI escape codes in nodejs</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/18/js-promise-resolve-reject/">Promise resolve and reject methods for just creating a resolve or rejected promise</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/17/lodash_words/">Get an array of words from a string using Lodash or native javaScript AKA Lexical Analysis Tokenization</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/11/nodejs-command-line/">node command line options and command use examples</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/10/nodejs-semver/">node semver version standard and npm package</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2019/09/19/nodejs-ansi-escape-codes/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
