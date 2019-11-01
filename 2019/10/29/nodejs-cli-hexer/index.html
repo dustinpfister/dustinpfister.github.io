@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>A node cli tool text to hex example | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2019/10/29/nodejs-cli-hexer/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="So for todays post a node cli tool example from my on my node_cli_tools project I will be writing about a quick tool that I put together that can be used to convert a plain text file to a hex format.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A node cli tool text to hex example">
+<meta property="og:url" content="https://dustinpfister.github.io/2019/10/29/nodejs-cli-hexer/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="So for todays post a node cli tool example from my on my node_cli_tools project I will be writing about a quick tool that I put together that can be used to convert a plain text file to a hex format.">
+<meta property="og:updated_time" content="2019-11-01T00:47:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="A node cli tool text to hex example">
+<meta name="twitter:description" content="So for todays post a node cli tool example from my on my node_cli_tools project I will be writing about a quick tool that I put together that can be used to convert a plain text file to a hex format.">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-cli-hexer" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/29/nodejs-cli-hexer/" class="article-date"> Published:
+  <time datetime="2019-10-29T21:51:00.000Z" itemprop="datePublished">2019-10-29</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2019/10/29/nodejs-cli-hexer/" class="article-date"> Modified:
+  <time datetime="2019-11-01T00:47:36.000Z" itemprop="dateModified">2019-10-31</time>
+</a>
+
+    <span class="article-date">V1.9</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      A node cli tool text to hex example
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>So for todays post a <a href="/2019/10/23/nodejs-cli/">node cli</a> tool example from my on my node_cli_tools project I will be writing about a quick tool that I put together that can be used to convert a plain text file to a hex format. This kind of tool might come in handy when it comes to creating a collection of content that I want to store in a format that is not necessary encrypted, but is just in a format that is not human readable. The main use case is that I just want a simple tool that will convert markdown files for example into a format that just makes it so the content is not indexed by Google bot, but can easily be converted back to a plain text format.</p>
+<a id="more"></a>
+<h2 id="1-The-node-cli-nc-hexer-command-basics"><a href="#1-The-node-cli-nc-hexer-command-basics" class="headerlink" title="1 - The node cli nc-hexer command basics"></a>1 - The node cli nc-hexer command basics</h2><p>This is a post on my cd-hexer command that is part of my node_cli_tools project that can be found on my github account. This node cli tool depends on yargs which is one of several npm packages that make part of a stack that is the core of the project as a whole. So the code examples here will not work out of the box by just copying and parsing the code. If you want to reproduce what is going on here it would be best to clone done the project and install it globally.</p>
+<h2 id="2-bin-hexer-index-js"><a href="#2-bin-hexer-index-js" class="headerlink" title="2 - /bin/hexer/index.js"></a>2 - /bin/hexer/index.js</h2><p>So each of my commands in the node_cli_tools projects has a bin folder in the root of the project folder. In the package.json file there is a bin key and that points to this file. This is why I am suing the nodejs shebang at the top of the file, as this is the first file to be called when the nc-hexer command is used.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env node</span></div><div class="line"> </div><div class="line"><span class="comment">// main index.js for nc-hexer</span></div><div class="line"><span class="built_in">require</span>(<span class="string">'yargs'</span>)</div><div class="line">.command(<span class="built_in">require</span>(<span class="string">'./commands/default.js'</span>))</div><div class="line">.argv;</div></pre></td></tr></table></figure>
+<h2 id="3-bin-hexer-commands-default-js"><a href="#3-bin-hexer-commands-default-js" class="headerlink" title="3 - /bin/hexer/commands/default.js"></a>3 - /bin/hexer/commands/default.js</h2><p>Here I have the default.js file for the default command of the nc-hexer command. The target option can be used to set the file to convert to hex, and the output option can be used to set the file to save the hex format of the fine to. There is also the mode option that can be used to change from converting text to hex, and from hex back to text.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// default command for nc-hexer</span></div><div class="line"><span class="keyword">let</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>),</div><div class="line">fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line">promisify = <span class="built_in">require</span>(<span class="string">'util'</span>).promisify,</div><div class="line">readFile = promisify(fs.readFile),</div><div class="line">writeFile = promisify(fs.writeFile),</div><div class="line">hexer = <span class="built_in">require</span>(<span class="string">'../../../shared/lib/hexer/index.js'</span>);</div><div class="line"> </div><div class="line">exports.command = <span class="string">'*'</span>;</div><div class="line">exports.aliases = [<span class="string">'d'</span>];</div><div class="line">exports.describe = <span class="string">'default command'</span>;</div><div class="line"> </div><div class="line">exports.builder = &#123;</div><div class="line">    <span class="comment">// target file</span></div><div class="line">    t: &#123;</div><div class="line">        <span class="attr">default</span>: <span class="literal">false</span></div><div class="line">    &#125;,</div><div class="line">    <span class="comment">// output file</span></div><div class="line">    o: &#123;</div><div class="line">        <span class="attr">default</span>: path.join(process.cwd(), <span class="string">'hex_'</span>+ <span class="keyword">new</span> <span class="built_in">Date</span>().getTime() +<span class="string">'.txt'</span>)</div><div class="line">    &#125;,</div><div class="line">    <span class="comment">// mode</span></div><div class="line">    m: &#123;</div><div class="line">        <span class="attr">default</span>: <span class="string">'toraw'</span></div><div class="line">    &#125;,</div><div class="line">    <span class="comment">// return char</span></div><div class="line">    r: &#123;</div><div class="line">        <span class="attr">default</span>: <span class="string">'\n'</span></div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;;</div><div class="line">exports.handler = <span class="function"><span class="keyword">function</span> (<span class="params">argv</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'nc-hexer default command:'</span>);</div><div class="line"> </div><div class="line">    <span class="keyword">if</span>(!argv.t)&#123;</div><div class="line">        </div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'a target file must be given:'</span>);</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'$ nc-hexer -t foo.txt'</span>);</div><div class="line">        </div><div class="line">    &#125;<span class="keyword">else</span>&#123;</div><div class="line">        </div><div class="line">        readFile(argv.t, <span class="string">'utf8'</span>)</div><div class="line">        </div><div class="line">        .then(<span class="function">(<span class="params">data</span>)=&gt;</span>&#123;</div><div class="line">            </div><div class="line">            <span class="keyword">switch</span>(argv.m)&#123;</div><div class="line">                </div><div class="line">                <span class="keyword">case</span> <span class="string">'toraw'</span>:</div><div class="line">                    <span class="keyword">return</span> writeFile(argv.o, hexer.toRawStyle(data, argv.r));</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">                </div><div class="line">                <span class="keyword">case</span> <span class="string">'fromraw'</span>:</div><div class="line">                    <span class="keyword">return</span> writeFile(argv.o, hexer.fromRawStyle(data, argv.r));</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            <span class="keyword">return</span> <span class="built_in">Promise</span>.reject(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'unknown mode'</span>));</div><div class="line">            </div><div class="line">        &#125;)</div><div class="line">        </div><div class="line">        .catch(<span class="function">(<span class="params">e</span>)=&gt;</span>&#123;</div><div class="line">            </div><div class="line">            <span class="built_in">console</span>.warn(e.message);</div><div class="line">            </div><div class="line">        &#125;);</div><div class="line">        </div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">//let raw = hexer.toRawStyle('foo\r\nbar\nfeeb');</span></div><div class="line">    </div><div class="line">    <span class="comment">//console.log(hexer.fromRawStyle(raw));</span></div><div class="line">    </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="4-shared-lib-hexer-index-js"><a href="#4-shared-lib-hexer-index-js" class="headerlink" title="4 - /shared/lib/hexer/index.js"></a>4 - /shared/lib/hexer/index.js</h2><p>Here I have the actual hexer lib.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> hexer = &#123;</div><div class="line">    </div><div class="line">    <span class="comment">// patterns</span></div><div class="line">    pat_returns: <span class="regexp">/\n|\r\n/g</span>,</div><div class="line">    </div><div class="line">    <span class="comment">// just split text by windows (cr lf) and/or posix ( lf ) style retruns </span></div><div class="line">    splitByReturns : <span class="function">(<span class="params">text</span>) =&gt;</span> &#123;</div><div class="line">        <span class="keyword">return</span> text.split(hexer.pat_returns);</div><div class="line">    &#125;,</div><div class="line">    </div><div class="line">    <span class="comment">// text to raw style hex format where each line is convered to</span></div><div class="line">    <span class="comment">// hex and retrunChars are placed between each line</span></div><div class="line">    toRawStyle : <span class="function">(<span class="params">text, returnChar</span>) =&gt;</span> &#123;</div><div class="line">        </div><div class="line">        returnChar = returnChar === <span class="literal">undefined</span> ? <span class="string">'\n'</span> : returnChar;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> hexer.splitByReturns(text).map(<span class="function">(<span class="params">line</span>)=&gt;</span>&#123;</div><div class="line">            </div><div class="line">            <span class="keyword">return</span> Buffer.from(line, <span class="string">'utf8'</span>).toString(<span class="string">'hex'</span>);</div><div class="line">            </div><div class="line">        &#125;).join(returnChar);</div><div class="line">        </div><div class="line">    &#125;,</div><div class="line">    </div><div class="line">    <span class="comment">// convert rawStyle format hex back to text</span></div><div class="line">    fromRawStyle : <span class="function">(<span class="params">hex, returnChar</span>) =&gt;</span> &#123;</div><div class="line">        </div><div class="line">        returnChar = returnChar === <span class="literal">undefined</span> ? <span class="string">'\n'</span> : returnChar;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> hexer.splitByReturns(hex).map(<span class="function">(<span class="params">line</span>)=&gt;</span>&#123;</div><div class="line">            </div><div class="line">            <span class="keyword">return</span> Buffer.from(line, <span class="string">'hex'</span>).toString(<span class="string">'utf8'</span>);</div><div class="line">            </div><div class="line">        &#125;).join(returnChar);</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="built_in">module</span>.exports = hexer;</div></pre></td></tr></table></figure>
+<h2 id="5-Conclusion"><a href="#5-Conclusion" class="headerlink" title="5 - Conclusion"></a>5 - Conclusion</h2><p>So this project even as it currently stands serves the purpose that I had in mind, I just wanted a simple tool that converted plain text files into a from where it is just hex strings for each line with line breaks separating each line. The reason why is I just want to store text in a non human readable form, but a more advanced version might also preform better key-less <a href="https://en.wikipedia.org/wiki/Obfuscation" target="_blank" rel="external">obfuscation</a> of text, and maybe even encryption.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2019/10/29/nodejs-cli-hexer/" data-id="ck2ff6zu50001ykv17ekdpj7m" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2019/10/29/nodejs-cli-hexer/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/10/30/nodejs-buffer-isbuffer/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Node is buffer native method basics and more
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/10/28/nodejs-cli-edit/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">A node cli tools text editor project</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2019/10/29/nodejs-cli-hexer/index.html';
+    this.page.identifier = '552';
+    this.page.title = 'A node cli tool text to hex example';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.11px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.53px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.68px;">angular</a> <a href="/tags/animation/" style="font-size: 12.63px;">animation</a> <a href="/tags/automation/" style="font-size: 12.63px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.16px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.74px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.37px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.63px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.05px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.58px;">ejs</a> <a href="/tags/express/" style="font-size: 16.84px;">express</a> <a href="/tags/games/" style="font-size: 17.89px;">games</a> <a href="/tags/git/" style="font-size: 11.58px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.26px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.68px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.21px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.53px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.58px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 12.63px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.42px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.21px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.47px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.95px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.11px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.32px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.79px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/10/30/nodejs-buffer-isbuffer/">Node is buffer native method basics and more</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/29/nodejs-cli-hexer/">A node cli tool text to hex example</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/28/nodejs-cli-edit/">A node cli tools text editor project</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/23/nodejs-cli/">A node cli tools project</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/22/nodejs-cli-ssg/">A node cli project static site generator</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2019/10/29/nodejs-cli-hexer/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

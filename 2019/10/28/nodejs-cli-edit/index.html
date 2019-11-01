@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>A node cli tools text editor project | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2019/10/28/nodejs-cli-edit/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="So when it comes to developing a node cli tool that is a text editor of sorts there are two general ideas that come to mind. One idea is a text editor that is terminal based in which I am using ansi e">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A node cli tools text editor project">
+<meta property="og:url" content="https://dustinpfister.github.io/2019/10/28/nodejs-cli-edit/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="So when it comes to developing a node cli tool that is a text editor of sorts there are two general ideas that come to mind. One idea is a text editor that is terminal based in which I am using ansi e">
+<meta property="og:updated_time" content="2019-11-01T00:47:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="A node cli tools text editor project">
+<meta name="twitter:description" content="So when it comes to developing a node cli tool that is a text editor of sorts there are two general ideas that come to mind. One idea is a text editor that is terminal based in which I am using ansi e">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-cli-edit" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/28/nodejs-cli-edit/" class="article-date"> Published:
+  <time datetime="2019-10-28T23:09:00.000Z" itemprop="datePublished">2019-10-28</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2019/10/28/nodejs-cli-edit/" class="article-date"> Modified:
+  <time datetime="2019-11-01T00:47:35.000Z" itemprop="dateModified">2019-10-31</time>
+</a>
+
+    <span class="article-date">V1.13</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      A node cli tools text editor project
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>So when it comes to <a href="/2019/10/23/node-cli/">developing a node cli tool</a> that is a text editor of sorts there are two general ideas that come to mind. One idea is a text editor that is terminal based in which I am using <a href="/2019/09/19/nodejs-ansi-escpe-codes">ansi escape codes</a> to make a text editor like that of nano or vim. The other idea is a text editor that works in a browser window, and I am using nodejs as a way to serve a client system that is that editor, and also have some back end code that is used to save the file I am working on.</p>
+<a id="more"></a>
+<h2 id="1-This-is-not-a-getting-started-post-on-node-cli-tools"><a href="#1-This-is-not-a-getting-started-post-on-node-cli-tools" class="headerlink" title="1 - This is not a getting started post on node cli tools"></a>1 - This is not a getting started post on node cli tools</h2><p>This post is on a text editor i made for my <a href="https://github.com/dustinpfister/node_cli_tools" target="_blank" rel="external">node_cli_tools project</a>. The editor that I am writing about here makes use of many resources that are part of the core repository of the project. So it might be a good idea to start with <a href="/2019/10/23/node-cli">my post on the node_cli_tools project in general</a>. If not you might have a hard time trying to reproduce what I am writing about here.</p>
+<h2 id="2-The-edit-index-and-edit-command-default-script-of-the-nc-edit-node-cli-tool"><a href="#2-The-edit-index-and-edit-command-default-script-of-the-nc-edit-node-cli-tool" class="headerlink" title="2 - The edit/index and edit/command/default script of the nc-edit node cli tool"></a>2 - The edit/index and edit/command/default script of the nc-edit node cli tool</h2><p>So in the main root directory of my node_cli_tools project I have a bin folder, and in this bin folder I have the edit folder that composes everything that is my nc-edit command. At the root of the edit folder is an index.js file that is what will be called within the project when i call the nc-edit command in the command line interface. One of the resources that I am uses is called <a href="/2018/07/24/nodejs-yargs">yargs</a> which is an option parser which is used in the main index.js file, to which I then load one or more commands for the nc-edit command in the commands folder that is also in the edit folder. In this section I will be quickly going over the index.js file and the default.js file in the commands folder.</p>
+<h3 id="2-1-edit-index-js-and-package-json-of-node-cli-tools"><a href="#2-1-edit-index-js-and-package-json-of-node-cli-tools" class="headerlink" title="2.1 - edit/index.js and package.json of node_cli_tools"></a>2.1 - edit/index.js and package.json of node_cli_tools</h3><p>The index.js file is where I am using yargs for option parsing, and I am just loading in one default command for the nc-edit command as of this writing. The logic for the default command is in the default.js file in the command folder, a common folder for all commands in this project.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env node</span></div><div class="line"><span class="comment">// main index.js for nc-edit</span></div><div class="line"><span class="comment">// using yargs for option parsing sub commands in a ./commands folder</span></div><div class="line"><span class="built_in">require</span>(<span class="string">'yargs'</span>)</div><div class="line">.command(<span class="built_in">require</span>(<span class="string">'./commands/default.js'</span>))</div><div class="line">.argv;</div></pre></td></tr></table></figure>
+<p>This file of course makes use of the nodejs shebang because it is the script that will first be called when calling the nc-edit command, and this is for course the entry point that I have defined in the bin key of the package.json file in the root of the node_cli_tools project folder.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="string">"bin"</span>: &#123;</div><div class="line">  <span class="string">"nc-init"</span>: <span class="string">"bin/init/index.js"</span>,</div><div class="line">  <span class="string">"nc-walk"</span>: <span class="string">"bin/walk/index.js"</span>,</div><div class="line">  <span class="string">"nc-ssg"</span>: <span class="string">"bin/ssg/index.js"</span>,</div><div class="line">  <span class="string">"nc-edit"</span>: <span class="string">"bin/edit/index.js"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="2-2-edit-commands-default-js"><a href="#2-2-edit-commands-default-js" class="headerlink" title="2.2 - /edit/commands/default.js"></a>2.2 - /edit/commands/default.js</h3><p>Here I have the logic for the single default command for nc-edit that sets up a server for a port and target folder that contains files that are to be edited. The module defines an object that will be used with yargs in the main index.js file. In loads the server.js file in the edit folder that will set up the server that will host the client system that will be used to edit files in a browser window.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// default command for nc-edit</span></div><div class="line"><span class="keyword">let</span> server = <span class="built_in">require</span>(<span class="string">'./server.js'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"> </div><div class="line">exports.command = <span class="string">'*'</span>;</div><div class="line">exports.aliases = [<span class="string">'d'</span>];</div><div class="line">exports.describe = <span class="string">'default command'</span>;</div><div class="line"> </div><div class="line">exports.builder = &#123;</div><div class="line">    <span class="comment">// target project folder</span></div><div class="line">    t: &#123;</div><div class="line">        <span class="attr">default</span>: process.cwd()</div><div class="line">    &#125;,</div><div class="line">    <span class="comment">// port to host</span></div><div class="line">    p: &#123;</div><div class="line">        <span class="attr">default</span>: <span class="number">8080</span></div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line">exports.handler = <span class="function"><span class="keyword">function</span> (<span class="params">argv</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'nc-edit default command:'</span>);</div><div class="line">    </div><div class="line">    server(&#123;</div><div class="line">        <span class="attr">target</span>: argv.t,</div><div class="line">        <span class="attr">port</span>: argv.p,</div><div class="line">        <span class="attr">dir_public</span>: path.join(__dirname, <span class="string">'public'</span>),</div><div class="line">        <span class="attr">dir_shared_public</span>: path.join(__dirname, <span class="string">'../../../shared/public'</span>)</div><div class="line">    &#125;)</div><div class="line">    </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="3-The-server-js-file"><a href="#3-The-server-js-file" class="headerlink" title="3 - The server.js file"></a>3 - The server.js file</h2><p>This is the main server.js file it is what will start when the default command is used. The port and target folder can be set in the command line when starting the command, but much of the other properties of a main conf object are internal. I am using express as a server side framework, because I have found that it saves me a great deal of time compared to working out a backend system without a framework such as express.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// nc-edit default command sever</span></div><div class="line"><span class="keyword">let</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"> </div><div class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">conf</span>) =&gt;</span> &#123;</div><div class="line">    </div><div class="line">    <span class="keyword">let</span> app = express();</div><div class="line">    </div><div class="line">    conf = conf || &#123;&#125;;</div><div class="line">    conf.port = conf.port || <span class="number">8080</span>;</div><div class="line">    conf.target = conf.target || process.cwd();</div><div class="line">    conf.dir_public = conf.dir_public || path.join(__dirname, <span class="string">'public'</span>);</div><div class="line">    conf.dir_shared_public = conf.dir_shared_public || path.join(__dirname, <span class="string">'../../../shared/public'</span>);</div><div class="line">    conf.app = app;</div><div class="line"> </div><div class="line">    app.use(<span class="string">'/'</span>, express.static( conf.dir_public ));</div><div class="line">    app.use(<span class="string">'/shared'</span>, express.static( path.join(conf.dir_shared_public) ));</div><div class="line">    </div><div class="line">    app.use(<span class="string">'/file-list'</span>, <span class="built_in">require</span>(path.join(__dirname, <span class="string">'middleware/file-list.js'</span>))(conf) );</div><div class="line">    app.use(<span class="string">'/file-open'</span>, <span class="built_in">require</span>(path.join(__dirname, <span class="string">'middleware/file-open.js'</span>))(conf) );</div><div class="line">    app.use(<span class="string">'/file-save'</span>, <span class="built_in">require</span>(path.join(__dirname, <span class="string">'middleware/file-save.js'</span>))(conf) );</div><div class="line">    </div><div class="line">    app.listen(conf.port, () =&gt; &#123;</div><div class="line">        </div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'nc-edit server running on port '</span> + conf.port);</div><div class="line">        </div><div class="line">    &#125;);</div><div class="line">    </div><div class="line">    </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>The main method that is exported and called in default.js creates some static paths for the client system in a public folder that is also contained with the commands folder of the edit folder, more on that latter. In additional a public static folder that is local to the nc-edit command I also have a public folder in a main shared folder at the root of the node_cli_tools project folder. In that folder I am making use of additional resources that are used in the client system, mainly vuejs, and vue-resource as an http client.</p>
+<p>I also make use of several middileware modules for this project that preform the actions of opening and writing files in the target folder.</p>
+<h2 id="4-the-edit-commands-middleware-files"><a href="#4-the-edit-commands-middleware-files" class="headerlink" title="4 - the /edit/commands/middleware files"></a>4 - the /edit/commands/middleware files</h2><p>In this section I will be going over the server <a href="/2018/06/25/express-middleware/">express middileware</a> methods that I have put together for this project.</p>
+<h3 id="4-1-file-open"><a href="#4-1-file-open" class="headerlink" title="4.1 - file-open"></a>4.1 - file-open</h3><p>This middleware opens a current file, and then sends back the contents of that file.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// open a file</span></div><div class="line"><span class="keyword">let</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>),</div><div class="line">fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">conf</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">let</span> router = express.Router();</div><div class="line">    router.use(<span class="built_in">require</span>(<span class="string">'body-parser'</span>).json());</div><div class="line">    router.post(<span class="string">'/'</span>, (req, res) =&gt; &#123;</div><div class="line">        fs.readFile(path.join(conf.target, req.body.fileName), <span class="string">'utf8'</span>, (e, text) =&gt; &#123;</div><div class="line">            <span class="keyword">if</span> (text) &#123;</div><div class="line">                res.json(&#123;</div><div class="line">                    <span class="attr">mess</span>: <span class="string">'looks like we have some text'</span>,</div><div class="line">                    <span class="attr">text</span>: text,</div><div class="line">                    <span class="attr">fileName</span>: req.body.fileName</div><div class="line">                &#125;);</div><div class="line">            &#125; <span class="keyword">else</span> </div><div class="line">                res.json(&#123;</div><div class="line">                    <span class="attr">mess</span>: e.message,</div><div class="line">                    <span class="attr">text</span>: <span class="string">''</span>,</div><div class="line">                    <span class="attr">fileName</span>: req.body.fileName</div><div class="line">                &#125;);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;);</div><div class="line">    <span class="keyword">return</span> router;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="4-2-file-save"><a href="#4-2-file-save" class="headerlink" title="4.2 - file-save"></a>4.2 - file-save</h3><p>This middleware writes the contents that have been submitted from the client system to the file in the target folder.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// save a file</span></div><div class="line"><span class="keyword">let</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>),</div><div class="line">fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">conf</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">let</span> router = express.Router();</div><div class="line">    router.use(<span class="built_in">require</span>(<span class="string">'body-parser'</span>).json());</div><div class="line">    router.post(<span class="string">'/'</span>, (req, res) =&gt; &#123;</div><div class="line">        fs.writeFile(path.join(conf.target, req.body.fileName), req.body.text, <span class="string">'utf8'</span>, (e) =&gt; &#123;</div><div class="line">            <span class="keyword">if</span> (e) &#123;</div><div class="line">                res.json(&#123;</div><div class="line">                    <span class="attr">mess</span>: e.message,</div><div class="line">                    <span class="attr">fail</span>: <span class="literal">true</span>,</div><div class="line">                    <span class="attr">fileName</span>: req.body.fileName</div><div class="line">                &#125;);</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                res.json(&#123;</div><div class="line">                    <span class="attr">mess</span>: <span class="string">'save is good'</span>,</div><div class="line">                    <span class="attr">fail</span>: <span class="literal">false</span>,</div><div class="line">                    <span class="attr">fileName</span>: req.body.fileName</div><div class="line">                &#125;);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;);</div><div class="line">    <span class="keyword">return</span> router;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="5-the-edit-commands-public-folder"><a href="#5-the-edit-commands-public-folder" class="headerlink" title="5 - the edit/commands/public folder"></a>5 - the edit/commands/public folder</h2><p>This section is on the public folder of the edit folder for the nc-edit command. This contains and index.html file that is the single page of the editor, and a client.js file that is the javaScript logic for the client system.</p>
+<h3 id="5-1-index-html"><a href="#5-1-index-html" class="headerlink" title="5.1 - index.html"></a>5.1 - index.html</h3><p>Here I have the main index.html file that has a div element that will server as a mount point for my vuejs vue that is defined in the client.js file. I am also of course linking to that client.js file, but first I am loading some resource that are used by the client system mainly vuejs and vue-resource.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>nc-edit<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line"> </div><div class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span></div><div class="line">    <span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">    </div><div class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>nc-edit<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">br</span>&gt;</span></div><div class="line"> </div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"editor"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    </div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/shared/js/vuejs/2.6.10/vue.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/shared/js/vue-resource/1.5.1/vue-resource.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/js/client.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="5-2-client-js"><a href="#5-2-client-js" class="headerlink" title="5.2 - client.js"></a>5.2 - client.js</h3><p>Here I have the client system that I am using for the nc-edit command.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> vue = <span class="keyword">new</span> Vue(&#123;</div><div class="line">        <span class="comment">// attaching to editor hard coded html element</span></div><div class="line">        el: <span class="string">'#editor'</span>,</div><div class="line">        <span class="comment">// temaple for the vue</span></div><div class="line">        template: <span class="string">'&lt;div&gt;'</span> +</div><div class="line">        <span class="string">'&lt;input type=\"text\" v-model=\"fileName\"&gt; '</span> +</div><div class="line">        <span class="string">'&lt;input type=\"button\" value=\"open\" v-on:click=\"open\"&gt; '</span> +</div><div class="line">        <span class="string">'&lt;input type=\"button\" value=\"save\" v-on:click=\"save\"&gt; &lt;br&gt;&lt;br&gt;'</span> +</div><div class="line">        <span class="string">'&lt;textarea cols=\"80\" rows=\"20\" v-model=\"text\"&gt;&lt;/textarea&gt;'</span> +</div><div class="line">        <span class="string">'&lt;/div&gt;'</span>,</div><div class="line">        <span class="comment">// state</span></div><div class="line">        data: &#123;</div><div class="line">            <span class="attr">fileName</span>: <span class="string">'untitled.md'</span>,</div><div class="line">            <span class="attr">text</span>: <span class="string">''</span></div><div class="line">        &#125;,</div><div class="line">        <span class="comment">// methods</span></div><div class="line">        methods: &#123;</div><div class="line">            <span class="comment">// save a file from text area to target folder</span></div><div class="line">            save: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">                <span class="built_in">console</span>.log(<span class="string">'save'</span> + <span class="keyword">this</span>.$data.fileName);</div><div class="line">                <span class="keyword">this</span>.$http.post(<span class="string">'/file-save'</span>, &#123;</div><div class="line">                    <span class="attr">fileName</span>: <span class="keyword">this</span>.$data.fileName,</div><div class="line">                    <span class="attr">text</span>: <span class="keyword">this</span>.$data.text</div><div class="line">                &#125;)</div><div class="line">                .then(<span class="function"><span class="keyword">function</span> (<span class="params">res</span>) </span>&#123;</div><div class="line">                    <span class="built_in">console</span>.log(res);</div><div class="line">                &#125;);</div><div class="line">            &#125;,</div><div class="line">            <span class="comment">// open a file from target folder of the current fileName</span></div><div class="line">            open: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">                <span class="built_in">console</span>.log(<span class="string">'open: '</span> + <span class="keyword">this</span>.$data.fileName);</div><div class="line">                <span class="keyword">this</span>.$http.post(<span class="string">'/file-open'</span>, &#123;</div><div class="line">                    <span class="attr">fileName</span>: <span class="keyword">this</span>.$data.fileName</div><div class="line">                &#125;)</div><div class="line">                .then(<span class="function"><span class="keyword">function</span> (<span class="params">res</span>) </span>&#123;</div><div class="line">                    <span class="built_in">console</span>.log(res);</div><div class="line">                    <span class="keyword">if</span> (res.body.text) &#123;</div><div class="line">                        <span class="keyword">this</span>.$data.text = res.body.text;</div><div class="line">                    &#125;</div><div class="line">                &#125;)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;);</div></pre></td></tr></table></figure>
+<h2 id="6-Conclusion"><a href="#6-Conclusion" class="headerlink" title="6 - Conclusion"></a>6 - Conclusion</h2><p>There is much more work to be done, but the basic idea of an editor is working so far. When I start it up in the command line and go to the address in my browser I can use the project to open and write files in the target folder That I have set. The only question now is how much more time I want to put into this project, and what more features does it need of any. There are some concerns with security too, but if I am just using this on my home network it should not be to big of a concern.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2019/10/28/nodejs-cli-edit/" data-id="ck2ff6ztq0000ykv1b05sbzp9" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2019/10/28/nodejs-cli-edit/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/10/29/nodejs-cli-hexer/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          A node cli tool text to hex example
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/10/23/nodejs-cli/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">A node cli tools project</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2019/10/28/nodejs-cli-edit/index.html';
+    this.page.identifier = '551';
+    this.page.title = 'A node cli tools text editor project';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.11px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.53px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.68px;">angular</a> <a href="/tags/animation/" style="font-size: 12.63px;">animation</a> <a href="/tags/automation/" style="font-size: 12.63px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.16px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.74px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.37px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.63px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.05px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.58px;">ejs</a> <a href="/tags/express/" style="font-size: 16.84px;">express</a> <a href="/tags/games/" style="font-size: 17.89px;">games</a> <a href="/tags/git/" style="font-size: 11.58px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.26px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.68px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.21px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.53px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.58px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 12.63px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.42px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.21px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.47px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.95px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.11px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.32px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.79px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/10/30/nodejs-buffer-isbuffer/">Node is buffer native method basics and more</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/29/nodejs-cli-hexer/">A node cli tool text to hex example</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/28/nodejs-cli-edit/">A node cli tools text editor project</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/23/nodejs-cli/">A node cli tools project</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/22/nodejs-cli-ssg/">A node cli project static site generator</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2019/10/28/nodejs-cli-edit/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

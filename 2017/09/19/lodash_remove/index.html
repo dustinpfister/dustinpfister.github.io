@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>The lodash _.remove array method in action | Dustin John Pfister at github pages</title>
+  <title>The lodash _.remove array method and vanilla javaScript alternatives | Dustin John Pfister at github pages</title>
   
   <!-- no index tag or blank here -->
   
@@ -11,16 +11,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2017/09/19/lodash_remove/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="The process of removing a few elements from an array can sometimes be a little troubling, or at least I remember that it was back when I was first starting out. The trouble was mainly with looping thr">
+  <meta name="description" content="The process of removing a few elements from an array can sometimes be a little troubling, or at least I remember that it was back when I was first starting out with javaScript. The trouble was mainly">
 <meta property="og:type" content="article">
-<meta property="og:title" content="The lodash _.remove array method in action">
+<meta property="og:title" content="The lodash _.remove array method and vanilla javaScript alternatives">
 <meta property="og:url" content="https://dustinpfister.github.io/2017/09/19/lodash_remove/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="The process of removing a few elements from an array can sometimes be a little troubling, or at least I remember that it was back when I was first starting out. The trouble was mainly with looping thr">
-<meta property="og:updated_time" content="2019-02-22T15:10:08.000Z">
+<meta property="og:description" content="The process of removing a few elements from an array can sometimes be a little troubling, or at least I remember that it was back when I was first starting out with javaScript. The trouble was mainly">
+<meta property="og:updated_time" content="2019-10-29T12:20:06.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="The lodash _.remove array method in action">
-<meta name="twitter:description" content="The process of removing a few elements from an array can sometimes be a little troubling, or at least I remember that it was back when I was first starting out. The trouble was mainly with looping thr">
+<meta name="twitter:title" content="The lodash _.remove array method and vanilla javaScript alternatives">
+<meta name="twitter:description" content="The process of removing a few elements from an array can sometimes be a little troubling, or at least I remember that it was back when I was first starting out with javaScript. The trouble was mainly">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/09/19/lodash_remove/" class="article-date"> Modified:
-  <time datetime="2019-02-22T15:10:08.000Z" itemprop="dateModified">2019-02-22</time>
+  <time datetime="2019-10-29T12:20:06.000Z" itemprop="dateModified">2019-10-29</time>
 </a>
 
-    <span class="article-date">V1.18</span>
+    <span class="article-date">V1.19</span>
 
     
   <div class="article-category">
@@ -139,7 +139,7 @@ ga('send', 'pageview');
         
   
     <h1 class="article-title" itemprop="name">
-      The lodash _.remove array method in action
+      The lodash _.remove array method and vanilla javaScript alternatives
     </h1>
   
 
@@ -147,7 +147,7 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>The process of removing a few elements from an array can sometimes be a little troubling, or at least I remember that it was back when I was first starting out. The trouble was mainly with looping threw an array from zero upwards, each time an element is removed it of course changes the length of an array. The way I would resolve the problem is often by looping threw the array backwards. Anyway this post is about the <a href="https://lodash.com/docs/4.17.4#remove" target="_blank" rel="external">_.remove</a> array method in <a href="https://lodash.com/" target="_blank" rel="external">lodash</a> that helps to make quick work of removing elements from an array. I will also be looking at some vanilla js alternatives to the lodash remove array method as well as well.</p>
+        <p>The process of removing a few elements from an array can sometimes be a little troubling, or at least I remember that it was back when I was first starting out with javaScript. The trouble was mainly with looping over an array from a zero element index value upwards, each time an element is removed it of course changes the length of an array, which of course causes a problem. The way I would resolve the problem is often by looping threw the array backwards, and using an array prototype method like Array.splice to purge elements. That kind of method seems to work okay, but there is also the <a href="https://lodash.com/docs/4.17.4#remove" target="_blank" rel="external">_.remove</a> array method in <a href="https://lodash.com/" target="_blank" rel="external">lodash</a> that helps to make quick work of removing elements from an array if lodash is part of the stack of a project. Still lots of developers are transitioning away from lodash, so I will also be looking at some vanilla js alternatives to the lodash remove method in addition to just what lodash has to work with.</p>
 <a id="more"></a>
 <h2 id="1-lodash-remove-basic-example"><a href="#1-lodash-remove-basic-example" class="headerlink" title="1 - lodash remove basic example"></a>1 - lodash remove basic example</h2><p>The lodash remove method is one of the many <a href="/2019/02/14/lodash_array/">array methods in lodash</a>. It’s pretty easy, just pass the array, and a method where you can define the conditions that will result in removal of the element.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> arr = [<span class="string">'foo'</span>, <span class="number">27</span>, <span class="string">'man'</span>, <span class="number">42</span>, <span class="string">'chew'</span>];</div><div class="line"> </div><div class="line">_.remove(arr, <span class="function"><span class="keyword">function</span> (<span class="params">el</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// remove all numbers</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">typeof</span> el === <span class="string">'number'</span>;</div><div class="line"> </div><div class="line">&#125;);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(arr); <span class="comment">// ['foo','man',chew];</span></div></pre></td></tr></table></figure>
@@ -211,7 +211,7 @@ ga('send', 'pageview');
 var disqus_config = function () {
     this.page.url = 'https://dustinpfister.github.io/2017/09/19/lodash_remove/index.html';
     this.page.identifier = '38';
-    this.page.title = 'The lodash _.remove array method in action';
+    this.page.title = 'The lodash _.remove array method and vanilla javaScript alternatives';
 };
 
 (function() {
@@ -274,23 +274,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/10/11/canvas-alpha/">Canvas alpha transparency</a>
+            <a href="/2019/10/30/nodejs-buffer-isbuffer/">Node is buffer native method basics and more</a>
           </li>
         
           <li>
-            <a href="/2019/10/10/canvas-example-animation-basics/">Canvas examples on animation basics and beyond</a>
+            <a href="/2019/10/29/nodejs-cli-hexer/">A node cli tool text to hex example</a>
           </li>
         
           <li>
-            <a href="/2019/10/09/canvas-translate/">The canvas translate method</a>
+            <a href="/2019/10/28/nodejs-cli-edit/">A node cli tools text editor project</a>
           </li>
         
           <li>
-            <a href="/2019/10/08/canvas-clip/">The canvas clip method</a>
+            <a href="/2019/10/23/nodejs-cli/">A node cli tools project</a>
           </li>
         
           <li>
-            <a href="/2019/10/03/lodash_deburr/">lodash deburr and latin 1 Unicode car removal</a>
+            <a href="/2019/10/22/nodejs-cli-ssg/">A node cli project static site generator</a>
           </li>
         
       </ul>

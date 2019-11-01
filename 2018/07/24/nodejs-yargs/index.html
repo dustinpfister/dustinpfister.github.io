@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2018/07/24/nodejs-yargs/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="So this week I have been looking into option parsers, for the sake of expanding my horizons when it comes to what the options are for parsing options. I have writing a post on nopt a long time ago, wh">
-<meta property="og:updated_time" content="2018-07-30T23:50:39.000Z">
+<meta property="og:updated_time" content="2019-10-23T01:42:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The yargs option parser for node.js">
 <meta name="twitter:description" content="So this week I have been looking into option parsers, for the sake of expanding my horizons when it comes to what the options are for parsing options. I have writing a post on nopt a long time ago, wh">
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2018/07/24/nodejs-yargs/" class="article-date"> Modified:
-  <time datetime="2018-07-30T23:50:39.000Z" itemprop="dateModified">2018-07-30</time>
+  <time datetime="2019-10-23T01:42:28.000Z" itemprop="dateModified">2019-10-22</time>
 </a>
 
-    <span class="article-date">V1.6</span>
+    <span class="article-date">V1.7</span>
 
     
   <div class="article-category">
@@ -163,6 +163,7 @@ ga('send', 'pageview');
 <h2 id="3-An-example-that-walks-a-file-system-for-html"><a href="#3-An-example-that-walks-a-file-system-for-html" class="headerlink" title="3 - An example that walks a file system for html"></a>3 - An example that walks a file system for html</h2><p>For a more interesting example I put together a quick script that can be used to walk a file system and log any html files that it finds.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> yargs = <span class="built_in">require</span>(<span class="string">'yargs'</span>),</div><div class="line">klaw = <span class="built_in">require</span>(<span class="string">'klaw'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>),</div><div class="line"> </div><div class="line">argv = yargs</div><div class="line"> </div><div class="line">    .command(&#123;</div><div class="line"> </div><div class="line">        <span class="attr">command</span>: <span class="string">'*'</span>,</div><div class="line">        <span class="attr">handler</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'use the html command to walk'</span>);</div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'walker html -p ./public -d 4'</span>);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;)</div><div class="line"> </div><div class="line">    <span class="comment">// html command</span></div><div class="line">    .command(&#123;</div><div class="line">        <span class="attr">command</span>: <span class="string">'html'</span>,</div><div class="line">        <span class="attr">describe</span>: <span class="string">'walk for html'</span>,</div><div class="line">        <span class="attr">handler</span>: <span class="function"><span class="keyword">function</span> (<span class="params">argv</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">// walk with path, and depth</span></div><div class="line">            klaw(argv.path, &#123;</div><div class="line">                <span class="attr">depthLimit</span>: argv.depth</div><div class="line">            &#125;)</div><div class="line"> </div><div class="line">            .on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</div><div class="line"> </div><div class="line">                <span class="keyword">if</span> (path.extname(item.path).toLowerCase() === <span class="string">'.html'</span>) &#123;</div><div class="line"> </div><div class="line">                    <span class="built_in">console</span>.log(item.path);</div><div class="line"> </div><div class="line">                &#125;</div><div class="line"> </div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;)</div><div class="line">    <span class="comment">// options to set path, and depth</span></div><div class="line">    .option(<span class="string">'depth'</span>, &#123;<span class="attr">alias</span>: <span class="string">'d'</span>,<span class="attr">default</span>:<span class="string">'0'</span>&#125;)</div><div class="line">    .option(<span class="string">'path'</span>, &#123;<span class="attr">alias</span>: <span class="string">'p'</span>,<span class="attr">default</span>:<span class="string">'./'</span>&#125;)</div><div class="line">    .argv;</div></pre></td></tr></table></figure>
 <p> In this example I am setting up a default command that will display a usage example when the script is called without a command given. I am also defining my commands by giving an object rather than three sets of arguments.</p>
+<h2 id="4-Using-external-files"><a href="#4-Using-external-files" class="headerlink" title="4 - Using external files"></a>4 - Using external files</h2><p>So the way I often like to use yargs in actual projects is to create a commands folder that will contains a whole bunch of scripts and each script is a command. So I will want to make it so each script exports an object that is formated the same way as the obejcts that I use to define what a command is.</p>
 
       
     </div>
@@ -273,23 +274,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/10/11/canvas-alpha/">Canvas alpha transparency</a>
+            <a href="/2019/10/30/nodejs-buffer-isbuffer/">Node is buffer native method basics and more</a>
           </li>
         
           <li>
-            <a href="/2019/10/10/canvas-example-animation-basics/">Canvas examples on animation basics and beyond</a>
+            <a href="/2019/10/29/nodejs-cli-hexer/">A node cli tool text to hex example</a>
           </li>
         
           <li>
-            <a href="/2019/10/09/canvas-translate/">The canvas translate method</a>
+            <a href="/2019/10/28/nodejs-cli-edit/">A node cli tools text editor project</a>
           </li>
         
           <li>
-            <a href="/2019/10/08/canvas-clip/">The canvas clip method</a>
+            <a href="/2019/10/23/nodejs-cli/">A node cli tools project</a>
           </li>
         
           <li>
-            <a href="/2019/10/03/lodash_deburr/">lodash deburr and latin 1 Unicode car removal</a>
+            <a href="/2019/10/22/nodejs-cli-ssg/">A node cli project static site generator</a>
           </li>
         
       </ul>
