@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2019/05/08/vuejs-set/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="The vue set global api method in vuejs can be used to set a property of a reactive object. In other words it is a way to add a property to an object in the data of a Vue constructor instance, and have">
-<meta property="og:updated_time" content="2019-05-09T18:59:47.000Z">
+<meta property="og:updated_time" content="2019-11-16T21:11:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="vue set for setting reactive properties in vuejs">
 <meta name="twitter:description" content="The vue set global api method in vuejs can be used to set a property of a reactive object. In other words it is a way to add a property to an object in the data of a Vue constructor instance, and have">
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2019/05/08/vuejs-set/" class="article-date"> Modified:
-  <time datetime="2019-05-09T18:59:47.000Z" itemprop="dateModified">2019-05-09</time>
+  <time datetime="2019-11-16T21:11:03.000Z" itemprop="dateModified">2019-11-16</time>
 </a>
 
-    <span class="article-date">V1.3</span>
+    <span class="article-date">V1.9</span>
 
     
   <div class="article-category">
@@ -147,12 +147,16 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>The <a href="https://vuejs.org/v2/api/#Vue-set" target="_blank" rel="external">vue set</a> global api method in vuejs can be used to set a property of a reactive object. In other words it is a way to add a property to an object in the data of a Vue constructor instance, and have the view update. The thing about this is that many frameworks have a method like this, because sometimes you can not just simply add a property to an object, sometimes some additional things need to happen on top of that.</p>
+        <p>The <a href="https://vuejs.org/v2/api/#Vue-set" target="_blank" rel="external">vue set</a> global api method in vuejs can be used to set a property of a reactive object. In other words it is a way to add a property to an object in the data of a Vue constructor instance, and have the view update when a change happens to that property. Many times this should happen automatically, but in some cases it might not when it comes to nested objects.</p>
+<p>The thing about this is that many frameworks have a method like this, because sometimes you can not just simply add a property to an object, or doing so is not a good idea at times. Sometimes some additional things need to happen on top of just simply setting a properly of an object, such as setting up something to watch that property of changes, and then do something when a change occurs.</p>
 <a id="more"></a>
 <h2 id="1-vue-set-example"><a href="#1-vue-set-example" class="headerlink" title="1 - vue set example"></a>1 - vue set example</h2><p>For a quick example of vue set, I put something together that makes use of a property in the data object but only if it is there. So in the example there is a root property in the data option object that is also an object, this is impotent because there is no way to add root properties to the data object with vue set. However vue set can be used to add properties to an object that is nested in the data object.</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>vue set example<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/js/vuejs/2.6.10/vue.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">  </div><div class="line">  <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">"foo"</span>&gt;</span>&#123;&#123; u.mess ? u.mess : 'no mess' &#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"></div><div class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">  <span class="keyword">var</span> vm = <span class="keyword">new</span> Vue(&#123;</div><div class="line">    <span class="attr">el</span>:<span class="string">'#foo'</span>,</div><div class="line">    <span class="attr">data</span>: &#123;</div><div class="line">    <span class="attr">u</span>:&#123;&#125;</div><div class="line">    &#125;</div><div class="line">  &#125;);</div><div class="line">  </div><div class="line">  <span class="comment">// set mess property and trigger update of the view</span></div><div class="line">  Vue.set(vm.u,<span class="string">'mess'</span>, <span class="string">'bar'</span>)</div><div class="line">  </div><div class="line">  <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
 <p>When I use the vue set method to set the value of the mess property of the u object in the data object the message bar is displayed as expected. If I where to just add the property directly the message will not display, because it is not reactive. This is the whole reason why there is the vue set method in the global api of vuejs, it is a way to add properties to a reactive object after the fact.</p>
-
+<h3 id="1-1-Using-force-update-as-an-alternative-to-making-properties-reactive"><a href="#1-1-Using-force-update-as-an-alternative-to-making-properties-reactive" class="headerlink" title="1.1 - Using force update as an alternative to making properties reactive"></a>1.1 - Using force update as an alternative to making properties reactive</h3><p>Another option is to use the vue force update method to force the vue to render again. This is a way to manually render the view again rather than have it update each time a value chances. With some projects I might want to have things work that way where the view does not always update each time I change a value in the state, but for the most part I would want that to happen.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> vm = <span class="keyword">new</span> Vue(&#123;</div><div class="line">  <span class="attr">el</span>:<span class="string">'#foo'</span>,</div><div class="line">  <span class="attr">data</span>: &#123;</div><div class="line">  <span class="attr">u</span>:&#123;&#125;</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">// force update can be used as an alternative</span></div><div class="line"><span class="comment">// to making a property reactive</span></div><div class="line">vm.$data.u.mess = <span class="string">'bar'</span>;</div><div class="line">vm.$forceUpdate();</div></pre></td></tr></table></figure>
+<p>In any case those are the two options make the property reactive if it is not to begin with, or use the force update method now and then where needed to render the view again when doing so is called for.</p>
+<h2 id="2-A-word-on-setters"><a href="#2-A-word-on-setters" class="headerlink" title="2 - A word on setters"></a>2 - A word on setters</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> app = &#123;</div><div class="line">    set n(val)&#123;</div><div class="line">        <span class="keyword">this</span>.container.innerText = val;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">container</span>: <span class="built_in">document</span>.getElementById(<span class="string">'foo'</span>)</div><div class="line">&#125;;</div><div class="line"> </div><div class="line">setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    app.n = <span class="built_in">Math</span>.floor( <span class="built_in">Math</span>.random() * <span class="number">6</span> );</div><div class="line">&#125;,<span class="number">1000</span>);</div></pre></td></tr></table></figure>
       
     </div>
     <footer class="article-footer">
@@ -262,23 +266,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/11/08/canvas-move/">Canvas move objects by Pixels per second</a>
+            <a href="/2019/11/15/vuejs-canvas/">Vue canvas topics including getting started scaling and more</a>
           </li>
         
           <li>
-            <a href="/2019/11/07/canvas-example-grid/">Canvas grid example view and model</a>
+            <a href="/2019/11/14/vuejs-on/">Vue on directive</a>
           </li>
         
           <li>
-            <a href="/2019/11/06/js-javascript-option/">The javaScript Option constructor and select lists in general</a>
+            <a href="/2019/11/13/vuejs-get/">Creating a vue get method via plug-ins</a>
           </li>
         
           <li>
-            <a href="/2019/11/05/canvas-rotate/">The canvas rotate method tips tricks and related topics</a>
+            <a href="/2019/11/12/vuejs-force-update/">vue force update method to make the view render when it will not</a>
           </li>
         
           <li>
-            <a href="/2019/11/04/lodash_at/">lodash at method</a>
+            <a href="/2019/11/11/vuejs-lifecycle-updated/">vue updated lifecycle hook</a>
           </li>
         
       </ul>
