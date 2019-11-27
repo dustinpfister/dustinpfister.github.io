@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Parsing markdown to html, or plain text with marked.js | Dustin John Pfister at github pages</title>
+  <title>Parsing markdown into html, or plain text with marked.js | Dustin John Pfister at github pages</title>
   
   <!-- no index tag or blank here -->
   
@@ -11,16 +11,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2017/11/19/nodejs-marked/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="These days I have been playing around more with a node.js project I am familiar with called marked. This is a package that can be used to parse markdown into html, in addition it is possible to define">
+  <meta name="description" content="These days I have been playing around more with a node.js project I am familiar with called marked. This is a package that can be used to parse markdown into html. In addition to the usual use case of">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Parsing markdown to html, or plain text with marked.js">
+<meta property="og:title" content="Parsing markdown into html, or plain text with marked.js">
 <meta property="og:url" content="https://dustinpfister.github.io/2017/11/19/nodejs-marked/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="These days I have been playing around more with a node.js project I am familiar with called marked. This is a package that can be used to parse markdown into html, in addition it is possible to define">
-<meta property="og:updated_time" content="2019-03-15T22:21:01.000Z">
+<meta property="og:description" content="These days I have been playing around more with a node.js project I am familiar with called marked. This is a package that can be used to parse markdown into html. In addition to the usual use case of">
+<meta property="og:updated_time" content="2019-11-18T15:39:17.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Parsing markdown to html, or plain text with marked.js">
-<meta name="twitter:description" content="These days I have been playing around more with a node.js project I am familiar with called marked. This is a package that can be used to parse markdown into html, in addition it is possible to define">
+<meta name="twitter:title" content="Parsing markdown into html, or plain text with marked.js">
+<meta name="twitter:description" content="These days I have been playing around more with a node.js project I am familiar with called marked. This is a package that can be used to parse markdown into html. In addition to the usual use case of">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/11/19/nodejs-marked/" class="article-date"> Modified:
-  <time datetime="2019-03-15T22:21:01.000Z" itemprop="dateModified">2019-03-15</time>
+  <time datetime="2019-11-18T15:39:17.000Z" itemprop="dateModified">2019-11-18</time>
 </a>
 
-    <span class="article-date">V1.1</span>
+    <span class="article-date">V1.5</span>
 
     
   <div class="article-category">
@@ -139,7 +139,7 @@ ga('send', 'pageview');
         
   
     <h1 class="article-title" itemprop="name">
-      Parsing markdown to html, or plain text with marked.js
+      Parsing markdown into html, or plain text with marked.js
     </h1>
   
 
@@ -147,22 +147,26 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>These days I have been playing around more with a <a href="https://nodejs.org/en/" target="_blank" rel="external">node.js</a> project I am familiar with called <a href="https://www.npmjs.com/package/marked" target="_blank" rel="external">marked</a>. This is a package that can be used to parse markdown into html, in addition it is possible to define a custom renderer that can be used to render out plain text, or some other standard other than html. In any case it is a great little package for doing that sort of thing, so it’s worth a post for sure.</p>
+        <p>These days I have been playing around more with a <a href="https://nodejs.org/en/" target="_blank" rel="external">node.js</a> project I am familiar with called <a href="https://www.npmjs.com/package/marked" target="_blank" rel="external">marked</a>. This is a package that can be used to parse markdown into html. In addition to the usual use case of parsing to html, it is possible to define a custom renderer that can be used to render out plain text, or some other standard other than html. </p>
+<p>In any case it is a great little package when it comes to working with markdown source, so it’s worth a post for sure. So lets look as some examples of this one.</p>
 <a id="more"></a>
-<h2 id="Getting-started-with-marked"><a href="#Getting-started-with-marked" class="headerlink" title="Getting started with marked"></a>Getting started with marked</h2><p>I assume that you know the basics when working with an npm package, but even so you might still want to know the name of the package to feed to npm right? So here it is:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># npm install marked --save</div></pre></td></tr></table></figure>
+<h2 id="1-Getting-started-with-marked"><a href="#1-Getting-started-with-marked" class="headerlink" title="1 - Getting started with marked"></a>1 - Getting started with marked</h2><p>I assume that you know the basics when working with an npm package, and nodejs, and javaScript in general. However even so you might still want to know the name of the package to feed to npm. This is a user space npm package afetr all, so to add it to a node project you might want to start out by doing an npm install save in the working directory of a project folder that has a package.json file.</p>
+<p>So for a getting starting example I might start a new node project folder and install marked with npm.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ mkdir newproject</div><div class="line">$ cd newroject</div><div class="line">$ npm init</div><div class="line">$ npm install marked --save</div></pre></td></tr></table></figure>
 <p>Once installed in a new project folder I made an index.js file and did this:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> marked = <span class="built_in">require</span>(<span class="string">'marked'</span>);</div><div class="line"><span class="built_in">console</span>.log(marked(<span class="string">'#hello world of mark down!'</span>));</div></pre></td></tr></table></figure>
-<p>Will give me the following when called from the CLI</p>
+<p>When I call that file from the command line with node it will give me the following.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ node index</div><div class="line">&lt;h1 id=&quot;hello-world-of-mark-down-&quot;&gt;hello world of mark down!&lt;/h1&gt;</div></pre></td></tr></table></figure>
-<h2 id="Using-a-custom-renderer-for-marked-to-not-render-links"><a href="#Using-a-custom-renderer-for-marked-to-not-render-links" class="headerlink" title="Using a custom renderer for marked to not render links."></a>Using a custom renderer for marked to not render links.</h2><p>There are some npm projects that can be used to do this such as <a href="https://www.npmjs.com/package/remove-markdown" target="_blank" rel="external">remove-markdown</a>, but it is possible to format the output of marked in many different ways, including plain text, buy writing a custom render.</p>
+<p>So there you have the basic use case of marked. I pass it some markdown, it spits out some HTML.</p>
+<h2 id="2-Using-a-custom-renderer-for-marked-to-not-render-links"><a href="#2-Using-a-custom-renderer-for-marked-to-not-render-links" class="headerlink" title="2 - Using a custom renderer for marked to not render links."></a>2 - Using a custom renderer for marked to not render links.</h2><p>There are some npm projects that can be used to do this such as <a href="https://www.npmjs.com/package/remove-markdown" target="_blank" rel="external">remove-markdown</a>, but it is possible to format the output of marked in many different ways, including plain text, by writing a custom render for marked.</p>
+<p>Just using marked for all things markdown related when it comes to parsing at least has become a default of sorts for me. Why add yet another project to a stack when I can just used a well supported project I am all ready using in a different way?</p>
 <p>One step in parsing to plain text is to just render the text of a hyper link, and not add an anchor element in the output.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> marked = <span class="built_in">require</span>(<span class="string">'marked'</span>),</div><div class="line"> </div><div class="line"><span class="comment">// return a custom renderer for marked.</span></div><div class="line">render_unlink = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> render = <span class="keyword">new</span> marked.Renderer();</div><div class="line"> </div><div class="line">    render.link = <span class="function"><span class="keyword">function</span> (<span class="params">href, title, text</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// render link text in a way that is appropriate</span></div><div class="line">        <span class="comment">// for a medium that is not a computer connected</span></div><div class="line">        <span class="comment">// to the Internet</span></div><div class="line">        <span class="keyword">return</span> text + <span class="string">' ( link to: '</span> + href + <span class="string">' )'</span>;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> render;</div><div class="line"> </div><div class="line">&#125;,</div><div class="line"> </div><div class="line">md = <span class="string">'this is some example markdown with [a link](github.com).'</span>;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(marked(md));</div><div class="line"><span class="comment">// &lt;p&gt;this is some example markdown with &lt;a href="github.com"&gt;a link&lt;/a&gt;.&lt;/p&gt;</span></div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(marked(md, &#123;</div><div class="line">        <span class="attr">renderer</span>: render_unlink()</div><div class="line">    &#125;));</div><div class="line"><span class="comment">// &lt;p&gt;this is some example markdown with a link ( link to: github.com ).&lt;/p&gt;</span></div></pre></td></tr></table></figure>
-<p>So here I am making a custom render that renders links differently, I could have it just render the text, or do anything I want really. As You would expect this can be done for a number of elements, including paragraph, and heading elements.</p>
-<h2 id="rendering-to-plain-text"><a href="#rendering-to-plain-text" class="headerlink" title="rendering to plain text"></a>rendering to plain text</h2><p>Rendering to plain text, or in any manner that I want is just a matter of overwriting the render methods by passing a custom renderer.</p>
+<p>So here I am making a custom render that renders links differently, I could have it just render the text, or do anything I want really. This of course can be done with all kinds of elements that might be used in the markdown source. As You would expect this can be done for a number of elements, including paragraph, and heading elements.</p>
+<h2 id="3-Rendering-to-plain-text"><a href="#3-Rendering-to-plain-text" class="headerlink" title="3 - Rendering to plain text"></a>3 - Rendering to plain text</h2><p>Rendering to plain text, or in any manner that I want is just a matter of overwriting the render methods by passing a custom renderer. For plain text I will want a method for all elements that are used in the markdown source which for me is paragraphs headers and links.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> marked = <span class="built_in">require</span>(<span class="string">'marked'</span>),</div><div class="line"> </div><div class="line"><span class="comment">// &amp;#63; to ? helper</span></div><div class="line">htmlEscapeToText = <span class="function"><span class="keyword">function</span> (<span class="params">text</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> text.replace(<span class="regexp">/\&amp;\#[0-9]*;|&amp;amp;/g</span>, <span class="function"><span class="keyword">function</span> (<span class="params">escapeCode</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (escapeCode.match(<span class="regexp">/amp/</span>)) &#123;</div><div class="line"> </div><div class="line">            <span class="keyword">return</span> <span class="string">'&amp;'</span>;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> <span class="built_in">String</span>.fromCharCode(escapeCode.match(<span class="regexp">/[0-9]+/</span>));</div><div class="line"> </div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">// return a custom renderer for marked.</span></div><div class="line">render_plain = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> render = <span class="keyword">new</span> marked.Renderer();</div><div class="line"> </div><div class="line">    <span class="comment">// render just the text of a link</span></div><div class="line">    render.link = <span class="function"><span class="keyword">function</span> (<span class="params">href, title, text</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> text;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// render just the text of a paragraph</span></div><div class="line">    render.paragraph = <span class="function"><span class="keyword">function</span> (<span class="params">text</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> htmlEscapeToText(text)+<span class="string">'\r\n'</span>;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// render just the text of a heading element, but indecate level</span></div><div class="line">    render.heading = <span class="function"><span class="keyword">function</span> (<span class="params">text, level</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> level + <span class="string">' ) '</span> + text;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// render nothing for images</span></div><div class="line">    render.image = <span class="function"><span class="keyword">function</span> (<span class="params">href, title, text</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> <span class="string">''</span>;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> render;</div><div class="line"> </div><div class="line">&#125;,</div><div class="line"> </div><div class="line">md = <span class="string">'# This is the markdown! \r\n it can have [links](github.com), and images \r\n![the image](foo.png)'</span>;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(marked(md));</div><div class="line"><span class="comment">/*</span></div><div class="line">&lt;h1 id="this-is-the-markdown-"&gt;This is the markdown!&lt;/h1&gt;</div><div class="line">&lt;p&gt; it can have &lt;a href="github.com"&gt;links&lt;/a&gt;, and images</div><div class="line">&lt;img src="foo.png" alt="the image"&gt;&lt;/p&gt;</div><div class="line">*/</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(marked(md, &#123;</div><div class="line">        <span class="attr">renderer</span>: render_plain()</div><div class="line">    &#125;));</div><div class="line"> </div><div class="line"><span class="comment">// 1 ) This is the markdown! it can have links, and images</span></div></pre></td></tr></table></figure>
 <p>For any method not specified the hard coded method will be used resulting in html being rendered. The full list of methods can be found in <a href="https://github.com/chjj/marked/blob/master/README.md" target="_blank" rel="external">the readme</a></p>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Marked is a great project that has helped me a great deal with getting into text processing. I will update, and expand on this post as I work more with the current project I am working on now that makes use of marked.</p>
+<h2 id="4-Conclusion"><a href="#4-Conclusion" class="headerlink" title="4 - Conclusion"></a>4 - Conclusion</h2><p>Marked is a great project that has helped me a great deal with getting into text processing. I will update, and expand on this post as I work more with the current project I am working on now that makes use of marked.</p>
 
       
     </div>
@@ -210,7 +214,7 @@ ga('send', 'pageview');
 var disqus_config = function () {
     this.page.url = 'https://dustinpfister.github.io/2017/11/19/nodejs-marked/index.html';
     this.page.identifier = '94';
-    this.page.title = 'Parsing markdown to html, or plain text with marked.js';
+    this.page.title = 'Parsing markdown into html, or plain text with marked.js';
 };
 
 (function() {
@@ -273,23 +277,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/11/15/vuejs-canvas/">Vue canvas topics including getting started scaling and more</a>
+            <a href="/2019/11/27/canvas-example-grid-defense/">A grid defense game canvas example</a>
           </li>
         
           <li>
-            <a href="/2019/11/14/vuejs-on/">Vue on directive</a>
+            <a href="/2019/11/26/canvas-example-pop-the-lock/">Pop The Lock Canvas Example Game Clone</a>
           </li>
         
           <li>
-            <a href="/2019/11/13/vuejs-get/">Creating a vue get method via plug-ins</a>
+            <a href="/2019/11/25/nodejs-filesystem-open/">node open file examples</a>
           </li>
         
           <li>
-            <a href="/2019/11/12/vuejs-force-update/">vue force update method to make the view render when it will not</a>
+            <a href="/2019/11/22/nodejs-filesystem-unlink/">node delete files with fs.unlink</a>
           </li>
         
           <li>
-            <a href="/2019/11/11/vuejs-lifecycle-updated/">vue updated lifecycle hook</a>
+            <a href="/2019/11/21/nodejs-event/">Node event emitter class</a>
           </li>
         
       </ul>

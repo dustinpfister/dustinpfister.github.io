@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2019/10/30/nodejs-buffer-isbuffer/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="The node is buffer method is the standard way to find out if something is a buffer or not in a nodejs project. The standard is buffer method is right there as part of the Buffer global, and can be use">
-<meta property="og:updated_time" content="2019-10-30T20:44:52.000Z">
+<meta property="og:updated_time" content="2019-11-20T14:02:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Node is buffer native method basics and more">
 <meta name="twitter:description" content="The node is buffer method is the standard way to find out if something is a buffer or not in a nodejs project. The standard is buffer method is right there as part of the Buffer global, and can be use">
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2019/10/30/nodejs-buffer-isbuffer/" class="article-date"> Modified:
-  <time datetime="2019-10-30T20:44:52.000Z" itemprop="dateModified">2019-10-30</time>
+  <time datetime="2019-11-20T14:02:30.000Z" itemprop="dateModified">2019-11-20</time>
 </a>
 
-    <span class="article-date">V1.3</span>
+    <span class="article-date">V1.7</span>
 
     
   <div class="article-category">
@@ -147,14 +147,20 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>The <a href="https://nodejs.org/api/buffer.html#buffer_class_method_buffer_isbuffer_obj" target="_blank" rel="external">node is buffer</a> method is the standard way to find out if something is a buffer or not in a nodejs project. The standard is buffer method is right there as part of the Buffer global, and can be used bu just passing a value as the first argument. The resulting value that the node is buffer method will return is then a boolean value that will be true if the value is a Buffer, or not if it is not. In addition there is also the is the <a href="https://www.npmjs.com/package/is-buffer" target="_blank" rel="external">is-buffer npm package</a> as well which is a user space option for this kind of task. One might think that a task such as this would be a trivial matter, and in most cases it is, but in other cases it is not such as with isNaN. So lets take a look at this one real quick so we can move on to more interesting things to write about.</p>
+        <p>The <a href="https://nodejs.org/api/buffer.html#buffer_class_method_buffer_isbuffer_obj" target="_blank" rel="external">node is buffer</a> method is the standard way to find out if something is a buffer or not in a nodejs project. The standard is buffer method is right there as part of the Buffer global, and can be used by just passing a value as the first argument. The resulting value that the node is buffer method will return is then a boolean value that will be true if the value is a Buffer, or not if it is not a buffer.</p>
+<p>In addition there is also the <a href="https://www.npmjs.com/package/is-buffer" target="_blank" rel="external">is-buffer npm package</a> as well, which is a user space option for this kind of task. One might thing that there is no need for such a package, but oddly enough there are often some extending situations in which there might actually need to be some additional logic, or the same task needs to be done a different way.</p>
+<p>One might think that a task such as this would be a trivial matter, and in most cases it is, but in other cases it is not. There is a long history of having to make user space solutions for native methods in javaScript, such is the case with the native isNaN method returning true for values other than NaN. So lets take a look at this one real quick to find out if this is the case with the is Buffer method in nodejs..</p>
 <a id="more"></a>
 <h2 id="1-node-is-buffer-basic-example"><a href="#1-node-is-buffer-basic-example" class="headerlink" title="1 - node is buffer basic example"></a>1 - node is buffer basic example</h2><p>In nodejs the Buffer.isBuffer method is fairly easy to use. Just call it off of the Buffer global and pass a value that is to be tested if it is a buffer or not.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">let</span> buff = Buffer.from(<span class="string">'0a0b0c0d'</span>, <span class="string">'hex'</span>);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(Buffer.isBuffer(buff)); <span class="comment">// true</span></div></pre></td></tr></table></figure>
-<p>Simple enough so far, but lets throw a whole bunch of other values to see if there is anything weird going on.</p>
-<h2 id="2-Throw-all-kinds-of-values-at-it-time"><a href="#2-Throw-all-kinds-of-values-at-it-time" class="headerlink" title="2 - Throw all kinds of values at it time"></a>2 - Throw all kinds of values at it time</h2><p>So when it comes to other naive methods like this there are some times some weird situation in which there is a need to write my own solution, or use another methods that does the same thing in a user space framework. To find out if that is the case I just need to trow all kinds of values at the method to see if it returns true for something other than a Buffer.</p>
+<p>Simple enough so far, but lets throw a whole bunch of other values to see if there is anything weird going on, which is the case some times with methods like this.</p>
+<h2 id="2-Throw-all-kinds-of-values-at-it-time"><a href="#2-Throw-all-kinds-of-values-at-it-time" class="headerlink" title="2 - Throw all kinds of values at it time"></a>2 - Throw all kinds of values at it time</h2><p>So when it comes to other naive methods like this there are some times some weird situation in which there is a need to write my own solution, or use another method that does the same thing in a user space framework. To find out if that is the case I just need to trow all kinds of values at the method to see if it returns true for something other than a Buffer.</p>
+<p>If the is buffer method in nodejs works as I would expect it to, it should return true for a buffer, and only a buffer. So if I give it an instance of a buffer it should give me a true boolean value, and false for every conceivable other type of value that might end up being passed to it in a project. So lets through together a quick test of sorts for that.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log( Buffer.isBuffer(Buffer.alloc(<span class="number">4</span>)) ); <span class="comment">// true</span></div><div class="line"> </div><div class="line"><span class="comment">// some other possible values</span></div><div class="line"><span class="built_in">console</span>.log( Buffer.isBuffer(<span class="number">4</span>) ); <span class="comment">// false</span></div><div class="line"><span class="built_in">console</span>.log( Buffer.isBuffer(<span class="string">'foo'</span>) ); <span class="comment">// false</span></div><div class="line"><span class="built_in">console</span>.log( Buffer.isBuffer(<span class="number">0</span>) ); <span class="comment">// false</span></div><div class="line"><span class="built_in">console</span>.log( Buffer.isBuffer(<span class="string">''</span>) ); <span class="comment">// false</span></div><div class="line"><span class="built_in">console</span>.log( Buffer.isBuffer(<span class="literal">undefined</span>) ); <span class="comment">// false</span></div><div class="line"><span class="built_in">console</span>.log( Buffer.isBuffer(<span class="literal">null</span>) ); <span class="comment">// false</span></div><div class="line"><span class="built_in">console</span>.log( Buffer.isBuffer(<span class="literal">NaN</span>) ); <span class="comment">// false</span></div><div class="line"><span class="built_in">console</span>.log( Buffer.isBuffer([]) ); <span class="comment">// false</span></div><div class="line"><span class="built_in">console</span>.log( Buffer.isBuffer(&#123;&#125;) ); <span class="comment">// false</span></div><div class="line"><span class="built_in">console</span>.log( Buffer.isBuffer( <span class="keyword">new</span> <span class="built_in">Uint8Array</span>()) ); <span class="comment">// false</span></div><div class="line"> </div><div class="line"><span class="comment">// looks good</span></div><div class="line"><span class="comment">// in fact even if I do something like this is still works</span></div><div class="line"><span class="keyword">let</span> buff = Buffer.alloc(<span class="number">5</span>);</div><div class="line"><span class="keyword">let</span> obj = &#123;&#125;;</div><div class="line">obj.constructor = buff.constructor;</div><div class="line"><span class="built_in">console</span>.log(obj.constructor.name); <span class="comment">// 'Buffer'</span></div><div class="line"><span class="built_in">console</span>.log( Buffer.isBuffer(obj) ); <span class="comment">// false</span></div></pre></td></tr></table></figure>
-<p>So that works out okay, I guess the native node is buffer method works just fine, so why bother with a user space module with this? Well there is the fact that the Buffer.isBuffer method is part of the node Buffer global, so there is the idea of making the method portable between node and a browser environment. Aside from that maybe I cant thing of any reason to bother with making a user space solution for this.</p>
+<p>So that works out okay, I guess the native node is buffer method works just fine, so why bother with a user space module with this? Well there is the fact that the Buffer.isBuffer method is part of the node Buffer global, so there is the idea of making the method portable between node and a browser environment. Aside from that maybe I cant thing of any reason to bother with making a user space solution for this in a pure nodejs environment.</p>
+<h2 id="3-Conclusion"><a href="#3-Conclusion" class="headerlink" title="3 - Conclusion"></a>3 - Conclusion</h2><p>I am not sure if I want or need to give this post more attention, I guess I could but together some more code examples surrounding this one, but why? It would seem that the native is buffer method in nodejs works the way that it should. So with the method working find there is no need to make a user defied replacement really, at least not when working in just a nodejs space. </p>
+<p>There is still working out a user space method for the sake of having something that will work in client side code, but the package I liked to does just that, also why use nodes buffer objects on the client side when there are more appropriate alternatives? I might come back to this post at some time maybe, but I think there is only so much more to write about on this one.</p>
+<p>For more on buffers you might want to check out my main post on the <a href="/2018/02/07/nodejs-buffer/">nodejs buffer</a> global here.</p>
 
       
     </div>
@@ -265,23 +271,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/11/15/vuejs-canvas/">Vue canvas topics including getting started scaling and more</a>
+            <a href="/2019/11/27/canvas-example-grid-defense/">A grid defense game canvas example</a>
           </li>
         
           <li>
-            <a href="/2019/11/14/vuejs-on/">Vue on directive</a>
+            <a href="/2019/11/26/canvas-example-pop-the-lock/">Pop The Lock Canvas Example Game Clone</a>
           </li>
         
           <li>
-            <a href="/2019/11/13/vuejs-get/">Creating a vue get method via plug-ins</a>
+            <a href="/2019/11/25/nodejs-filesystem-open/">node open file examples</a>
           </li>
         
           <li>
-            <a href="/2019/11/12/vuejs-force-update/">vue force update method to make the view render when it will not</a>
+            <a href="/2019/11/22/nodejs-filesystem-unlink/">node delete files with fs.unlink</a>
           </li>
         
           <li>
-            <a href="/2019/11/11/vuejs-lifecycle-updated/">vue updated lifecycle hook</a>
+            <a href="/2019/11/21/nodejs-event/">Node event emitter class</a>
           </li>
         
       </ul>

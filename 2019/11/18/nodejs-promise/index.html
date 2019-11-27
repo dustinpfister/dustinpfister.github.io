@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Node promise basics and beyond | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2019/11/18/nodejs-promise/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Looking back I have wrote a few posts on [promises]https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise() in nodejs, and a few when it comes to using them in javaSc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node promise basics and beyond">
+<meta property="og:url" content="https://dustinpfister.github.io/2019/11/18/nodejs-promise/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="Looking back I have wrote a few posts on [promises]https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise() in nodejs, and a few when it comes to using them in javaSc">
+<meta property="og:updated_time" content="2019-11-19T13:40:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Node promise basics and beyond">
+<meta name="twitter:description" content="Looking back I have wrote a few posts on [promises]https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise() in nodejs, and a few when it comes to using them in javaSc">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-promise" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/11/18/nodejs-promise/" class="article-date"> Published:
+  <time datetime="2019-11-18T17:13:00.000Z" itemprop="datePublished">2019-11-18</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2019/11/18/nodejs-promise/" class="article-date"> Modified:
+  <time datetime="2019-11-19T13:40:59.000Z" itemprop="dateModified">2019-11-19</time>
+</a>
+
+    <span class="article-date">V1.25</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Node promise basics and beyond
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>Looking back I have wrote a few posts on [promises]<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise(" target="_blank" rel="external">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise(</a>) in <a href="https://nodejs.org/en/" target="_blank" rel="external">nodejs</a>, and a few when it comes to using them in javaScript in general. However I have not yet wrote a main post on <a href="https://medium.com/dev-bits/writing-neat-asynchronous-node-js-code-with-promises-32ed3a4fd098" target="_blank" rel="external">node promise</a> topics in general. From just starting out with the Promise constructor, and the using the promisify utility method to convert old callback style methods to methods that return promises.</p>
+<p>It would also be nice to have one post where I go beyond just the basics of promises, and give some real solid examples that outline why they are great for handing a whole bunch of async tasks.</p>
+<a id="more"></a>
+<h2 id="1-Node-promise-basics"><a href="#1-Node-promise-basics" class="headerlink" title="1 - Node promise basics"></a>1 - Node promise basics</h2><p>So in the section I will start out with the basics surrounding node promise topics. Starting out with just a simple example of an old callback style use example of the read file file system module method. I will then give two examples that do the same thing with promises. One of which will use the Promise Constructor, and the other will use the promisify method of the util method to quickly create a method that returns a promise for the read file file system module.</p>
+<p>This section serves as the getting start point of promises in nodejs, if you have some experience with promises all ready and want to go beyond the basics of them in node, then you should maybe skip over this section.</p>
+<h3 id="1-1-The-old-node-callback-style-way"><a href="#1-1-The-old-node-callback-style-way" class="headerlink" title="1.1 - The old node callback style way"></a>1.1 - The old node callback style way</h3><p>So here I have an example of the old callback style way of using a method that accepts a callback method that will fire when the task is finished. That is I call the method, give it some arguments, and one of the arguments is a function that will fire when the task is done. Within this callback method I then do what it is that I want to do with the result of that task, or handle and error that might happen.</p>
+<p>So this example is an example of the read file file system method in the file system module of node. I call the method pass the path to the file that I want to read as the first argument, followed by an option encoding, or options object, and finally pass a callback that will fire when the file is read, or an error happens.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"> </div><div class="line">fs.readFile(<span class="string">'./README.md'</span>, <span class="string">'utf8'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e, data</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (e) &#123;</div><div class="line">        <span class="comment">// error message if there is a problem</span></div><div class="line">        <span class="built_in">console</span>.log(e.message);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">// the content of the file if it is there</span></div><div class="line">        <span class="comment">// and all id well</span></div><div class="line">        <span class="built_in">console</span>.log(data.toString());</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>The problem here is that I have to do both error handing, and what it is that I do if all goes well in the body of the same function. However this also causes things to get yet even more messy when I need to do several tasks like this on top of each other. When doing so this results in what is often called callback hell.</p>
+<p>So promises then are a way to go about breaking down what to do into septate functions that are called in the event of an error, and if all goes well. In addition things can be chained together, resulting in code that is easier to follow and debug. So lets look as some more examples that do the same thing only this time with node promises.</p>
+<h3 id="1-2-The-Node-Promise-native-constructor"><a href="#1-2-The-Node-Promise-native-constructor" class="headerlink" title="1.2 - The Node Promise native constructor"></a>1.2 - The Node Promise native constructor</h3><p>So one way to get started with promises in node is to create one with the promise constructor. As long as you are using a recent version of node the promise constructor should be there, all I have to do is just call it with the new keyword just like any other constructor, and pass it a function where I will define what needs to get done for the promise.</p>
+<p>The function that I pass to the constructor will have two arguments a resolve and reject argument. These arguments are functions that are to be called when the task that needs to happen is done. The resolve argument is to be called if all has gone well, passing the result as an argument when calling it. The reject method in turn is the argument to call if there is a problem, passing an error object as an argument.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"> </div><div class="line"><span class="keyword">let</span> readFile = <span class="function">(<span class="params">filePath, encoding, flag</span>) =&gt;</span> &#123;</div><div class="line">    encoding = encoding || <span class="string">'utf8'</span>;</div><div class="line">    flag = flag || <span class="string">'r'</span>;</div><div class="line">    <span class="keyword">if</span> (!filePath) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="built_in">Promise</span>.reject(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'file path not given to readFile method.'</span>))</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// return a new Promise created with the</span></div><div class="line">    <span class="comment">// promise constructor</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line">        fs.readFile(filePath, &#123;</div><div class="line">            <span class="attr">encoding</span>: encoding,</div><div class="line">            <span class="attr">flag</span>: flag</div><div class="line">        &#125;, <span class="function"><span class="keyword">function</span> (<span class="params">e, data</span>) </span>&#123;</div><div class="line">            <span class="keyword">if</span> (e) &#123;</div><div class="line">                reject(e);</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                resolve(data);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line">readFile(<span class="string">'./README.md'</span>)</div><div class="line">.then(<span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</div><div class="line">    <span class="comment">// the content of the file if it is there</span></div><div class="line">    <span class="comment">// and all id well</span></div><div class="line">    <span class="built_in">console</span>.log(data.toString());</div><div class="line">&#125;)</div><div class="line">.catch(<span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</div><div class="line">    <span class="comment">// error message if there is a problem</span></div><div class="line">    <span class="built_in">console</span>.log(e.message);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>So then this example works more or less the same way as the first example that just used callbacks. So far it would seem that I just made something that could be very simple far more complex. That is the case hear actually, there is a far more simple way to go about doing this.</p>
+<p>In late versions of node you do not need to bother making a readFile method like this, as the native read file method returns a promise to begin with. Using the Promise constructor is not maybe the best option to do something like this, when it comes to supporting older versions of node as well. If I just want to make sure read file will return a promise on all versions of node concerned, it might be better to use a promsify method of one type or another</p>
+<p>Still this example is here to serve as an example of using the promise constructor to create a method that returns a promise. In some situations it might make sense to make a method with the promise constructor if the aim is to make some kind of custom method where the use of the constructor is really called for.</p>
+<p>Any way lets look at some more examples of promises in nodejs.</p>
+<h3 id="1-3-THe-Util-module-and-the-promisify-method"><a href="#1-3-THe-Util-module-and-the-promisify-method" class="headerlink" title="1.3 - THe Util module and the promisify method"></a>1.3 - THe Util module and the promisify method</h3><p>So then thee is the <a href="/2019/06/22/nodejs-util-promisify/">promsify method of the node core util module</a>. I use this method all the time as a node built in way to convert an old callback style method into a method that will return a promise.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line">promisify = <span class="built_in">require</span>(<span class="string">'util'</span>).promisify;</div><div class="line"> </div><div class="line"><span class="keyword">let</span> readFile = promisify(fs.readFile);</div><div class="line"> </div><div class="line">readFile(<span class="string">'./README.md'</span>)</div><div class="line">.then(<span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</div><div class="line">    <span class="comment">// the content of the file if it is there</span></div><div class="line">    <span class="comment">// and all id well</span></div><div class="line">    <span class="built_in">console</span>.log(data.toString());</div><div class="line">&#125;)</div><div class="line">.catch(<span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</div><div class="line">    <span class="comment">// error message if there is a problem</span></div><div class="line">    <span class="built_in">console</span>.log(e.message);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>This example once again does the same thing as the others, but now it does so with promises, and is far more concise then the example that used the promise constructor. So whenever I want to make sure a node method will return a promise, I use this method. If I need to work out some custom logic, or create an abstraction for whatever the reason the promise constructor would be a better option.</p>
+<h2 id="2-node-promise-map-file-collection-and-index-example"><a href="#2-node-promise-map-file-collection-and-index-example" class="headerlink" title="2 - node promise map file collection and index example"></a>2 - node promise map file collection and index example</h2><p>In this section I will be going over a note so basic example of using promises, that involves creating and indexing a collection of map files. These map files are a resource that could be used in a game of sorts, but I have not went that far with this example. The main index here is to just create an example of using promises as a way to keep things organized, and to wait until a bunch of aysn tasks complete before continuing on to the next thing.</p>
+<p>The basic process of all of this is to create a maps folder at a root folder it it is not there, then create a bunch of maps in that maps folder, then build an index for the collection of the maps at the root folder.</p>
+<h3 id="2-1-Make-maps-folder-method"><a href="#2-1-Make-maps-folder-method" class="headerlink" title="2.1 - Make maps folder method"></a>2.1 - Make maps folder method</h3><p>The example starts off with using require to make use of the core node file system module, and the util module promisify method to make sure the file system methods that I will be using return promises. I  then start out with my make maps folder helper method.</p>
+<p>The make maps folder method uses the mkdir file system method that has been promisifyed, I then also use the Promise resolve and reject static methods to make sure that the helper method always returns a resolve promise even if there is an error, but the error is a code that means the file is there all ready. As such the method will only return a rejected promise in the event that there is some other kind of error that might have to do with file access permissions for example.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// using node modules</span></div><div class="line"><span class="keyword">let</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>),</div><div class="line">promisify = <span class="built_in">require</span>(<span class="string">'util'</span>).promisify;</div><div class="line"><span class="comment">// promisify file system methods</span></div><div class="line"><span class="keyword">let</span> mkdir = promisify(fs.mkdir),</div><div class="line">writeFile = promisify(fs.writeFile),</div><div class="line">readFile = promisify(fs.readFile),</div><div class="line">readdir = promisify(fs.readdir);</div><div class="line"><span class="comment">// make the maps folder</span></div><div class="line"><span class="keyword">let</span> mkMapsFolder = <span class="function">(<span class="params">root</span>) =&gt;</span> &#123;</div><div class="line">    root = root || process.cwd();</div><div class="line">    <span class="comment">// attempt to make a new maps folder</span></div><div class="line">    <span class="keyword">return</span> mkdir(path.join(root, <span class="string">'maps'</span>))</div><div class="line">    <span class="comment">// if successful just resolve</span></div><div class="line">    .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve();</div><div class="line">    &#125;)</div><div class="line">    <span class="comment">// folder is there or other error</span></div><div class="line">    .catch(<span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</div><div class="line">        <span class="comment">// if it is just there all ready resolve</span></div><div class="line">        <span class="keyword">if</span> (e.code === <span class="string">'EEXIST'</span>) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve();</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">// else reject because of other error</span></div><div class="line">            <span class="keyword">return</span> <span class="built_in">Promise</span>.reject(e);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>This method will be used in a later method, and its only purpose is to make sure that a folder is at a given root path.</p>
+<h3 id="2-2-Write-Map-file-method"><a href="#2-2-Write-Map-file-method" class="headerlink" title="2.2 - Write Map file method"></a>2.2 - Write Map file method</h3><p>Here I have a method that is used to write a single map file in the maps folder. The method uses my node promise style writeFile method that was created with the promisify util module method to write just a single map json file.</p>
+<p>before doing so it creates cells for the map given the various options via a single option argument object. this contains value like the cell width and height, and a method to call for each cell that will be used to define any custom properties for each cell in the map.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// write a map file</span></div><div class="line"><span class="keyword">let</span> writeMapFile = <span class="function">(<span class="params">opt</span>) =&gt;</span> &#123;</div><div class="line">    opt = opt || &#123;&#125;;</div><div class="line">    opt.name = opt.name || <span class="string">''</span>;</div><div class="line">    opt.root = opt.root || path.resolve(<span class="string">'./'</span>);</div><div class="line">    opt.fileName = opt.fileName || <span class="string">'map_'</span> + opt.name + <span class="string">'.json'</span>;</div><div class="line">    opt.width = opt.width || <span class="number">4</span>;</div><div class="line">    opt.height = opt.height || <span class="number">4</span>;</div><div class="line">    opt.forCell = opt.forCell || <span class="function"><span class="keyword">function</span> (<span class="params">cell</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> cell;</div><div class="line">    &#125;;</div><div class="line">    opt.forMap = opt.forMap || <span class="function"><span class="keyword">function</span> (<span class="params">map</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> map;</div><div class="line">    &#125;;</div><div class="line">    <span class="comment">// create cells</span></div><div class="line">    <span class="keyword">let</span> i = <span class="number">0</span>,</div><div class="line">    cells = [],</div><div class="line">    len = opt.width * opt.height;</div><div class="line">    <span class="keyword">while</span> (i &lt; len) &#123;</div><div class="line">        cells.push(opt.forCell(&#123;</div><div class="line">                <span class="attr">type</span>: <span class="string">'blank'</span>,</div><div class="line">                <span class="attr">i</span>: i,</div><div class="line">                <span class="attr">x</span>: i % opt.width,</div><div class="line">                <span class="attr">y</span>: <span class="built_in">Math</span>.floor(i / opt.width)</div><div class="line">            &#125;, i));</div><div class="line">        i += <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// create map object</span></div><div class="line">    <span class="keyword">let</span> map = opt.forMap(&#123;</div><div class="line">            <span class="attr">name</span>: opt.name,</div><div class="line">            <span class="attr">width</span>: opt.width,</div><div class="line">            <span class="attr">height</span>: opt.height,</div><div class="line">            <span class="attr">cells</span>: cells</div><div class="line">        &#125;);</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'writing map: '</span> + opt.fileName);</div><div class="line">    <span class="comment">// write map</span></div><div class="line">    <span class="keyword">return</span> writeFile(path.join(opt.root, opt.fileName), <span class="built_in">JSON</span>.stringify(map), <span class="string">'utf8'</span>);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>Another method will call this method a whole bunch of times using the promise all static promise method.</p>
+<h3 id="2-3-build-index"><a href="#2-3-build-index" class="headerlink" title="2.3 - build index"></a>2.3 - build index</h3><p>Now for the method that will build the index for the map files. This method accepts a root folder that is used to find the maps folder. It also accepts a index by method that is used to sort the index by the logic given via that method. The fine product is an array of absolute paths to each map file ordered by the index by method that is written as an index json file in the root folder location.</p>
+<p>The promise all method is used to read all map files so that the collection can be applied to the index by method. Once the promise all call is finished the array is sorted and the array map prototype method is used to create the array of absolute paths to each file. The the write file method is used to write that array of paths as json to an index json file.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// build an index</span></div><div class="line"><span class="keyword">let</span> writeMapIndex = <span class="function">(<span class="params">opt</span>) =&gt;</span> &#123;</div><div class="line">    opt = opt || &#123;&#125;;</div><div class="line">    opt.root = path.resolve(opt.root || process.cwd());</div><div class="line">    opt.indexBy = opt.indexBy || <span class="function"><span class="keyword">function</span> (<span class="params">a, b</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">return</span> readdir(path.join(opt.root, <span class="string">'maps'</span>))</div><div class="line">    .then(<span class="function">(<span class="params">files</span>) =&gt;</span> &#123;</div><div class="line">        <span class="comment">// read all map files</span></div><div class="line">        <span class="keyword">return</span> <span class="built_in">Promise</span>.all(files.map(<span class="function">(<span class="params">fileName</span>) =&gt;</span> &#123;</div><div class="line">                <span class="keyword">return</span> readFile(path.join(path.join(opt.root, <span class="string">'maps'</span>, fileName)), <span class="string">'utf8'</span>)</div><div class="line">                .then(<span class="function">(<span class="params">map</span>) =&gt;</span> &#123;</div><div class="line">                    <span class="built_in">console</span>.log(<span class="string">'read '</span> + fileName);</div><div class="line">                    map = <span class="built_in">JSON</span>.parse(map);</div><div class="line">                    map.fileName = fileName;</div><div class="line">                    <span class="keyword">return</span> map</div><div class="line">                &#125;);</div><div class="line">            &#125;))</div><div class="line">        <span class="comment">// build index for all map files</span></div><div class="line">        .then(<span class="function">(<span class="params">maps</span>) =&gt;</span> &#123;</div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'building index for '</span> + maps.length + <span class="string">' map files'</span>);</div><div class="line">            <span class="keyword">let</span> json = <span class="built_in">JSON</span>.stringify(maps.sort(opt.indexBy).map(<span class="function">(<span class="params">map</span>) =&gt;</span> &#123;</div><div class="line">                        <span class="keyword">return</span> path.join(opt.root, <span class="string">'maps'</span>, map.fileName);</div><div class="line">                    &#125;));</div><div class="line">            <span class="keyword">return</span> writeFile(path.join(opt.root, <span class="string">'map_index.json'</span>), json, <span class="string">'utf8'</span>);</div><div class="line">        &#125;);</div><div class="line">    &#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>This method mush be called once the creation of a collection map files has finished. One final method mush now be made that uses all of these methods thus far, finishing with this one when the collection is created.</p>
+<h3 id="2-4-write-map-file-collection-and-index"><a href="#2-4-write-map-file-collection-and-index" class="headerlink" title="2.4 - write map file collection and index"></a>2.4 - write map file collection and index</h3><p>Here is the method that will create the whole collection of map files in the map folder, and then build the index file for that collection.</p>
+<p>It starts out by calling the first method that just makes sure that the maps folder is there. Once that promise resolves it then calls the write map file method a whole bunch of times by creating an array of write map file methods calls all of which return a promise. This array is then returned to the promise all method and that is what is returned in the then method that is called after the make maps folder promise resolves.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// make maps folder with all maps</span></div><div class="line"><span class="keyword">let</span> writeMapsFolder = <span class="function">(<span class="params">opt</span>) =&gt;</span> &#123;</div><div class="line">    opt = opt || &#123;&#125;;</div><div class="line">    opt.root = opt.root || process.cwd();</div><div class="line">    opt.forCell = opt.forCell || <span class="function"><span class="keyword">function</span> (<span class="params">cell</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> cell;</div><div class="line">    &#125;;</div><div class="line">    opt.forMap = opt.forMap || <span class="function"><span class="keyword">function</span> (<span class="params">map</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> map;</div><div class="line">    &#125;;</div><div class="line">    opt.indexBy = opt.indexBy || <span class="function"><span class="keyword">function</span> (<span class="params">a, b</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    &#125;;</div><div class="line">    opt.mapCount = opt.mapCount || <span class="number">10</span>;</div><div class="line">    opt.cellWidth = opt.cellWidth || <span class="number">12</span>;</div><div class="line">    opt.cellHeight = opt.cellHeight || <span class="number">12</span>;</div><div class="line">    <span class="comment">// start by making maps folder if it is not there</span></div><div class="line">    <span class="keyword">return</span> mkMapsFolder(opt.root)</div><div class="line">    <span class="comment">// then write a map file for each mapCount</span></div><div class="line">    .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'all is good with maps folder, creating maps.'</span>);</div><div class="line">        <span class="keyword">let</span> maps = [],</div><div class="line">        i = <span class="number">0</span>;</div><div class="line">        <span class="keyword">while</span> (i &lt; opt.mapCount) &#123;</div><div class="line">            maps.push(writeMapFile(&#123;</div><div class="line">                    <span class="attr">root</span>: path.join(opt.root, <span class="string">'maps'</span>),</div><div class="line">                    <span class="attr">name</span>: i + <span class="number">1</span>,</div><div class="line">                    <span class="attr">forCell</span>: opt.forCell,</div><div class="line">                    <span class="attr">forMap</span>: opt.forMap,</div><div class="line">                    <span class="attr">width</span>: opt.cellWidth,</div><div class="line">                    <span class="attr">height</span>: opt.cellHeight,</div><div class="line">                &#125;));</div><div class="line">            i += <span class="number">1</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// resolve when map writes resolve</span></div><div class="line">        <span class="keyword">return</span> <span class="built_in">Promise</span>.all(maps);</div><div class="line">    &#125;)</div><div class="line">    <span class="comment">// then build index</span></div><div class="line">    .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'done writing map files building index now.'</span>);</div><div class="line">        <span class="keyword">return</span> writeMapIndex(&#123;</div><div class="line">            <span class="attr">root</span>: opt.root,</div><div class="line">            <span class="attr">indexBy</span>: opt.indexBy</div><div class="line">        &#125;);</div><div class="line">    &#125;)</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>once that instance of Promise all for all map files resolves it is then safe to build the index by calling the build index method. So then this is the main method of sorts that should be called by any demo application that would make use of this, so lets move on to that now.</p>
+<h3 id="2-5-demo"><a href="#2-5-demo" class="headerlink" title="2.5 - demo"></a>2.5 - demo</h3><p>Now to take all of this for a test drive with a demo that calls the main write maps folder method that makes the maps folder fills it with maps and builds an index for that collection.</p>
+<p>For this demo I created some custom methods for each cell, and map as well as a custom index by method. These are all passed to the write maps folder method, along with other custom options. The aim here is to create a collection of maps with worth values for each cell, and have a total worth value for the map, finally index the maps bu that worth value.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// demo</span></div><div class="line">writeMapsFolder(&#123;</div><div class="line">    <span class="attr">root</span>: <span class="string">'./'</span>,</div><div class="line">    <span class="attr">mapCount</span>: <span class="number">5</span>,</div><div class="line">    <span class="attr">cellWidth</span>: <span class="number">2</span>,</div><div class="line">    <span class="attr">cellHeight</span>: <span class="number">2</span>,</div><div class="line">    <span class="comment">// worth value for each cell</span></div><div class="line">    forCell: <span class="function"><span class="keyword">function</span> (<span class="params">cell</span>) </span>&#123;</div><div class="line">        cell.type = <span class="string">'grass'</span>;</div><div class="line">        cell.worth = <span class="number">50</span> + <span class="built_in">Math</span>.round(<span class="number">50</span> * <span class="built_in">Math</span>.random());</div><div class="line">        <span class="keyword">return</span> cell;</div><div class="line">    &#125;,</div><div class="line">    <span class="comment">// tabulate map cell worth</span></div><div class="line">    forMap: <span class="function"><span class="keyword">function</span> (<span class="params">map</span>) </span>&#123;</div><div class="line">        map.worth = map.cells.reduce(<span class="function">(<span class="params">acc, cell</span>) =&gt;</span> &#123;</div><div class="line">                acc = <span class="keyword">typeof</span> acc === <span class="string">'object'</span> ? acc.worth : acc;</div><div class="line">                <span class="keyword">return</span> acc + cell.worth;</div><div class="line">            &#125;);</div><div class="line">        <span class="keyword">return</span> map;</div><div class="line">    &#125;,</div><div class="line">    <span class="comment">// index maps by worth</span></div><div class="line">    indexBy: <span class="function"><span class="keyword">function</span> (<span class="params">a, b</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (a.worth &gt; b.worth) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (a.worth &lt; b.worth) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line">&#125;).then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'done creating map files and map index'</span>);</div><div class="line">&#125;)</div><div class="line">.catch(<span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(e.message);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>When I run this I get what I would expect a collection of map files in a maps folder where each cell has a worth value, and there is also a total worth value for the map. I look at the index for the maps and sure enough each path to the maps is sorted by the worth value of each map where the first map in the index is the most valuable one.</p>
+<p>So the example works out great just as expected. If I where to continue working on this maybe the map index would turn into a world map of sorts, and I would add a whole world of more code to turn it into some kind of game, but that would be a metter for another post.</p>
+<h2 id="3-Conclusion"><a href="#3-Conclusion" class="headerlink" title="3 - Conclusion"></a>3 - Conclusion</h2><p>So there is way more to cover on promises in nodejs, as well as in javaScript in general. I have other posts on the promise all method, the promise resolve and reject Promise object static methods. In addition I have posts on the npm package bluebird that provides way more to work with beyond what is provided with just native Promises.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2019/11/18/nodejs-promise/" data-id="ck3hx7h5z0001u4v1vck4u6v5" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2019/11/18/nodejs-promise/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/11/19/nodejs-os/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Node os module examples
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/11/15/vuejs-canvas/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Vue canvas topics including getting started scaling and more</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2019/11/18/nodejs-promise/index.html';
+    this.page.identifier = '565';
+    this.page.title = 'Node promise basics and beyond';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.11px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.53px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.68px;">angular</a> <a href="/tags/animation/" style="font-size: 12.63px;">animation</a> <a href="/tags/automation/" style="font-size: 12.63px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.16px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.74px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.37px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.63px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.05px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.58px;">ejs</a> <a href="/tags/express/" style="font-size: 16.84px;">express</a> <a href="/tags/games/" style="font-size: 17.89px;">games</a> <a href="/tags/git/" style="font-size: 11.58px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.26px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.68px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.21px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.53px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.58px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 12.63px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.42px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.21px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.47px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.95px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.11px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.32px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.79px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/11/27/canvas-example-grid-defense/">A grid defense game canvas example</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/26/canvas-example-pop-the-lock/">Pop The Lock Canvas Example Game Clone</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/25/nodejs-filesystem-open/">node open file examples</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/22/nodejs-filesystem-unlink/">node delete files with fs.unlink</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/21/nodejs-event/">Node event emitter class</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2019/11/18/nodejs-promise/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

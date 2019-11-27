@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2019/07/18/nodejs-net/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="This post will be on the node net module that can be used to accomplish tasks involving the tcp protocol rather than http. The net module includes constructors that return insistences of streams that">
-<meta property="og:updated_time" content="2019-10-14T21:39:23.000Z">
+<meta property="og:updated_time" content="2019-11-19T18:57:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Node net module basic examples and more">
 <meta name="twitter:description" content="This post will be on the node net module that can be used to accomplish tasks involving the tcp protocol rather than http. The net module includes constructors that return insistences of streams that">
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2019/07/18/nodejs-net/" class="article-date"> Modified:
-  <time datetime="2019-10-14T21:39:23.000Z" itemprop="dateModified">2019-10-14</time>
+  <time datetime="2019-11-19T18:57:11.000Z" itemprop="dateModified">2019-11-19</time>
 </a>
 
-    <span class="article-date">V1.7</span>
+    <span class="article-date">V1.8</span>
 
     
   <div class="article-category">
@@ -151,10 +151,10 @@ ga('send', 'pageview');
 <a id="more"></a>
 <h2 id="1-Node-net-basic-example"><a href="#1-Node-net-basic-example" class="headerlink" title="1 - Node net basic example"></a>1 - Node net basic example</h2><p>For a basic example of the nodejs net module here is a hello world example of using the create server net method to set up a TPC server on localhost at port 8080.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> net = <span class="built_in">require</span>(<span class="string">'net'</span>);</div><div class="line"> </div><div class="line"><span class="keyword">let</span> server = net.createServer();</div><div class="line"> </div><div class="line"><span class="comment">// 'connection' listener</span></div><div class="line">server.on(<span class="string">'connection'</span>, (socket) =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'connected'</span>);</div><div class="line">    socket.on(<span class="string">'end'</span>, () =&gt; &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'disconnected'</span>);</div><div class="line">    &#125;);</div><div class="line">    socket.write(<span class="string">'hello world this is node net in action! \r\n'</span>);</div><div class="line">    socket.end()</div><div class="line">&#125;);</div><div class="line"> </div><div class="line"><span class="comment">// handle errors</span></div><div class="line">server.on(<span class="string">'error'</span>, (err) =&gt; &#123;</div><div class="line">  <span class="keyword">throw</span> err;</div><div class="line">&#125;);</div><div class="line"> </div><div class="line"><span class="comment">// listen on port 8080 on local host with a backlog of 200</span></div><div class="line">server.listen(<span class="number">8080</span>, <span class="string">'localhost'</span>, <span class="number">200</span>, () =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'opened server on'</span>, server.address());</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>Once this example is up and running I can use a TCP client like telnet to connect to it an sure enough I get the message hello world. However if you do not have a TCP client installed it is also possible to connect to the server with another script so leys look into how to do that as well.</p>
+<p>Once this example is up and running I can use a TCP client like telnet to connect to it an sure enough I get the message hello world. However if you do not have a TCP client installed it is also possible to connect to the server with another script so lets look into how to do that as well.</p>
 <h2 id="2-Using-the-Socket-Constructor-to-connect-to-a-server"><a href="#2-Using-the-Socket-Constructor-to-connect-to-a-server" class="headerlink" title="2 - Using the Socket Constructor to connect to a server"></a>2 - Using the Socket Constructor to connect to a server</h2><p>So the socket constructor can be used to connect to a server by creating and instance of socket and then connecting to a server by using the connect method of socket.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> net = <span class="built_in">require</span>(<span class="string">'net'</span>),</div><div class="line">host = process.argv[<span class="number">2</span>] || <span class="string">'localhost'</span>,</div><div class="line">port = process.argv[<span class="number">3</span>] || <span class="number">8080</span>;</div><div class="line"> </div><div class="line"><span class="keyword">let</span> socket = <span class="keyword">new</span> net.Socket();</div><div class="line"> </div><div class="line"><span class="comment">// for incoming data</span></div><div class="line">socket.on(<span class="string">'data'</span>, (a) =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(a.toString());</div><div class="line">&#125;);</div><div class="line"> </div><div class="line">socket.on(<span class="string">'error'</span>, (err) =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'error connectng to Server on host: '</span> + host + <span class="string">' port: '</span> + port);</div><div class="line">    <span class="built_in">console</span>.log(err);</div><div class="line">&#125;);</div><div class="line"> </div><div class="line">socket.connect(port, host);</div></pre></td></tr></table></figure>
-<h2 id="3-Concussion"><a href="#3-Concussion" class="headerlink" title="3 - Concussion"></a>3 - Concussion</h2><p>So the net module can be used to set up and connect to TCP servers, it is also the base class for the create server constructors used in the http module as well.</p>
+<h2 id="3-Conclusion"><a href="#3-Conclusion" class="headerlink" title="3 - Conclusion"></a>3 - Conclusion</h2><p>So the net module can be used to set up and connect to TCP servers, it is also the base class for the create server constructors used in the http module as well.</p>
 
       
     </div>
@@ -184,7 +184,7 @@ ga('send', 'pageview');
   
     <a href="/2019/07/11/nodejs-buffer-fill/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Buffer fill in nodejs</div>
+      <div class="article-nav-title">Buffer fill method and filling buffers completely in nodejs</div>
     </a>
   
 </nav>
@@ -265,23 +265,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/11/15/vuejs-canvas/">Vue canvas topics including getting started scaling and more</a>
+            <a href="/2019/11/27/canvas-example-grid-defense/">A grid defense game canvas example</a>
           </li>
         
           <li>
-            <a href="/2019/11/14/vuejs-on/">Vue on directive</a>
+            <a href="/2019/11/26/canvas-example-pop-the-lock/">Pop The Lock Canvas Example Game Clone</a>
           </li>
         
           <li>
-            <a href="/2019/11/13/vuejs-get/">Creating a vue get method via plug-ins</a>
+            <a href="/2019/11/25/nodejs-filesystem-open/">node open file examples</a>
           </li>
         
           <li>
-            <a href="/2019/11/12/vuejs-force-update/">vue force update method to make the view render when it will not</a>
+            <a href="/2019/11/22/nodejs-filesystem-unlink/">node delete files with fs.unlink</a>
           </li>
         
           <li>
-            <a href="/2019/11/11/vuejs-lifecycle-updated/">vue updated lifecycle hook</a>
+            <a href="/2019/11/21/nodejs-event/">Node event emitter class</a>
           </li>
         
       </ul>

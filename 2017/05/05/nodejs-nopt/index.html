@@ -11,16 +11,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2017/05/05/nodejs-nopt/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="So you find yourself writing some kind of Command Line Interface tool with node.js, and as such you want to make it so it will accept some arguments from the command line. Just like that of many other">
+  <meta name="description" content="So you find yourself writing some kind of Command Line Interface tool with node.js, and as such you want to make it so it will accept some arguments from the command line. So you want something that w">
 <meta property="og:type" content="article">
 <meta property="og:title" content="A very nice option parser for Node.js called nopt">
 <meta property="og:url" content="https://dustinpfister.github.io/2017/05/05/nodejs-nopt/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="So you find yourself writing some kind of Command Line Interface tool with node.js, and as such you want to make it so it will accept some arguments from the command line. Just like that of many other">
-<meta property="og:updated_time" content="2017-09-30T22:43:22.000Z">
+<meta property="og:description" content="So you find yourself writing some kind of Command Line Interface tool with node.js, and as such you want to make it so it will accept some arguments from the command line. So you want something that w">
+<meta property="og:updated_time" content="2019-11-18T13:52:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="A very nice option parser for Node.js called nopt">
-<meta name="twitter:description" content="So you find yourself writing some kind of Command Line Interface tool with node.js, and as such you want to make it so it will accept some arguments from the command line. Just like that of many other">
+<meta name="twitter:description" content="So you find yourself writing some kind of Command Line Interface tool with node.js, and as such you want to make it so it will accept some arguments from the command line. So you want something that w">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/05/05/nodejs-nopt/" class="article-date"> Modified:
-  <time datetime="2017-09-30T22:43:22.000Z" itemprop="dateModified">2017-09-30</time>
+  <time datetime="2019-11-18T13:52:20.000Z" itemprop="dateModified">2019-11-18</time>
 </a>
 
-    <span class="article-date">V1.5</span>
+    <span class="article-date">V1.6</span>
 
     
   <div class="article-category">
@@ -147,7 +147,7 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>So you find yourself writing some kind of <a href="https://en.wikipedia.org/wiki/Command-line_interface" target="_blank" rel="external">Command Line Interface tool</a> with <a href="https://nodejs.org/en/" target="_blank" rel="external">node.js</a>, and as such you want to make it so it will accept some arguments from the command line. Just like that of many other CLI tools that you may be familiar with if you are somewhat POSIX or powerShell savvy. If so you will want to check out <a href="https://www.npmjs.com/package/nopt" target="_blank" rel="external">nopt</a>.</p>
+        <p>So you find yourself writing some kind of <a href="https://en.wikipedia.org/wiki/Command-line_interface" target="_blank" rel="external">Command Line Interface tool</a> with <a href="https://nodejs.org/en/" target="_blank" rel="external">node.js</a>, and as such you want to make it so it will accept some arguments from the command line. So you want something that works just like that of many other CLI tools that you may be familiar with if you are somewhat POSIX or powerShell savvy. If so you might want to check out <a href="/2018/07/24/nodejs-yargs">yargs</a> as that is the option parser that I have come to prefer. However there are <a href="/2018/07/31/nodejs-ways-to-parse-cli-options/">many other options</a> of course, and as such this post is mainly just on <a href="https://www.npmjs.com/package/nopt" target="_blank" rel="external">nopt</a>.</p>
 <a id="more"></a>
 <p>I first noticed nopt when checking out the dependencies for the popular node.js task runner <a href="https://gruntjs.com/" target="_blank" rel="external">grunt</a>. I have gotten into the habit of doing that as a way to become more aware of what is all ready out there in the node.js world, learn how to use it, and break free of the habit of wasting time re-inventing the wheel. Speaking of that I also really like what was written in the README file of the project on that matter:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">If you want to write an option parser, and have it be good, there are</div><div class="line">two ways to do it.  The Right Way, and the Wrong Way.</div><div class="line"></div><div class="line">The Wrong Way is to sit down and write an option parser.  We&apos;ve all done</div><div class="line">that.</div><div class="line"></div><div class="line">The Right Way is to write some complex configurable program with so many</div><div class="line">options that you hit the limit of your frustration just trying to</div><div class="line">manage them all, and defer it with duct-tape solutions until you see</div><div class="line">exactly to the core of the problem, and finally snap and write an</div><div class="line">awesome option parser.</div><div class="line"></div><div class="line">If you want to write an option parser, don&apos;t write an option parser.</div><div class="line">Write a package manager, or a source control system, or a service</div><div class="line">restarter, or an operating system.  You probably won&apos;t end up with a</div><div class="line">good one of those, but if you don&apos;t give up, and you are relentless and</div><div class="line">diligent enough in your procrastination, you may just end up with a very</div><div class="line">nice option parser.</div></pre></td></tr></table></figure>
@@ -286,23 +286,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/11/15/vuejs-canvas/">Vue canvas topics including getting started scaling and more</a>
+            <a href="/2019/11/27/canvas-example-grid-defense/">A grid defense game canvas example</a>
           </li>
         
           <li>
-            <a href="/2019/11/14/vuejs-on/">Vue on directive</a>
+            <a href="/2019/11/26/canvas-example-pop-the-lock/">Pop The Lock Canvas Example Game Clone</a>
           </li>
         
           <li>
-            <a href="/2019/11/13/vuejs-get/">Creating a vue get method via plug-ins</a>
+            <a href="/2019/11/25/nodejs-filesystem-open/">node open file examples</a>
           </li>
         
           <li>
-            <a href="/2019/11/12/vuejs-force-update/">vue force update method to make the view render when it will not</a>
+            <a href="/2019/11/22/nodejs-filesystem-unlink/">node delete files with fs.unlink</a>
           </li>
         
           <li>
-            <a href="/2019/11/11/vuejs-lifecycle-updated/">vue updated lifecycle hook</a>
+            <a href="/2019/11/21/nodejs-event/">Node event emitter class</a>
           </li>
         
       </ul>

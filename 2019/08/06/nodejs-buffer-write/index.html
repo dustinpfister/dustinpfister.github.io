@@ -11,16 +11,19 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2019/08/06/nodejs-buffer-write/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="The buffer write method in nodejs can be used to write data to a buffer that has been created before hand one way of another. There are a few basics to cover when it comes to putting data into a buffe">
+  <meta name="description" content="The buffer write method in the nodejs buffer global can be used to write data to a buffer that has been created before hand one way of another. 
+There are a few basics to cover when it comes to puttin">
 <meta property="og:type" content="article">
 <meta property="og:title" content="The buffer write method for writing to buffers in nodejs.">
 <meta property="og:url" content="https://dustinpfister.github.io/2019/08/06/nodejs-buffer-write/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="The buffer write method in nodejs can be used to write data to a buffer that has been created before hand one way of another. There are a few basics to cover when it comes to putting data into a buffe">
-<meta property="og:updated_time" content="2019-08-06T15:35:05.000Z">
+<meta property="og:description" content="The buffer write method in the nodejs buffer global can be used to write data to a buffer that has been created before hand one way of another. 
+There are a few basics to cover when it comes to puttin">
+<meta property="og:updated_time" content="2019-11-20T15:47:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The buffer write method for writing to buffers in nodejs.">
-<meta name="twitter:description" content="The buffer write method in nodejs can be used to write data to a buffer that has been created before hand one way of another. There are a few basics to cover when it comes to putting data into a buffe">
+<meta name="twitter:description" content="The buffer write method in the nodejs buffer global can be used to write data to a buffer that has been created before hand one way of another. 
+There are a few basics to cover when it comes to puttin">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -121,10 +124,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2019/08/06/nodejs-buffer-write/" class="article-date"> Modified:
-  <time datetime="2019-08-06T15:35:05.000Z" itemprop="dateModified">2019-08-06</time>
+  <time datetime="2019-11-20T15:47:17.000Z" itemprop="dateModified">2019-11-20</time>
 </a>
 
-    <span class="article-date">V1.4</span>
+    <span class="article-date">V1.7</span>
 
     
   <div class="article-category">
@@ -147,15 +150,19 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>The <a href="https://nodejs.org/api/buffer.html#buffer_buf_write_string_offset_length_encoding" target="_blank" rel="external">buffer write</a> method in nodejs can be used to write data to a buffer that has been created before hand one way of another. There are a few basics to cover when it comes to putting data into a buffer such as encoding and buffer index values. So I thought I would writing a quick post on the buffer write prototype method in nodejs, and may branch off with some other related topics on buffers.</p>
+        <p>The <a href="https://nodejs.org/api/buffer.html#buffer_buf_write_string_offset_length_encoding" target="_blank" rel="external">buffer write</a> method in the nodejs <a href="/2018/02/07/nodejs-buffer/">buffer global</a> can be used to write data to a buffer that has been created before hand one way of another. </p>
+<p>There are a few basics to cover when it comes to putting data into a buffer such as encoding and buffer index values. So I thought I would write a quick post on the buffer write prototype method in nodejs. In addition to this I  may branch off with some other related topics on buffers in general.</p>
 <a id="more"></a>
-<h2 id="1-buffer-write-basic-example-in-nodejs"><a href="#1-buffer-write-basic-example-in-nodejs" class="headerlink" title="1 - buffer write basic example in nodejs."></a>1 - buffer write basic example in nodejs.</h2><p>So first we need to create a new buffer, or some across a buffer instance by whatever other means such as inside the body of a handler for a data stream of some kind. In any case once there is a buffer instance to work with the write prototype method can be used to write some data to that buffer.</p>
-<p>A string value should be given as the first argument, and then also an encoding as the second argument for starters at least when maying around with this method for the first time. More on encoding shortly, but for now lets look at a basic example of the buffer write method in action.</p>
+<h2 id="1-buffer-write-basic-example-in-nodejs"><a href="#1-buffer-write-basic-example-in-nodejs" class="headerlink" title="1 - buffer write basic example in nodejs."></a>1 - buffer write basic example in nodejs.</h2><p>So first we need to create a new buffer, or come across a buffer instance by whatever other means such as inside the body of a handler for a data stream for example. In any case once there is a buffer instance to work with the write prototype method can be used to write some data to that buffer.</p>
+<p>A string value can be given as the first argument, and then also an encoding as the second argument for starters at least when it comes to a basic example of the buffer write method when playing around with this method for the first time. More on encoding shortly, but for now lets look at a basic example of the buffer write method in action by passing just a string to it, and an additional string that sets the encoding to hex rather than the default utf8 value.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> buff = Buffer.alloc(<span class="number">4</span>);</div><div class="line"> </div><div class="line"><span class="comment">// make first byte of buffer ff</span></div><div class="line"><span class="comment">// with the buffer write method</span></div><div class="line">buff.write(<span class="string">'ff'</span>, <span class="string">'hex'</span>);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(buff.toString(<span class="string">'hex'</span>));</div><div class="line"><span class="comment">// ff000000</span></div></pre></td></tr></table></figure>
-<p>So as one would expect this writes the hex value ff as the first byte of the buffer. However what if I want the string to be treated as a different encoding, and what if I want to place it at a different byte index in the buffer. No problem there are additional arguments for the method.</p>
-<h2 id="2-nodejs-buffer-write-and-encoding"><a href="#2-nodejs-buffer-write-and-encoding" class="headerlink" title="2 - nodejs buffer write and encoding"></a>2 - nodejs buffer write and encoding</h2><p>So a second, third, or final argument can be used to set the character encoding to be used when writing the given string value to a buffer. By default the encoding is utf8, but it makes sense to always set the encoding even if it is the default to help make things more clear and readable as to what it is going on in a project of mine. </p>
+<p>So as one would expect this writes the hex value ff as the first byte of the buffer. However what if I want the string to be treated as a different encoding, and what if I want to place it at a different byte index in the buffer. No problem there are additional arguments for the method that can be used to change the encoding an byte index values.</p>
+<h2 id="2-nodejs-buffer-write-and-encoding"><a href="#2-nodejs-buffer-write-and-encoding" class="headerlink" title="2 - nodejs buffer write and encoding"></a>2 - nodejs buffer write and encoding</h2><p>So a second, third, or final argument can be used to set the character encoding to be used when writing the given string value to a buffer. By default the encoding is utf8, but it makes sense to always set the encoding even if it is the default to help make things more clear and readable as to what it is going on in a project. </p>
+<p>To help show why consider the following.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> buff = Buffer.alloc(<span class="number">4</span>);</div><div class="line"> </div><div class="line"><span class="comment">// default encoding is utf8</span></div><div class="line">buff.write(<span class="string">'ff'</span>);</div><div class="line"><span class="comment">// so if no encoding is given then the</span></div><div class="line"><span class="comment">// value of the buffer will be the</span></div><div class="line"><span class="comment">// Unicode value of the string </span></div><div class="line"><span class="built_in">console</span>.log(buff.toString(<span class="string">'hex'</span>));</div><div class="line"><span class="comment">// 66660000</span></div></pre></td></tr></table></figure>
+<p>This is an might be unexpected result, but it is what will happen because of the default encoding of utf8. Even if I want the encoding to be utf8 I still generally choose to pass a string value of utf8 anyway to make it clear that is the encoding that I want to be used when writing data to a buffer.</p>
 <h2 id="3-Buffer-write-index-offset-and-length-of-bytes-to-put-in-the-buffer"><a href="#3-Buffer-write-index-offset-and-length-of-bytes-to-put-in-the-buffer" class="headerlink" title="3 - Buffer write index offset and length of bytes to put in the buffer"></a>3 - Buffer write index offset and length of bytes to put in the buffer</h2><p>So then there is the subject of having control over the index value in the buffer to start writing, and the number of bytes to write to that buffer index forward.</p>
+<p>For this I can use three arguments, or four arguments. If three arguments the second argument is a starting index in the buffer to begin writing at, and then the encoding. If four argument again the second is a starting location, the third is the number of bytes to write, and then the encoding.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> buff = Buffer.alloc(<span class="number">4</span>);</div><div class="line"> </div><div class="line"><span class="comment">// just the starting byte index can be given</span></div><div class="line">buff.write(<span class="string">'ffff'</span>, <span class="number">1</span>, <span class="string">'hex'</span>);</div><div class="line"><span class="built_in">console</span>.log(buff.toString(<span class="string">'hex'</span>));</div><div class="line"><span class="comment">// 00ffff00</span></div><div class="line"> </div><div class="line"><span class="comment">// a start index and length can also be given</span></div><div class="line">buff.fill(<span class="string">'00'</span>, <span class="string">'hex'</span>);</div><div class="line">buff.write(<span class="string">'ffff'</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="string">'hex'</span>);</div><div class="line"><span class="built_in">console</span>.log(buff.toString(<span class="string">'hex'</span>));</div><div class="line"><span class="comment">// 00ff0000</span></div></pre></td></tr></table></figure>
       
     </div>
@@ -266,23 +273,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/11/15/vuejs-canvas/">Vue canvas topics including getting started scaling and more</a>
+            <a href="/2019/11/27/canvas-example-grid-defense/">A grid defense game canvas example</a>
           </li>
         
           <li>
-            <a href="/2019/11/14/vuejs-on/">Vue on directive</a>
+            <a href="/2019/11/26/canvas-example-pop-the-lock/">Pop The Lock Canvas Example Game Clone</a>
           </li>
         
           <li>
-            <a href="/2019/11/13/vuejs-get/">Creating a vue get method via plug-ins</a>
+            <a href="/2019/11/25/nodejs-filesystem-open/">node open file examples</a>
           </li>
         
           <li>
-            <a href="/2019/11/12/vuejs-force-update/">vue force update method to make the view render when it will not</a>
+            <a href="/2019/11/22/nodejs-filesystem-unlink/">node delete files with fs.unlink</a>
           </li>
         
           <li>
-            <a href="/2019/11/11/vuejs-lifecycle-updated/">vue updated lifecycle hook</a>
+            <a href="/2019/11/21/nodejs-event/">Node event emitter class</a>
           </li>
         
       </ul>

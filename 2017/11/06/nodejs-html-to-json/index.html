@@ -11,19 +11,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2017/11/06/nodejs-html-to-json/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="I have been writing a javaScript blog for a little under a year now, and would like to have some tools at my disposal that will help me improve the quality of the content in my posts.
-So I wanted to m">
+  <meta name="description" content="So I wanted to make a simple tool to run threw all of my blog posts that have been parsed into html, and find certain values such as word count for my posts. In other words I want to create a collecti">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Converting html code to a JavaScript object in node.js with html-to-json">
 <meta property="og:url" content="https://dustinpfister.github.io/2017/11/06/nodejs-html-to-json/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="I have been writing a javaScript blog for a little under a year now, and would like to have some tools at my disposal that will help me improve the quality of the content in my posts.
-So I wanted to m">
-<meta property="og:updated_time" content="2017-11-13T01:44:47.000Z">
+<meta property="og:description" content="So I wanted to make a simple tool to run threw all of my blog posts that have been parsed into html, and find certain values such as word count for my posts. In other words I want to create a collecti">
+<meta property="og:updated_time" content="2019-11-19T14:50:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Converting html code to a JavaScript object in node.js with html-to-json">
-<meta name="twitter:description" content="I have been writing a javaScript blog for a little under a year now, and would like to have some tools at my disposal that will help me improve the quality of the content in my posts.
-So I wanted to m">
+<meta name="twitter:description" content="So I wanted to make a simple tool to run threw all of my blog posts that have been parsed into html, and find certain values such as word count for my posts. In other words I want to create a collecti">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -124,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/11/06/nodejs-html-to-json/" class="article-date"> Modified:
-  <time datetime="2017-11-13T01:44:47.000Z" itemprop="dateModified">2017-11-12</time>
+  <time datetime="2019-11-19T14:50:12.000Z" itemprop="dateModified">2019-11-19</time>
 </a>
 
-    <span class="article-date">V1.3</span>
+    <span class="article-date">V1.1</span>
 
     
   <div class="article-category">
@@ -150,17 +147,20 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>I have been writing a javaScript blog for a little under a year now, and would like to have some tools at my disposal that will help me improve the quality of the content in my posts.</p>
-<p>So I wanted to make a simple tool to run threw all of my blog posts that have been parsed into html, and find certain values such as word count for my posts. So I wanted to find some kind of javaScript project that I can use in my CLI tool that would help easily turn some html into a javaScript object that I can then work with. I found a few projects that work nice, but settled in on something called <a href="https://www.npmjs.com/package/html-to-json" target="_blank" rel="external">html-to-json</a>.</p>
+        <p>So I wanted to make a simple tool to run threw all of my blog posts that have been parsed into html, and find certain values such as word count for my posts. In other words I want to create a collection of objects for each html file, or have a way to convert to a JSON format from HTML. So there should be some kind of dependency in the npmjs ecosystem that I can use to just quickly turn html into an object tyoe form that I can work with in a node environment, similarly to that of what I can work with in a browser or client side javaScript environment.</p>
+<p>WIth that being said I took a little time to see what there is to work with if anything and after doing so I found a few projects that work nice. However in this post I will mostly be writing about a npm package called <a href="https://www.npmjs.com/package/html-to-json" target="_blank" rel="external">html-to-json</a>. This package has a method where I can feed it an html string, and what is returned is a workable object.</p>
 <a id="more"></a>
-<h2 id="Basic-example-of-html-to-json-in-node"><a href="#Basic-example-of-html-to-json-in-node" class="headerlink" title="Basic example of html-to-json in node."></a>Basic example of html-to-json in node.</h2><p>So of course as always the first thing is to install the package into a node project</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install node-to-json --save</div></pre></td></tr></table></figure>
-<p>After that I wanted to make my typical hello world example of how to get started with html to json. As such I put together a simple example to just test out how it works, by seeing if I can just pull the text from a single paragraph element.</p>
+<h2 id="1-Basic-example-of-html-to-json-in-node"><a href="#1-Basic-example-of-html-to-json-in-node" class="headerlink" title="1 - Basic example of html-to-json in node."></a>1 - Basic example of html-to-json in node.</h2><p>So of course as always the first thing is to install the package into a node project folder. I assume that you know the basics of setting up a new node project folder, if not this is nt the post to start out with the basic of using node and the default package manager for it called npm.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install html-to-json --save</div></pre></td></tr></table></figure>
+<p>After that I wanted to make my typical hello world example of how to get started with html to json. As such I put together a simple example to just test out how it works, by seeing if I can just pull the text from a single paragraph element just for starters.</p>
+<p>So with that said there is the parse method of this project where the first argument that is given is an html string, and the second argument given is an object the serves as a filter. Then a third argument can be given that is a callback, but the method also returns a promise. The resulting object that is given via a callback, or in a resolved promise via the this method contains what I would expect.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> htmlToJson = <span class="built_in">require</span>(<span class="string">'html-to-json'</span>),</div><div class="line"> </div><div class="line">htmlToJson.parse(<span class="string">'&lt;p&gt;This is only an example&lt;/p&gt;'</span>, &#123;</div><div class="line"> </div><div class="line">    <span class="attr">p</span>: <span class="function"><span class="keyword">function</span> (<span class="params">doc</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> doc.find(<span class="string">'p'</span>).text();</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">result</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="built_in">console</span>.log(result.p); <span class="comment">// 'this is only an example'</span></div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<h2 id="Converting-many-files-to-javaScript-objects"><a href="#Converting-many-files-to-javaScript-objects" class="headerlink" title="Converting many files to javaScript objects"></a>Converting many files to javaScript objects</h2><p>To do this I used another javaScript dependency called node-dir, which comes in handy when I want to grab the content of many files that exist in a complex file structure. I <a href="/2017/11/05/nodejs-node-dir/">wrote a post</a> on it if you want to learn more about how to loop over files recursively with it.</p>
+<p>So far so good, looks like this project is more or less what I had in mind, but lets look at a few more examples just for the hell of it.</p>
+<h2 id="2-Converting-many-files-to-javaScript-objects"><a href="#2-Converting-many-files-to-javaScript-objects" class="headerlink" title="2 - Converting many files to javaScript objects"></a>2 - Converting many files to javaScript objects</h2><p>To do this I used another javaScript dependency called node-dir, which comes in handy when I want to grab the content of many files that exist in a complex file structure. I <a href="/2017/11/05/nodejs-node-dir/">wrote a post</a> on it if you want to learn more about how to loop over files recursively with it.</p>
+<p>There are other options that can be used to walk the contents of a file system, in fact I am not sure if I can say node dir is the best option when it comes to file system walkers. <a href="/2018/07/20/nodejs-ways-to-walk-a-file-system/">I wrote a post on the subject of file system walking</a> that you might want to check out when it does come to other options for this. However in any case I just need a way to loop over the contents of a file system recursively, open each html file, and then use this project to parse the html into a workable object.</p>
 <p>Anyway using node-dir with html-to-json i was able to quickly build the json report that I wanted.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> htmlToJson = <span class="built_in">require</span>(<span class="string">'html-to-json'</span>),</div><div class="line">fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line">dir = <span class="built_in">require</span>(<span class="string">'node-dir'</span>),</div><div class="line"></div><div class="line">results = [],</div><div class="line">source = <span class="string">'./html'</span>,</div><div class="line">jsonFN = <span class="string">'./report.json'</span>;</div><div class="line"> </div><div class="line"><span class="comment">// using the readFiles method in node-dir</span></div><div class="line">dir.readFiles(source,</div><div class="line"> </div><div class="line">    <span class="comment">// a function to call for each file in the path</span></div><div class="line">    <span class="function"><span class="keyword">function</span> (<span class="params">err, content, fileName, next</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// if an error happens log it</span></div><div class="line">    <span class="keyword">if</span> (err) &#123;</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(err);</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// log current filename</span></div><div class="line">    <span class="built_in">console</span>.log(fileName);</div><div class="line"> </div><div class="line">    <span class="comment">// using html-to-jsons parse method</span></div><div class="line">    htmlToJson.parse(content, &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// include the filename</span></div><div class="line">        fn: fileName,</div><div class="line"> </div><div class="line">        <span class="comment">// get the h1 tag in my post</span></div><div class="line">        title: <span class="function"><span class="keyword">function</span> (<span class="params">doc</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="keyword">return</span> doc.find(<span class="string">'title'</span>).text().replace(<span class="regexp">/\n/g</span>, <span class="string">''</span>).trim();</div><div class="line"> </div><div class="line">        &#125;,</div><div class="line"> </div><div class="line">        <span class="comment">// getting word count</span></div><div class="line">        wc: <span class="function"><span class="keyword">function</span> (<span class="params">doc</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">// finding word count by getting text of all p elements</span></div><div class="line">            <span class="keyword">return</span> doc.find(<span class="string">'p'</span>).text().split(<span class="string">' '</span>).length;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">result</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// log the result</span></div><div class="line">        results.push(result);</div><div class="line"> </div><div class="line">    &#125;)</div><div class="line"> </div><div class="line">    next();</div><div class="line"> </div><div class="line">&#125;, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// write out a json file</span></div><div class="line">    fs.writeFile(jsonFN, <span class="built_in">JSON</span>.stringify(results), <span class="string">'utf-8'</span>);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>So I might want to work on my content analysis tool some more as a great deal more comes to mind other than just word count of my posts. It seems like what is a lot more important than a high word count is targeting the right string of keywords that people are searching for. Anyway this is a great solution for helping me with the task of converting html to json, I hope this post helped you.</p>
+<h2 id="3-Conclusion"><a href="#3-Conclusion" class="headerlink" title="3 - Conclusion"></a>3 - Conclusion</h2><p>So I might want to work on my content analysis tool some more as a great deal more comes to mind other than just word count of my posts. It seems like what is a lot more important than a high word count is targeting the right string of keywords that people are searching for. Anyway this is a great solution for helping me with the task of converting html to json, I hope this post helped you.</p>
 
       
     </div>
@@ -271,23 +271,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/11/15/vuejs-canvas/">Vue canvas topics including getting started scaling and more</a>
+            <a href="/2019/11/27/canvas-example-grid-defense/">A grid defense game canvas example</a>
           </li>
         
           <li>
-            <a href="/2019/11/14/vuejs-on/">Vue on directive</a>
+            <a href="/2019/11/26/canvas-example-pop-the-lock/">Pop The Lock Canvas Example Game Clone</a>
           </li>
         
           <li>
-            <a href="/2019/11/13/vuejs-get/">Creating a vue get method via plug-ins</a>
+            <a href="/2019/11/25/nodejs-filesystem-open/">node open file examples</a>
           </li>
         
           <li>
-            <a href="/2019/11/12/vuejs-force-update/">vue force update method to make the view render when it will not</a>
+            <a href="/2019/11/22/nodejs-filesystem-unlink/">node delete files with fs.unlink</a>
           </li>
         
           <li>
-            <a href="/2019/11/11/vuejs-lifecycle-updated/">vue updated lifecycle hook</a>
+            <a href="/2019/11/21/nodejs-event/">Node event emitter class</a>
           </li>
         
       </ul>

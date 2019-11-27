@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Node event emitter class | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2019/11/21/nodejs-event/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="This will be a post on the node event emitter class for making custom events in nodejs. It can come in handy now and then to make my own custom events, and attach handers for them, I just need to know">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node event emitter class">
+<meta property="og:url" content="https://dustinpfister.github.io/2019/11/21/nodejs-event/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="This will be a post on the node event emitter class for making custom events in nodejs. It can come in handy now and then to make my own custom events, and attach handers for them, I just need to know">
+<meta property="og:updated_time" content="2019-11-23T15:53:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Node event emitter class">
+<meta name="twitter:description" content="This will be a post on the node event emitter class for making custom events in nodejs. It can come in handy now and then to make my own custom events, and attach handers for them, I just need to know">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-event" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/11/21/nodejs-event/" class="article-date"> Published:
+  <time datetime="2019-11-21T21:58:00.000Z" itemprop="datePublished">2019-11-21</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2019/11/21/nodejs-event/" class="article-date"> Modified:
+  <time datetime="2019-11-23T15:53:28.000Z" itemprop="dateModified">2019-11-23</time>
+</a>
+
+    <span class="article-date">V1.12</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Node event emitter class
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>This will be a post on the <a href="https://nodejs.org/api/events.html#events_class_eventemitter" target="_blank" rel="external">node event</a> emitter class for making custom events in nodejs. It can come in handy now and then to make my own custom events, and attach handers for them, I just need to know where and when to call the emit method in my code when a custom event happens. However maybe it would be best to learn by doing, and to do so it might be best to just jump ahead to the code examples here on the node event emitter class.<br>This is a nodejs core build in module that is in node itself, so no npm package of any kind needs to be installed to get started with this, you just need node itself.</p>
+<a id="more"></a>
+<h2 id="1-Basic-node-event-emitter-class-example"><a href="#1-Basic-node-event-emitter-class-example" class="headerlink" title="1 - Basic node event emitter class example"></a>1 - Basic node event emitter class example</h2><p>So for a basic example of the node event emitter class, here is an example that just involves stepping an object property. Each time the object property is stepped an update event is emitted, and a overload event is also emitted when that property reaches a defined max value. </p>
+<p>So To set up my own events I just need to require in the events module that exports a constructor method that can be used to create an instance of the node event emitter class. Once I have that emitter class instance I can call the emit method of that instance in my code where I want a kind of event to happen, I then pass a name for the event as the first argument, followed by one or more arguments for it.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> Emitter = <span class="built_in">require</span>(<span class="string">'events'</span>),</div><div class="line">events = <span class="keyword">new</span> Emitter();</div><div class="line"> </div><div class="line">events.on(<span class="string">'update'</span>, (obj) =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(obj.i)</div><div class="line">&#125;);</div><div class="line"> </div><div class="line">events.on(<span class="string">'overload'</span>, (obj) =&gt; &#123;</div><div class="line">    obj.i %= obj.iMax;</div><div class="line">&#125;);</div><div class="line"> </div><div class="line"><span class="keyword">let</span> obj = &#123;</div><div class="line">    <span class="attr">i</span>: <span class="number">0</span>,</div><div class="line">    <span class="attr">iMax</span>: <span class="number">10</span></div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="keyword">let</span> updateObject = <span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</div><div class="line">    obj.i += <span class="number">1</span>;</div><div class="line">    <span class="keyword">if</span> (obj.i &gt; obj.iMax) &#123;</div><div class="line">        events.emit(<span class="string">'overload'</span>, obj);</div><div class="line">    &#125;</div><div class="line">    events.emit(<span class="string">'update'</span>, obj);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line">setInterval(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    updateObject(obj);</div><div class="line">&#125;, <span class="number">250</span>);</div></pre></td></tr></table></figure>
+<p>So when this example starts it counts up to 10 at which point the overload event is used to set the count back to zero. This is a silly pointless example, but you get the general idea. The node event emitter class is a way to go about defining my own events. I just need to have a way to go about calling the emit method where and when doing so is called for, setting a name, and passing arguments that are needed.</p>
+<h2 id="2-Game-board-example-of-a-node-event-emitter"><a href="#2-Game-board-example-of-a-node-event-emitter" class="headerlink" title="2 - Game board example of a node event emitter"></a>2 - Game board example of a node event emitter</h2><p>Okay great now that we have the boring part out of the way lets do something fun, or at least something where there is a potential for fun anyway.</p>
+<p>In this example I worked out a basic game board module. It contains the beginnings of two classes one for a unit, and another for a game board that will also function as a unit collection class. The Board class will contain an instance of the node event emitter class that I can use to define some events for certain events, such as when a unit moves, or goes out of bounds for the game board.</p>
+<h3 id="2-1-The-game-board-lib"><a href="#2-1-The-game-board-lib" class="headerlink" title="2.1 - The game board lib"></a>2.1 - The game board lib</h3><p>So here is the game board module that I put together for this post. Here I define my Unit Class, and my Board class, and have just a plain object that is exported as public api. The public api of this module is just two references to the Unit and Board Classes.</p>
+<p>In the Board class Constructor I created an instance of a node event emitter, and make that one of the properties of a Board class instance. That way when I use the Class in a project I can define event handlers for the Board class instance for certain events of interest that will happen as I move a unit around the board.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> Emitter = <span class="built_in">require</span>(<span class="string">'events'</span>);</div><div class="line"> </div><div class="line"><span class="keyword">let</span> c = <span class="number">0</span>;</div><div class="line"><span class="keyword">let</span> genUID = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Number</span>(<span class="number">100</span> + c).toString(<span class="string">'hex'</span>);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// A Unit Class</span></div><div class="line"><span class="keyword">let</span> Unit = <span class="function"><span class="keyword">function</span> (<span class="params">opt</span>) </span>&#123;</div><div class="line">    opt = opt || &#123;&#125;;</div><div class="line">    <span class="keyword">this</span>.uid = opt.uid || genUID();</div><div class="line">    <span class="keyword">this</span>.x = opt.x === <span class="literal">undefined</span> ? <span class="number">0</span> : opt.x;</div><div class="line">    <span class="keyword">this</span>.y = opt.y === <span class="literal">undefined</span> ? <span class="number">0</span> : opt.y;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// A Board Class</span></div><div class="line"><span class="keyword">let</span> Board = <span class="function"><span class="keyword">function</span> (<span class="params">opt</span>) </span>&#123;</div><div class="line">    opt = opt || &#123;&#125;;</div><div class="line">    <span class="keyword">this</span>.width = opt.width || <span class="number">8</span>;</div><div class="line">    <span class="keyword">this</span>.height = opt.height || <span class="number">8</span>;</div><div class="line">    <span class="keyword">this</span>.units = opt.units || [];</div><div class="line">    <span class="keyword">this</span>.events = <span class="keyword">new</span> Emitter();</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// get Unit method</span></div><div class="line">Board.prototype.getUnit = <span class="function"><span class="keyword">function</span> (<span class="params">u</span>) </span>&#123;</div><div class="line">    <span class="comment">// if object assume it is a unit</span></div><div class="line">    <span class="comment">// all ready and just return</span></div><div class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> u === <span class="string">'object'</span> &amp;&amp; u != <span class="literal">null</span>) &#123;</div><div class="line">        <span class="keyword">return</span> u;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// if string get unit by it</span></div><div class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> u === <span class="string">'string'</span>) &#123;</div><div class="line">        <span class="keyword">let</span> i = <span class="keyword">this</span>.units.length,</div><div class="line">        unit;</div><div class="line">        <span class="keyword">while</span> (i--) &#123;</div><div class="line">            unit = <span class="keyword">this</span>.units[i];</div><div class="line">            <span class="keyword">if</span> (unit.uid === u) &#123;</div><div class="line">                <span class="keyword">return</span> unit;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">this</span>.events.emit(<span class="string">'error'</span>, <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'unit uid '</span> + u + <span class="string">' not found'</span>))</div><div class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// if number assume it is an index</span></div><div class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> u === <span class="string">'number'</span>) &#123;</div><div class="line">        <span class="keyword">let</span> unit = <span class="keyword">this</span>.units[u];</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> unit === <span class="string">'object'</span>) &#123;</div><div class="line">            <span class="keyword">return</span> unit;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">this</span>.events.emit(<span class="string">'error'</span>, <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Unit index '</span> + u + <span class="string">' is out of range'</span>));</div><div class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// if all fails emit an error event, and return and empty object</span></div><div class="line">    <span class="keyword">this</span>.events.emit(<span class="string">'error'</span>, <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Attempt to get a unit with invalid value: '</span> + u));</div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line">Board.prototype.moveUnit = <span class="function"><span class="keyword">function</span> (<span class="params">u, dx, dy</span>) </span>&#123;</div><div class="line">    <span class="comment">// get unit</span></div><div class="line">    <span class="keyword">let</span> unit = <span class="keyword">this</span>.getUnit(u);</div><div class="line">    <span class="comment">// if unit move it</span></div><div class="line">    <span class="keyword">if</span> (unit) &#123;</div><div class="line">        <span class="keyword">let</span> ox = unit.x,</div><div class="line">        oy = unit.y,</div><div class="line">        x = unit.x = unit.x + dx,</div><div class="line">        y = unit.y = unit.y + dy;</div><div class="line">        <span class="comment">// emit a 'unit-move' event</span></div><div class="line">        <span class="keyword">this</span>.events.emit(<span class="string">'unit-move'</span>, unit, ox, oy);</div><div class="line">        <span class="comment">// if unit is out of bounds emit an out-of-bounds event</span></div><div class="line">        <span class="keyword">if</span> (unit.x &lt; <span class="number">0</span> || unit.y &gt;= <span class="keyword">this</span>.width || unit.y &lt; <span class="number">0</span> || unit.y &gt;= <span class="keyword">this</span>.height) &#123;</div><div class="line">            <span class="keyword">this</span>.events.emit(<span class="string">'unit-out-of-bounds'</span>, unit);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">    <span class="attr">Board</span>: Board,</div><div class="line">    <span class="attr">Unit</span>: Unit</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>There is way more that could be added when it comes to turning this into a module that would be used in an actual game project. However for the sake of the theme of this post you get the idea. With the node event emitter class I can add all kinds of events for various events that are custom tailer to the nature of the module that I am making.</p>
+<h3 id="2-2-A-simple-demo"><a href="#2-2-A-simple-demo" class="headerlink" title="2.2 - A simple demo"></a>2.2 - A simple demo</h3><p>So now for a simple demo of this Board Class in action. In a new javaScript file I require in my board class module. I then create an instance of the Board Class, and then make a single unit for it. I then add some handlers to the node event emitter class instance that is attached to the events property of the Broad Class instance.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> board = <span class="built_in">require</span>(<span class="string">'./lib_board_class.js'</span>);</div><div class="line"> </div><div class="line"><span class="keyword">let</span> gameBoard = <span class="keyword">new</span> board.Board(&#123;</div><div class="line">        <span class="attr">width</span>: <span class="number">5</span>,</div><div class="line">        <span class="attr">height</span>: <span class="number">5</span>,</div><div class="line">        <span class="attr">units</span>: [</div><div class="line">            <span class="keyword">new</span> board.Unit(&#123;</div><div class="line">                <span class="attr">x</span>: <span class="number">1</span>,</div><div class="line">                <span class="attr">y</span>: <span class="number">1</span>,</div><div class="line">                <span class="attr">uid</span>: <span class="string">'player'</span></div><div class="line">            &#125;)</div><div class="line">        ]</div><div class="line">    &#125;);</div><div class="line"> </div><div class="line"><span class="comment">// set some handlers for my events</span></div><div class="line">gameBoard.events.on(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">''</span>)</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'Error:'</span>)</div><div class="line">    <span class="built_in">console</span>.log(e.message);</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">''</span>);</div><div class="line">&#125;);</div><div class="line">gameBoard.events.on(<span class="string">'unit-move'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">unit, ox, oy</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">''</span>)</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'Unit moved:'</span>);</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'from: '</span> + ox + <span class="string">','</span> + oy);</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'to: '</span> + unit.x + <span class="string">','</span> + unit.y);</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">''</span>)</div><div class="line">&#125;);</div><div class="line">gameBoard.events.on(<span class="string">'unit-out-of-bounds'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">unit</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">''</span>)</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'Unit is out of bounds:'</span>);</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'unit uid: '</span> + unit.uid);</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">''</span>)</div><div class="line">&#125;);</div><div class="line"> </div><div class="line">gameBoard.moveUnit(<span class="string">'player'</span>, <span class="number">-1</span>, <span class="number">0</span>);</div><div class="line">gameBoard.moveUnit(<span class="string">'player'</span>, <span class="number">-1</span>, <span class="number">0</span>);</div><div class="line">gameBoard.moveUnit(<span class="literal">null</span>, <span class="number">-1</span>, <span class="number">0</span>);</div></pre></td></tr></table></figure>
+<p>When I run this example I get the expected behavior the unit-move event fires each time for the Unit class instance I created with the uid property of player. The unit-out-of-bounds event fires once when the player unit goes out of bounds, and an error event happens when I attempt to get and move a unit with a value of null.</p>
+<p>So things are working as I would expect so far, but the module is still lacking many must needed features. It would also be nice to expand the Unit class as well. I am not sure I would care to put a great deal of time into this though, I thing I would prefer to make a class like this that would work okay on the client side. However you get the idea when it comes to using the node event emitter class it is a way to go about defining some events for a project like this.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2019/11/21/nodejs-event/" data-id="ck3hx7hag000hu4v1ku01j7sn" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2019/11/21/nodejs-event/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/11/22/nodejs-filesystem-unlink/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          node delete files with fs.unlink
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/11/20/nodejs-websocket/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Node websocket simple vanilla javaScript example</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2019/11/21/nodejs-event/index.html';
+    this.page.identifier = '568';
+    this.page.title = 'Node event emitter class';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.11px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.53px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.68px;">angular</a> <a href="/tags/animation/" style="font-size: 12.63px;">animation</a> <a href="/tags/automation/" style="font-size: 12.63px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.16px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.74px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.37px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.63px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.05px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.58px;">ejs</a> <a href="/tags/express/" style="font-size: 16.84px;">express</a> <a href="/tags/games/" style="font-size: 17.89px;">games</a> <a href="/tags/git/" style="font-size: 11.58px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.26px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.68px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.21px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.53px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.58px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 12.63px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.42px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.21px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.47px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.95px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.11px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.32px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.79px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/11/27/canvas-example-grid-defense/">A grid defense game canvas example</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/26/canvas-example-pop-the-lock/">Pop The Lock Canvas Example Game Clone</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/25/nodejs-filesystem-open/">node open file examples</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/22/nodejs-filesystem-unlink/">node delete files with fs.unlink</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/21/nodejs-event/">Node event emitter class</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2019/11/21/nodejs-event/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

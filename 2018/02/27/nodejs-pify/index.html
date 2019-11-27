@@ -11,16 +11,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2018/02/27/nodejs-pify/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="When making a node.js project, many methods in the node.js core work by giving a callback that will return an error, or what it is that you want from the method. It may be desireable to have these met">
+  <meta name="description" content="When making a node.js project, many methods in the node.js core work by giving a callback that will return an error, or what it is that you want from the method. This is a callback style method that c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Turning a node.js method into a promise with pify">
 <meta property="og:url" content="https://dustinpfister.github.io/2018/02/27/nodejs-pify/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="When making a node.js project, many methods in the node.js core work by giving a callback that will return an error, or what it is that you want from the method. It may be desireable to have these met">
-<meta property="og:updated_time" content="2018-02-28T22:23:05.000Z">
+<meta property="og:description" content="When making a node.js project, many methods in the node.js core work by giving a callback that will return an error, or what it is that you want from the method. This is a callback style method that c">
+<meta property="og:updated_time" content="2019-11-18T15:19:21.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Turning a node.js method into a promise with pify">
-<meta name="twitter:description" content="When making a node.js project, many methods in the node.js core work by giving a callback that will return an error, or what it is that you want from the method. It may be desireable to have these met">
+<meta name="twitter:description" content="When making a node.js project, many methods in the node.js core work by giving a callback that will return an error, or what it is that you want from the method. This is a callback style method that c">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2018/02/27/nodejs-pify/" class="article-date"> Modified:
-  <time datetime="2018-02-28T22:23:05.000Z" itemprop="dateModified">2018-02-28</time>
+  <time datetime="2019-11-18T15:19:21.000Z" itemprop="dateModified">2019-11-18</time>
 </a>
 
-    <span class="article-date">V1.1</span>
+    <span class="article-date">V1.5</span>
 
     
   <div class="article-category">
@@ -147,12 +147,17 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>When making a node.js project, many methods in the node.js core work by giving a callback that will return an error, or what it is that you want from the method. It may be desireable to have these methods return promises instead to be used as a means to work with the method. I could juts do so with the Promise constructor, but <a href="https://www.npmjs.com/package/pify" target="_blank" rel="external">pify</a> is a nice little project that can help to make quick work of this.</p>
+        <p>When making a node.js project, many methods in the node.js core work by giving a callback that will return an error, or what it is that you want from the method. This is a callback style method that can result in the so called callback hell when it comes to doing anything where many of these kinds of calls need to be nested.</p>
+<p>In late versions of nodejs many core modules now return a promise as an alternative to this cllback style way of doing things. Also there is the <a href="/2019/06/22/nodejs-util-promisify/">promisify method in the util module</a> that I often use as a way to promsify these built in methods. That solution will also work on most older versions of nodejs, at least all the one that are still supported anyway.</p>
+<p>Another option would be to just make a quick method where I am returning a new instance of a promise constructor when it comes to any version of node that supports Promises, or failing that, by using a user space module like bluebird to add promises. However this is a post on the npm package <a href="https://www.npmjs.com/package/pify" target="_blank" rel="external">pify</a>, one of many project created and maintained by <a href="https://github.com/sindresorhus" target="_blank" rel="external">sindresorhus</a>, it is a nice little project that can help to make quick work of this also so lets look at some quick examples.</p>
 <a id="more"></a>
-<h2 id="A-basic-example-of-pify"><a href="#A-basic-example-of-pify" class="headerlink" title="A basic example of pify"></a>A basic example of pify</h2><p>So normally most node.js methods are used by giving one or more arguments ending with a callback. </p>
-<p>like this:<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"> </div><div class="line">fs.readFile(<span class="string">'readme.md'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e, text</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// something went wrong</span></div><div class="line">    <span class="keyword">if</span> (e) &#123;</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(e);</div><div class="line"> </div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// the contents of the readme</span></div><div class="line">        <span class="built_in">console</span>.log(text.toString());</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
-<p>This can work okay, but can lead to what is called call back hell when making a complex project. Promises can help to keep things neater, and pify can be used as a way to do just that.</p>
+<h2 id="1-Basic-example-of-pify"><a href="#1-Basic-example-of-pify" class="headerlink" title="1 - Basic example of pify"></a>1 - Basic example of pify</h2><p>So normally most node.js methods are used by giving one or more arguments ending with a callback. That callback will then give an error object, or null value as the first argument, and then a result of some kind as the second argument when there is something to that effect.</p>
+<p>In other words something like this:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"> </div><div class="line">fs.readFile(<span class="string">'readme.md'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e, text</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// something went wrong</span></div><div class="line">    <span class="keyword">if</span> (e) &#123;</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(e);</div><div class="line"> </div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// the contents of the readme</span></div><div class="line">        <span class="built_in">console</span>.log(text.toString());</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>This can work okay, but can lead to what is called call back hell when making a complex project. Promises can help to keep things neater by having a long chain of calls for promises and then calling the then method off the resolve promise object.<br>This is where pify can be used as a way to make it so that a promise is what is returned rather than having to use the callback style way of doing things. Just require in pify, then call the method that it exports passing the function that I want to promisify. I can then call the method that returns which returns a promise, at which point I can then use then and catch just like with any other promise.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> pify = <span class="built_in">require</span>(<span class="string">'pify'</span>),</div><div class="line">fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"> </div><div class="line">pify(fs.readFile)(<span class="string">'readme.md'</span>).then(<span class="function"><span class="keyword">function</span> (<span class="params">text</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// the contents of the readme</span></div><div class="line">    <span class="built_in">console</span>.log(text.toString());</div><div class="line"> </div><div class="line">&#125;).catch (<span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// something went wrong</span></div><div class="line">    <span class="built_in">console</span>.log(e);</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="2-Conclusion"><a href="#2-Conclusion" class="headerlink" title="2 - Conclusion"></a>2 - Conclusion</h2><p>So pify is not the inly way to go about doing this when it comes to making a project that will work nice with older versions of node, and the use of user space projects that do not return promises. As I have mentioned there is a built in method in the util module of nodejs that can also be used to do this. In addition other projects like fs-extra return promise for all file system methods’ Also when it comes to late versions of node there is no need to bother with any of these any more assuming that you do not care abut supporting older versions of node at all.</p>
+
       
     </div>
     <footer class="article-footer">
@@ -262,23 +267,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/11/15/vuejs-canvas/">Vue canvas topics including getting started scaling and more</a>
+            <a href="/2019/11/27/canvas-example-grid-defense/">A grid defense game canvas example</a>
           </li>
         
           <li>
-            <a href="/2019/11/14/vuejs-on/">Vue on directive</a>
+            <a href="/2019/11/26/canvas-example-pop-the-lock/">Pop The Lock Canvas Example Game Clone</a>
           </li>
         
           <li>
-            <a href="/2019/11/13/vuejs-get/">Creating a vue get method via plug-ins</a>
+            <a href="/2019/11/25/nodejs-filesystem-open/">node open file examples</a>
           </li>
         
           <li>
-            <a href="/2019/11/12/vuejs-force-update/">vue force update method to make the view render when it will not</a>
+            <a href="/2019/11/22/nodejs-filesystem-unlink/">node delete files with fs.unlink</a>
           </li>
         
           <li>
-            <a href="/2019/11/11/vuejs-lifecycle-updated/">vue updated lifecycle hook</a>
+            <a href="/2019/11/21/nodejs-event/">Node event emitter class</a>
           </li>
         
       </ul>

@@ -11,16 +11,19 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2017/08/02/nodejs-js-yaml/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="YAML is a recursive acronym for YAML Ain’t Markup Language, that is used for data serialization. Often I see it used for configuration files in place of JSON (JavaScript Object Notation), as a means o">
+  <meta name="description" content="YAML is a recursive acronym for YAML Ain’t Markup Language that is used for data serialization, but does so in a more human readable style format, by supporting features like comments. 
+Because of the">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Using yaml in place of JSON in node.js with js-yaml">
 <meta property="og:url" content="https://dustinpfister.github.io/2017/08/02/nodejs-js-yaml/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="YAML is a recursive acronym for YAML Ain’t Markup Language, that is used for data serialization. Often I see it used for configuration files in place of JSON (JavaScript Object Notation), as a means o">
-<meta property="og:updated_time" content="2017-09-30T22:43:21.000Z">
+<meta property="og:description" content="YAML is a recursive acronym for YAML Ain’t Markup Language that is used for data serialization, but does so in a more human readable style format, by supporting features like comments. 
+Because of the">
+<meta property="og:updated_time" content="2019-11-18T13:42:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Using yaml in place of JSON in node.js with js-yaml">
-<meta name="twitter:description" content="YAML is a recursive acronym for YAML Ain’t Markup Language, that is used for data serialization. Often I see it used for configuration files in place of JSON (JavaScript Object Notation), as a means o">
+<meta name="twitter:description" content="YAML is a recursive acronym for YAML Ain’t Markup Language that is used for data serialization, but does so in a more human readable style format, by supporting features like comments. 
+Because of the">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -121,10 +124,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/08/02/nodejs-js-yaml/" class="article-date"> Modified:
-  <time datetime="2017-09-30T22:43:21.000Z" itemprop="dateModified">2017-09-30</time>
+  <time datetime="2019-11-18T13:42:49.000Z" itemprop="dateModified">2019-11-18</time>
 </a>
 
-    <span class="article-date">V1.2</span>
+    <span class="article-date">V1.9</span>
 
     
   <div class="article-category">
@@ -147,19 +150,24 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p><a href="http://yaml.org/" target="_blank" rel="external">YAML</a> is a recursive acronym for YAML Ain’t Markup Language, that is used for data serialization. Often I see it used for configuration files in place of JSON (JavaScript Object Notation), as a means of soft coding settings. This is the case in <a href="https://hexo.io" target="_blank" rel="external">hexo</a>, for the purpose of configuring settings for hexo itself, as well as the theme that is being used.</p>
+        <p><a href="http://yaml.org/" target="_blank" rel="external">YAML</a> is a recursive acronym for <a href="https://en.wikipedia.org/wiki/YAML" target="_blank" rel="external">YAML Ain’t Markup Language</a> that is used for data serialization, but does so in a more human readable style format, by supporting features like comments. </p>
+<p>Because of the support of comments often I see it used for configuration files in place of JSON (JavaScript Object Notation), as a means of soft coding settings, and storing other forms of data where YAML may be an appropriate option. This is the case in the static site generator that I use called <a href="https://hexo.io" target="_blank" rel="external">hexo</a>, for the purpose of configuring settings for hexo itself as well as for a site project folder such as what theme I am using.</p>
 <a id="more"></a>
-<h2 id="Why-use-YAML-over-JSON"><a href="#Why-use-YAML-over-JSON" class="headerlink" title="Why use YAML over JSON?"></a>Why use YAML over JSON?</h2><p>In most cases JSON works just fine, but YAML is used in a wider range of programing environments outside that of javaScript. In addition YAML allows for additional features such as comments. As such it is sometimes used as an alternative to JSON that comes up now and then in node.js projects.</p>
-<p>This post will help you get started with js-yaml as a means of parsing a YAML file into an object that you can then use to soft code you node.js application.</p>
-<h2 id="YAML-file-example"><a href="#YAML-file-example" class="headerlink" title="YAML file example"></a>YAML file example</h2><p>First start with a basic YAML file example such as this.</p>
+<p>In most cases JSON works just fine, but YAML might be a better option for anything that is not going to be sent to or from a web based client system. The main reason why I find myself using it now and then in projects is because of the comments support, it allows for me to place comments above each setting in a configuration file that is nice when it comes to making a project a little more user friendly. Also it strikes me as a more appropriate option when it comes to a more standard from of data storage when it comes to other programing environments outside of that of javaScript.</p>
+<p>In this post will be writing a thing or two about <a href="https://www.npmjs.com/package/js-yaml" target="_blank" rel="external">js-yaml</a> as a means of parsing a YAML file into an object that you can then use to soft code you node.js application.</p>
+<h2 id="1-YAML-basic-file-example"><a href="#1-YAML-basic-file-example" class="headerlink" title="1 - YAML basic file example"></a>1 - YAML basic file example</h2><p>So for starters we need to work out just a basic YAML file example that has some foo bar like settings. An example that just has a single key value pair, and then maybe some nested key value pairs maybe.</p>
+<p>So then lets first start with a basic YAML file example such as this:</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Set a username here</span></div><div class="line"><span class="attr">userName:</span> dustin</div><div class="line"> </div><div class="line"><span class="comment"># some config config options</span></div><div class="line">options :</div><div class="line">   displayTime : <span class="literal">true</span></div><div class="line">   displayGreating : <span class="literal">true</span></div></pre></td></tr></table></figure>
-<p>As you can see you can use the number sign to indicate a comment. I am also defining a object called options by just defining some more properties rather than giving a value.</p>
-<h2 id="installing-js-yaml"><a href="#installing-js-yaml" class="headerlink" title="installing js-yaml"></a>installing js-yaml</h2><p>Now that you have an example file to work with you will need a yaml parser to parse the yaml file into a javascript object that can be worked with in the project.</p>
+<p>As you can see the number sign can be used to indicate a comment. I started off by making a comment that informs someone looking over my simple configuration file that a user name value can be changed by changing the value for the user name key in this file.</p>
+<p>I am also defining a object called options by just using a line break followed by whitespace indentation with spaces and not tabs. The white space indentation is what is used to inform a parser that the values are object keys of the current object.</p>
+<p>So I saved this example as config.yaml, and now I just need a way to parse it into a workable object in node. To do this I will need a parser, I could make my own but why do that whne I can save a whole lot of time by using js-yaml.</p>
+<h2 id="2-installing-js-yaml"><a href="#2-installing-js-yaml" class="headerlink" title="2 - installing js-yaml"></a>2 - installing js-yaml</h2><p>Now that you have an example file to work with you will need a yaml parser to parse the yaml file into a javaScript object that can be worked with in the project.</p>
 <p>So start a new node.js test project cd into the folder of it as usual and the add js-yaml to the project.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install js-yaml --save</div></pre></td></tr></table></figure>
-<h2 id="Parsing-YAML-for-use-in-a-node-project"><a href="#Parsing-YAML-for-use-in-a-node-project" class="headerlink" title="Parsing YAML for use in a node project."></a>Parsing YAML for use in a node project.</h2><p>Once you have js-yaml in your node_modules folder working with it is pretty straight forward.</p>
+<p>The js-yaml parser can now be required in just as with any other user space or built in nodejs module. So lets get together a simple javaScript file that will load this external conf.yaml file of ours.</p>
+<h2 id="3-Parsing-YAML-for-use-in-a-node-project"><a href="#3-Parsing-YAML-for-use-in-a-node-project" class="headerlink" title="3 - Parsing YAML for use in a node project."></a>3 - Parsing YAML for use in a node project.</h2><p>Once you have js-yaml in your node_modules folder working with it is pretty straight forward. The safe load method is the usual way to go about loading in some yaml, but first I need to get that yaml code. The built in nodejs file system module is one way to go about doing so.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> yaml = <span class="built_in">require</span>(<span class="string">'js-yaml'</span>),</div><div class="line">fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line">fs.readFile(<span class="string">'./config.yml'</span>, <span class="string">'utf8'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e, data</span>) </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">var</span> file;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (e) &#123;</div><div class="line"></div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'config.yml not found.'</span>);</div><div class="line"></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line"></div><div class="line">        file = yaml.safeLoad(data, <span class="string">'utf8'</span>);</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (file.options[<span class="string">'displayGreating'</span>]) &#123;</div><div class="line"></div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'hello '</span> + file.userName);</div><div class="line"></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (file.options[<span class="string">'displayTime'</span>]) &#123;</div><div class="line"></div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'the time is: '</span> + <span class="keyword">new</span> <span class="built_in">Date</span>());</div><div class="line"></div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<h2 id="Further-reading"><a href="#Further-reading" class="headerlink" title="Further reading"></a>Further reading</h2><p>In this post I will not be going over the full scope of YAML, there are some <a href="http://www.yaml.org/start.html" target="_blank" rel="external">good resources</a> that do just that. This is just another quick post of mine on one of the many <a href="/categories/node-js/">node.js</a> packages I have fiddled around with.</p>
+<h2 id="4-Further-reading"><a href="#4-Further-reading" class="headerlink" title="4 - Further reading"></a>4 - Further reading</h2><p>In this post I will not be going over the full scope of YAML, there are some <a href="http://www.yaml.org/start.html" target="_blank" rel="external">good resources</a> that do just that. This is just another quick post of mine on one of the many <a href="/categories/node-js/">node.js</a> packages I have fiddled around with.</p>
 <p>Be sure to check out my many other <a href="/categories/node-js/">posts on node.js and npm packages</a>.</p>
 <!-- notes 
 
@@ -276,23 +284,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/11/15/vuejs-canvas/">Vue canvas topics including getting started scaling and more</a>
+            <a href="/2019/11/27/canvas-example-grid-defense/">A grid defense game canvas example</a>
           </li>
         
           <li>
-            <a href="/2019/11/14/vuejs-on/">Vue on directive</a>
+            <a href="/2019/11/26/canvas-example-pop-the-lock/">Pop The Lock Canvas Example Game Clone</a>
           </li>
         
           <li>
-            <a href="/2019/11/13/vuejs-get/">Creating a vue get method via plug-ins</a>
+            <a href="/2019/11/25/nodejs-filesystem-open/">node open file examples</a>
           </li>
         
           <li>
-            <a href="/2019/11/12/vuejs-force-update/">vue force update method to make the view render when it will not</a>
+            <a href="/2019/11/22/nodejs-filesystem-unlink/">node delete files with fs.unlink</a>
           </li>
         
           <li>
-            <a href="/2019/11/11/vuejs-lifecycle-updated/">vue updated lifecycle hook</a>
+            <a href="/2019/11/21/nodejs-event/">Node event emitter class</a>
           </li>
         
       </ul>

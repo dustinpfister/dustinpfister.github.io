@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Buffer fill in nodejs | Dustin John Pfister at github pages</title>
+  <title>Buffer fill method and filling buffers completely in nodejs | Dustin John Pfister at github pages</title>
   
   <!-- no index tag or blank here -->
   
@@ -11,16 +11,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2019/07/11/nodejs-buffer-fill/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Todays post will be a few quick examples on the buffer fill method in nodejs. The buffer fill method can be used to fill a buffer with a pattern. There is also other methods like the buffer write meth">
+  <meta name="description" content="Todays post will be a few quick examples on the buffer fill method in the nodejs buffer global. The buffer fill method can be used to fill a buffer with a data pattern, so it similar to buffer write b">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Buffer fill in nodejs">
+<meta property="og:title" content="Buffer fill method and filling buffers completely in nodejs">
 <meta property="og:url" content="https://dustinpfister.github.io/2019/07/11/nodejs-buffer-fill/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="Todays post will be a few quick examples on the buffer fill method in nodejs. The buffer fill method can be used to fill a buffer with a pattern. There is also other methods like the buffer write meth">
-<meta property="og:updated_time" content="2019-07-20T01:17:01.000Z">
+<meta property="og:description" content="Todays post will be a few quick examples on the buffer fill method in the nodejs buffer global. The buffer fill method can be used to fill a buffer with a data pattern, so it similar to buffer write b">
+<meta property="og:updated_time" content="2019-11-20T15:32:26.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Buffer fill in nodejs">
-<meta name="twitter:description" content="Todays post will be a few quick examples on the buffer fill method in nodejs. The buffer fill method can be used to fill a buffer with a pattern. There is also other methods like the buffer write meth">
+<meta name="twitter:title" content="Buffer fill method and filling buffers completely in nodejs">
+<meta name="twitter:description" content="Todays post will be a few quick examples on the buffer fill method in the nodejs buffer global. The buffer fill method can be used to fill a buffer with a data pattern, so it similar to buffer write b">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2019/07/11/nodejs-buffer-fill/" class="article-date"> Modified:
-  <time datetime="2019-07-20T01:17:01.000Z" itemprop="dateModified">2019-07-19</time>
+  <time datetime="2019-11-20T15:32:26.000Z" itemprop="dateModified">2019-11-20</time>
 </a>
 
-    <span class="article-date">V1.14</span>
+    <span class="article-date">V1.21</span>
 
     
   <div class="article-category">
@@ -139,7 +139,7 @@ ga('send', 'pageview');
         
   
     <h1 class="article-title" itemprop="name">
-      Buffer fill in nodejs
+      Buffer fill method and filling buffers completely in nodejs
     </h1>
   
 
@@ -147,24 +147,30 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>Todays post will be a few quick examples on the <a href="https://nodejs.org/api/buffer.html#buffer_buf_fill_value_offset_end_encoding" target="_blank" rel="external">buffer fill</a> method in nodejs. The buffer fill method can be used to fill a buffer with a pattern. There is also other methods like the buffer write method also that might be more appropriate when it comes to just writing data to a certain location and length of a buffer. So this post will be mostly on the buffer fill method, but also on filling a buffer with data in general, so lets get to some examples.</p>
+        <p>Todays post will be a few quick examples on the <a href="https://nodejs.org/api/buffer.html#buffer_buf_fill_value_offset_end_encoding" target="_blank" rel="external">buffer fill</a> method in the <a href="/2018/02/07/nodejs-buffer/">nodejs buffer</a> global. The buffer fill method can be used to fill a buffer with a data pattern, so it similar to <a href="/2019/08/06/nodejs-buffer-write/">buffer write</a> but is not a replacement for it, in fact that method is a more robust alternative to buffer fill. The buffer fill method is just a convenience method for something that can be done with buffer write that can be used to write to a buffer in general, rather than just filling a buffer with a pattern.</p>
+<p>So then the buffer write method might be more appropriate when it comes to just writing data to a certain location and length to a buffer instance. As such this post will be mostly on the buffer fill method, but also on filling a buffer with data in general, with buffer write, and also the ways that buffers are created to begin with.</p>
 <a id="more"></a>
 <h2 id="1-buffer-fill-basic-example"><a href="#1-buffer-fill-basic-example" class="headerlink" title="1 - buffer fill basic example"></a>1 - buffer fill basic example</h2><p>So a basic example of the buffer fill method might be to just pass a single character string to the fill method when calling if off an instance of a buffer. The default encoding is utf8 so if the character is the letter a this will result in the value 61 being set for all bytes in the buffer.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> buff = Buffer.alloc(<span class="number">4</span>);</div><div class="line">buff.fill(<span class="string">'a'</span>);</div><div class="line"><span class="built_in">console</span>.log(buff.toString(<span class="string">'hex'</span>));</div><div class="line"><span class="comment">// 61616161</span></div></pre></td></tr></table></figure>
-<p>If you want the byte value of ten to be used the you will want to set the encoding to something other than utf8, and that is of course one of the additional arguments for the method.</p>
-<h3 id="1-1-Changing-the-encoding-to-hex"><a href="#1-1-Changing-the-encoding-to-hex" class="headerlink" title="1.1 - Changing the encoding to hex"></a>1.1 - Changing the encoding to hex</h3><p>So then  when it comes to filling a buffer with a value from a hex string then the string needs to be in the forum a hex string characters of course and it must be sets of two characters for one or more byte values. When passing the hex string to the fill method I also just need to pass the string hex as the second argument to change the encoding from the default utf8 value tot hat of hex.</p>
+<p>If you want the byte value of ten to be used the you will want to set the encoding to hex rather than utf8, and that is of course one of the additional arguments for the method. So lets look at another very basic example of the buffer fill method in action.</p>
+<h3 id="1-1-Changing-the-encoding-to-hex"><a href="#1-1-Changing-the-encoding-to-hex" class="headerlink" title="1.1 - Changing the encoding to hex"></a>1.1 - Changing the encoding to hex</h3><p>So then when it comes to filling a buffer with a value from a hex string then the string needs to be in the forum of hex string characters of course to begin with. Also the hex string must be sets of two characters for one or more byte values, as that is the smallest unit of data that we are working with when it comes to node buffers. When passing the hex string to the fill method I also just need to pass the string hex as the second argument to change the encoding from the default utf8 value tot hat of hex.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> buff = Buffer.allocUnsafe(<span class="number">4</span>);</div><div class="line">buff.fill(<span class="string">'0a'</span>, <span class="string">'hex'</span>);</div><div class="line"><span class="built_in">console</span>.log(buff.reduce(<span class="function">(<span class="params">acc, byt</span>) =&gt;</span> &#123;</div><div class="line">        <span class="keyword">return</span> acc + <span class="string">','</span> + byt</div><div class="line">    &#125;));</div><div class="line"><span class="comment">// 10,10,10,10</span></div></pre></td></tr></table></figure>
-<h3 id="1-2-Filling-with-another-buffer"><a href="#1-2-Filling-with-another-buffer" class="headerlink" title="1.2 - Filling with another buffer"></a>1.2 - Filling with another buffer</h3><p>A string and encoding can be used to fill a buffer the the fill method, but another buffer can be used also. THis buffer can be created by and means possible such as the Buffer.from method. Once the buffer exists it just needs to be passed as the first argument when calling the fill method and the buffer will be filled wit th contents of the other buffer.</p>
+<p>I then get the desired result by passing the string 0a that worked out to a byte value of 10, and that then is what the buffer ends up getting filled with.</p>
+<h3 id="1-2-Filling-with-another-buffer"><a href="#1-2-Filling-with-another-buffer" class="headerlink" title="1.2 - Filling with another buffer"></a>1.2 - Filling with another buffer</h3><p>A string and encoding can be used to fill a buffer with the fill method, but another buffer can be used also when desired. This buffer can be created by and means possible such as the Buffer.from method that can also be used as a way to both create and fill. Once the buffer exists it just needs to be passed as the first argument when calling the fill method and the buffer will be filled with the contents of the other buffer that was passed to buffer fill.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> buff = Buffer.allocUnsafe(<span class="number">4</span>);</div><div class="line">buff.fill(Buffer.from([<span class="number">255</span>]));</div><div class="line"><span class="built_in">console</span>.log(buff.toString(<span class="string">'hex'</span>));</div><div class="line"><span class="comment">// ffffffff</span></div></pre></td></tr></table></figure>
-<h2 id="2-Fill-an-unsafe-buffer"><a href="#2-Fill-an-unsafe-buffer" class="headerlink" title="2 - Fill an unsafe buffer"></a>2 - Fill an unsafe buffer</h2><p>So when using the alloc buffer method the buffer starts out filled with zeros for starters by default. It is also possible to fill with other patterns just like with the fill method as well. But for the sake of this section now say you have an Unsafe buffer allocated and you want to fill over any sensitive data that might be in it. One way to do so is to use the buffer fill method.</p>
+<p>Here I have chose to use buffer from from method and passed it an array of bytes values. This array just has one element with a number value of 255, so that results in a buffer with a byte length of one and a value of 255 for that single byte. I then passed that value to the buffer fill metod oh another buffer that I created with the alloc unsafe method which fills the buffer with the value 255 rather than leaving any old contents that might be there.</p>
+<h2 id="2-Fill-an-unsafe-buffer"><a href="#2-Fill-an-unsafe-buffer" class="headerlink" title="2 - Fill an unsafe buffer"></a>2 - Fill an unsafe buffer</h2><p>So when using the alloc buffer method the buffer starts out filled with zeros for starters by default. It is also possible to fill with other patterns just like with the fill method as well. But for the sake of this section now say you have an Unsafe buffer allocated, and you want to fill over any sensitive data that might be in it. One way to do so is to use the buffer fill method.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> buff = Buffer.allocUnsafe(<span class="number">8</span>);</div><div class="line">buff.fill(Buffer.from(<span class="string">'ff'</span>,<span class="string">'hex'</span>))</div><div class="line"><span class="built_in">console</span>.log(buff.toString(<span class="string">'hex'</span>));</div><div class="line"><span class="comment">// ffffffffffffffff</span></div></pre></td></tr></table></figure>
-<p>The allocUnsafe method does not zero fill a buffer for starters and on top of that it does not have arguments that can be used to fill the buffer as well. This is the reason why it is called allocUnsafe. So the buffer fill method can be used as one way to make it safe by zero filling the buffer, it is just that doing so is now an option, as in n some cases I might not want a buffer zero filled.</p>
-<h2 id="3-Alteratives-to-buffer-fill"><a href="#3-Alteratives-to-buffer-fill" class="headerlink" title="3 - Alteratives to buffer fill"></a>3 - Alteratives to buffer fill</h2><p>So the buffer fill method might come in handy for quickly filling a buffer. However it comes cases the fill method might be a little redundant. There are other ways to fill a buffer of course. When using the alloc method there are options for changing the patten used so it can be filled with something other than zeros. There are other methods and ways of filling a buffer with a pattern also. So lets take a look at some other options when it comes t filling a buffer in nodejs.</p>
-<h3 id="3-1-fill-with-alloc"><a href="#3-1-fill-with-alloc" class="headerlink" title="3.1 - fill with alloc"></a>3.1 - fill with alloc</h3><p>So when using the buffer alloc method as a way to create a new buffer the buffer will be zero filed by default. It is also possible to change the patter that is to be used to fill the buffer with by passing the same arguments that are used in the buffer fill method right after the first argument that is used to set the size of the buffer.</p>
+<p>The allocUnsafe method does not zero fill a buffer for starters and on top of that it does not have arguments that can be used to fill the buffer in addition to this. So then this is the reason why it is called allocUnsafe, because there could be old data in there that might be of interest to a bad actor. </p>
+<p>So the buffer fill method can be used as one way to make it safe by zero filling the buffer, it is just that doing so is now an option, rather than a requirement. In some cases I might not want a buffer zero filled to begin with for performance reasons.</p>
+<h2 id="3-Alteratives-to-buffer-fill"><a href="#3-Alteratives-to-buffer-fill" class="headerlink" title="3 - Alteratives to buffer fill"></a>3 - Alteratives to buffer fill</h2><p>So the buffer fill method might come in handy for quickly filling a buffer. However it some cases the fill method might be a little redundant. There are other ways to fill a buffer of course, and often it is an optiin to do so when using certain other buffer methods. </p>
+<p>When using the alloc method there are options for changing the patten used so it can be filled with something other than zeros. There are other methods and ways of filling a buffer with a pattern also, or just making the length of the buffer the length of the content to begin with. So lets take a look at some other options when it comes t filling a buffer in nodejs.</p>
+<h3 id="3-1-fill-with-alloc"><a href="#3-1-fill-with-alloc" class="headerlink" title="3.1 - fill with alloc"></a>3.1 - fill with alloc</h3><p>So when using the buffer alloc method as a way to create a new buffer, the buffer will be zero filed by default. It is also possible to change the pattern that is to be used to fill the buffer with by passing the same arguments that are used in the buffer fill method right after the first argument that is used to set the size of the buffer.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> buff = Buffer.alloc(<span class="number">4</span>, <span class="string">'0a'</span>, <span class="string">'hex'</span>);</div><div class="line"><span class="built_in">console</span>.log(buff.reduce(<span class="function">(<span class="params">acc, byt</span>) =&gt;</span> &#123;</div><div class="line">        <span class="keyword">return</span> acc + <span class="string">','</span> + byt</div><div class="line">    &#125;));</div><div class="line"><span class="comment">// 10,10,10,10</span></div></pre></td></tr></table></figure>
-<h3 id="3-2-Fill-a-buffer-with-the-buffer-write-method"><a href="#3-2-Fill-a-buffer-with-the-buffer-write-method" class="headerlink" title="3.2 - Fill a buffer with the buffer write method"></a>3.2 - Fill a buffer with the buffer write method</h3><p>So another way to fill a buffer is to use the buffer write method. This is one way to just go about putting some data into a buffer, but it cal also be used to fill it as well if the arguments are given that will do so.</p>
+<p>So if I am using alloc as away to create buffers if will be filled to begin with by zeros by default, but the second argument can set a pattern, and a third can be used to set the encoding. So then the functionally of th buffer fill method is baked into the buffer alloc method as an additional feature accessible via additional arguments.</p>
+<h3 id="3-2-Fill-a-buffer-with-the-buffer-write-method"><a href="#3-2-Fill-a-buffer-with-the-buffer-write-method" class="headerlink" title="3.2 - Fill a buffer with the buffer write method"></a>3.2 - Fill a buffer with the buffer write method</h3><p>So another way to fill a buffer is to use the buffer write method. This is one way to just go about putting some data into a buffer, but it can also be used to fill it as well if the arguments are given that will do so.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> buff = Buffer.allocUnsafe(<span class="number">4</span>);</div><div class="line"> </div><div class="line">buff.write(<span class="string">'f1a20306'</span>, <span class="number">0</span>, <span class="number">8</span>, <span class="string">'hex'</span>);</div><div class="line"><span class="built_in">console</span>.log(buff.toString(<span class="string">'hex'</span>));</div><div class="line"><span class="comment">// f1a20306</span></div></pre></td></tr></table></figure>
-<p>So if I want to fill with the buffer write method then the byte length of the string that I am using to fill with should be as long as the buffer. I will also want to be sure to set the right values for offset, length, and make sure that the encoding match up also.</p>
+<p>So if I want to fill with the buffer write method then the byte length of the string that I am using to fill with should be as long as the buffer. I will also want to be sure to set the right values for offset, and length. Also it should go without saying that I should make sure that the encodings match up also.</p>
 <h3 id="3-3-Concat"><a href="#3-3-Concat" class="headerlink" title="3.3 - Concat"></a>3.3 - Concat</h3><p>So the concat method can be used to concatenate two or more buffers together and then return a new buffer that is the sum of all those buffers that will be filled with the contents of the list of buffers given to it. It can also be given another argument that can limit the size of the resulting buffer.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> buff = Buffer.concat([Buffer.from(<span class="string">'afaf'</span>,<span class="string">'hex'</span>),Buffer.from(<span class="string">'2828'</span>,<span class="string">'hex'</span>)], <span class="number">3</span>);</div><div class="line"><span class="built_in">console</span>.log(buff.toString(<span class="string">'hex'</span>));</div><div class="line"><span class="comment">// afaf28</span></div></pre></td></tr></table></figure>
 <h3 id="3-4-The-copy-method"><a href="#3-4-The-copy-method" class="headerlink" title="3.4 - The copy method"></a>3.4 - The copy method</h3><p>So the copy method is yet another option that could be used as a way to fill a buffer with a pattern also.</p>
@@ -215,7 +221,7 @@ ga('send', 'pageview');
 var disqus_config = function () {
     this.page.url = 'https://dustinpfister.github.io/2019/07/11/nodejs-buffer-fill/index.html';
     this.page.identifier = '503';
-    this.page.title = 'Buffer fill in nodejs';
+    this.page.title = 'Buffer fill method and filling buffers completely in nodejs';
 };
 
 (function() {
@@ -278,23 +284,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/11/15/vuejs-canvas/">Vue canvas topics including getting started scaling and more</a>
+            <a href="/2019/11/27/canvas-example-grid-defense/">A grid defense game canvas example</a>
           </li>
         
           <li>
-            <a href="/2019/11/14/vuejs-on/">Vue on directive</a>
+            <a href="/2019/11/26/canvas-example-pop-the-lock/">Pop The Lock Canvas Example Game Clone</a>
           </li>
         
           <li>
-            <a href="/2019/11/13/vuejs-get/">Creating a vue get method via plug-ins</a>
+            <a href="/2019/11/25/nodejs-filesystem-open/">node open file examples</a>
           </li>
         
           <li>
-            <a href="/2019/11/12/vuejs-force-update/">vue force update method to make the view render when it will not</a>
+            <a href="/2019/11/22/nodejs-filesystem-unlink/">node delete files with fs.unlink</a>
           </li>
         
           <li>
-            <a href="/2019/11/11/vuejs-lifecycle-updated/">vue updated lifecycle hook</a>
+            <a href="/2019/11/21/nodejs-event/">Node event emitter class</a>
           </li>
         
       </ul>

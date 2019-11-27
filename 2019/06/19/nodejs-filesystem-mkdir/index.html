@@ -11,16 +11,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2019/06/19/nodejs-filesystem-mkdir/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="So when it comes to making a new folder in nodejs there is the fs mkdir method that can be used to make a folder. There is also how to go about making a whole bunch of folders recursively, depending o">
+  <meta name="description" content="So when it comes to making a new folder in nodejs there is the fs mkdir method that can be used to make a folder. If I just want to make a single folder at a given root folder, then the process of doi">
 <meta property="og:type" content="article">
 <meta property="og:title" content="fs mkdir file system method in nodejs">
 <meta property="og:url" content="https://dustinpfister.github.io/2019/06/19/nodejs-filesystem-mkdir/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="So when it comes to making a new folder in nodejs there is the fs mkdir method that can be used to make a folder. There is also how to go about making a whole bunch of folders recursively, depending o">
-<meta property="og:updated_time" content="2019-06-19T17:54:42.000Z">
+<meta property="og:description" content="So when it comes to making a new folder in nodejs there is the fs mkdir method that can be used to make a folder. If I just want to make a single folder at a given root folder, then the process of doi">
+<meta property="og:updated_time" content="2019-11-19T16:06:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fs mkdir file system method in nodejs">
-<meta name="twitter:description" content="So when it comes to making a new folder in nodejs there is the fs mkdir method that can be used to make a folder. There is also how to go about making a whole bunch of folders recursively, depending o">
+<meta name="twitter:description" content="So when it comes to making a new folder in nodejs there is the fs mkdir method that can be used to make a folder. If I just want to make a single folder at a given root folder, then the process of doi">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2019/06/19/nodejs-filesystem-mkdir/" class="article-date"> Modified:
-  <time datetime="2019-06-19T17:54:42.000Z" itemprop="dateModified">2019-06-19</time>
+  <time datetime="2019-11-19T16:06:06.000Z" itemprop="dateModified">2019-11-19</time>
 </a>
 
-    <span class="article-date">V1.1</span>
+    <span class="article-date">V1.8</span>
 
     
   <div class="article-category">
@@ -147,9 +147,19 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>So when it comes to making a new folder in nodejs there is the fs mkdir method that can be used to make a folder. There is also how to go about making a whole bunch of folders recursively, depending on the version of node that you are using doing so can be very simple, or a little hard.</p>
+        <p>So when it comes to making a new folder in nodejs there is the <a href="https://nodejs.org/api/fs.html#fs_fs_mkdir_path_options_callback" target="_blank" rel="external">fs mkdir</a> method that can be used to make a folder. If I just want to make a single folder at a given root folder, then the process of doing so is fairly easy with the core node file system module by itself.</p>
+<p>There is however how to go about making a whole bunch of folders recursively just like that of the mkdirp command in posixs systems. When it comes to that I could use the child process module as a way to call that external command, but still there should be a way to do so in nodejs.</p>
+<p>So in this post I will be going over the fs mkdir method in node in the file system module that can be used to create a new folder in nodjes, and branch off into some other related topics when it comes to making nested folders and so forth linking to other posts where doing so is called for when it comes to npm packages.</p>
 <a id="more"></a>
-<h2 id="1-fs-mkdir-and-making-folders-recursively"><a href="#1-fs-mkdir-and-making-folders-recursively" class="headerlink" title="1 - fs mkdir and making folders recursively"></a>1 - fs mkdir and making folders recursively</h2><p>Say you want to use mkdir to make a full path if it is there or not, rather than just one folder at a time. Also say that you want to make it so the method will work on older versions of nodejs, before doing so was very simple. There is mush to write about when it comes to what is available in user space which it comes to npm packages such as mkdirp, and fs-extra when it comes to adding this functionality to a project.</p>
+<h2 id="1-node-mkdir-basic-examples"><a href="#1-node-mkdir-basic-examples" class="headerlink" title="1 - node mkdir basic examples"></a>1 - node mkdir basic examples</h2><p>So lets start off this post with some simple fs mkdir examples in nodejs. The mkdir method can just be used by itself callback style as a way to use the method, and have it work on a wide range version range of nodejs. However these days I would recommend doing something to ensure that the method will return a promise when called by using a npm package to do so, or the built in method in the util module that will work with all modern versions of node that I use at least (8.x+)</p>
+<p>So lets look at some examples of this.</p>
+<h3 id="1-1-Basic-callback-style-examples-of-fs-mkdir"><a href="#1-1-Basic-callback-style-examples-of-fs-mkdir" class="headerlink" title="1.1 - Basic callback style examples of fs mkdir"></a>1.1 - Basic callback style examples of fs mkdir</h3><p>Here I have a Basic callback style example of the fs mkdir method. This will work on just about any version of node I thing, if not you must be using a crazy old version that is no longer supported.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line">fs.mkdir(path.join(process.cwd(), <span class="string">'test'</span>), <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (e) &#123;</div><div class="line">        <span class="built_in">console</span>.log(e)</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'created test folder'</span>);</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>This might work okay for simple examples like this, but it is generally a good idea to work the use of promises into a project to help keep things more organized.</p>
+<p>When I call this example it works as expected, creating a new test folder in the current working path where I called the file. It does so the first time at least, any additional calls will result in an error, because the folder is there to begin with.</p>
+<h3 id="1-2-Using-promisify-with-fs-mkdir"><a href="#1-2-Using-promisify-with-fs-mkdir" class="headerlink" title="1.2 - Using promisify with fs mkdir"></a>1.2 - Using promisify with fs mkdir</h3><p>Here we have another example this time using the <a href="/2019/06/22/nodejs-util-promisify/">util promisify</a> method to make a new method that will return a promise as a way to handy what to do when the process of making a folder works, and what to do when there is a problem.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>),</div><div class="line">promisify = <span class="built_in">require</span>(<span class="string">'util'</span>).promisify,</div><div class="line">mkdir = promisify(fs.mkdir);</div><div class="line"> </div><div class="line">mkdir(path.join(process.cwd(), <span class="string">'test'</span>))</div><div class="line">.then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'created test folder'</span>);</div><div class="line">&#125;)</div><div class="line">.catch(<span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(e);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="2-fs-mkdir-and-making-folders-recursively"><a href="#2-fs-mkdir-and-making-folders-recursively" class="headerlink" title="2 - fs mkdir and making folders recursively"></a>2 - fs mkdir and making folders recursively</h2><p>Say you want to use mkdir to make a full path if it is there or not, rather than just one folder at a time. Also say that you want to make it so the method will work on older versions of nodejs, before doing so was very simple. There is mush to write about when it comes to what is available in user space which it comes to npm packages such as <a href="/2017/11/14/nodejs-mkdirp/">mkdirp</a>, and <a href="/2018/01/08/nodejs-fs-extra/">fs-extra</a> when it comes to adding this functionality to a project.</p>
 <p>Looking over the source code of mkdirp the basic idea might look something like this:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"> </div><div class="line"><span class="comment">// mkdirp</span></div><div class="line"><span class="keyword">var</span> mkdirp = <span class="function"><span class="keyword">function</span> (<span class="params">p, cb</span>) </span>&#123;</div><div class="line">    p = path.resolve(p);</div><div class="line">    fs.mkdir(p, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (!e) &#123;</div><div class="line">            cb(<span class="literal">null</span>);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">if</span> (e.code === <span class="string">'ENOENT'</span>) &#123;</div><div class="line">                <span class="comment">// if 'ENOENT' code error call mkdirp</span></div><div class="line">                <span class="comment">// again with the dirname of current dir</span></div><div class="line">                mkdirp(path.dirname(p), <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">                    <span class="keyword">if</span> (e) &#123;</div><div class="line">                        cb(e);</div><div class="line">                    &#125; <span class="keyword">else</span> &#123;</div><div class="line">                        mkdirp(p, cb);</div><div class="line">                    &#125;</div><div class="line">                &#125;);</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="comment">// else some other error happed</span></div><div class="line">                cb(e);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line">mkdirp(<span class="string">'./test/foo/bar'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (!e) &#123;</div><div class="line">        fs.writeFile(<span class="string">'./test/foo/bar/baz.txt'</span>, <span class="string">'okay'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'wrote a file'</span>)</div><div class="line">        &#125;);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="built_in">console</span>.log(e.message);</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p>If you are using a late version of nodejs (10.x or later), and you do not care about supporting older versions of node, then using something like this is redundant as the recursive functionality is now baked into nodejs itself.</p>
@@ -263,23 +273,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/11/15/vuejs-canvas/">Vue canvas topics including getting started scaling and more</a>
+            <a href="/2019/11/27/canvas-example-grid-defense/">A grid defense game canvas example</a>
           </li>
         
           <li>
-            <a href="/2019/11/14/vuejs-on/">Vue on directive</a>
+            <a href="/2019/11/26/canvas-example-pop-the-lock/">Pop The Lock Canvas Example Game Clone</a>
           </li>
         
           <li>
-            <a href="/2019/11/13/vuejs-get/">Creating a vue get method via plug-ins</a>
+            <a href="/2019/11/25/nodejs-filesystem-open/">node open file examples</a>
           </li>
         
           <li>
-            <a href="/2019/11/12/vuejs-force-update/">vue force update method to make the view render when it will not</a>
+            <a href="/2019/11/22/nodejs-filesystem-unlink/">node delete files with fs.unlink</a>
           </li>
         
           <li>
-            <a href="/2019/11/11/vuejs-lifecycle-updated/">vue updated lifecycle hook</a>
+            <a href="/2019/11/21/nodejs-event/">Node event emitter class</a>
           </li>
         
       </ul>

@@ -11,16 +11,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2017/11/14/nodejs-object-merge/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="When making any kind of CLI tool, or project with node.js I am often faced with a situation in witch I need to merge down two or more objects into one, and do so recursively. Although there might be a">
+  <meta name="description" content="When making any kind of CLI tool, or project with node.js I am often faced with a situation in witch I need to merge down two or more objects into one, and do so recursively. There are many options fo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Merging two or more objects down on top of each other in node.js using object-merge">
 <meta property="og:url" content="https://dustinpfister.github.io/2017/11/14/nodejs-object-merge/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="When making any kind of CLI tool, or project with node.js I am often faced with a situation in witch I need to merge down two or more objects into one, and do so recursively. Although there might be a">
-<meta property="og:updated_time" content="2017-11-17T17:57:08.000Z">
+<meta property="og:description" content="When making any kind of CLI tool, or project with node.js I am often faced with a situation in witch I need to merge down two or more objects into one, and do so recursively. There are many options fo">
+<meta property="og:updated_time" content="2019-11-19T16:39:41.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Merging two or more objects down on top of each other in node.js using object-merge">
-<meta name="twitter:description" content="When making any kind of CLI tool, or project with node.js I am often faced with a situation in witch I need to merge down two or more objects into one, and do so recursively. Although there might be a">
+<meta name="twitter:description" content="When making any kind of CLI tool, or project with node.js I am often faced with a situation in witch I need to merge down two or more objects into one, and do so recursively. There are many options fo">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/11/14/nodejs-object-merge/" class="article-date"> Modified:
-  <time datetime="2017-11-17T17:57:08.000Z" itemprop="dateModified">2017-11-17</time>
+  <time datetime="2019-11-19T16:39:41.000Z" itemprop="dateModified">2019-11-19</time>
 </a>
 
-    <span class="article-date">V1.2</span>
+    <span class="article-date">V1.6</span>
 
     
   <div class="article-category">
@@ -147,16 +147,20 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>When making any kind of CLI tool, or project with node.js I am often faced with a situation in witch I need to merge down two or more objects into one, and do so recursively. Although there might be a method in a framework I am using, or maybe even something native that is getting added in, to help with this, and just this I have quickly found that the npm package <a href="https://www.npmjs.com/package/object-merge" target="_blank" rel="external">object-merge</a> works great for this.</p>
+        <p>When making any kind of CLI tool, or project with node.js I am often faced with a situation in witch I need to merge down two or more objects into one, and do so recursively. There are many options for doing so, but there is also doing so it a way in which I do not alter the source objects, and also clone the objects rather than just simple copying references.</p>
+<p>Although there might be a method in a framework I am using such as with the <a href="/2017/11/17/lodash_merge/">lodash merge</a> method, or maybe even something native that is getting added in, to help with this, I have found another stand alone package for this of course. That package is called <a href="https://www.npmjs.com/package/object-merge" target="_blank" rel="external">object-merge</a>, and it works great for this.</p>
 <a id="more"></a>
-<h2 id="Installing"><a href="#Installing" class="headerlink" title="Installing"></a>Installing</h2><p>Because it is an npm package I can get started with it my just typing npm install as always.</p>
+<h2 id="1-Installing"><a href="#1-Installing" class="headerlink" title="1 - Installing"></a>1 - Installing</h2><p>Because it is an npm package I can get started with it my just typing npm install as always in a node project folder that was set up before hand with a package.json file like this.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install object-merge --save</div></pre></td></tr></table></figure>
-<h2 id="Use-example"><a href="#Use-example" class="headerlink" title="Use example"></a>Use example</h2><p>The situation I get in often involves having an object that contains hard coded default values, values that are parsed from the command line using something like <a href="/2017/05/05/nodejs-nopt/">nopt</a>, and maybe even some values from a json file.</p>
+<p>I can the use object-merge by requiring it in just like any npm package, not that I got that out of the way lets look at some actual examples.</p>
+<h2 id="2-Use-example"><a href="#2-Use-example" class="headerlink" title="2 - Use example"></a>2 - Use example</h2><p>The situation I get in often involves having an object that contains hard coded default values, values that are parsed from the command line using something like <a href="/2017/05/05/nodejs-nopt/">nopt</a>, and maybe even some values from a json file.</p>
 <p>As such I might want my CLI tool to treat what is given from the command line as what comes first and foremost, then fall back to what is in JSON, and finally go with what is hard coded last to make an options object that contains the actual set of options that will be used.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">var merge = require(&apos;object-merge&apos;);</div><div class="line"> </div><div class="line">// hard coded defaults</div><div class="line">var defaults = &#123;</div><div class="line"> </div><div class="line">    source: &apos;./source&apos;,</div><div class="line">    target: &apos;./build&apos;,</div><div class="line">    recursive: false,</div><div class="line">    writeFiles: &#123;</div><div class="line"> </div><div class="line">        active: false,</div><div class="line">        sizes: [32]</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;,</div><div class="line"> </div><div class="line">// values from JSON</div><div class="line">fromJSON = &#123;</div><div class="line"> </div><div class="line">    source: &apos;./html&apos;,</div><div class="line">    recursive: true,</div><div class="line">    writeFiles: &#123;</div><div class="line"> </div><div class="line">        active: true,</div><div class="line">        sizes: [32, 64, 128, 320]</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;,</div><div class="line"> </div><div class="line">// values parsed from CLI</div><div class="line">fromCLI = &#123;</div><div class="line"> </div><div class="line">    writeFiles: &#123;</div><div class="line"> </div><div class="line">        active: false</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line">options =  merge(defaults,fromJSON,fromCLI);</div><div class="line"> </div><div class="line">console.log(options);</div><div class="line">/*</div><div class="line">*   &#123; source: &apos;./html&apos;,</div><div class="line">*   target: &apos;./build&apos;,</div><div class="line">*   recursive: true,</div><div class="line">*   writeFiles: &#123; active: false, sizes: [ 32, 64, 128, 320 ] &#125; &#125;</div><div class="line">*/</div></pre></td></tr></table></figure>
-<h2 id="Comparison-with-Object-assign"><a href="#Comparison-with-Object-assign" class="headerlink" title="Comparison with Object.assign"></a>Comparison with Object.assign</h2><p>I know I write my code examples in an ES5 style, but of course I am ware that there are many methods that do things like this in modern standards of javaScript, but Object.assign is not one of them. It copies keys over, it does not merge down recursively.</p>
+<h2 id="3-Comparison-with-Object-assign"><a href="#3-Comparison-with-Object-assign" class="headerlink" title="3 - Comparison with Object.assign"></a>3 - Comparison with Object.assign</h2><p>I know I write my code examples in an ES5 style, but of course I am ware that there are many methods that do things like this in modern standards of javaScript, but Object.assign is not one of them. It copies keys over, it does not merge down recursively.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(merge(defaults,fromJSON,fromCLI));</div><div class="line"><span class="comment">/*</span></div><div class="line">*   &#123; source: './html',</div><div class="line">*   target: './build',</div><div class="line">*   recursive: true,</div><div class="line">*   writeFiles: &#123; active: false, sizes: [ 32, 64, 128, 320 ] &#125; &#125;</div><div class="line">*/</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.assign(defaults,fromJSON,fromCLI));</div><div class="line"><span class="comment">/*</span></div><div class="line">*   &#123; source: './html',</div><div class="line">*   target: './build',</div><div class="line">*   recursive: true,</div><div class="line">*   writeFiles: &#123; active: false &#125; &#125;</div><div class="line">*/</div></pre></td></tr></table></figure>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Thats it for now, it seems like object-merge is a solid solution from merging down one or more objects, but I would not say it is the end all be all.</p>
+<h2 id="4-Conclusion"><a href="#4-Conclusion" class="headerlink" title="4 - Conclusion"></a>4 - Conclusion</h2><p>Thats it for now, it seems like object-merge is a solid solution from merging down one or more objects, but I would not say it is the end all be all solution for this. There are some native methods that can be used for merging objects now, mainly Object assign, but that just assigns properties when it comes to nested objects, and can lead to undesired side effects as a result.</p>
+<p>The process of merging objects is a little complicated, there is the question of how to handle references to other nested objects, as well as references to other objects outside of the object, including the global object and other native objects.<br>Then there is the question of the prototype chain, and what to do when merging a much of objects that have different prototypes. What should be done in that case, do we just care about the so called own properties of the objects, or do we want to ccopy some prototype methods, or reference theme.</p>
+<p>So you want to use the right tool for the job, or maybe even make a custom tool if it seems that doing so is called for.</p>
 
       
     </div>
@@ -267,23 +271,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/11/15/vuejs-canvas/">Vue canvas topics including getting started scaling and more</a>
+            <a href="/2019/11/27/canvas-example-grid-defense/">A grid defense game canvas example</a>
           </li>
         
           <li>
-            <a href="/2019/11/14/vuejs-on/">Vue on directive</a>
+            <a href="/2019/11/26/canvas-example-pop-the-lock/">Pop The Lock Canvas Example Game Clone</a>
           </li>
         
           <li>
-            <a href="/2019/11/13/vuejs-get/">Creating a vue get method via plug-ins</a>
+            <a href="/2019/11/25/nodejs-filesystem-open/">node open file examples</a>
           </li>
         
           <li>
-            <a href="/2019/11/12/vuejs-force-update/">vue force update method to make the view render when it will not</a>
+            <a href="/2019/11/22/nodejs-filesystem-unlink/">node delete files with fs.unlink</a>
           </li>
         
           <li>
-            <a href="/2019/11/11/vuejs-lifecycle-updated/">vue updated lifecycle hook</a>
+            <a href="/2019/11/21/nodejs-event/">Node event emitter class</a>
           </li>
         
       </ul>

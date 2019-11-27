@@ -11,16 +11,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2017/08/26/nodejs-traverse/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Sometimes I get into a situation in which I may want to loop over all the nodes of a given object. That is I want to traverse, or loop over an object an preform a certain action with certain node valu">
+  <meta name="description" content="Sometimes I get into a situation in which I may want to loop over all the nodes of a given object. That is I want to traverse, or loop over an object and preform a certain action with certain key valu">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Traversing over an object in node.js">
 <meta property="og:url" content="https://dustinpfister.github.io/2017/08/26/nodejs-traverse/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="Sometimes I get into a situation in which I may want to loop over all the nodes of a given object. That is I want to traverse, or loop over an object an preform a certain action with certain node valu">
-<meta property="og:updated_time" content="2017-09-30T22:43:23.000Z">
+<meta property="og:description" content="Sometimes I get into a situation in which I may want to loop over all the nodes of a given object. That is I want to traverse, or loop over an object and preform a certain action with certain key valu">
+<meta property="og:updated_time" content="2019-11-18T14:38:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Traversing over an object in node.js">
-<meta name="twitter:description" content="Sometimes I get into a situation in which I may want to loop over all the nodes of a given object. That is I want to traverse, or loop over an object an preform a certain action with certain node valu">
+<meta name="twitter:description" content="Sometimes I get into a situation in which I may want to loop over all the nodes of a given object. That is I want to traverse, or loop over an object and preform a certain action with certain key valu">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/08/26/nodejs-traverse/" class="article-date"> Modified:
-  <time datetime="2017-09-30T22:43:23.000Z" itemprop="dateModified">2017-09-30</time>
+  <time datetime="2019-11-18T14:38:50.000Z" itemprop="dateModified">2019-11-18</time>
 </a>
 
-    <span class="article-date">V1.2</span>
+    <span class="article-date">V1.6</span>
 
     
   <div class="article-category">
@@ -147,22 +147,25 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>Sometimes I get into a situation in which I may want to loop over all the nodes of a given object. That is I want to traverse, or loop over an object an preform a certain action with certain node values. I could slap together my own solution, maybe starting with a for in loop that I use in a method that is called recursively. However a much better option would likely be to just go ahead and use <a href="https://www.npmjs.com/package/traverse" target="_blank" rel="external">traverse</a>.</p>
+        <p>Sometimes I get into a situation in which I may want to loop over all the nodes of a given object. That is I want to traverse, or loop over an object and preform a certain action with certain key value pairs of an object that has one or more nested objects in it. </p>
+<p>I could slap together my own solution for looping over all nested object keys, maybe starting with a for in loop that I use in a method that is called recursively. However a much better option would likely be to just go ahead and use <a href="https://www.npmjs.com/package/traverse" target="_blank" rel="external">traverse</a> as this seems to work just fine for this kind of task.</p>
 <a id="more"></a>
-<h2 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h2><p>You know the deal, unless you don’t in which case.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install traverse</div></pre></td></tr></table></figure>
-<h2 id="The-Object"><a href="#The-Object" class="headerlink" title="The Object"></a>The Object</h2><p>So just for the sake of this post I will be starting with the following code for each example.</p>
+<h2 id="1-Install-the-traverse-npm-package"><a href="#1-Install-the-traverse-npm-package" class="headerlink" title="1 - Install the traverse npm package"></a>1 - Install the traverse npm package</h2><p>You know the deal whe it comes to adding an npm package to a stack, unless you do not in which case.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install traverse --save</div></pre></td></tr></table></figure>
+<p>This will install traverse into the current project folder and save it as a dependency of the project in the package.json file.</p>
+<h2 id="2-The-Object"><a href="#2-The-Object" class="headerlink" title="2 - The Object"></a>2 - The Object</h2><p>So just for the sake of this post I will be starting with the following code for each example.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// to use transverse</span></div><div class="line"><span class="keyword">var</span> traverse = <span class="built_in">require</span>(<span class="string">'traverse'</span>),</div><div class="line"> </div><div class="line"><span class="comment">// the object to walk</span></div><div class="line">foo = &#123;</div><div class="line"> </div><div class="line">    <span class="attr">bar</span> : <span class="string">'foo'</span>,</div><div class="line">    <span class="attr">barfoo</span> : <span class="literal">false</span>,</div><div class="line"> </div><div class="line">    <span class="attr">foobar</span> : &#123;</div><div class="line"> </div><div class="line">        <span class="attr">bar</span> : <span class="string">'foo'</span>,</div><div class="line">        <span class="attr">foo</span> : &#123;</div><div class="line"> </div><div class="line">            <span class="attr">b</span> : <span class="number">41</span>,</div><div class="line">            <span class="attr">a</span> : <span class="number">43</span>,</div><div class="line">            <span class="attr">r</span> : <span class="number">42</span></div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>Each following example will be code that is written after the above code. Notice that the object has a nested object within yet another nested object, in addition one of each primitive is used as a key value (String, Boolen, and Number). Although this is a silly example object, in the wild I come across objects like this all the time, and sometimes I would like to walk over them for some reason.</p>
-<h2 id="forEach-example"><a href="#forEach-example" class="headerlink" title="forEach example"></a>forEach example</h2><p>So I thought I would start off with a simple forEach example.</p>
+<p>Each following example will be code that is written after the above code. Notice that the object has a nested object within yet another nested object, in addition to having some primitive key values also (String, Boolean, and Number). Although this is a silly example object, in the wild I come across objects like this all the time, and sometimes I would like to walk over them for one reason or another.</p>
+<h2 id="3-forEach-example"><a href="#3-forEach-example" class="headerlink" title="3 - forEach example"></a>3 - forEach example</h2><p>So I thought I would start off with a simple forEach example.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// walk the object with forEach</span></div><div class="line">traverse(foo).forEach(<span class="function"><span class="keyword">function</span> (<span class="params">node</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (node === <span class="number">42</span>) &#123;</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'The anwser has been found!'</span>);</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'forEach aurgs'</span>);</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'node: '</span> + node); <span class="comment">// the answer</span></div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'path: '</span> + <span class="keyword">this</span>.path.join(<span class="string">'/'</span>)); <span class="comment">// the way to the answer</span></div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>So this works a whole lot like Array.forEach in that it loops over each key value pare of the Object. As you would expect it does not work just the same way because I am looping over just a plain old object rather than an instance of Array. Also via the use of the this keyword I have access to a whole lot of helpful properties when walking over the objest such as this.path, also this.node can be used as an alternative to the node argument.</p>
-<h2 id="Paths-example"><a href="#Paths-example" class="headerlink" title="Paths example"></a>Paths example</h2><p>So there are a lot of useful methods in this dependency that help with what comes to mind when dealing with this certain aspect of node.js development. The Path method for example will return an array of all possible paths in the object which I am sure will come in handy now and then.</p>
+<p>So this works a whole lot like Array.forEach in that it loops over each key value pare of the Object. As you would expect it does not work just the same way because I am looping over just a plain old object rather than an instance of Array. Also via the use of the this keyword I have access to a whole lot of helpful properties when walking over the object such as this.path, also this.node can be used as an alternative to the node argument.</p>
+<h2 id="3-Paths-example"><a href="#3-Paths-example" class="headerlink" title="3 - Paths example"></a>3 - Paths example</h2><p>So there are a lot of useful methods in this dependency that help with what comes to mind when dealing with this certain aspect of node.js development. The Path method for example will return an array of all possible paths in the object which I am sure will come in handy now and then.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> trav = traverse(foo),</div><div class="line"> </div><div class="line"><span class="comment">// grab an array of all paths in the objest</span></div><div class="line">paths = trav.paths();</div><div class="line"> </div><div class="line"><span class="comment">// looping over the array</span></div><div class="line">paths.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">path</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// a path is an array of key values to a certain path</span></div><div class="line">    <span class="built_in">console</span>.log(path);</div><div class="line"> </div><div class="line">    <span class="comment">// the traverse get method excepts a path array</span></div><div class="line">    <span class="built_in">console</span>.log(trav.get(path));</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<h2 id="reduce-example"><a href="#reduce-example" class="headerlink" title="reduce example"></a>reduce example</h2><p>Okay now for an example using the reduce method, this should be fun.</p>
+<h2 id="4-reduce-example"><a href="#4-reduce-example" class="headerlink" title="4 - reduce example"></a>4 - reduce example</h2><p>Okay now for an example using the reduce method, this should be fun.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> trav = traverse(foo),</div><div class="line"> </div><div class="line">obj = trav.reduce(<span class="function"><span class="keyword">function</span> (<span class="params">acc, node</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> ref = acc,</div><div class="line">        self = <span class="keyword">this</span>;</div><div class="line"> </div><div class="line">        <span class="comment">// if the node is a number</span></div><div class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> node === <span class="string">'number'</span>) &#123;</div><div class="line"> </div><div class="line">            <span class="comment">// go over the key path</span></div><div class="line">            <span class="keyword">this</span>.path.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">key, index</span>) </span>&#123;</div><div class="line"> </div><div class="line">                <span class="comment">// are we at the end of the key path?</span></div><div class="line">                <span class="keyword">if</span> (index === self.path.length - <span class="number">1</span>) &#123;</div><div class="line"> </div><div class="line">                    <span class="comment">// then et the node value</span></div><div class="line">                    ref[key] = node;</div><div class="line"> </div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">                    <span class="comment">// else create a new object if we need one</span></div><div class="line">                    <span class="keyword">if</span> (ref[key] === <span class="literal">undefined</span>) &#123;</div><div class="line"> </div><div class="line">                        ref[key] = &#123;&#125;;</div><div class="line"> </div><div class="line">                    &#125;</div><div class="line"> </div><div class="line">                    <span class="comment">// change the ref to the next object in the path</span></div><div class="line">                    ref = ref[key];</div><div class="line"> </div><div class="line">                &#125;</div><div class="line"> </div><div class="line">            &#125;);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">// return the new object being made with reduce</span></div><div class="line">        <span class="keyword">return</span> acc;</div><div class="line"> </div><div class="line">    &#125;, &#123;&#125;);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(obj); <span class="comment">// &#123; foobar: &#123; foo: &#123; b: 41, a: 43, r: 42 &#125; &#125; &#125;</span></div></pre></td></tr></table></figure>
 <p>Reduce can be used to return a new object that is constructed during the process of looping over the contents on the object. Here I am creating a new object that only has the structure of my foo object that contains keys that have numbers.</p>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Be sure to check out my many other <a href="/categories/node-js/">posts on node.js and npm packages</a>.</p>
+<h2 id="5-Conclusion"><a href="#5-Conclusion" class="headerlink" title="5 - Conclusion"></a>5 - Conclusion</h2><p>So the the traverse npm package is a good way to go about looping over all the contents of an object in a nodejs project. Although it looks like it is not supported any more, so maybe another solution should be looked into on this one. It is true that just because a project is not being supported it does not mean that it is broken, there is a difference between supporting and mangling.</p>
+<p>Be sure to check out my many other <a href="/categories/node-js/">posts on node.js and npm packages</a>.</p>
 
       
     </div>
@@ -192,7 +195,7 @@ ga('send', 'pageview');
   
     <a href="/2017/08/18/nodejs-jsmin/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Compressing javascript files with jsmin</div>
+      <div class="article-nav-title">javaScript minification of js files with jsmin</div>
     </a>
   
 </nav>
@@ -273,23 +276,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2019/11/15/vuejs-canvas/">Vue canvas topics including getting started scaling and more</a>
+            <a href="/2019/11/27/canvas-example-grid-defense/">A grid defense game canvas example</a>
           </li>
         
           <li>
-            <a href="/2019/11/14/vuejs-on/">Vue on directive</a>
+            <a href="/2019/11/26/canvas-example-pop-the-lock/">Pop The Lock Canvas Example Game Clone</a>
           </li>
         
           <li>
-            <a href="/2019/11/13/vuejs-get/">Creating a vue get method via plug-ins</a>
+            <a href="/2019/11/25/nodejs-filesystem-open/">node open file examples</a>
           </li>
         
           <li>
-            <a href="/2019/11/12/vuejs-force-update/">vue force update method to make the view render when it will not</a>
+            <a href="/2019/11/22/nodejs-filesystem-unlink/">node delete files with fs.unlink</a>
           </li>
         
           <li>
-            <a href="/2019/11/11/vuejs-lifecycle-updated/">vue updated lifecycle hook</a>
+            <a href="/2019/11/21/nodejs-event/">Node event emitter class</a>
           </li>
         
       </ul>
