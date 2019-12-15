@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Canvas Curve basics | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2019/12/09/canvas-curve/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="So in canvas curves are a topic that one will just get into at one point or another. There are 2d drawing api methods such as the canvas arc method and well as some others that can be used to draw mor">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Canvas Curve basics">
+<meta property="og:url" content="https://dustinpfister.github.io/2019/12/09/canvas-curve/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="So in canvas curves are a topic that one will just get into at one point or another. There are 2d drawing api methods such as the canvas arc method and well as some others that can be used to draw mor">
+<meta property="og:updated_time" content="2019-12-10T19:12:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Canvas Curve basics">
+<meta name="twitter:description" content="So in canvas curves are a topic that one will just get into at one point or another. There are 2d drawing api methods such as the canvas arc method and well as some others that can be used to draw mor">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-canvas-curve" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/09/canvas-curve/" class="article-date"> Published:
+  <time datetime="2019-12-09T20:20:00.000Z" itemprop="datePublished">2019-12-09</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2019/12/09/canvas-curve/" class="article-date"> Modified:
+  <time datetime="2019-12-10T19:12:25.000Z" itemprop="dateModified">2019-12-10</time>
+</a>
+
+    <span class="article-date">V1.16</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/canvas/">canvas</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Canvas Curve basics
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>So in canvas curves are a topic that one will just get into at one point or another. There are 2d drawing api methods such as the canvas arc method and well as some others that can be used to draw more complex curves sych as the <a href="https://www.w3schools.com/tags/canvas_beziercurveto.asp" target="_blank" rel="external">bezier curve to</a> method. However these methods do not help when it comes to pulling the state of something away from the process of rendering such a state. </p>
+<p>When it comes to really getting into curves, and starting to have a deep understand and appreciation for drawing curves in canvas, I feel as though I need to do something that involves making methods that create point collections.</p>
+<a id="more"></a>
+<h2 id="1-Canvas-Curves-and-what-to-know-before-hand"><a href="#1-Canvas-Curves-and-what-to-know-before-hand" class="headerlink" title="1 - Canvas Curves and what to know before hand"></a>1 - Canvas Curves and what to know before hand</h2><p>So then in this post I will be going over all kinds of methods that have to do with creating an array of points. This array of points is then what is drawn to the canvas. This is necessary if I want to really get into the math behind canvas curve methods like the canvas arc method, and other such drawing api methods for drawing curves.</p>
+<p>So then in order to use these methods you will need a way to draw these points to a canvas. This draw points method will be all that is used to draw to the canvas in these examples, otherwise everything is just a way to create an array of numbers that are points in a 2d grid system.</p>
+<h3 id="1-1-Have-a-draw-points-method-to-draw-curves-and-lines-in-general-from-an-array-of-points"><a href="#1-1-Have-a-draw-points-method-to-draw-curves-and-lines-in-general-from-an-array-of-points" class="headerlink" title="1.1 - Have a draw points method to draw curves and lines in general from an array of points"></a>1.1 - Have a draw points method to draw curves and lines in general from an array of points</h3><p>Many canvas frameworks will have a method that will draw an array of points to a canvas. If you want to just use native javaScript by itself you might just use a basic method like this.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> drawPoints = <span class="function"><span class="keyword">function</span> (<span class="params">ctx, points, close</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> i = <span class="number">2</span>,</div><div class="line">    len = points.length;</div><div class="line">    ctx.beginPath();</div><div class="line">    ctx.moveTo(points[<span class="number">0</span>], points[<span class="number">1</span>]);</div><div class="line">    <span class="keyword">while</span> (i &lt; len) &#123;</div><div class="line">        ctx.lineTo(points[i], points[i + <span class="number">1</span>]);</div><div class="line">        i += <span class="number">2</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span>(close)&#123;ctx.closePath();&#125;</div><div class="line">    ctx.stroke();</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>In these examples I have this method alone in a separate javaScript file.</p>
+<h3 id="1-2-Angles-lib"><a href="#1-2-Angles-lib" class="headerlink" title="1.2 - Angles lib"></a>1.2 - Angles lib</h3><p>I also also using a simple library that I put together to help with working with angles. What I have worked out so far here is based on <a href="https://github.com/infusion/Angles.js" target="_blank" rel="external">angles.js</a>.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> angle = &#123;</div><div class="line">    <span class="attr">scale</span>: <span class="built_in">Math</span>.PI * <span class="number">2</span></div><div class="line">&#125;;</div><div class="line">angle.mod = <span class="function"><span class="keyword">function</span> (<span class="params">x, m</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> (x % m + m) % m;</div><div class="line">&#125;;</div><div class="line">angle.dist = <span class="function"><span class="keyword">function</span> (<span class="params">a, b</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> m = angle.scale,</div><div class="line">    h = m / <span class="number">2</span>,</div><div class="line">    <span class="comment">// normalize full</span></div><div class="line">    diff = angle.mod(a - b, m);</div><div class="line">    <span class="keyword">if</span> (diff &gt; h) &#123;</div><div class="line">        diff = diff - m;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Math</span>.abs(diff);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="2-Canvas-arc-curve-example"><a href="#2-Canvas-arc-curve-example" class="headerlink" title="2 - Canvas arc curve example"></a>2 - Canvas arc curve example</h2><p>So in this example I will be going over a canvas curve example that is just a more complex way of using the canvas arc method. The Math.cos, and Math.sin methods can be used to create an array of points around a center point from a given radius.</p>
+<h3 id="2-1-The-Points-arc-method"><a href="#2-1-The-Points-arc-method" class="headerlink" title="2.1 - The Points arc method"></a>2.1 - The Points arc method</h3><p>So Here I have the points Arc method that I have placed in its own javaScript file and will link to in the html that makes use of this alone with my other assets. I made it so that this method works in a similar way to the canvas arc method, by giving a center x and y value, alone with a radius, start and end radians, and a counter clockwise boolean. On top of that there is one additional argument that sets the number of points in the arc.</p>
+<p>The major difference from the canvas arc method of the 2d drawing api is that this method returns an array of points that can then be passed to my draw points method. In addition this method gives me a better degree of control as I can set the number of points in the arc, which is just one of many reasons why it is often better to take this kind of approach rather than just using the drawing methods in the 2d drawing context.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> pointsArc = <span class="function"><span class="keyword">function</span> (<span class="params">cx, cy, radius, start, end, counterClock, pointCount</span>) </span>&#123;</div><div class="line">    cx = cx === <span class="literal">undefined</span> ? <span class="number">0</span> : cx;</div><div class="line">    cy = cy === <span class="literal">undefined</span> ? <span class="number">0</span> : cy;</div><div class="line">    radius = radius === <span class="literal">undefined</span> ? <span class="number">50</span> : radius;</div><div class="line">    start = start === <span class="literal">undefined</span> ? <span class="number">0</span> : start;</div><div class="line">    end = end === <span class="literal">undefined</span> ? <span class="built_in">Math</span>.PI * <span class="number">2</span> : end;</div><div class="line">    counterClock = counterClock === <span class="literal">undefined</span> ? <span class="literal">false</span> : counterClock;</div><div class="line">    pointCount = pointCount === <span class="literal">undefined</span> ? <span class="number">50</span> : pointCount;</div><div class="line">    <span class="keyword">var</span> rad,</div><div class="line">    points = [],</div><div class="line">    d = angle.dist(start, end),</div><div class="line">    a = counterClock ? <span class="built_in">Math</span>.PI * <span class="number">2</span> - d : d,</div><div class="line">    radDelta = a / (pointCount<span class="number">-1</span>) * (counterClock ? <span class="number">-1</span>: <span class="number">1</span>),</div><div class="line">    i = <span class="number">0</span>,</div><div class="line">    x,</div><div class="line">    y;</div><div class="line">    <span class="keyword">while</span> (i &lt; pointCount) &#123;</div><div class="line">        rad = start + radDelta * i;</div><div class="line">        x = <span class="built_in">Math</span>.cos(rad) * radius + cx;</div><div class="line">        y = <span class="built_in">Math</span>.sin(rad) * radius + cy;</div><div class="line">        points.push(x, y);</div><div class="line">        i += <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> points;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>So now that we have that together lets make use of this method in an example in which I am also linking to my draw points method and angles.js library.</p>
+<h3 id="2-2-The-HTML"><a href="#2-2-The-HTML" class="headerlink" title="2.2 - The HTML"></a>2.2 - The HTML</h3><p>Here I have the html of a canvas curve example than makes use of the points arc method and thus the angles lib as well as my draw points method. I link to the draw points function, and then the angles lib before I link to the points arc method as it depends on the angles lib.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>canvas curve arc<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">canvas</span> <span class="attr">id</span>=<span class="string">"the-canvas"</span>&gt;</span><span class="tag">&lt;/<span class="name">canvas</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"draw-points.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"angles.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"points-arc.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line"> </div><div class="line"><span class="comment">// get canvas can 2d context</span></div><div class="line"><span class="keyword">var</span> canvas = <span class="built_in">document</span>.getElementById(<span class="string">'the-canvas'</span>),</div><div class="line">ctx = canvas.getContext(<span class="string">'2d'</span>);</div><div class="line">canvas.width = <span class="number">320</span>;</div><div class="line">canvas.height = <span class="number">240</span>;</div><div class="line"> </div><div class="line"><span class="comment">// use points arc and draw points to draw a circle the hard way</span></div><div class="line"><span class="keyword">var</span> points = pointsArc(<span class="number">160</span>, <span class="number">120</span>, <span class="number">100</span>, <span class="number">0</span>, <span class="built_in">Math</span>.PI * <span class="number">2</span>, <span class="literal">true</span>, <span class="number">75</span>);</div><div class="line">ctx.strokeStyle = <span class="string">'green'</span>;</div><div class="line">drawPoints(ctx, points, <span class="literal">false</span>);</div><div class="line"> </div><div class="line">        <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>So then as you would expect this example draws a green circle at the center of the canvas. So in other words I just found a way to over complicated drawing a circle that could have just been done with the canvas arc method. However the situation is a little different from that as I created an array of points first, and yes it is just an array of points that draws a circle, for this simple example at least.</p>
+<p>This is not a post on the canvas arc method, but on canvas curves, that is drawing curves in canvas, and all curves in canvas can be though of as a collection of 2d points, or 3d points actually if you want to pull threejs into the mix. In any case drawing arc like curves strikes me as a good starting point when it comes to drawing curves in canvas, but there are many other types of curves that can also exist as an array of points that just need to be drawn. SO lets look at some more canvas curve examples.</p>
+<h2 id="3-Canvas-curve-exponential-style"><a href="#3-Canvas-curve-exponential-style" class="headerlink" title="3 - Canvas curve exponential style"></a>3 - Canvas curve exponential style</h2><p>So there is an arc curve, and then there is an <a href="https://mathbitsnotebook.com/Algebra1/FunctionGraphs/FNGTypeExponential.html" target="_blank" rel="external">exponential curve</a> among many others. This type of canvas curve might typically involve applying the use of Math.pow to the y or x axis. There is then also the question if the ratio between x and y remains at one to one, or if I might want to stretch out one or the other. Just like with my points arc method I would also like for there to be a way to set the number or points to be used to help make the curve smoother.</p>
+<h3 id="3-1-The-points-exp-method"><a href="#3-1-The-points-exp-method" class="headerlink" title="3.1 - The points exp method"></a>3.1 - The points exp method</h3><p>So here I have an example of yet another function that will create a collection of points that I can then pass to my draw points method. This time it will create a collection of points that will be an exponential curve rather than an arc.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> pointsExp = <span class="function"><span class="keyword">function</span> (<span class="params">opt</span>) </span>&#123;</div><div class="line"> </div><div class="line">    opt = opt || &#123;&#125;;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> sx = opt.sx === <span class="literal">undefined</span> ? <span class="number">0</span> : opt.sx,</div><div class="line">    sy = opt.sy === <span class="literal">undefined</span> ? <span class="number">0</span> : opt.sy,</div><div class="line">    base = opt.base === <span class="literal">undefined</span> ? <span class="number">2</span> : opt.base,</div><div class="line">    expStart = opt.expStart === <span class="literal">undefined</span> ? <span class="number">0</span> : opt.expStart,</div><div class="line">    expEnd = opt.expEnd === <span class="literal">undefined</span> ? <span class="number">8</span> : opt.expEnd,</div><div class="line">    xMulti = opt.xMulti === <span class="literal">undefined</span> ? <span class="number">30</span> : opt.xMulti,</div><div class="line">    yMulti = opt.yMulti === <span class="literal">undefined</span> ? <span class="number">1</span> : opt.yMulti,</div><div class="line">    iStep = opt.iStep === <span class="literal">undefined</span> ? <span class="number">1</span> : opt.iStep;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> points = [],</div><div class="line">    i = <span class="number">0</span>,</div><div class="line">    len = expEnd - expStart,</div><div class="line">    x,</div><div class="line">    y;</div><div class="line">    <span class="keyword">while</span> (i &lt; len) &#123;</div><div class="line">        x = sx + i * xMulti;</div><div class="line">        y = sy + <span class="built_in">Math</span>.pow(base, expStart + i) * yMulti;</div><div class="line">        points.push(x, y);</div><div class="line">        i += iStep;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> points;</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="3-2-basic-example-of-a-canvas-exponential-curve"><a href="#3-2-basic-example-of-a-canvas-exponential-curve" class="headerlink" title="3.2 - basic example of a canvas exponential curve"></a>3.2 - basic example of a canvas exponential curve</h3><p>So now I have a basic example of the points exp method. Here I am keeping the ratio between x and y at one, but scaling things up a bit.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>canvas curve<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">canvas</span> <span class="attr">id</span>=<span class="string">"the-canvas"</span>&gt;</span><span class="tag">&lt;/<span class="name">canvas</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"draw-points.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"angles.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"points-exp.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line"> </div><div class="line"><span class="comment">// get canvas can 2d context</span></div><div class="line"><span class="keyword">var</span> canvas = <span class="built_in">document</span>.getElementById(<span class="string">'the-canvas'</span>),</div><div class="line">ctx = canvas.getContext(<span class="string">'2d'</span>);</div><div class="line">canvas.width = <span class="number">320</span>;</div><div class="line">canvas.height = <span class="number">240</span>;</div><div class="line"> </div><div class="line"><span class="comment">// Using pointsExp method to create an draw points</span></div><div class="line"><span class="comment">//var points = pointsExp(20, 220, 2, 0, 9, 20, -1, 0.25);</span></div><div class="line">ctx.fillStyle=<span class="string">'black'</span>;</div><div class="line">ctx.fillRect(<span class="number">0</span>,<span class="number">0</span>,canvas.width, canvas.height);</div><div class="line"> </div><div class="line">ctx.strokeStyle = <span class="string">'green'</span>;</div><div class="line">ctx.lineWidth = <span class="number">3</span>;</div><div class="line"><span class="keyword">var</span> points = pointsExp(&#123;</div><div class="line">    <span class="attr">sx</span>: <span class="number">10</span>,</div><div class="line">    <span class="attr">sy</span>: canvas.height<span class="number">-10</span>,</div><div class="line">    <span class="attr">yMulti</span>: <span class="number">-1</span> * <span class="number">10</span>,</div><div class="line">    <span class="attr">xMulti</span>: <span class="number">1</span> * <span class="number">10</span>,</div><div class="line">    <span class="attr">expStart</span>: <span class="number">-2</span>,</div><div class="line">    <span class="attr">iStep</span>: <span class="number">0.25</span></div><div class="line">&#125;);</div><div class="line">drawPoints(ctx, points, <span class="literal">false</span>);</div><div class="line"> </div><div class="line">        <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="4-Conclusion"><a href="#4-Conclusion" class="headerlink" title="4 - Conclusion"></a>4 - Conclusion</h2><p>This post does not even scratch the surface on the subject of canvas curves. There are some many methods in the canvas drawing api to write about, and then there is of course getting into making curves they way I did in this post only at a deeper level. I would also like to get into using three.js when it comes to this topic also, as that is where the real fun begins with this.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2019/12/09/canvas-curve/" data-id="ck46c9fnh0003d0v116k84dfi" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2019/12/09/canvas-curve/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/canvas/">canvas</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/10/js-math-pow/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Math pow in javaScript
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/04/lodash_eq/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">lodash eq method, Object.is, SameValueZero, equality, and identity</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2019/12/09/canvas-curve/index.html';
+    this.page.identifier = '577';
+    this.page.title = 'Canvas Curve basics';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.11px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.53px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.68px;">angular</a> <a href="/tags/animation/" style="font-size: 12.63px;">animation</a> <a href="/tags/automation/" style="font-size: 12.63px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.16px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.74px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.89px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.63px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.05px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.58px;">ejs</a> <a href="/tags/express/" style="font-size: 16.84px;">express</a> <a href="/tags/games/" style="font-size: 17.37px;">games</a> <a href="/tags/git/" style="font-size: 11.58px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.26px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.68px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.21px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.53px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.58px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 12.63px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.42px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.21px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.47px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.95px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.11px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.32px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.79px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/13/canvas-example-clock-basic/">A canvas example of a basic clock</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/11/canvas-example-image-limits/">A canvas example on the limits to images</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/10/js-math-pow/">Math pow in javaScript</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/09/canvas-curve/">Canvas Curve basics</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/04/lodash_eq/">lodash eq method, Object.is, SameValueZero, equality, and identity</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2019/12/09/canvas-curve/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
