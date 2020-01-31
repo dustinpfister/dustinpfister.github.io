@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>State Machine canvas example | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2020/01/28/canvas-example-state-machine/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="For todays canvas example I made a state machine that helps to keep code broken down into many independent states. For simple canvas examples and projects a state machine is not needed, but if I am st">
+<meta property="og:type" content="article">
+<meta property="og:title" content="State Machine canvas example">
+<meta property="og:url" content="https://dustinpfister.github.io/2020/01/28/canvas-example-state-machine/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="For todays canvas example I made a state machine that helps to keep code broken down into many independent states. For simple canvas examples and projects a state machine is not needed, but if I am st">
+<meta property="og:updated_time" content="2020-01-28T21:19:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="State Machine canvas example">
+<meta name="twitter:description" content="For todays canvas example I made a state machine that helps to keep code broken down into many independent states. For simple canvas examples and projects a state machine is not needed, but if I am st">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-canvas-example-state-machine" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/01/28/canvas-example-state-machine/" class="article-date"> Published:
+  <time datetime="2020-01-28T18:49:00.000Z" itemprop="datePublished">2020-01-28</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2020/01/28/canvas-example-state-machine/" class="article-date"> Modified:
+  <time datetime="2020-01-28T21:19:09.000Z" itemprop="dateModified">2020-01-28</time>
+</a>
+
+    <span class="article-date">V1.9</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/canvas/">canvas</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      State Machine canvas example
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>For todays <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial" target="_blank" rel="external">canvas example</a> I made a state machine that helps to keep code broken down into many independent states. For simple canvas examples and projects a state machine is not needed, but if I am starting to make a serious project the use of a state machine becomes more important.</p>
+<a id="more"></a>
+<h2 id="1-The-State-Machine-module-for-canvas-examples"><a href="#1-The-State-Machine-module-for-canvas-examples" class="headerlink" title="1 - The State Machine module for canvas examples"></a>1 - The State Machine module for canvas examples</h2><p>In this section I will be going over the source code of the state machine module that I worked out for this post, and might use in future canvas examples and projects. The module makes use of the IFFE pattern and returns a public API as a single function that creates a state machine object. Once I have a state machine object I can then call the load method as a way to start defining state objects.</p>
+<h3 id="1-1-The-start-of-the-module-and-a-parse-container-argument-helper"><a href="#1-1-The-start-of-the-module-and-a-parse-container-argument-helper" class="headerlink" title="1.1 - The start of the module, and a parse container argument helper"></a>1.1 - The start of the module, and a parse container argument helper</h3><p>So I start out the module with the beginnings of an IIFE, and a parse container helper. When the main public function is called I can pass a container argument as the first argument. The argument can be an object which is assumed to be a container element, it can also be a string that is assumed to be an id to an element to use. All other possible values including undefined will result in the body element being used as the container element to attach to.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Machine = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// PARSE arguments</span></div><div class="line"> </div><div class="line">    <span class="comment">// Parse a container argument</span></div><div class="line">    <span class="keyword">var</span> parseContainer = <span class="function"><span class="keyword">function</span> (<span class="params">container</span>) </span>&#123;</div><div class="line">        <span class="comment">// if object assume element that is to be used as the container</span></div><div class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> container === <span class="string">'object'</span> &amp;&amp; container != <span class="literal">null</span>) &#123;</div><div class="line">            <span class="keyword">return</span> container;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// if string assume id</span></div><div class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> container === <span class="string">'string'</span>) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="built_in">document</span>.getElementById(container);</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// if we get this far return document.body</span></div><div class="line">        <span class="keyword">return</span> <span class="built_in">document</span>.body;</div><div class="line">    &#125;;</div></pre></td></tr></table></figure>
+<h3 id="1-2-Create-canvas-helper"><a href="#1-2-Create-canvas-helper" class="headerlink" title="1.2 - Create canvas helper"></a>1.2 - Create canvas helper</h3><p>Here I have a helper that is used to create and append the canvas element to the given state object. This method assumes that a container element is attached to the state machine instance so that value should be parsed before this method is called.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// CANVAS</span></div><div class="line"> </div><div class="line"><span class="comment">// create a canvas for the given state machine</span></div><div class="line"><span class="keyword">var</span> createCanvas = <span class="function"><span class="keyword">function</span> (<span class="params">sm, w, h</span>) </span>&#123;</div><div class="line">    sm.canvas = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>);</div><div class="line">    sm.ctx = sm.canvas.getContext(<span class="string">'2d'</span>);</div><div class="line">    sm.container.appendChild(sm.canvas);</div><div class="line">    sm.canvas.width = w || <span class="number">320</span>;</div><div class="line">    sm.canvas.height = h || <span class="number">240</span>;</div><div class="line">    <span class="comment">// fill black for starters</span></div><div class="line">    sm.ctx.fillStyle = <span class="string">'black'</span>;</div><div class="line">    sm.ctx.fillRect(<span class="number">0</span>, <span class="number">0</span>, sm.canvas.width, sm.canvas.height);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>For starters it draws a plain black background to the canvas, and the width and height can also be set via the arguments that are passed along from the arguments of the main public function that I will be getting to later.</p>
+<h3 id="1-3-Get-canvas-relative-position"><a href="#1-3-Get-canvas-relative-position" class="headerlink" title="1.3 - Get canvas relative position"></a>1.3 - Get canvas relative position</h3><p>This helper method just returns a canvas relative position from an event object that was gained from within an event hander. Without this I would end up with a window relative position which is the default for event handlers that have to do with mouse and touch events.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// get canvas relative point</span></div><div class="line"><span class="keyword">var</span> getCanvasRelative = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> canvas = e.target,</div><div class="line">    bx = canvas.getBoundingClientRect(),</div><div class="line">    x = e.clientX - bx.left,</div><div class="line">    y = e.clientY - bx.top;</div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        <span class="attr">x</span>: x,</div><div class="line">        <span class="attr">y</span>: y,</div><div class="line">        <span class="attr">bx</span>: bx</div><div class="line">    &#125;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="1-4-Attach-event-handers-to-a-canvas-element"><a href="#1-4-Attach-event-handers-to-a-canvas-element" class="headerlink" title="1.4 - Attach event handers to a canvas element"></a>1.4 - Attach event handers to a canvas element</h3><p>This is the method that I worked out for attaching events to the canvas for event types like mouse down. The state manager instance should be passed as the first argument, and the canvas element should be created and append before this method is used.</p>
+<p>In the body of the hander that is attached for this given DOM event type the get canvas relative position helper that I wrote about earlier in this section is used to get a canvas relative position for the event. This position will be passed to the actual hander defined in the state object as the first argument for that kind of hander, along with the state machine instance and the original event object.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// attach a canvas event</span></div><div class="line"><span class="keyword">var</span> attachCanvasEvent = <span class="function"><span class="keyword">function</span> (<span class="params">sm, DOMType, smType</span>) </span>&#123;</div><div class="line">    sm.canvas.addEventListener(DOMType, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> pos = getCanvasRelative(e),</div><div class="line">        stateObj = sm.states[sm.currentState],</div><div class="line">        handler,</div><div class="line">        mode;</div><div class="line">        <span class="comment">// call top level if there</span></div><div class="line">        <span class="keyword">if</span> (stateObj.userPointer) &#123;</div><div class="line">            handler = stateObj.userPointer[smType];</div><div class="line">            <span class="keyword">if</span> (handler) &#123;</div><div class="line">                handler(pos, sm, e);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// call for current mode if there</span></div><div class="line">        <span class="keyword">if</span> (stateObj.modes &amp;&amp; sm.currentMode) &#123;</div><div class="line">            mode = stateObj.modes[sm.currentMode];</div><div class="line">            <span class="keyword">if</span> (mode.userPointer) &#123;</div><div class="line">                handler = mode.userPointer[smType];</div><div class="line">                <span class="keyword">if</span> (handler) &#123;</div><div class="line">                    handler(pos, sm, e);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// attach canvas events for the given state machine</span></div><div class="line"><span class="keyword">var</span> attachAllCanvasEvents = <span class="function"><span class="keyword">function</span> (<span class="params">sm</span>) </span>&#123;</div><div class="line">    attachCanvasEvent(sm, <span class="string">'mousedown'</span>, <span class="string">'start'</span>);</div><div class="line">    attachCanvasEvent(sm, <span class="string">'mousemove'</span>, <span class="string">'move'</span>);</div><div class="line">    attachCanvasEvent(sm, <span class="string">'mouseup'</span>, <span class="string">'end'</span>);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="1-5-The-public-function-that-creates-a-state-machine-object"><a href="#1-5-The-public-function-that-creates-a-state-machine-object" class="headerlink" title="1.5 - The public function that creates a state machine object"></a>1.5 - The public function that creates a state machine object</h3><p>So now it is time for the public function that is used to create the state machine instance when making a project with this state machine module.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">    <span class="comment">// create a new state machine</span></div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">container, w , h</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// state machine Object</span></div><div class="line">        <span class="keyword">var</span> sm = &#123;</div><div class="line">            <span class="attr">currentState</span>: <span class="literal">null</span>,</div><div class="line">            <span class="attr">currentMode</span>: <span class="literal">null</span>,</div><div class="line">            <span class="attr">game</span>: &#123;&#125;,</div><div class="line">            <span class="attr">draw</span>: &#123;&#125;,</div><div class="line">            <span class="attr">states</span>: &#123;&#125;,</div><div class="line">            <span class="attr">canvas</span>: <span class="literal">null</span>,</div><div class="line">            <span class="attr">container</span>: parseContainer(container),</div><div class="line">            <span class="attr">ctx</span>: <span class="literal">null</span>,</div><div class="line">            <span class="attr">load</span>: <span class="function"><span class="keyword">function</span> (<span class="params">stateObj</span>) </span>&#123;</div><div class="line">                <span class="comment">// just reference the object for now as long as</span></div><div class="line">                <span class="comment">// that works okay</span></div><div class="line">                sm.states[stateObj.name || <span class="string">'game'</span>] = stateObj;</div><div class="line">                <span class="keyword">if</span> (stateObj.bootState) &#123;</div><div class="line">                    sm.currentState = stateObj.name;</div><div class="line">                &#125;</div><div class="line">            &#125;,</div><div class="line">            <span class="attr">start</span>: <span class="function"><span class="keyword">function</span> (<span class="params">stateName</span>) </span>&#123;</div><div class="line">                sm.currentState = stateName || sm.currentState;</div><div class="line">                <span class="keyword">var</span> init = sm.states[sm.currentState].init || <span class="literal">null</span>;</div><div class="line">                <span class="keyword">if</span> (init) &#123;</div><div class="line">                    init(sm);</div><div class="line">                &#125;</div><div class="line">                loop();</div><div class="line">            &#125;</div><div class="line">        &#125;;</div><div class="line"> </div><div class="line">        <span class="comment">// create canvas and attach event handlers</span></div><div class="line">        createCanvas(sm, w, h);</div><div class="line">        attachAllCanvasEvents(sm);</div><div class="line"> </div><div class="line">        <span class="comment">// main loop</span></div><div class="line">        <span class="keyword">var</span> loop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">            requestAnimationFrame(loop);</div><div class="line">            <span class="keyword">var</span> stateObj = sm.states[sm.currentState] || &#123;&#125;;</div><div class="line"> </div><div class="line">            <span class="comment">// call top level tick</span></div><div class="line">            <span class="keyword">if</span> (stateObj.tick) &#123;</div><div class="line">                stateObj.tick(sm);</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="comment">// call mode tick</span></div><div class="line">            <span class="keyword">if</span> (stateObj.modes &amp;&amp; sm.currentMode) &#123;</div><div class="line">                <span class="keyword">var</span> mode = stateObj.modes[sm.currentMode];</div><div class="line">                <span class="keyword">if</span> (mode.tick) &#123;</div><div class="line">                    mode.tick(sm);</div><div class="line">                &#125;;</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">        &#125;;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> sm;</div><div class="line"> </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">&#125;</div><div class="line">    ());</div></pre></td></tr></table></figure>
+<h2 id="2-Simple-use-case-example"><a href="#2-Simple-use-case-example" class="headerlink" title="2 - Simple use case example"></a>2 - Simple use case example</h2><p>So here is a simple use case example of the state machine module in action. This results in a very basic clicker type game example where some resources are given when the canvas is clicked, as well as just over time.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> sm = Machine(<span class="string">'gamearea'</span>);</div><div class="line"> </div><div class="line">sm.load(&#123;</div><div class="line">    <span class="attr">name</span>: <span class="string">'game'</span>,</div><div class="line">    <span class="attr">bootState</span>: <span class="literal">true</span>,</div><div class="line">    <span class="attr">init</span>: <span class="function"><span class="keyword">function</span> (<span class="params">sm</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> g = sm.game;</div><div class="line">        g.manual = <span class="number">0</span>;</div><div class="line">        g.perManual = <span class="number">0.25</span>;</div><div class="line">        g.auto = <span class="number">0</span>;</div><div class="line">        g.autoTickRate = <span class="number">3000</span>;</div><div class="line">        g.perAutoTick = <span class="number">1</span>;</div><div class="line">        g.lt = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line">    <span class="attr">tick</span>: <span class="function"><span class="keyword">function</span> (<span class="params">sm</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> g = sm.game,</div><div class="line">        ctx = sm.ctx,</div><div class="line">        now = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">        t = now - g.lt;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (t &gt;= g.autoTickRate) &#123;</div><div class="line">            <span class="keyword">var</span> ticks = t / g.autoTickRate;</div><div class="line">            g.auto += ticks * g.perAutoTick;</div><div class="line">            g.lt = now;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        ctx.fillStyle = <span class="string">'black'</span>;</div><div class="line">        ctx.fillRect(<span class="number">0</span>, <span class="number">0</span>, sm.canvas.width, sm.canvas.height);</div><div class="line"> </div><div class="line">        ctx.fillStyle = <span class="string">'white'</span>;</div><div class="line">        ctx.fillText(<span class="string">'manual: '</span> + g.manual.toFixed(<span class="number">2</span>), <span class="number">10</span>, <span class="number">20</span>);</div><div class="line">        ctx.fillText(<span class="string">'auto: '</span> + g.auto.toFixed(<span class="number">2</span>), <span class="number">10</span>, <span class="number">30</span>);</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line">    <span class="attr">userPointer</span>: &#123;</div><div class="line">        <span class="attr">start</span>: <span class="function"><span class="keyword">function</span> (<span class="params">pt, sm, e</span>) </span>&#123;</div><div class="line">            <span class="built_in">console</span>.log(e.type, pt.x, pt.y);</div><div class="line">            sm.game.manual += sm.game.perManual;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;);</div><div class="line"> </div><div class="line">sm.start();</div></pre></td></tr></table></figure>
+<h2 id="3-Modes-use-case-example"><a href="#3-Modes-use-case-example" class="headerlink" title="3 - Modes use case example"></a>3 - Modes use case example</h2><p>I wanted to make another example that makes use of my modes feature that I put together. This is a way to have a state within a state sort of speak. When a mode is active additional logic that is to happen when the mode is active will happen on top of the logic that will always run for the state.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> sm = Machine(<span class="string">'gamearea'</span>, <span class="number">640</span>, <span class="number">480</span>);</div><div class="line"> </div><div class="line">sm.load(&#123;</div><div class="line">    <span class="attr">name</span>: <span class="string">'game'</span>,</div><div class="line">    <span class="attr">bootState</span>: <span class="literal">true</span>,</div><div class="line">    <span class="attr">init</span>: <span class="function"><span class="keyword">function</span> (<span class="params">sm</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> g = sm.game;</div><div class="line">        g.ship = &#123;</div><div class="line">            <span class="attr">x</span>: sm.canvas.width / <span class="number">2</span>,</div><div class="line">            <span class="attr">y</span>: sm.canvas.height / <span class="number">2</span>,</div><div class="line">            <span class="attr">heading</span>: <span class="number">0</span></div><div class="line">        &#125;;</div><div class="line">        g.userDown = <span class="literal">false</span>;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">tick</span>: <span class="function"><span class="keyword">function</span> (<span class="params">sm</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> g = sm.game,</div><div class="line">        ctx = sm.ctx;</div><div class="line"> </div><div class="line">        <span class="comment">// set mode to nav conditions</span></div><div class="line">        sm.currentMode = <span class="literal">null</span>;</div><div class="line">        <span class="keyword">if</span> (g.userDown) &#123;</div><div class="line">            <span class="keyword">if</span> (<span class="keyword">new</span> <span class="built_in">Date</span>() - g.userDownST &gt;= <span class="number">1000</span>) &#123;</div><div class="line">                sm.currentMode = <span class="string">'nav'</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">// draw</span></div><div class="line">        ctx.fillStyle = <span class="string">'black'</span>;</div><div class="line">        ctx.fillRect(<span class="number">0</span>, <span class="number">0</span>, sm.canvas.width, sm.canvas.height);</div><div class="line">        ctx.fillStyle = <span class="string">'white'</span>;</div><div class="line">        ctx.fillText(g.userDown, <span class="number">10</span>, <span class="number">20</span>);</div><div class="line">        ctx.strokeStyle = <span class="string">'white'</span>;</div><div class="line">        ctx.beginPath();</div><div class="line">        ctx.arc(g.ship.x, g.ship.y, <span class="number">5</span>, <span class="number">0</span>, <span class="built_in">Math</span>.PI * <span class="number">2</span>);</div><div class="line">        ctx.stroke();</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line">    <span class="comment">// global user pointer</span></div><div class="line">    userPointer: &#123;</div><div class="line">        <span class="attr">start</span>: <span class="function"><span class="keyword">function</span> (<span class="params">pt, sm, e</span>) </span>&#123;</div><div class="line">            sm.game.userDown = <span class="literal">true</span>;</div><div class="line">            sm.game.userDownST = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line">        &#125;,</div><div class="line">        <span class="attr">end</span>: <span class="function"><span class="keyword">function</span> (<span class="params">pt, sm, e</span>) </span>&#123;</div><div class="line">            sm.game.userDown = <span class="literal">false</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="comment">// modes for this state</span></div><div class="line">    modes: &#123;</div><div class="line">        <span class="attr">nav</span>: &#123;</div><div class="line">            <span class="comment">// what to do for each tick, when nav mode is active</span></div><div class="line">            tick: <span class="function"><span class="keyword">function</span> (<span class="params">sm</span>) </span>&#123;</div><div class="line">                <span class="keyword">var</span> g = sm.game,</div><div class="line">                ship = g.ship;</div><div class="line">                <span class="comment">// move ship based on current heading</span></div><div class="line">                ship.x += <span class="built_in">Math</span>.cos(ship.heading) * <span class="number">2</span>;</div><div class="line">                ship.y += <span class="built_in">Math</span>.sin(ship.heading) * <span class="number">2</span>;</div><div class="line">                <span class="comment">// boundaries</span></div><div class="line">                ship.x = ship.x &lt; <span class="number">0</span> ? sm.canvas.width : ship.x;</div><div class="line">                ship.y = ship.y &lt; <span class="number">0</span> ? sm.canvas.height : ship.y;</div><div class="line">                ship.x = ship.x &gt; sm.canvas.width ? <span class="number">0</span> : ship.x;</div><div class="line">                ship.y = ship.y &gt; sm.canvas.height ? <span class="number">0</span> : ship.y;</div><div class="line">            &#125;,</div><div class="line">            <span class="comment">// user pointer just for nav</span></div><div class="line">            userPointer: &#123;</div><div class="line">                <span class="comment">// mouse move event can change heading now</span></div><div class="line">                move: <span class="function"><span class="keyword">function</span> (<span class="params">pt, sm, e</span>) </span>&#123;</div><div class="line">                    <span class="keyword">var</span> g = sm.game,</div><div class="line">                    ship = g.ship;</div><div class="line">                    ship.heading = <span class="built_in">Math</span>.atan2(pt.y - ship.y, pt.x - ship.x);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line">&#125;);</div><div class="line"> </div><div class="line">sm.start();</div></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2020/01/28/canvas-example-state-machine/" data-id="ck62t2cgz000crgv117cdpope" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2020/01/28/canvas-example-state-machine/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/canvas/">canvas</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/01/29/canvas-example-pointer-manager-mouse-and-touch/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Pointer manager mouse and touch canvas example
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/01/27/js-array-from/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">The Array from static method and other ways of creating an array from something else</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2020/01/28/canvas-example-state-machine/index.html';
+    this.page.identifier = '598';
+    this.page.title = 'State Machine canvas example';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.22px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 12.78px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.78px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.78px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 16.67px;">express</a> <a href="/tags/games/" style="font-size: 17.22px;">games</a> <a href="/tags/git/" style="font-size: 11.67px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.89px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.44px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 12.78px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.33px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.44px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.89px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.11px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.56px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/01/31/nodejs-path-parse/">Node path parse method and the compoents of a path</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/30/js-javascript-date-get-num-of-days-between-two-dates/">Getting the number of days between two javaScript dates.</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/29/canvas-example-pointer-manager-mouse-and-touch/">Pointer manager mouse and touch canvas example</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/28/canvas-example-state-machine/">State Machine canvas example</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/27/js-array-from/">The Array from static method and other ways of creating an array from something else</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2020/01/28/canvas-example-state-machine/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

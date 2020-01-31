@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2018/10/03/lodash_uniqueid/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="Writing more content on lodash this month for now, and have noticed that I did not get around to _.uniqueId yet. The method addresses something that comes up a lot now and then when developing project">
-<meta property="og:updated_time" content="2018-10-04T01:00:58.000Z">
+<meta property="og:updated_time" content="2020-01-10T02:11:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Using _.uniqueId in lodash, and alternatives">
 <meta name="twitter:description" content="Writing more content on lodash this month for now, and have noticed that I did not get around to _.uniqueId yet. The method addresses something that comes up a lot now and then when developing project">
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2018/10/03/lodash_uniqueid/" class="article-date"> Modified:
-  <time datetime="2018-10-04T01:00:58.000Z" itemprop="dateModified">2018-10-03</time>
+  <time datetime="2020-01-10T02:11:56.000Z" itemprop="dateModified">2020-01-09</time>
 </a>
 
-    <span class="article-date">V1.5</span>
+    <span class="article-date">V1.11</span>
 
     
   <div class="article-category">
@@ -147,13 +147,19 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>Writing more content on <a href="https://lodash.com/" target="_blank" rel="external">lodash</a> this month for now, and have noticed that I did not get around to _.uniqueId yet. The method addresses something that comes up a lot now and then when developing projects, so it deserves a post. Also in these lodash posts I often take a moment to brush up on how hard it is to go about making a vanilla js solution, or if there are native methods that can be used, and as such this post will be no exception. So lets take a look at _.uniqueId, and some other solutions for generating unique ids.</p>
+        <p>Writing more content on <a href="https://lodash.com/" target="_blank" rel="external">lodash</a> this month for now, and have noticed that I did not get around to <a href="https://lodash.com/docs/4.17.15#uniqueId" target="_blank" rel="external">_.uniqueId</a> yet. The method addresses something that comes up a lot now and then when developing projects, so it deserves a post. Also in these lodash posts I often take a moment to brush up on how hard it is to go about making a vanilla js solution, or if there are native methods that can be used, and as such this post will be no exception. So lets take a look at _.uniqueId, and some other solutions for generating unique ids.</p>
 <a id="more"></a>
 <h2 id="1-What-to-know"><a href="#1-What-to-know" class="headerlink" title="1 - What to know"></a>1 - What to know</h2><p>This is a post on the _.uniqueId method in lodash. This method can be used to create a unique id for something each time it is called. This method will work for the purpose of assigning a unique id for most use cases, but not with complex projects that require a unique id always even if the project restarts. In any case this will be a brief post on this topic.</p>
 <h2 id="2-An-uniqueId-example"><a href="#2-An-uniqueId-example" class="headerlink" title="2 - An _.uniqueId example"></a>2 - An _.uniqueId example</h2><p>Using the _.uniqueId method is fairly straight forward to use, I just need to call it, passing an optional prefix as the first argument, and a unique id will be returned.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> _ = <span class="built_in">require</span>(<span class="string">'lodash'</span>);</div><div class="line"> </div><div class="line"><span class="keyword">let</span> id = _.uniqueId(<span class="string">'id_'</span>);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(id); <span class="comment">// 'id_1'</span></div><div class="line"> </div><div class="line"><span class="keyword">let</span> i = <span class="number">10</span>, ids = [];</div><div class="line"><span class="keyword">while</span> (i--) &#123;</div><div class="line">    ids.push(_.uniqueId(<span class="string">'id_'</span>));</div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(ids[<span class="number">0</span>]); <span class="comment">// id_2</span></div><div class="line"><span class="built_in">console</span>.log(ids[<span class="number">9</span>]); <span class="comment">// id_11</span></div></pre></td></tr></table></figure>
-<h2 id="3-Vanilla-js-alternative-to-uniqueId"><a href="#3-Vanilla-js-alternative-to-uniqueId" class="headerlink" title="3 Vanilla js alternative to _.uniqueId"></a>3 Vanilla js alternative to _.uniqueId</h2><p>Making my own solution for this is not to hard, all is needed is the power of closure.</p>
+<p>The value might be unique in a relative way, but it is not at all the best solution for many other use case examples. The method is just a lazy way to get a value that is unique each time it is called, and one way to do that is to have it so it just returns a count each time.</p>
+<h2 id="3-Vanilla-js-alternative-to-uniqueId"><a href="#3-Vanilla-js-alternative-to-uniqueId" class="headerlink" title="3 Vanilla js alternative to _.uniqueId"></a>3 Vanilla js alternative to _.uniqueId</h2><p>Making my own solution for this is not to hard, all is needed is the power of closure. I just write a self executing function expression and then inside the body of that function expression I have a local num variable, I then return a function that when called will step the num variable, and use that as part of the string that is returned that will be unique each time.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> uniqueId = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">let</span> num = <span class="number">0</span>;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">prefix</span>) </span>&#123;</div><div class="line">        prefix = <span class="built_in">String</span>(prefix) || <span class="string">''</span>;</div><div class="line">        num += <span class="number">1</span>;</div><div class="line">        <span class="keyword">return</span> prefix + num;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">    ());</div><div class="line"></div><div class="line"><span class="keyword">let</span> id = uniqueId(<span class="string">'id_'</span>);</div><div class="line"><span class="built_in">console</span>.log(id); <span class="comment">// 'id_1'</span></div></pre></td></tr></table></figure>
+<h2 id="4-Making-a-more-advanced-method-for-making-a-unique-string"><a href="#4-Making-a-more-advanced-method-for-making-a-unique-string" class="headerlink" title="4 - Making a more advanced method for making a unique string"></a>4 - Making a more advanced method for making a unique string</h2><p>So it goes without saying that the value that is returned by the lodash uniqueid method is not all that unique. Depending on how unique you need the value to be though it is good enough, however it comes projects you might need to have a method that returns a value that has a lower probability of being duplicated.</p>
+<p>So a more advanced version of the same vanilla javaScript alternative that I put together could be made that maybe makes use of things like the Date constructor and Math random method.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> uniqueId = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">let</span> c = <span class="number">0</span>,</div><div class="line">    st = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">prefix</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> t = <span class="keyword">new</span> <span class="built_in">Date</span>() - st,</div><div class="line">        r = <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">1000</span>),</div><div class="line">        str;</div><div class="line">        prefix = <span class="built_in">String</span>(prefix) || <span class="string">''</span>;</div><div class="line">        str = <span class="string">'-'</span> + c + <span class="string">'-'</span> + t + <span class="string">'-'</span> + r;</div><div class="line">        c += <span class="number">1</span>;</div><div class="line">        <span class="keyword">return</span> prefix + str;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">    ());</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(uniqueId(<span class="string">'id'</span>));</div><div class="line"><span class="built_in">console</span>.log(uniqueId(<span class="string">'id'</span>));</div><div class="line"><span class="built_in">console</span>.log(uniqueId(<span class="string">'id'</span>));</div><div class="line">setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(uniqueId(<span class="string">'id'</span>));</div><div class="line">&#125;, <span class="number">1000</span>);</div><div class="line"><span class="comment">/*</span></div><div class="line">id-0-1-145</div><div class="line">id-1-8-113</div><div class="line">id-2-9-598</div><div class="line">id-3-1018-910</div><div class="line">*/</div></pre></td></tr></table></figure>
+<p>A method such as this results in a value where there is still a non zero change of the value being duplicated, but it is still unique enough that the probability of that happening is pretty negligible.</p>
+<h2 id="5-Conclusion"><a href="#5-Conclusion" class="headerlink" title="5 - Conclusion"></a>5 - Conclusion</h2><p>This is not really one of the most compelling methods that I can think of that warrant the use of the full lodash library. The functionally of this methods can be quickly implemented with vanilla javaScript, and often it is something that should be custom tailored anyway. Just stepping a number can make a value unique in a relative way, but it is not the same thing as more complex methods that might involve additional data that helps to make a far more unique value.</p>
 
       
     </div>
@@ -264,23 +270,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2020/01/08/canvas-example-map-scrolling/">A Basic canvas map scrolling example</a>
+            <a href="/2020/01/31/nodejs-path-parse/">Node path parse method and the compoents of a path</a>
           </li>
         
           <li>
-            <a href="/2020/01/05/lodash_orderby/">lodash orderby method as an option for sorting collections</a>
+            <a href="/2020/01/30/js-javascript-date-get-num-of-days-between-two-dates/">Getting the number of days between two javaScript dates.</a>
           </li>
         
           <li>
-            <a href="/2020/01/03/blog-post-plan-for-2020/">Blog plan for 2020</a>
+            <a href="/2020/01/29/canvas-example-pointer-manager-mouse-and-touch/">Pointer manager mouse and touch canvas example</a>
           </li>
         
           <li>
-            <a href="/2019/12/30/nodejs-util-inspect-object/">node util inspect object method and other options for converting an object to a string.</a>
+            <a href="/2020/01/28/canvas-example-state-machine/">State Machine canvas example</a>
           </li>
         
           <li>
-            <a href="/2019/12/26/js-function/">JS Function basics and much more</a>
+            <a href="/2020/01/27/js-array-from/">The Array from static method and other ways of creating an array from something else</a>
           </li>
         
       </ul>

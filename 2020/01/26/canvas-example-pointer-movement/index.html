@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Pointer map movement logic canvas example | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2020/01/26/canvas-example-pointer-movement/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="In this canvas example I will be working out some logic that has to do with moving what could be a map by way of a pointer such as a mouse. Many canvas examples, mainly games will require some way to">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pointer map movement logic canvas example">
+<meta property="og:url" content="https://dustinpfister.github.io/2020/01/26/canvas-example-pointer-movement/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="In this canvas example I will be working out some logic that has to do with moving what could be a map by way of a pointer such as a mouse. Many canvas examples, mainly games will require some way to">
+<meta property="og:updated_time" content="2020-01-27T11:04:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Pointer map movement logic canvas example">
+<meta name="twitter:description" content="In this canvas example I will be working out some logic that has to do with moving what could be a map by way of a pointer such as a mouse. Many canvas examples, mainly games will require some way to">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-canvas-example-pointer-movement" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/01/26/canvas-example-pointer-movement/" class="article-date"> Published:
+  <time datetime="2020-01-26T21:53:00.000Z" itemprop="datePublished">2020-01-26</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2020/01/26/canvas-example-pointer-movement/" class="article-date"> Modified:
+  <time datetime="2020-01-27T11:04:40.000Z" itemprop="dateModified">2020-01-27</time>
+</a>
+
+    <span class="article-date">V1.22</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/canvas/">canvas</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Pointer map movement logic canvas example
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>In this <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial" target="_blank" rel="external">canvas example</a> I will be working out some logic that has to do with moving what could be a map by way of a pointer such as a mouse. Many canvas examples, mainly games will require some way to pan around a game map of sorts, so some kind of logic such as what I am going over here would need to be used to do so.</p>
+<p>I will not be going over how to create a grid or map like state, I have wrote many posts on those subjects earlier. Instead I will just be writing about a module that I put together that just has to do with maintaining the state of an object that would be used to update a map position.</p>
+<a id="more"></a>
+<h2 id="1-The-pointer-movement-module-for-the-canvas-example"><a href="#1-The-pointer-movement-module-for-the-canvas-example" class="headerlink" title="1 - The pointer movement module for the canvas example"></a>1 - The pointer movement module for the canvas example</h2><p>In this canvas example I have a point that is treated as a map offset position, and then a state that is used to update that map position point. This state object has properties like angle, and delta that are used to find the direction, and rate of change for each update cycle or frame tick. </p>
+<p>In addition to the properties of this Pointer Movement state object there will also be a need to have some methods to work with updating the state of the Pointer Movement object, as well as working with other related tasks. Tasks such as updating a Point with the Pointer Movement state, and working out events. I could make this a Class, but I prefer to not bother writing Classes that much these days. Instead I made this module in a way in which there is a method that is called to return a new Pointer Movement state, and then that state is passed to the other public methods.</p>
+<p>There are also a few helper methods that are used internally in this module, along with the public methods that are returned and used outside of the module. The private methods are just used in this module as far as this canvas example is concerned, but if I where to continue working on this project chances are they would be pulled into a public module as well. In any case I still like to follow the IIFE pattern in module design when working out my own javaScript modules in native javaScript.</p>
+<h3 id="1-1-The-start-of-the-module-and-the-distance-formula"><a href="#1-1-The-start-of-the-module-and-the-distance-formula" class="headerlink" title="1.1 - The start of the module and the distance formula"></a>1.1 - The start of the module and the distance formula</h3><p>I start off the module with the beginning part of an IIFE, and then have a distance formula as one of the helpers. This helper method will be used later on in the method that I use to update the values of a Pointer Movement state.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> PM = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> distance = <span class="function"><span class="keyword">function</span> (<span class="params">x1, y1, x2, y2</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="built_in">Math</span>.sqrt(<span class="built_in">Math</span>.pow(x1 - x2, <span class="number">2</span>) + <span class="built_in">Math</span>.pow(y1 - y2, <span class="number">2</span>));</div><div class="line">    &#125;;</div></pre></td></tr></table></figure>
+<h3 id="1-2-Get-a-canvas-relative-position"><a href="#1-2-Get-a-canvas-relative-position" class="headerlink" title="1.2 - Get a canvas relative position"></a>1.2 - Get a canvas relative position</h3><p>Here I have another helper method that I needed for this module used in my pointer movement canvas example. I use it in my methods that are used in event handers to get the canvas relative position of a mouse click.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// get canvas relative point</span></div><div class="line"><span class="keyword">var</span> getCanvasRelative = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> canvas = e.target,</div><div class="line">    bx = canvas.getBoundingClientRect(),</div><div class="line">    x = e.clientX - bx.left,</div><div class="line">    y = e.clientY - bx.top;</div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        <span class="attr">x</span>: x,</div><div class="line">        <span class="attr">y</span>: y,</div><div class="line">        <span class="attr">bx</span>: bx</div><div class="line">    &#125;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="1-3-The-start-of-the-public-api-and-the-create-new-Pointer-Movement-state-object"><a href="#1-3-The-start-of-the-public-api-and-the-create-new-Pointer-Movement-state-object" class="headerlink" title="1.3 - The start of the public api, and the create new Pointer Movement state object"></a>1.3 - The start of the public api, and the create new Pointer Movement state object</h3><p>Now for the public methods, for this module there is no main function so I just created an object literal for the public API. the first method that I made for this public API for the Pointer Movement module is a method that can be used to create a new Pointer Movement state.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> api = &#123;&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// new Pointer Movement State Object</span></div><div class="line">api.newPM = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        <span class="attr">down</span>: <span class="literal">false</span>,</div><div class="line">        <span class="attr">angle</span>: <span class="number">0</span>,</div><div class="line">        <span class="attr">dist</span>: <span class="number">0</span>,</div><div class="line">        <span class="attr">delta</span>: <span class="number">0</span>,</div><div class="line">        <span class="attr">sp</span>: &#123; <span class="comment">// start point</span></div><div class="line">            x: <span class="number">-1</span>,</div><div class="line">            <span class="attr">y</span>: <span class="number">-1</span></div><div class="line">        &#125;,</div><div class="line">        <span class="attr">cp</span>: &#123; <span class="comment">// current point</span></div><div class="line">            x: <span class="number">-1</span>,</div><div class="line">            <span class="attr">y</span>: <span class="number">-1</span></div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="1-4-Update-a-Pointer-Movement-state"><a href="#1-4-Update-a-Pointer-Movement-state" class="headerlink" title="1.4 - Update a Pointer Movement state"></a>1.4 - Update a Pointer Movement state</h3><p>I then need a method that I can used to update a Pointer Movement state that has a mutated current point.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// update the pm based on startPoint, and currentPoint</span></div><div class="line">api.updatePM = <span class="function"><span class="keyword">function</span> (<span class="params">pm</span>) </span>&#123;</div><div class="line">    pm.dist = <span class="number">0</span>;</div><div class="line">    pm.delta = <span class="number">0</span>;</div><div class="line">    pm.angle = <span class="number">0</span>;</div><div class="line">    <span class="keyword">if</span> (pm.cp.x &gt;= <span class="number">0</span> &amp;&amp; pm.cp.y &gt;= <span class="number">0</span>) &#123;</div><div class="line">        pm.dist = distance(pm.sp.x, pm.sp.y, pm.cp.x, pm.cp.y);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (pm.down &amp;&amp; pm.dist &gt;= <span class="number">5</span>) &#123;</div><div class="line">        <span class="keyword">var</span> per = pm.dist / <span class="number">64</span>;</div><div class="line">        per = per &gt; <span class="number">1</span> ? <span class="number">1</span> : per;</div><div class="line">        per = per &lt; <span class="number">0</span> ? <span class="number">0</span> : per;</div><div class="line">        pm.delta = per * <span class="number">3</span>;</div><div class="line">        pm.angle = <span class="built_in">Math</span>.atan2(pm.cp.y - pm.sp.y, pm.cp.x - pm.sp.x);</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="1-5-Step-a-point-by-the-current-state-of-the-Pointer-Movement-state"><a href="#1-5-Step-a-point-by-the-current-state-of-the-Pointer-Movement-state" class="headerlink" title="1.5 - Step a point by the current state of the Pointer Movement state"></a>1.5 - Step a point by the current state of the Pointer Movement state</h3><p>This method is what I can use to update a point with a Pointer Movement State object.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// step a point by the current values of the pm</span></div><div class="line">api.stepPointByPM = <span class="function"><span class="keyword">function</span> (<span class="params">pm, pt</span>) </span>&#123;</div><div class="line">    pt.x += <span class="built_in">Math</span>.cos(pm.angle) * pm.delta;</div><div class="line">    pt.y += <span class="built_in">Math</span>.sin(pm.angle) * pm.delta;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="1-5-Event-methods-and-the-end-of-the-module"><a href="#1-5-Event-methods-and-the-end-of-the-module" class="headerlink" title="1.5 - Event methods, and the end of the module"></a>1.5 - Event methods, and the end of the module</h3><p>I then worked out some additional methods that can be used when attaching event handers in the main javaScript project that makes used of this module.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">    <span class="comment">// when a pointer action starts</span></div><div class="line">    api.onPointerStart = <span class="function"><span class="keyword">function</span> (<span class="params">pm, e</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> pos = getCanvasRelative(e);</div><div class="line">        pm.down = <span class="literal">true</span>;</div><div class="line">        pm.sp = &#123;</div><div class="line">            <span class="attr">x</span>: pos.x,</div><div class="line">            <span class="attr">y</span>: pos.y</div><div class="line">        &#125;;</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// when a pointer action moves</span></div><div class="line">    api.onPointerMove = <span class="function"><span class="keyword">function</span> (<span class="params">pm, e</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> pos = getCanvasRelative(e);</div><div class="line">        pm.cp = &#123;</div><div class="line">            <span class="attr">x</span>: pos.x,</div><div class="line">            <span class="attr">y</span>: pos.y</div><div class="line">        &#125;;</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// when a pointer actions ends</span></div><div class="line">    api.onPointerEnd = <span class="function"><span class="keyword">function</span> (<span class="params">pm, e</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> pos = getCanvasRelative(e);</div><div class="line">        pm.down = <span class="literal">false</span>;</div><div class="line">        pm.sp = &#123;</div><div class="line">            <span class="attr">x</span>: <span class="number">-1</span>,</div><div class="line">            <span class="attr">y</span>: <span class="number">-1</span></div><div class="line">        &#125;;</div><div class="line">        pm.cp = &#123;</div><div class="line">            <span class="attr">x</span>: <span class="number">-1</span>,</div><div class="line">            <span class="attr">y</span>: <span class="number">-1</span></div><div class="line">        &#125;;</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> api;</div><div class="line"> </div><div class="line">&#125;</div><div class="line">    ());</div></pre></td></tr></table></figure>
+<h2 id="2-The-draw-module"><a href="#2-The-draw-module" class="headerlink" title="2 - The draw module"></a>2 - The draw module</h2><p>So now that I have my Pointer Movement module worked out I will want to produce some draw methods that can be used to draw the current state of this Pointer Movement object, as well as other things that have to do with this canvas example.</p>
+<h3 id="2-1-The-start-of-the-module-and-a-draw-background-method"><a href="#2-1-The-start-of-the-module-and-a-draw-background-method" class="headerlink" title="2.1 - The start of the module, and a draw background method"></a>2.1 - The start of the module, and a draw background method</h3><p>This draw javaScript file is just an object literal with a bunch of draw methods attached that need to have a drawing context passed as the first argument. The first draw method that I worked out is to just draw a plain black background when passed the drawing context and canvas.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> draw = &#123;&#125;;</div><div class="line"> </div><div class="line">draw.background = <span class="function"><span class="keyword">function</span> (<span class="params">pm, ctx, canvas</span>) </span>&#123;</div><div class="line">    ctx.fillStyle = <span class="string">'black'</span>;</div><div class="line">    ctx.fillRect(<span class="number">0</span>, <span class="number">0</span>, canvas.width, canvas.height);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="2-2-Just-draw-some-grid-lines-draw-method"><a href="#2-2-Just-draw-some-grid-lines-draw-method" class="headerlink" title="2.2 - Just draw some grid lines draw method"></a>2.2 - Just draw some grid lines draw method</h3><p>I then want a draw method that just draws some grid lines on the canvas. In a real project I would have draw methods that render the current state of a map module. However getting into that would be a whole other post. For now I just need a draw method where I pass a point that is being mutated by my Point Movement state that is used to draw grid lines.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">draw.PTGridlines = <span class="function"><span class="keyword">function</span> (<span class="params">pt, ctx, canvas</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> cellX = <span class="number">-1</span>,</div><div class="line">    cellY = <span class="number">-1</span>,</div><div class="line">    x,</div><div class="line">    y;</div><div class="line">    ctx.strokeStyle = <span class="string">'white'</span>;</div><div class="line">    ctx.lineWidth = <span class="number">1</span>;</div><div class="line">    <span class="keyword">while</span> (cellX &lt; <span class="number">11</span>) &#123;</div><div class="line">        x = cellX * <span class="number">32</span> - pt.x % <span class="number">32</span>;</div><div class="line">        ctx.beginPath();</div><div class="line">        ctx.moveTo(x, <span class="number">0</span>);</div><div class="line">        ctx.lineTo(x, canvas.height);</div><div class="line">        ctx.stroke();</div><div class="line">        cellX += <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">while</span> (cellY &lt; <span class="number">8</span>) &#123;</div><div class="line">        y = cellY * <span class="number">32</span> - pt.y % <span class="number">32</span>;</div><div class="line">        ctx.beginPath();</div><div class="line">        ctx.moveTo(<span class="number">0</span>, y);</div><div class="line">        ctx.lineTo(canvas.width, y);</div><div class="line">        ctx.stroke();</div><div class="line">        cellY += <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="2-3-Draw-the-navigation-circle-for-the-Pointer-Movement-state"><a href="#2-3-Draw-the-navigation-circle-for-the-Pointer-Movement-state" class="headerlink" title="2.3 - Draw the navigation circle for the Pointer Movement state"></a>2.3 - Draw the navigation circle for the Pointer Movement state</h3><p>This draw method helps to give a visual idea of what is going on with the Pointer Movement state.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// draw a navigation circle when moving the map</span></div><div class="line">draw.navCircle = <span class="function"><span class="keyword">function</span> (<span class="params">pm, ctx, canvas</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (pm.down) &#123;</div><div class="line">        <span class="keyword">var</span> cx = pm.sp.x,</div><div class="line">        cy = pm.sp.y,</div><div class="line">        x,</div><div class="line">        y,</div><div class="line">        min = <span class="number">64</span>,</div><div class="line">        per = <span class="number">0</span>,</div><div class="line">        a = pm.angle;</div><div class="line">        ctx.strokeStyle = <span class="string">'white'</span>;</div><div class="line">        ctx.lineWidth = <span class="number">3</span>;</div><div class="line">        <span class="comment">// draw circle</span></div><div class="line">        ctx.beginPath();</div><div class="line">        ctx.arc(cx, cy, min / <span class="number">2</span>, <span class="number">0</span>, <span class="built_in">Math</span>.PI * <span class="number">2</span>);</div><div class="line">        ctx.stroke();</div><div class="line">        <span class="comment">// draw direction line</span></div><div class="line">        x = <span class="built_in">Math</span>.cos(a) * min + cx;</div><div class="line">        y = <span class="built_in">Math</span>.sin(a) * min + cy;</div><div class="line">        ctx.beginPath();</div><div class="line">        ctx.moveTo(cx, cy);</div><div class="line">        ctx.lineTo(x, y);</div><div class="line">        ctx.stroke();</div><div class="line">        <span class="comment">// draw delta circle</span></div><div class="line">        per = pm.delta / <span class="number">3</span>;</div><div class="line">        x = <span class="built_in">Math</span>.cos(a) * min * per + cx;</div><div class="line">        y = <span class="built_in">Math</span>.sin(a) * min * per + cy;</div><div class="line">        ctx.beginPath();</div><div class="line">        ctx.arc(x, y, <span class="number">10</span>, <span class="number">0</span>, <span class="built_in">Math</span>.PI * <span class="number">2</span>);</div><div class="line">        ctx.stroke();</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="2-4-Draw-debug-info"><a href="#2-4-Draw-debug-info" class="headerlink" title="2.4 - Draw debug info"></a>2.4 - Draw debug info</h3><p>Another method that I use to just see the current state of some values of interest as I would on this canvas example.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">draw.debugInfo = <span class="function"><span class="keyword">function</span> (<span class="params">pm, pt, ctx, canvas</span>) </span>&#123;</div><div class="line">    ctx.fillStyle = <span class="string">'white'</span>;</div><div class="line">    ctx.fillText(pt.x + <span class="string">', '</span> + pt.y, <span class="number">10</span>, <span class="number">10</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="3-The-Main-js-and-index-html-files-and-getting-the-project-up-and-running"><a href="#3-The-Main-js-and-index-html-files-and-getting-the-project-up-and-running" class="headerlink" title="3 - The Main.js, and index.html files and getting the project up and running"></a>3 - The Main.js, and index.html files and getting the project up and running</h2><p>Now to wrap everything together with a main.js file and some html.</p>
+<h3 id="3-1-main-js"><a href="#3-1-main-js" class="headerlink" title="3.1 - main.js"></a>3.1 - main.js</h3><p>Here I have the main.js file where I create and append a canvas element that will be used for this canvas example. I then create a new Pointer Movement state, and a point that will be used for what would be a map offset value. I then have a main app loop where I am calling my methods that are used to update the Pointer Movement state, and the point that is used for drawing grid lines. I then also have some event handers work out as well.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> canvas = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>),</div><div class="line">ctx = canvas.getContext(<span class="string">'2d'</span>),</div><div class="line">container = <span class="built_in">document</span>.getElementById(<span class="string">'gamearea'</span>) || <span class="built_in">document</span>.body;</div><div class="line">container.appendChild(canvas);</div><div class="line">canvas.width = <span class="number">320</span>;</div><div class="line">canvas.height = <span class="number">240</span>;</div><div class="line">ctx.translate(<span class="number">0.5</span>, <span class="number">0.5</span>);</div><div class="line"> </div><div class="line"><span class="keyword">var</span> pm = PM.newPM();</div><div class="line"><span class="comment">// a point</span></div><div class="line"><span class="keyword">var</span> pt = &#123;</div><div class="line">    <span class="attr">x</span>: <span class="number">0</span>,</div><div class="line">    <span class="attr">y</span>: <span class="number">0</span></div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> loop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    requestAnimationFrame(loop);</div><div class="line">    PM.updatePM(pm);</div><div class="line">    PM.stepPointByPM(pm, pt);</div><div class="line">    draw.background(pm, ctx, canvas);</div><div class="line">    draw.navCircle(pm, ctx, canvas);</div><div class="line">    draw.debugInfo(pm, pt, ctx, canvas);</div><div class="line">    draw.PTGridlines(pt, ctx, canvas);</div><div class="line">&#125;;</div><div class="line">loop();</div><div class="line"> </div><div class="line">canvas.addEventListener(<span class="string">'mousedown'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">PM.onPointerStart(pm, e);</div><div class="line">&#125;);</div><div class="line">canvas.addEventListener(<span class="string">'mousemove'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">PM.onPointerMove(pm, e);</div><div class="line">&#125;);</div><div class="line">canvas.addEventListener(<span class="string">'mouseup'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">PM.onPointerEnd(pm, e);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="3-2-index-html"><a href="#3-2-index-html" class="headerlink" title="3.2 - index.html"></a>3.2 - index.html</h3><p>I then have an html file that pulls all of this together.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;html&gt;</div><div class="line">    &lt;head&gt;</div><div class="line">        &lt;title&gt;canvas example pointer movement&lt;/title&gt;</div><div class="line">    &lt;/head&gt;</div><div class="line">    &lt;body&gt;</div><div class="line">        &lt;div id="gamearea"&gt;&lt;/div&gt;</div><div class="line">        &lt;script src="pm.js"&gt;&lt;/script&gt;</div><div class="line">        &lt;script src="draw.js"&gt;&lt;/script&gt;</div><div class="line">        &lt;script src="main.js"&gt;&lt;/script&gt;</div><div class="line">    &lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<h2 id="4-Conclusion"><a href="#4-Conclusion" class="headerlink" title="4 - Conclusion"></a>4 - Conclusion</h2><p>When this canvas Example is up and running I have grid lines drawn to the canvas. When I click and hold on the canvas the navigation circle shows up, at which point as I move the mouse pointer the state changes and so to does the state of the point object. The gird lines move in a way that is consistent with what I would expect.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2020/01/26/canvas-example-pointer-movement/" data-id="ck62t2chz000irgv1k8wnj56p" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2020/01/26/canvas-example-pointer-movement/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/canvas/">canvas</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/01/27/js-array-from/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          The Array from static method and other ways of creating an array from something else
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/01/22/js-math-max-min/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Math max and min methods in javaScript</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2020/01/26/canvas-example-pointer-movement/index.html';
+    this.page.identifier = '596';
+    this.page.title = 'Pointer map movement logic canvas example';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.22px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 12.78px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.78px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.78px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 16.67px;">express</a> <a href="/tags/games/" style="font-size: 17.22px;">games</a> <a href="/tags/git/" style="font-size: 11.67px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.89px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.44px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 12.78px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.33px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.44px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.89px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.11px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.56px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/01/31/nodejs-path-parse/">Node path parse method and the compoents of a path</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/30/js-javascript-date-get-num-of-days-between-two-dates/">Getting the number of days between two javaScript dates.</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/29/canvas-example-pointer-manager-mouse-and-touch/">Pointer manager mouse and touch canvas example</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/28/canvas-example-state-machine/">State Machine canvas example</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/27/js-array-from/">The Array from static method and other ways of creating an array from something else</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2020/01/26/canvas-example-pointer-movement/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>What to know about working with paths in node.js | Dustin John Pfister at github pages</title>
+  <title>Node path module general overview | Dustin John Pfister at github pages</title>
   
   <!-- no index tag or blank here -->
   
@@ -11,16 +11,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2017/12/27/nodejs-paths/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Working with paths in node.js is something that comes up all the time when it comes to file system related tasks. When doing so there is a desire for a nice framework to help with joining paths togeth">
+  <meta name="description" content="Working with paths in node.js is something that comes up all the time when it comes to file system related tasks. When doing so there is a desire for a nice module to help with joining paths together,">
 <meta property="og:type" content="article">
-<meta property="og:title" content="What to know about working with paths in node.js">
+<meta property="og:title" content="Node path module general overview">
 <meta property="og:url" content="https://dustinpfister.github.io/2017/12/27/nodejs-paths/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="Working with paths in node.js is something that comes up all the time when it comes to file system related tasks. When doing so there is a desire for a nice framework to help with joining paths togeth">
-<meta property="og:updated_time" content="2019-09-08T19:15:51.000Z">
+<meta property="og:description" content="Working with paths in node.js is something that comes up all the time when it comes to file system related tasks. When doing so there is a desire for a nice module to help with joining paths together,">
+<meta property="og:updated_time" content="2020-01-31T21:21:37.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="What to know about working with paths in node.js">
-<meta name="twitter:description" content="Working with paths in node.js is something that comes up all the time when it comes to file system related tasks. When doing so there is a desire for a nice framework to help with joining paths togeth">
+<meta name="twitter:title" content="Node path module general overview">
+<meta name="twitter:description" content="Working with paths in node.js is something that comes up all the time when it comes to file system related tasks. When doing so there is a desire for a nice module to help with joining paths together,">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/12/27/nodejs-paths/" class="article-date"> Modified:
-  <time datetime="2019-09-08T19:15:51.000Z" itemprop="dateModified">2019-09-08</time>
+  <time datetime="2020-01-31T21:21:37.000Z" itemprop="dateModified">2020-01-31</time>
 </a>
 
-    <span class="article-date">V1.6</span>
+    <span class="article-date">V1.17</span>
 
     
   <div class="article-category">
@@ -139,7 +139,7 @@ ga('send', 'pageview');
         
   
     <h1 class="article-title" itemprop="name">
-      What to know about working with paths in node.js
+      Node path module general overview
     </h1>
   
 
@@ -147,19 +147,22 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>Working with paths in node.js is something that comes up all the time when it comes to file system related tasks. When doing so there is a desire for a nice framework to help with joining paths together, and help with problems that have to do with the differences of how paths are handled in windows and linux systems, along with many other common path related tasks. So I could look for some kind of npm package, write my own code.However for starters there is no need to bother with an npm package of any kind, or write my own code, as the node.js built in <a href="https://nodejs.org/api/path.html" target="_blank" rel="external">path module</a> can help with a great deal of these kinds of tasks when working with a file system.</p>
+        <p>Working with paths in node.js is something that comes up all the time when it comes to file system related tasks. When doing so there is a desire for a nice module to help with joining paths together, and help with problems that have to do with the differences of how paths are handled in windows and linux systems. There are also many other concerns surround paths such as the difference between relative and absolute paths. </p>
+<p>So I could look for some kind of npm package, or other user space copy and past type thing to help me out with this, or take the time to writ my own code. However for for the most part there is no need to bother with any of that as the node.js built in <a href="https://nodejs.org/api/path.html" target="_blank" rel="external">path module</a> can help with a great deal of these kinds of tasks when working with file system paths.</p>
 <a id="more"></a>
-<h2 id="1-Joining-two-paths-together"><a href="#1-Joining-two-paths-together" class="headerlink" title="1 - Joining two paths together"></a>1 - Joining two paths together</h2><p>This is a task that I use the path module for all the time. I have a base path to a working folder or any kind of folder or interest where there are resources of some kind. I then also have a relative path from that working path and I want to create a path from the base path and the relative path. One way to go about doing so with the path module in nodejs is to use the path join method.</p>
+<p>As such this post will serve as a general overview of the built in node path module in node.js itself. These will be just very simple examples of the methods that are in the module without getting into any kind of complicated real life examples. Then at the end of the post a few simple examples of using the path module with other build in modules and global properties closely related to the use of the node path module.</p>
+<h2 id="1-Node-path-module-and-joining-two-paths-together-with-the-path-join-method"><a href="#1-Node-path-module-and-joining-two-paths-together-with-the-path-join-method" class="headerlink" title="1 - Node path module and joining two paths together with the path.join method"></a>1 - Node path module and joining two paths together with the path.join method</h2><p>This is a task that I use the path module for all the time. I have a base path to a working folder or any kind of folder of interest where there are resources of some kind. I then also have a relative path from that working path and I want to create a path from the base path and the relative path. One way to go about doing so with the path module in nodejs is to use the path join method.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"><span class="keyword">let</span> p = path.posix.join(<span class="string">'/'</span>,<span class="string">'foo'</span>,<span class="string">'bar'</span>);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(p);</div><div class="line"><span class="comment">// '/foo/bar'</span></div></pre></td></tr></table></figure>
-<p>In the above example I am using the posix property of the path module to make sure that I end up getting a posix rather than win32 friendly path result. I could just call path.join but that would give a result that is different depending on the underlaying operating system that node is running on. In some situations I might want to do something that way actually but for this example I wanted to make a simple code example of the path join method that will return the same result on any kind of platform.</p>
-<h2 id="2-Path-resolve-method"><a href="#2-Path-resolve-method" class="headerlink" title="2 - Path resolve method"></a>2 - Path resolve method</h2><p>So another node path method module method that I use a lot is the resolve method. This also works like path join but will resolve the path to an abolsute path.</p>
+<p>In the above example I am using the posix property of the path module to make sure that I end up getting a posix rather than win32 friendly path result. I could just call path.join but that would give a result that is different depending on the underlaying operating system that node is running on. In some situations I might want to do something that way actually, but for this example I wanted to make a simple code example of the path join method that will return the same result on any kind of platform.</p>
+<h2 id="2-Node-path-module-method-examples"><a href="#2-Node-path-module-method-examples" class="headerlink" title="2 - Node path module method examples"></a>2 - Node path module method examples</h2><p>In this section I will be going over some of the most commonly used methods of the path module speaking from my experience thus far at least.</p>
+<h3 id="2-1-The-Node-Path-resolve-method-and-absolute-paths"><a href="#2-1-The-Node-Path-resolve-method-and-absolute-paths" class="headerlink" title="2.1 - The Node Path resolve method and absolute paths"></a>2.1 - The Node Path resolve method and absolute paths</h3><p>So another node path method module method that I use a lot is the resolve method. This also works like path join but will resolve the path to an absolute path. In general I find that it is best to make everything that I am working with an absolute path to help make sure that I am always grabbing at an absolute resource location.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"><span class="keyword">let</span> p = path.resolve(process.cwd(),<span class="string">'new_foo_project'</span>);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(path.isAbsolute(p)); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(p);</div><div class="line"><span class="comment">// (absolute path to ./new_foo_project)</span></div></pre></td></tr></table></figure>
-<h2 id="Getting-the-base-name-of-a-path"><a href="#Getting-the-base-name-of-a-path" class="headerlink" title="Getting the base name of a path"></a>Getting the base name of a path</h2><p>Another task that is quickly solved with the path module is getting the base name of a path. This is helpful for getting a filename from the end of a path.</p>
+<p>If you are still new to node and working with paths, it is a good idea for now to just be aware of what the difference is between relative and absolute paths. The value of what is placed in before a relative path can change depending on certain factors, but an absolute path helps to make sure that nothing weird happens.</p>
+<h3 id="2-2-Getting-the-base-name-of-a-path"><a href="#2-2-Getting-the-base-name-of-a-path" class="headerlink" title="2.2 - Getting the base name of a path"></a>2.2 - Getting the base name of a path</h3><p>Another task that is quickly solved with the path module is getting the base name of a path. This is helpful for getting a filename from the end of a path.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> fileName = path.basename(<span class="string">'./foo/man/chew.js'</span>);</div><div class="line"><span class="comment">// returns 'chew.js'</span></div></pre></td></tr></table></figure>
-<h2 id="Getting-a-dir-from-a-full-path-with-path-dirname"><a href="#Getting-a-dir-from-a-full-path-with-path-dirname" class="headerlink" title="Getting a dir from a full path with path.dirname"></a>Getting a dir from a full path with path.dirname</h2><p>Opposite of basename is path.dirname.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> dir = path.basename(<span class="string">'./foo/man/chew.js'</span>);</div><div class="line"><span class="comment">// returns '/foo/man'</span></div></pre></td></tr></table></figure>
-<p>I often end up in situations in which I have many different path parts and I want to piece them together into a single path in a way in which it will always come together in a single valid path. The join method serves me well with this.</p>
-<h2 id="Absolute-Paths"><a href="#Absolute-Paths" class="headerlink" title="Absolute Paths"></a>Absolute Paths</h2><p>An absolute path is a full path all the way back to root. On a posix system an absolute path is something like this</p>
+<h3 id="2-3-Getting-a-dir-from-a-full-path-with-path-dirname"><a href="#2-3-Getting-a-dir-from-a-full-path-with-path-dirname" class="headerlink" title="2.3 - Getting a dir from a full path with path.dirname"></a>2.3 - Getting a dir from a full path with path.dirname</h3><p>Opposite of basename is path.dirname, as one would expect this will return the dirname of the given path.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"> </div><div class="line"><span class="keyword">let</span> dir = path.dirname(<span class="string">'./foo/man/chew.js'</span>);</div><div class="line"><span class="built_in">console</span>.log(dir);</div><div class="line"><span class="comment">// './foo/man'</span></div></pre></td></tr></table></figure>
+<h3 id="2-4-Absolute-Paths-relative-paths-and-the-isAbsolute-node-path-method"><a href="#2-4-Absolute-Paths-relative-paths-and-the-isAbsolute-node-path-method" class="headerlink" title="2.4 - Absolute Paths, relative paths, and the isAbsolute node path method"></a>2.4 - Absolute Paths, relative paths, and the isAbsolute node path method</h3><p>An absolute path is a full path all the way back to root, or in other words a full path to a folder or file. This is in contrast to a relative path, that is just a path to a filename maybe, but not a full path to that resource. On a posix system an absolute path is something like this</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/home/dustin/documents</div></pre></td></tr></table></figure>
 <p>On a windows system it would be something like this</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">C:/users/dustin/documents</div></pre></td></tr></table></figure>
@@ -167,8 +170,15 @@ ga('send', 'pageview');
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">../documents</div></pre></td></tr></table></figure>
 <p>As such it is nice to have a way to find out if a path is absolute or not, so there is a method for that called path.isAbsolute.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> isAbsolute = path.isAbsolute(<span class="string">'/home/dustin'</span>);</div><div class="line"><span class="comment">// returns true</span></div></pre></td></tr></table></figure>
-<h2 id="Finding-out-if-a-path-is-a-sub-dir-of-another-path"><a href="#Finding-out-if-a-path-is-a-sub-dir-of-another-path" class="headerlink" title="Finding out if a path is a sub dir of another path"></a>Finding out if a path is a sub dir of another path</h2><p>I recently ran into a situation in which I need to find out if a path is a sub dir of another path in order to exclude it if it is. Path.relative comes in handy with this.</p>
+<h3 id="2-5-Getting-a-file-extension-name"><a href="#2-5-Getting-a-file-extension-name" class="headerlink" title="2.5 - Getting a file extension name"></a>2.5 - Getting a file extension name</h3><p>If I just want to get the file extension name of a filename, or a path that contains a file name, then there is the path extname method.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"> </div><div class="line"><span class="keyword">let</span> ext = path.extname(<span class="string">'./foo/man/chew.js'</span>);</div><div class="line"><span class="built_in">console</span>.log(ext);</div><div class="line"><span class="comment">// '.js'</span></div></pre></td></tr></table></figure>
+<h3 id="2-6-Finding-out-if-a-path-is-a-sub-dir-of-another-path"><a href="#2-6-Finding-out-if-a-path-is-a-sub-dir-of-another-path" class="headerlink" title="2.6 - Finding out if a path is a sub dir of another path"></a>2.6 - Finding out if a path is a sub dir of another path</h3><p>I recently ran into a situation in which I need to find out if a path is a sub dir of another path in order to exclude it if it is. The Path.relative method comes in handy with this.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> isSub = <span class="function"><span class="keyword">function</span> (<span class="params">rootPath, testPath</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">let</span> relative = path.relative(rootPath, testPath);</div><div class="line">    <span class="keyword">return</span> !!relative &amp;&amp; !relative.startsWith(<span class="string">'..'</span>) &amp;&amp; !path.isAbsolute(relative);</div><div class="line"> </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="3-Why-absoulte-paths"><a href="#3-Why-absoulte-paths" class="headerlink" title="3 - Why absoulte paths?"></a>3 - Why absoulte paths?</h2><p>Why should a developer consider using absolute paths most of the time? maybe this simple copy and past example will helper you understand first hand why the difference is important.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">let path = require(&apos;path&apos;);</div><div class="line"> </div><div class="line">let r = path.resolve(&apos;./foo.js&apos;),</div><div class="line">a = path.resolve(__dirname, &apos;./foo.js&apos;);</div><div class="line"> </div><div class="line">console.log(r);</div><div class="line">console.log(a);</div></pre></td></tr></table></figure>
+<p>The above example used the dir name global variable to get a path to the current module. In this case the file to which this node path example is saved. If I call this file from a command line interface where the current working path is the same as the path where the file is, then both paths will resolve to the same absolute path. However if I change the working path to something else, and then call it from there, the relative path will be to a foo.js file that would be at that current working path.</p>
+<p>Depending on what you want to do, you might want to load a file from the current working directory. However even then you should make it more explicit, by joining process.cwd with the relative path that you expect from that current working directory.</p>
+<h2 id="4-Conclusion"><a href="#4-Conclusion" class="headerlink" title="4 - Conclusion"></a>4 - Conclusion</h2><p>The <a href="https://nodejs.dev/the-nodejs-path-module" target="_blank" rel="external">node path module</a> is a built in module that I find myself using all the time when it comes to making nodejs modules, examples, and basic projects. It is not a silver bullet for all file system related tasks though, there is still the file system module when it comes to actually reading and writing files for example.</p>
 
       
     </div>
@@ -216,7 +226,7 @@ ga('send', 'pageview');
 var disqus_config = function () {
     this.page.url = 'https://dustinpfister.github.io/2017/12/27/nodejs-paths/index.html';
     this.page.identifier = '122';
-    this.page.title = 'What to know about working with paths in node.js';
+    this.page.title = 'Node path module general overview';
 };
 
 (function() {
@@ -279,23 +289,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2020/01/08/canvas-example-map-scrolling/">A Basic canvas map scrolling example</a>
+            <a href="/2020/01/31/nodejs-path-parse/">Node path parse method and the compoents of a path</a>
           </li>
         
           <li>
-            <a href="/2020/01/05/lodash_orderby/">lodash orderby method as an option for sorting collections</a>
+            <a href="/2020/01/30/js-javascript-date-get-num-of-days-between-two-dates/">Getting the number of days between two javaScript dates.</a>
           </li>
         
           <li>
-            <a href="/2020/01/03/blog-post-plan-for-2020/">Blog plan for 2020</a>
+            <a href="/2020/01/29/canvas-example-pointer-manager-mouse-and-touch/">Pointer manager mouse and touch canvas example</a>
           </li>
         
           <li>
-            <a href="/2019/12/30/nodejs-util-inspect-object/">node util inspect object method and other options for converting an object to a string.</a>
+            <a href="/2020/01/28/canvas-example-state-machine/">State Machine canvas example</a>
           </li>
         
           <li>
-            <a href="/2019/12/26/js-function/">JS Function basics and much more</a>
+            <a href="/2020/01/27/js-array-from/">The Array from static method and other ways of creating an array from something else</a>
           </li>
         
       </ul>
