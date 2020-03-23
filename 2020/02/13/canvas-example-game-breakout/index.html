@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2020/02/13/canvas-example-game-breakout/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="This will be a post on a canvas example that is a very basic breakout clone. Even a basic example of this game might prove to be a little involves for new developers especially if you are starting fro">
-<meta property="og:updated_time" content="2020-02-19T01:47:53.000Z">
+<meta property="og:updated_time" content="2020-03-23T13:29:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="A javaScript breakout canvas example">
 <meta name="twitter:description" content="This will be a post on a canvas example that is a very basic breakout clone. Even a basic example of this game might prove to be a little involves for new developers especially if you are starting fro">
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2020/02/13/canvas-example-game-breakout/" class="article-date"> Modified:
-  <time datetime="2020-02-19T01:47:53.000Z" itemprop="dateModified">2020-02-18</time>
+  <time datetime="2020-03-23T13:29:27.000Z" itemprop="dateModified">2020-03-23</time>
 </a>
 
-    <span class="article-date">V1.18</span>
+    <span class="article-date">V1.19</span>
 
     
   <div class="article-category">
@@ -147,7 +147,7 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>This will be a post on a <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial" target="_blank" rel="external">canvas example</a> that is a very basic breakout clone. Even a basic example of this game might prove to be a little involves for new developers especially if you are starting from the ground up, and not using a framework. I will try to keep things as striped down as possible for this post, but it will still be a little involved with several javaScript files, and many methods of interest covering many topics that come up when making a game like this.</p>
+        <p>This will be a post on a <a href="/2020/03/23/canvas-example/">canvas example</a> that is a very basic breakout clone. Even a basic example of this game might prove to be a little involves for new developers especially if you are starting from the ground up, and not using a framework. I will try to keep things as striped down as possible for this post, but it will still be a little involved with several javaScript files, and many methods of interest covering many topics that come up when making a game like this.</p>
 <a id="more"></a>
 <h2 id="1-The-custom-utils-lib"><a href="#1-The-custom-utils-lib" class="headerlink" title="1 - The custom utils lib"></a>1 - The custom utils lib</h2><p>I worked out a basic custom utils library for this canvas example. This library has methods that I will be using in the game module, but also likely elsewhere if this project where to continue growing. For now it is just methods that have to do with bounding box collision detection, distance, and normalizing angles.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> util = &#123;&#125;;</div><div class="line"> </div><div class="line">util.TAU = <span class="built_in">Math</span>.PI * <span class="number">2</span>;</div><div class="line">util.EPS = <span class="number">1e-15</span>;</div><div class="line"> </div><div class="line">util.mod = <span class="function"><span class="keyword">function</span> <span class="title">mod</span>(<span class="params">x, m</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> (x % m + m) % m;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line">util.boundingBox = <span class="function"><span class="keyword">function</span> (<span class="params">x1, y1, w1, h1, x2, y2, w2, h2</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> !(</div><div class="line">        (y1 + h1) &lt; (y2) ||</div><div class="line">        y1 &gt; (y2 + h2) ||</div><div class="line">        (x1 + w1) &lt; x2 ||</div><div class="line">        x1 &gt; (x2 + w2));</div><div class="line">&#125;;</div><div class="line"> </div><div class="line">util.distance = <span class="function"><span class="keyword">function</span> (<span class="params">x1, y1, x2, y2</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Math</span>.sqrt(<span class="built_in">Math</span>.pow(x1 - x2, <span class="number">2</span>) + <span class="built_in">Math</span>.pow(y1 - y2, <span class="number">2</span>));</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// normalize angle method</span></div><div class="line">util.angleNormalize = <span class="function"><span class="keyword">function</span> (<span class="params">a, scale</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> util.mod(a, scale || util.TAU);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -265,7 +265,7 @@ s.setAttribute('data-timestamp', +new Date());
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/JSON/" style="font-size: 12.78px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.56px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.89px;">angular</a> <a href="/tags/animation/" style="font-size: 12.78px;">animation</a> <a href="/tags/automation/" style="font-size: 12.78px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.33px;">backbone</a> <a href="/tags/blog/" style="font-size: 15px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.78px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.33px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.67px;">ejs</a> <a href="/tags/express/" style="font-size: 16.67px;">express</a> <a href="/tags/games/" style="font-size: 17.22px;">games</a> <a href="/tags/git/" style="font-size: 11.67px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.89px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.44px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.56px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.67px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 12.78px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.33px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.44px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.44px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.89px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.22px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.11px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.56px;">vuejs</a>
+      <a href="/tags/JSON/" style="font-size: 12.63px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.53px;">SEO</a> <a href="/tags/angular/" style="font-size: 14.21px;">angular</a> <a href="/tags/animation/" style="font-size: 12.63px;">animation</a> <a href="/tags/automation/" style="font-size: 12.63px;">automation</a> <a href="/tags/backbone/" style="font-size: 13.16px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.26px;">blog</a> <a href="/tags/canvas/" style="font-size: 17.89px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.68px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.05px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.58px;">ejs</a> <a href="/tags/express/" style="font-size: 16.84px;">express</a> <a href="/tags/games/" style="font-size: 17.37px;">games</a> <a href="/tags/git/" style="font-size: 11.58px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.26px;">hapi</a> <a href="/tags/heroku/" style="font-size: 14.21px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.74px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.53px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.58px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 12.63px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.42px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.74px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.47px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.95px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.11px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.32px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.79px;">vuejs</a>
     </div>
   </div>
 
@@ -287,23 +287,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2020/03/06/js-value-of/">js value of object method</a>
+            <a href="/2020/03/23/canvas-example/">23 Canvas examples and counting, animations, games, modules, and more.</a>
           </li>
         
           <li>
-            <a href="/2020/03/04/canvas-get-point-relative-to-canvas/">Get a point relative to a canvas element rather than window in client side javaScript</a>
+            <a href="/2020/03/20/nodejs-example-world-generator/">Node example of a world generator</a>
           </li>
         
           <li>
-            <a href="/2020/03/03/lodash_pull/">The lodash pull method and other ways to remove elements</a>
+            <a href="/2020/03/19/nodejs-example-copy-dir/">Node copy directory example</a>
           </li>
         
           <li>
-            <a href="/2020/02/28/js-json-parse/">JSON parse method in javaScript</a>
+            <a href="/2020/03/18/canvas-example-particles-binary/">Canvas example of exploding binary particles</a>
           </li>
         
           <li>
-            <a href="/2020/02/27/js-javascript-example-tax-brackets/">javaScript example tax brackets</a>
+            <a href="/2020/03/17/nodejs-simple-lexer/">A simple nodejs lexer</a>
           </li>
         
       </ul>
