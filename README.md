@@ -1,6 +1,6 @@
 # dustinpfister.github.io
 
-This is the deployment of my github pages site that can be found at [https://dustinpfister.github.io](https://dustinpfister.github.io). If you are reading this it means that it was built with hexo using the theme and additional assets stored at my [hexo_sitesource](https://github.com/dustinpfister/hexo_sitesource) repo.
+This is the deployment of my github pages site that can be found at [https://dustinpfister.github.io](https://dustinpfister.github.io). It was built with hexo using the theme and additional assets stored at my [hexo_sitesource](https://github.com/dustinpfister/hexo_sitesource) repo.
 
 ## If you want to make a pull request
 
