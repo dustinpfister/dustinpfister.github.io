@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>JavaScript mouse basics including events and pit falls. | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2020/06/25/js-javascript-mouse/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="In client side javaScript mouse events are a way to get mouse cursor positions as well as the state of one or more mouse buttons. The javaScript mouse events are a collection of several types of event">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript mouse basics including events and pit falls.">
+<meta property="og:url" content="https://dustinpfister.github.io/2020/06/25/js-javascript-mouse/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="In client side javaScript mouse events are a way to get mouse cursor positions as well as the state of one or more mouse buttons. The javaScript mouse events are a collection of several types of event">
+<meta property="og:updated_time" content="2020-06-26T15:29:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript mouse basics including events and pit falls.">
+<meta name="twitter:description" content="In client side javaScript mouse events are a way to get mouse cursor positions as well as the state of one or more mouse buttons. The javaScript mouse events are a collection of several types of event">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-js-javascript-mouse" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/25/js-javascript-mouse/" class="article-date"> Published:
+  <time datetime="2020-06-25T15:44:00.000Z" itemprop="datePublished">2020-06-25</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2020/06/25/js-javascript-mouse/" class="article-date"> Modified:
+  <time datetime="2020-06-26T15:29:34.000Z" itemprop="dateModified">2020-06-26</time>
+</a>
+
+    <span class="article-date">V1.8</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/js/">js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      JavaScript mouse basics including events and pit falls.
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>In client side <a href="https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent" target="_blank" rel="external">javaScript mouse</a> events are a way to get mouse cursor positions as well as the state of one or more mouse buttons. The javaScript mouse events are a collection of several types of events that can be attached to the window object, or just about an html element with a method the <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener" target="_blank" rel="external">add event listener</a>.</p>
+<p>There are three general event type of interest when working something out with mouse events that are <a href="https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onmousedown" target="_blank" rel="external">onmousedown</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onmousemove" target="_blank" rel="external">onmosemove</a>, and <a href="https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onmouseup" target="_blank" rel="external">onmouseup</a>. There are other events of interest, but for the most part I only bother with those three events when working out any kind of user interface that will make use of a mouse if present.</p>
+<a id="more"></a>
+<h2 id="1-JavaScript-mouse-events-basics"><a href="#1-JavaScript-mouse-events-basics" class="headerlink" title="1 - JavaScript mouse events basics"></a>1 - JavaScript mouse events basics</h2><p>So for a basic example of javaScript mouse events I quickly put together this example that will just display the current state of a the mouse position, and the state of the left mouse button.</p>
+<p>In this example I just have a simple state object as well as some helper methods for setting the position of the state object, as well as rendering the state of the values to an html element. I am then just attaching event handlers to the window object with the add event listener method by calling the add event listener method off of the window object. Each time I call the add event listener method I pass a string value for the desired event type I want to attach for, and then a function that will fire each time the event happens.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>JavaScript mouse basic example<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"out"</span>&gt;</span><span class="tag">&lt;<span class="name">div</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line"><span class="comment">// basic state and render stuff</span></div><div class="line"><span class="keyword">var</span> state = &#123;</div><div class="line">    <span class="attr">down</span>: <span class="literal">false</span>,</div><div class="line">    <span class="attr">x</span>: <span class="literal">null</span>,</div><div class="line">    <span class="attr">y</span>: <span class="literal">null</span></div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> setPos = <span class="function"><span class="keyword">function</span> (<span class="params">state, e</span>) </span>&#123;</div><div class="line">    state.x = e.clientX;</div><div class="line">    state.y = e.clientY;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> render = <span class="function"><span class="keyword">function</span> (<span class="params">state</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> out = <span class="built_in">document</span>.getElementById(<span class="string">'out'</span>);</div><div class="line">    out.innerText = <span class="string">'pos: ('</span> + state.x + <span class="string">','</span> + state.y + <span class="string">' ); down: '</span> + state.down + <span class="string">';'</span>;</div><div class="line">&#125;;</div><div class="line"><span class="comment">// attach events to window</span></div><div class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'mousedown'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">    state.down = <span class="literal">true</span>;</div><div class="line">    setPos(state, e);</div><div class="line">    render(state);</div><div class="line">&#125;);</div><div class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'mousemove'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">    setPos(state, e);</div><div class="line">    render(state);</div><div class="line">&#125;);</div><div class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'mouseup'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">    state.down = <span class="literal">false</span>;</div><div class="line">    setPos(state, e);</div><div class="line">    render(state);</div><div class="line">&#125;);</div><div class="line">render(state);</div><div class="line">        <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>When this example is up and running in the browser I end up with the current values of the state object being displayed. moving the mouse around will result in the position being updated, and clicking the mouse button will change the value of the down boolean value.</p>
+<h2 id="2-Get-element-relative-position"><a href="#2-Get-element-relative-position" class="headerlink" title="2 - Get element relative position"></a>2 - Get element relative position</h2><p>So one thing that might come up right away is that the position that is obtained from the clientX, and clientY properties might not always be what one might expect. The values are always going to be relative to the start of the browser window rather than an element in that window.</p>
+<p>To resolve the issue of the position not being relative to a nested element the get bounding client rect method of the target element of the event object can be used to get the position of the element in the window. These values can then be used to get a position that is relative to the element rather than the whole window.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>javascript mouse get element relative<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">canvas</span> <span class="attr">id</span>=<span class="string">"out"</span> <span class="attr">width</span>=<span class="string">"320"</span> <span class="attr">height</span>=<span class="string">"240"</span> <span class="attr">style</span>=<span class="string">"position:absolute;left:50px;top:50px;"</span>&gt;</span><span class="tag">&lt;<span class="name">canvas</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line"><span class="comment">// Gte El relative</span></div><div class="line"><span class="keyword">var</span> getElRelative = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> el = e.target,</div><div class="line">    bx = el.getBoundingClientRect();</div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        <span class="attr">x</span>: e.clientX - bx.left,</div><div class="line">        <span class="attr">y</span>: e.clientY - bx.top,</div><div class="line">        <span class="attr">bx</span>: bx</div><div class="line">    &#125;;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> setPos = <span class="function"><span class="keyword">function</span> (<span class="params">state, e</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> pos = getElRelative(e);</div><div class="line">    state.x = pos.x;</div><div class="line">    state.y = pos.y;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> render = <span class="function"><span class="keyword">function</span> (<span class="params">ctx, canvas, state</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> text = <span class="string">'pos: ('</span> + state.x + <span class="string">','</span> + state.y + <span class="string">' ); down: '</span> + state.down + <span class="string">';'</span>;</div><div class="line">    ctx.fillStyle = <span class="string">'black'</span>;</div><div class="line">    ctx.fillRect(<span class="number">0</span>, <span class="number">0</span>, canvas.width, canvas.height);</div><div class="line">    ctx.fillStyle = <span class="string">'white'</span>;</div><div class="line">    ctx.fillText(text, <span class="number">32</span>, <span class="number">32</span>);</div><div class="line">&#125;;</div><div class="line"><span class="comment">// state object</span></div><div class="line"><span class="keyword">var</span> state = &#123;</div><div class="line">    <span class="attr">down</span>: <span class="literal">false</span>,</div><div class="line">    <span class="attr">x</span>: <span class="literal">null</span>,</div><div class="line">    <span class="attr">y</span>: <span class="literal">null</span></div><div class="line">&#125;;</div><div class="line"><span class="comment">// attach events to canvas</span></div><div class="line"><span class="keyword">var</span> canvas = <span class="built_in">document</span>.getElementById(<span class="string">'out'</span>),</div><div class="line">ctx = canvas.getContext(<span class="string">'2d'</span>);</div><div class="line">canvas.addEventListener(<span class="string">'mousedown'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">    state.down = <span class="literal">true</span>;</div><div class="line">    setPos(state, e);</div><div class="line">    render(ctx, canvas, state);</div><div class="line">&#125;);</div><div class="line">canvas.addEventListener(<span class="string">'mousemove'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">    setPos(state, e);</div><div class="line">    render(ctx, canvas, state);</div><div class="line">&#125;);</div><div class="line">canvas.addEventListener(<span class="string">'mouseup'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">    state.down = <span class="literal">false</span>;</div><div class="line">    setPos(state, e);</div><div class="line">    render(ctx, canvas, state);</div><div class="line">&#125;);</div><div class="line">render(ctx, canvas, state);</div><div class="line">        <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>This time I went with attaching the events to a canvas element that is the nested element of interest. I could leave the events attached to the window object, but that would result in the events continuing to fire even when I do something with the mouse outside of the canvas element.</p>
+<h2 id="3-Conclusion"><a href="#3-Conclusion" class="headerlink" title="3 - Conclusion"></a>3 - Conclusion</h2><p>So hopefully this post has helped you gain some basic insight into how to get going with a mouse when making a user interface with javaScript. However there is much more to learn and be aware of when it comes to using mouse events, as well as other events such as touch events, and keyboard events. This post does not outline a fully comprehensive input controller module or project or sorts after all as the focus here is just on things that have to do with working with the mouse.</p>
+<p>When it comes to working out some kind of project that will work as something that will parse input from an array or sources I made a <a href="/2020/04/17/canvas-example-input-controller/">canvas example post that is an input controller of sorts</a>. This canvas example is one of many such canvas examples that I am working on a little now and then that serve as real projects examples of sorts. So for more on mouse events as well as many other related topics you might want to check that post out.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2020/06/25/js-javascript-mouse/" data-id="ckc7ni13x00ux60v162tkdygs" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2020/06/25/js-javascript-mouse/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/06/26/js-javascript-example-fizzbuzz/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          JavaScript fizzbuzz examples
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/06/23/js-document-queryselector/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">document querySelector method and other ways of getting references to elements in javaScript</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2020/06/25/js-javascript-mouse/index.html';
+    this.page.identifier = '671';
+    this.page.title = 'JavaScript mouse basics including events and pit falls.';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.63px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.53px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.68px;">angular</a> <a href="/tags/animation/" style="font-size: 12.11px;">animation</a> <a href="/tags/automation/" style="font-size: 12.11px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.63px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.74px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.95px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.16px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.05px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.58px;">ejs</a> <a href="/tags/express/" style="font-size: 16.84px;">express</a> <a href="/tags/games/" style="font-size: 17.37px;">games</a> <a href="/tags/git/" style="font-size: 11.58px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.26px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.68px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.21px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.53px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.58px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 13.16px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.42px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.21px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.47px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.89px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.63px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.32px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.79px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/07/02/canvas-example-grass-blades/">Canvas Example grass blades</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/01/lodash_reject/">lodash reject compaired to lodash filter and other native javaScript options</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/30/nodejs-module/">Nodejs module object and modules in general</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/26/js-javascript-example-fizzbuzz/">JavaScript fizzbuzz examples</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/25/js-javascript-mouse/">JavaScript mouse basics including events and pit falls.</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2020/06/25/js-javascript-mouse/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
