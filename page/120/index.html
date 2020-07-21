@@ -106,18 +106,252 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
-    <article itemscope itemtype="http://schema.org/Blog" id="post-backbone-model" class="article article-type-post" itemprop="blogPost">
+    <article itemscope itemtype="http://schema.org/Blog" id="post-js-copying-vs-referencing-objects-in-javascript" class="article article-type-post" itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/11/02/backbone-model/" class="article-date"> Published:
-  <time datetime="2017-11-02T13:15:00.000Z" itemprop="datePublished">2017-11-02</time>
+    <a href="/2017/11/13/js-copying-vs-referencing-objects-in-javascript/" class="article-date"> Published:
+  <time datetime="2017-11-13T16:35:00.000Z" itemprop="datePublished">2017-11-13</time>
 </a>
 
     <!-- other info (dustin) -->
-    <a href="/2017/11/02/backbone-model/" class="article-date"> Modified:
-  <time datetime="2017-11-02T20:13:02.000Z" itemprop="dateModified">2017-11-02</time>
+    <a href="/2017/11/13/js-copying-vs-referencing-objects-in-javascript/" class="article-date"> Modified:
+  <time datetime="2020-07-17T17:14:42.000Z" itemprop="dateModified">2020-07-17</time>
 </a>
 
-    <span class="article-date">V1.6</span>
+    <span class="article-date">V1.12</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/js/">js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/13/js-copying-vs-referencing-objects-in-javascript/">Copying vs referencing Objects in javaScript, and the many ways to copy them.</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>I have been cranking out <a href="/categories/lodash/">posts on lodash</a> as of late, and have come to make a <a href="/2017/11/13/lodash_clonedeep/">post on _.cloneDeep</a> which can be used to deep clone objects in javaScript if I am using <a href="https://lodash.com/">lodash</a> in a project. However I think it is called for to write a post on a subject that has to do with objects in general with javaScript regardless if lodash is used or not. That subject is the deal with referencing vs copying objects in javaScript. You see objects in javaScript are not the same thing as primitive values like numbers and strings, they are always copied by value. However when it comes to copying objects, often you are not making a copy of the object, you are just creating another reference to the same object. So then this is where cloning of objects comes into play, as well as shallow and deep cloning.</p>
+<p>So in this post I will be covering a bunch of ways to go about making a copy of an object with native javaScript by itself. In addition I will try to do my best to get the core of the situation with objects in general down when it comes to copying and referencing them.</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/11/13/js-copying-vs-referencing-objects-in-javascript/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/11/13/js-copying-vs-referencing-objects-in-javascript/" data-id="ckcwgnwer00t29wv14btdcebq" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2017/11/13/js-copying-vs-referencing-objects-in-javascript/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/blog/">blog</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/corejs/">corejs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lodash/">lodash</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article itemscope itemtype="http://schema.org/Blog" id="post-lodash_clonedeep" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/13/lodash_clonedeep/" class="article-date"> Published:
+  <time datetime="2017-11-13T15:35:00.000Z" itemprop="datePublished">2017-11-13</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2017/11/13/lodash_clonedeep/" class="article-date"> Modified:
+  <time datetime="2019-11-03T16:26:33.000Z" itemprop="dateModified">2019-11-03</time>
+</a>
+
+    <span class="article-date">V1.3</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/lodash/">lodash</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/13/lodash_clonedeep/">Making copy&#39;s of objects in an array with the lodash _.cloneDeep method.</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>The issue with deep cloning objects in javaScript comes up now and then. Maybe one day I will write a full post on the matter, and all the ways to go about doing it. However this is a post on <a href="https://lodash.com/">lodash</a>, and as such I will just be writing about the <a href="https://lodash.com/docs/4.17.4#cloneDeep">_.cloneDeep</a> method. I have wrote a post on the lodash clone method before which is okay for shallow copy clones of objects, but if I want to copy nested objects as well the <a href="/2017/10/02/lodash_clone/">lodash clone</a> deep method should be used, or some other means to make a so called deep copy clone of an object.</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/11/13/lodash_clonedeep/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/11/13/lodash_clonedeep/" data-id="ckcwgnx3201329wv1h5oqdltd" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2017/11/13/lodash_clonedeep/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lodash/">lodash</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-html-to-json" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/06/nodejs-html-to-json/" class="article-date"> Published:
+  <time datetime="2017-11-06T22:06:00.000Z" itemprop="datePublished">2017-11-06</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2017/11/06/nodejs-html-to-json/" class="article-date"> Modified:
+  <time datetime="2019-11-19T14:50:12.000Z" itemprop="dateModified">2019-11-19</time>
+</a>
+
+    <span class="article-date">V1.1</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/06/nodejs-html-to-json/">Converting html code to a JavaScript object in node.js with html-to-json</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>So I wanted to make a simple tool to run threw all of my blog posts that have been parsed into html, and find certain values such as word count for my posts. In other words I want to create a collection of objects for each html file, or have a way to convert to a JSON format from HTML. So there should be some kind of dependency in the npmjs ecosystem that I can use to just quickly turn html into an object tyoe form that I can work with in a node environment, similarly to that of what I can work with in a browser or client side javaScript environment.</p>
+<p>WIth that being said I took a little time to see what there is to work with if anything and after doing so I found a few projects that work nice. However in this post I will mostly be writing about a npm package called <a href="https://www.npmjs.com/package/html-to-json">html-to-json</a>. This package has a method where I can feed it an html string, and what is returned is a workable object.</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/11/06/nodejs-html-to-json/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/11/06/nodejs-html-to-json/" data-id="ckcwgny4t01fg9wv1n5z1djr3" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2017/11/06/nodejs-html-to-json/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/blog/">blog</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-node-dir" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/05/nodejs-node-dir/" class="article-date"> Published:
+  <time datetime="2017-11-06T02:08:00.000Z" itemprop="datePublished">2017-11-05</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2017/11/05/nodejs-node-dir/" class="article-date"> Modified:
+  <time datetime="2018-07-22T00:47:16.000Z" itemprop="dateModified">2018-07-21</time>
+</a>
+
+    <span class="article-date">V1.4</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/05/nodejs-node-dir/">Looping over a bunch of files in Node.js with node-dir</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>So you have a bunch of files in a folder, and you want to do something involving the content of each file. You might only want to bother with a certain kind of file, and you might want to know each filename. Well one npm package that I have found that helps a whole lot with that is <a href="https://www.npmjs.com/package/node-dir">node-dir</a>, and I find it a bit of a time saver compared to just making something from the ground up.</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/11/05/nodejs-node-dir/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2017/11/05/nodejs-node-dir/" data-id="ckcwgny9l01gt9wv1wzogwjkr" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2017/11/05/nodejs-node-dir/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article itemscope itemtype="http://schema.org/Blog" id="post-backbone-view-extend" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/04/backbone-view-extend/" class="article-date"> Published:
+  <time datetime="2017-11-04T17:31:00.000Z" itemprop="datePublished">2017-11-04</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2017/11/04/backbone-view-extend/" class="article-date"> Modified:
+  <time datetime="2017-11-04T23:50:10.000Z" itemprop="dateModified">2017-11-04</time>
+</a>
+
+    <span class="article-date">V1.1</span>
 
     
   <div class="article-category">
@@ -132,7 +366,7 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/02/backbone-model/">A general overview of Models in backbone.js</a>
+      <a class="article-title" href="/2017/11/04/backbone-view-extend/">A Backbone.View.extend example</a>
     </h1>
   
 
@@ -140,253 +374,22 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>In this post I will be writing a general overview of <a href="http://backbonejs.org/#Model">Models in backbone</a>. This post will not cover everything there is to know about them, but it will be a good starting point, and I will link to any, and all other posts of mine that have to do with backbone Models.</p>
+        <p>When making a backbone project the first and foremost thing to focus on in my view is the Model of a project. However once I have a Model that is in good shape there is a desire to make a front end in order to view some of that data in the state of that Model, and of course interact with that Model. That is to make a View to view and work with a Model.</p>
+<p>To make a view in backbone it will involve using the extend method of Backbone.View, as such this post will give a quick example of that to get things started.</p>
         
           <p class="article-more-link">
-            <a href="/2017/11/02/backbone-model/#more">Read More</a>
+            <a href="/2017/11/04/backbone-view-extend/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2017/11/02/backbone-model/" data-id="ckc7nhzz400bn60v1g1ry2g6a" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2017/11/04/backbone-view-extend/" data-id="ckcwgnveq00be9wv16a9t5q6y" class="article-share-link">Share</a>
       
-        <a href="https://dustinpfister.github.io/2017/11/02/backbone-model/#disqus_thread" class="article-comment-link">Comments</a>
+        <a href="https://dustinpfister.github.io/2017/11/04/backbone-view-extend/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/backbone/">backbone</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article itemscope itemtype="http://schema.org/Blog" id="post-backbone-getting-started" class="article article-type-post" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/11/01/backbone-getting-started/" class="article-date"> Published:
-  <time datetime="2017-11-01T16:10:00.000Z" itemprop="datePublished">2017-11-01</time>
-</a>
-
-    <!-- other info (dustin) -->
-    <a href="/2017/11/01/backbone-getting-started/" class="article-date"> Modified:
-  <time datetime="2017-11-02T18:40:27.000Z" itemprop="dateModified">2017-11-02</time>
-</a>
-
-    <span class="article-date">V1.5</span>
-
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/backbone/">backbone</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/01/backbone-getting-started/">Getting started with backbone.js</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="text">
-      
-        <p>After viewing a few terms on <a href="https://trends.google.com/trends/explore?q=backbone,underscore,lodash">Google trends</a> it appears that <a href="http://backbonejs.org/">backbone.js</a> is still popular these days. So as such I will commit to writing a few posts on it, and as always with this sort of thing, it will require a getting started type post.</p>
-        
-          <p class="article-more-link">
-            <a href="/2017/11/01/backbone-getting-started/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2017/11/01/backbone-getting-started/" data-id="ckc7nhzy900b360v199alk8v8" class="article-share-link">Share</a>
-      
-        <a href="https://dustinpfister.github.io/2017/11/01/backbone-getting-started/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/backbone/">backbone</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article itemscope itemtype="http://schema.org/Blog" id="post-phaser-scale-compatibility-scrollto" class="article article-type-post" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/10/31/phaser-scale-compatibility-scrollto/" class="article-date"> Published:
-  <time datetime="2017-10-31T14:19:00.000Z" itemprop="datePublished">2017-10-31</time>
-</a>
-
-    <!-- other info (dustin) -->
-    <a href="/2017/10/31/phaser-scale-compatibility-scrollto/" class="article-date"> Modified:
-  <time datetime="2017-10-31T15:15:58.000Z" itemprop="dateModified">2017-10-31</time>
-</a>
-
-    <span class="article-date">V1</span>
-
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/phaser/">phaser</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/31/phaser-scale-compatibility-scrollto/">Fixing the problem of a phaser project causing the browser to jump to the top of a page on mobile.</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="text">
-      
-        <p>I ran into a pretty annoying issue of my phaser projects causing a page to jump to the top of a page when scrolling down in chrome for android. I found that the problem has to do with phasers scroll manager, and to fix it all I need to do is set a boolean value to false. In addition this post will outline more about why this is.</p>
-        
-          <p class="article-more-link">
-            <a href="/2017/10/31/phaser-scale-compatibility-scrollto/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2017/10/31/phaser-scale-compatibility-scrollto/" data-id="ckc7ni3ia01mu60v1w1bbbb8j" class="article-share-link">Share</a>
-      
-        <a href="https://dustinpfister.github.io/2017/10/31/phaser-scale-compatibility-scrollto/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/games/">games</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/phaser/">phaser</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article itemscope itemtype="http://schema.org/Blog" id="post-phaser-line" class="article article-type-post" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/10/28/phaser-line/" class="article-date"> Published:
-  <time datetime="2017-10-28T14:14:00.000Z" itemprop="datePublished">2017-10-28</time>
-</a>
-
-    <!-- other info (dustin) -->
-    <a href="/2017/10/28/phaser-line/" class="article-date"> Modified:
-  <time datetime="2018-12-25T01:56:03.000Z" itemprop="dateModified">2018-12-24</time>
-</a>
-
-    <span class="article-date">V1.6</span>
-
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/phaser/">phaser</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/28/phaser-line/">The Phaser Line constructor</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="text">
-      
-        <p>In this post I will be writing about the <a href="http://phaser.io">phaser</a> <a href="http://phaser.io/docs/2.6.2/Phaser.Line.html">Line Constructor</a>. This constructor may prove to be somewhat useful when doing anything involving line segments.</p>
-        
-          <p class="article-more-link">
-            <a href="/2017/10/28/phaser-line/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2017/10/28/phaser-line/" data-id="ckc7ni3ax01kx60v1wwgkxjo3" class="article-share-link">Share</a>
-      
-        <a href="https://dustinpfister.github.io/2017/10/28/phaser-line/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/games/">games</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/phaser/">phaser</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article itemscope itemtype="http://schema.org/Blog" id="post-phaser-math-distance" class="article article-type-post" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/10/27/phaser-math-distance/" class="article-date"> Published:
-  <time datetime="2017-10-27T16:17:00.000Z" itemprop="datePublished">2017-10-27</time>
-</a>
-
-    <!-- other info (dustin) -->
-    <a href="/2017/10/27/phaser-math-distance/" class="article-date"> Modified:
-  <time datetime="2017-10-28T22:00:11.000Z" itemprop="dateModified">2017-10-28</time>
-</a>
-
-    <span class="article-date">V1.5</span>
-
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/phaser/">phaser</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/27/phaser-math-distance/">Finding the distance between two points in Phaser</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="text">
-      
-        <p>In <a href="http://phaser.io/">Phaser</a> there is a Math object like that of the Math object in core javaScript. There are a few methods there that come in handy, one of which is a usual suspects in most projects that is used to find the distance between two points. That is the 2d distance formula that can be found at Phaser.Math.distance.</p>
-        
-          <p class="article-more-link">
-            <a href="/2017/10/27/phaser-math-distance/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2017/10/27/phaser-math-distance/" data-id="ckc7ni3bs01l660v1kt9yxwku" class="article-share-link">Share</a>
-      
-        <a href="https://dustinpfister.github.io/2017/10/27/phaser-math-distance/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/games/">games</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/phaser/">phaser</a></li></ul>
 
     </footer>
   </div>
@@ -399,7 +402,7 @@ ga('send', 'pageview');
 
 
   <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/page/119/">&laquo; __('prev')</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/118/">118</a><a class="page-number" href="/page/119/">119</a><span class="page-number current">120</span><a class="page-number" href="/page/121/">121</a><a class="page-number" href="/page/122/">122</a><span class="space">&hellip;</span><a class="page-number" href="/page/136/">136</a><a class="extend next" rel="next" href="/page/121/">__('next') &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/119/">&laquo; __('prev')</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/118/">118</a><a class="page-number" href="/page/119/">119</a><span class="page-number current">120</span><a class="page-number" href="/page/121/">121</a><a class="page-number" href="/page/122/">122</a><span class="space">&hellip;</span><a class="page-number" href="/page/137/">137</a><a class="extend next" rel="next" href="/page/121/">__('next') &raquo;</a>
   </nav>
 </section>
         
@@ -429,7 +432,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/JSON/" style="font-size: 12.63px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.53px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.68px;">angular</a> <a href="/tags/animation/" style="font-size: 12.11px;">animation</a> <a href="/tags/automation/" style="font-size: 12.11px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.63px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.74px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.95px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.16px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.05px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.58px;">ejs</a> <a href="/tags/express/" style="font-size: 16.84px;">express</a> <a href="/tags/games/" style="font-size: 17.37px;">games</a> <a href="/tags/git/" style="font-size: 11.58px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.26px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.68px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.21px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.53px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.58px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 13.16px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.42px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.21px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.47px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.89px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.63px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.32px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.79px;">vuejs</a>
+      <a href="/tags/JSON/" style="font-size: 13px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.5px;">SEO</a> <a href="/tags/angular/" style="font-size: 14px;">angular</a> <a href="/tags/animation/" style="font-size: 12.5px;">animation</a> <a href="/tags/automation/" style="font-size: 12.5px;">automation</a> <a href="/tags/backbone/" style="font-size: 13px;">backbone</a> <a href="/tags/blog/" style="font-size: 15px;">blog</a> <a href="/tags/canvas/" style="font-size: 19px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.5px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.5px;">ejs</a> <a href="/tags/express/" style="font-size: 17px;">express</a> <a href="/tags/games/" style="font-size: 17.5px;">games</a> <a href="/tags/git/" style="font-size: 12px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.5px;">hapi</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.5px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.5px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.5px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 13.5px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.5px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.5px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.5px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18px;">phaser</a> <a href="/tags/statistics/" style="font-size: 13px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.5px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16px;">vuejs</a>
     </div>
   </div>
 
@@ -451,23 +454,23 @@ ga('send', 'pageview');
       <ul>
         
           <li>
-            <a href="/2020/07/02/canvas-example-grass-blades/">Canvas Example grass blades</a>
+            <a href="/2020/07/21/js-window-inner-width-height/">Window innerWidth, innerHeight, centering and scaling elements</a>
           </li>
         
           <li>
-            <a href="/2020/07/01/lodash_reject/">lodash reject compaired to lodash filter and other native javaScript options</a>
+            <a href="/2020/07/20/canvas-example-object-pool/">A canvas example of an object pool</a>
           </li>
         
           <li>
-            <a href="/2020/06/30/nodejs-module/">Nodejs module object and modules in general</a>
+            <a href="/2020/07/14/js-to-string/">The js to string method in objects, and setting what the string value should be for an object</a>
           </li>
         
           <li>
-            <a href="/2020/06/26/js-javascript-example-fizzbuzz/">JavaScript fizzbuzz examples</a>
+            <a href="/2020/07/13/js-array-concat/">The array concat method and some other ways of adding two arrays together</a>
           </li>
         
           <li>
-            <a href="/2020/06/25/js-javascript-mouse/">JavaScript mouse basics including events and pit falls.</a>
+            <a href="/2020/07/10/canvas-example-game-fixed-shooter-hybrid/">A canvas example game that is a fixed shooter hybrid</a>
           </li>
         
       </ul>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>The array concat method and some other ways of adding two arrays together | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2020/07/13/js-array-concat/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="So there is adding two strings or numbers together with the addition operator in javaScript, but then there is adding two or more objects together including arrays. In the array prototype object there">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The array concat method and some other ways of adding two arrays together">
+<meta property="og:url" content="https://dustinpfister.github.io/2020/07/13/js-array-concat/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="So there is adding two strings or numbers together with the addition operator in javaScript, but then there is adding two or more objects together including arrays. In the array prototype object there">
+<meta property="og:updated_time" content="2020-07-14T17:11:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The array concat method and some other ways of adding two arrays together">
+<meta name="twitter:description" content="So there is adding two strings or numbers together with the addition operator in javaScript, but then there is adding two or more objects together including arrays. In the array prototype object there">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-js-array-concat" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/07/13/js-array-concat/" class="article-date"> Published:
+  <time datetime="2020-07-13T18:11:00.000Z" itemprop="datePublished">2020-07-13</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2020/07/13/js-array-concat/" class="article-date"> Modified:
+  <time datetime="2020-07-14T17:11:50.000Z" itemprop="dateModified">2020-07-14</time>
+</a>
+
+    <span class="article-date">V1.9</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/js/">js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      The array concat method and some other ways of adding two arrays together
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>So there is adding two strings or numbers together with the addition operator in javaScript, but then there is adding two or more objects together including arrays. In the array prototype object there is the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat" target="_blank" rel="external">array concat</a> method that can be used to create a new array that is the concatenation of two or more arrays, or values. This is then one way to go about adding two or more arrays together. There are then also ways of going about doing the same thing, such as converting and array to a string and then back again using something like the string split method. So lets look at some examples of array concatenation with the array concat method, as well as other ways to go about getting a similar effect.</p>
+<a id="more"></a>
+<h2 id="1-Basic-array-concat-example"><a href="#1-Basic-array-concat-example" class="headerlink" title="1 - Basic array concat example"></a>1 - Basic array concat example</h2><p>So the basic idea of the concat method is that I just call it off of an instance of a javaScript array, and then pass one or more arrays that I want to concatenate with the array that I call the method off of. A new array will be returned by the array concat method, and none of the source arrays including the array that the method is called off of will be mutated.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</div><div class="line">b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>],</div><div class="line">c = a.concat(b);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(a, b, c);</div><div class="line"><span class="comment">// [ 1, 2, 3 ] [ 4, 5, 6 ] [ 1, 2, 3, 4, 5, 6 ]</span></div></pre></td></tr></table></figure>
+<p>So then that is the basic idea of the array concat method, it is there for just going ahead and adding one array to another. When it comes to simple arrays or primitive values like this it will work just fine as expected. It is only when coping arrays of nested objects that maybe a developing might run into some problems though when it comes to copying references to objects, but maybe that is a <a href="/2017/11/13/js-copying-vs-referencing-objects-in-javascript/">matter for another post</a>. In any case lets look at least a few more examples of adding two or more arrays together into one.</p>
+<h2 id="2-Can-pass-arrays-and-just-values-also-as-arguments"><a href="#2-Can-pass-arrays-and-just-values-also-as-arguments" class="headerlink" title="2 - Can pass arrays, and just values also as arguments"></a>2 - Can pass arrays, and just values also as arguments</h2><p>So the array concat method can be used to concatenate two or more arrays, but values can also be added via arguments also. So then this concat method also works as an alternative to the array push method then also on top of just a way to add to arrays together into one array.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</div><div class="line">b = a.concat(<span class="number">4</span>, <span class="number">5</span>, <span class="string">'6'</span>, <span class="literal">null</span>, <span class="literal">false</span>, &#123;&#125;, [<span class="number">7</span>, <span class="number">8</span>], [<span class="number">9</span>, <span class="number">10</span>, <span class="number">11</span>], [<span class="number">12</span>]);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(b);</div><div class="line"><span class="comment">// [ 1, 2, 3, 4, 5, '6', null, false, &#123;&#125;, 7, 8, 9, 10, 11, 12 ]</span></div></pre></td></tr></table></figure>
+<p>speaking of the array push method it is actually possible to use array push in the same way as concat when it comes to just one array at least when it comes to using array push with something like the function apply method. More on that later in this post.</p>
+<h2 id="3-Using-array-like-objects-and-array-concat"><a href="#3-Using-array-like-objects-and-array-concat" class="headerlink" title="3 - Using array like objects and array concat"></a>3 - Using array like objects and array concat</h2><p>So with many array prototype methods it is possible to use the Function call prototype method to get an array method to work with array like objects. However when using the array concat method on an array like object with function call I end up getting a result that might not end up being expected. So when working with array like objects, it might be better to use the array from static method to convert an array like object to an array, and then use concat off of the resulting array.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">    <span class="number">0</span>: <span class="number">1</span>,</div><div class="line">    <span class="number">1</span>: <span class="number">2</span>,</div><div class="line">    <span class="number">2</span>: <span class="number">3</span>,</div><div class="line">    <span class="attr">length</span>: <span class="number">3</span></div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> a = <span class="built_in">Array</span>.prototype.concat.call(obj, <span class="number">4</span>, <span class="number">5</span>, [<span class="number">6</span>, <span class="number">7</span>]),</div><div class="line">b = <span class="built_in">Array</span>.from(obj).concat(<span class="number">4</span>, <span class="number">5</span>, [<span class="number">6</span>, <span class="number">7</span>]);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(a);</div><div class="line"><span class="comment">// [ &#123; '0': 1, '1': 2, '2': 3, length: 3 &#125;, 4, 5, 6, 7 ]</span></div><div class="line"><span class="built_in">console</span>.log(b);</div><div class="line"><span class="comment">// [ 1, 2, 3, 4, 5, 6, 7 ]</span></div></pre></td></tr></table></figure>
+<h2 id="4-The-addition-operator-strings-and-the-string-split-method"><a href="#4-The-addition-operator-strings-and-the-string-split-method" class="headerlink" title="4 - The addition operator, strings, and the string split method"></a>4 - The addition operator, strings, and the string split method</h2><p>So one might think that the addition operator can just be used to add to arrays together. The funny thing about it is that in some cases you actually can if we are talking about an array of primitive values at least maybe. When adding two arrays together by default the value of methods will return a string value of the array. So by adding a comma between the two arrays you might end up with a formatted string that can then be split back into an array.</p>
+<p>In other words something like this:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</div><div class="line">b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>],</div><div class="line">c = a + b;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(c, c.constructor.name);</div><div class="line"><span class="comment">// 1,2,34,5,6 String</span></div><div class="line"> </div><div class="line"><span class="keyword">var</span> d = <span class="built_in">String</span>(a + <span class="string">','</span> + b).split(<span class="string">','</span>);</div><div class="line"><span class="built_in">console</span>.log(d, d.constructor.name);</div><div class="line"><span class="comment">// [ '1', '2', '3', '4', '5', '6' ] 'Array'</span></div></pre></td></tr></table></figure>
+<p>I can not recommend that doing this is a good practice, but in some cases it seems to work okay, so I guess it is worth writing about at least. It is also worth mentioning the nature of valueOf and ToString methods of objects, and why they come in handy in some situations. When working with the addition of objects a toString method defines logic that will be used to create a string primitive value of the object, and the valueOf method can be used to define what a number primitive value is for the object. However maybe getting into the depth of that is a matter for other blog posts.</p>
+<h2 id="5-Using-array-push-and-Function-apply-to-concatenate-arrays"><a href="#5-Using-array-push-and-Function-apply-to-concatenate-arrays" class="headerlink" title="5 - Using array.push and Function.apply to concatenate arrays"></a>5 - Using array.push and Function.apply to concatenate arrays</h2><p>Another way to concatenate arrays would be to use the array push method with the apply function prototype method. the thing about the push method is that it can be used to add one or more elements to an array, but only by way of one element at a time, or more than one but by way of two or more arguments when calling array push. So the apply function method can be called off of the push method, and the array that you to concatenate to can be passed as the first argument followed by the other array that you want at the end of the one given the first argument to apply.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</div><div class="line">b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>],</div><div class="line">c = [];</div><div class="line"> </div><div class="line">[].push.apply(c, a);</div><div class="line">[].push.apply(c, b);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(a);</div><div class="line"><span class="comment">// [ 1, 2, 3 ]</span></div><div class="line"><span class="built_in">console</span>.log(b);</div><div class="line"><span class="comment">// [ 4, 5, 6 ]</span></div><div class="line"><span class="built_in">console</span>.log(c);</div><div class="line"><span class="comment">//[ 1, 2, 3, 4, 5, 6 ]</span></div></pre></td></tr></table></figure>
+<p>The same should also work when it comes to using the array unshift method that is the same as push only it adds element to the beginning of an array rather than the end.</p>
+<p>Apply, call and bind are worth writing more about, but I will not be getting into detail with those methods here. I have <a href="/2017/09/21/js-call-apply-and-bind/">wrote a post on these methods before hand anyway</a> a long time ago, so there is just reading over that post if you want my take on these methods. Yes they come in handy a lot when working with javaScript code, so you should take a moment to read up on them more if you have not done so all ready.</p>
+<h2 id="6-Conclusion"><a href="#6-Conclusion" class="headerlink" title="6 - Conclusion"></a>6 - Conclusion</h2><p>So the array concat method is the main goto method when it comes to creating a new array that is the product of two or more additional arrays. There is always more than one way of solving the same problem thous, not that any of the other methods of adding two or more arrays outline here are better choices or not though. It is generally a good idea to look into more than one way to go about doing something though, even if I end up just going with what it typical though.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2020/07/13/js-array-concat/" data-id="ckcwgnwba00re9wv1p2ivqdot" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2020/07/13/js-array-concat/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/07/14/js-to-string/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          The js to string method in objects, and setting what the string value should be for an object
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/07/10/canvas-example-game-fixed-shooter-hybrid/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">A canvas example game that is a fixed shooter hybrid</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2020/07/13/js-array-concat/index.html';
+    this.page.identifier = '681';
+    this.page.title = 'The array concat method and some other ways of adding two arrays together';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 13px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.5px;">SEO</a> <a href="/tags/angular/" style="font-size: 14px;">angular</a> <a href="/tags/animation/" style="font-size: 12.5px;">animation</a> <a href="/tags/automation/" style="font-size: 12.5px;">automation</a> <a href="/tags/backbone/" style="font-size: 13px;">backbone</a> <a href="/tags/blog/" style="font-size: 15px;">blog</a> <a href="/tags/canvas/" style="font-size: 19px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.5px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.5px;">ejs</a> <a href="/tags/express/" style="font-size: 17px;">express</a> <a href="/tags/games/" style="font-size: 17.5px;">games</a> <a href="/tags/git/" style="font-size: 12px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.5px;">hapi</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.5px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.5px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.5px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 13.5px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.5px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.5px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.5px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18px;">phaser</a> <a href="/tags/statistics/" style="font-size: 13px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.5px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/07/21/js-window-inner-width-height/">Window innerWidth, innerHeight, centering and scaling elements</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/20/canvas-example-object-pool/">A canvas example of an object pool</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/14/js-to-string/">The js to string method in objects, and setting what the string value should be for an object</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/13/js-array-concat/">The array concat method and some other ways of adding two arrays together</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/10/canvas-example-game-fixed-shooter-hybrid/">A canvas example game that is a fixed shooter hybrid</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2020/07/13/js-array-concat/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

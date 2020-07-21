@@ -11,16 +11,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2019/02/01/js-call-object/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="The Call object in javaScript is used as a way to store local variables this contrasts with the global object which is the top most name space where variables are stored. So the call object is a way t">
+  <meta name="description" content="The Call object in javaScript is used as a way to store local variables, this call object contrasts with the global object which is the top most name space where variables are stored. So the call obje">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Call object and local variables in javaScript">
 <meta property="og:url" content="https://dustinpfister.github.io/2019/02/01/js-call-object/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="The Call object in javaScript is used as a way to store local variables this contrasts with the global object which is the top most name space where variables are stored. So the call object is a way t">
-<meta property="og:updated_time" content="2019-08-12T18:49:38.000Z">
+<meta property="og:description" content="The Call object in javaScript is used as a way to store local variables, this call object contrasts with the global object which is the top most name space where variables are stored. So the call obje">
+<meta property="og:updated_time" content="2020-07-08T13:52:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Call object and local variables in javaScript">
-<meta name="twitter:description" content="The Call object in javaScript is used as a way to store local variables this contrasts with the global object which is the top most name space where variables are stored. So the call object is a way t">
+<meta name="twitter:description" content="The Call object in javaScript is used as a way to store local variables, this call object contrasts with the global object which is the top most name space where variables are stored. So the call obje">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2019/02/01/js-call-object/" class="article-date"> Modified:
-  <time datetime="2019-08-12T18:49:38.000Z" itemprop="dateModified">2019-08-12</time>
+  <time datetime="2020-07-08T13:52:04.000Z" itemprop="dateModified">2020-07-08</time>
 </a>
 
-    <span class="article-date">V1.6</span>
+    <span class="article-date">V1.8</span>
 
     
   <div class="article-category">
@@ -147,7 +147,8 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>The Call object in javaScript is used as a way to store local variables this contrasts with the global object which is the top most name space where variables are stored. So the call object is a way to help keep the global name space from becoming polluted by giving javaScript developers as way to have a separate collection of variables that are only local to a functions call object. This is not to be confused with the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call" target="_blank" rel="external">call method</a> of a function that can be used to set the value of the this keyword for a function. Another term for the call object in javaScript would be the <a href="http://dmitrysoshnikov.com/ecmascript/chapter-2-variable-object/#variable-object-in-function-context" target="_blank" rel="external">activation object</a>, this term might also be used as a way to eliminate confusion. So in this post I will be writing about the call object, and function scope local variables in javaScript.</p>
+        <p>The Call object in javaScript is used as a way to store local variables, this call object contrasts with the global object which is the top most name space where variables are stored. So the call object is a way to help keep the global name space from becoming polluted by giving javaScript developers a way to have a separate collection of variables that are only local to a functions call object. This is of course on top of the block scope that also helps with that when it comes to later specs of javaScript.</p>
+<p>This is not to be confused with the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call" target="_blank" rel="external">call function prototype method</a> of a function that can be used to set the value of the this keyword for a function. Another term for the call object in javaScript would be the <a href="http://dmitrysoshnikov.com/ecmascript/chapter-2-variable-object/#variable-object-in-function-context" target="_blank" rel="external">activation object</a>, this term might also be used as a way to eliminate confusion. So in this post I will be writing about the call object, and function scope local variables in javaScript.</p>
 <a id="more"></a>
 <h2 id="1-Call-Object-basics-in-javaScript"><a href="#1-Call-Object-basics-in-javaScript" class="headerlink" title="1 - Call Object basics in javaScript"></a>1 - Call Object basics in javaScript</h2><p>The call object or activation object if you prefer is created when a function is called. It is populated with the arguments object, as well as named arguments for the function, and any local variables that are defined with a keyword such as var, let, or const within the body of the function.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> func = <span class="function"><span class="keyword">function</span> (<span class="params">a, b</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">let</span> c = <span class="number">5</span>;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (<span class="built_in">arguments</span>.length &gt;= <span class="number">2</span>) &#123;</div><div class="line"> </div><div class="line">        c += <span class="number">5</span>;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> a + b + c;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(func(<span class="number">3</span>, <span class="number">2</span>)); <span class="comment">// 15</span></div></pre></td></tr></table></figure>
@@ -160,7 +161,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2019/02/01/js-call-object/" data-id="ckc7ni0w400rf60v1qnolz6wg" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2019/02/01/js-call-object/" data-id="ckcwgnweb00sz9wv1qpk7upuv" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2019/02/01/js-call-object/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -244,7 +245,7 @@ s.setAttribute('data-timestamp', +new Date());
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/JSON/" style="font-size: 12.63px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.53px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.68px;">angular</a> <a href="/tags/animation/" style="font-size: 12.11px;">animation</a> <a href="/tags/automation/" style="font-size: 12.11px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.63px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.74px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.95px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.16px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.05px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.58px;">ejs</a> <a href="/tags/express/" style="font-size: 16.84px;">express</a> <a href="/tags/games/" style="font-size: 17.37px;">games</a> <a href="/tags/git/" style="font-size: 11.58px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.26px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.68px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.21px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.53px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.58px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 13.16px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.42px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.21px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.47px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.89px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.63px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.32px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.79px;">vuejs</a>
+      <a href="/tags/JSON/" style="font-size: 13px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.5px;">SEO</a> <a href="/tags/angular/" style="font-size: 14px;">angular</a> <a href="/tags/animation/" style="font-size: 12.5px;">animation</a> <a href="/tags/automation/" style="font-size: 12.5px;">automation</a> <a href="/tags/backbone/" style="font-size: 13px;">backbone</a> <a href="/tags/blog/" style="font-size: 15px;">blog</a> <a href="/tags/canvas/" style="font-size: 19px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.5px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.5px;">ejs</a> <a href="/tags/express/" style="font-size: 17px;">express</a> <a href="/tags/games/" style="font-size: 17.5px;">games</a> <a href="/tags/git/" style="font-size: 12px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.5px;">hapi</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.5px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.5px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.5px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 13.5px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.5px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.5px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.5px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18px;">phaser</a> <a href="/tags/statistics/" style="font-size: 13px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.5px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16px;">vuejs</a>
     </div>
   </div>
 
@@ -266,23 +267,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2020/07/02/canvas-example-grass-blades/">Canvas Example grass blades</a>
+            <a href="/2020/07/21/js-window-inner-width-height/">Window innerWidth, innerHeight, centering and scaling elements</a>
           </li>
         
           <li>
-            <a href="/2020/07/01/lodash_reject/">lodash reject compaired to lodash filter and other native javaScript options</a>
+            <a href="/2020/07/20/canvas-example-object-pool/">A canvas example of an object pool</a>
           </li>
         
           <li>
-            <a href="/2020/06/30/nodejs-module/">Nodejs module object and modules in general</a>
+            <a href="/2020/07/14/js-to-string/">The js to string method in objects, and setting what the string value should be for an object</a>
           </li>
         
           <li>
-            <a href="/2020/06/26/js-javascript-example-fizzbuzz/">JavaScript fizzbuzz examples</a>
+            <a href="/2020/07/13/js-array-concat/">The array concat method and some other ways of adding two arrays together</a>
           </li>
         
           <li>
-            <a href="/2020/06/25/js-javascript-mouse/">JavaScript mouse basics including events and pit falls.</a>
+            <a href="/2020/07/10/canvas-example-game-fixed-shooter-hybrid/">A canvas example game that is a fixed shooter hybrid</a>
           </li>
         
       </ul>

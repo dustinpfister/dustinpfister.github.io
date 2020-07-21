@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2019/12/03/lodash_intersection/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="Time for another post on lodash this one is on the lodash intersection method. The _.intersection method will create an array of values that are in all the given arrays using the lodash _.eq method al">
-<meta property="og:updated_time" content="2019-12-09T17:00:19.000Z">
+<meta property="og:updated_time" content="2020-07-12T15:25:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="lodash intersection method">
 <meta name="twitter:description" content="Time for another post on lodash this one is on the lodash intersection method. The _.intersection method will create an array of values that are in all the given arrays using the lodash _.eq method al">
@@ -121,10 +121,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2019/12/03/lodash_intersection/" class="article-date"> Modified:
-  <time datetime="2019-12-09T17:00:19.000Z" itemprop="dateModified">2019-12-09</time>
+  <time datetime="2020-07-12T15:25:18.000Z" itemprop="dateModified">2020-07-12</time>
 </a>
 
-    <span class="article-date">V1.1</span>
+    <span class="article-date">V1.12</span>
 
     
   <div class="article-category">
@@ -148,23 +148,23 @@ ga('send', 'pageview');
     <div class="article-entry" itemprop="text">
       
         <p>Time for another post on lodash this one is on the <a href="https://lodash.com/docs/4.17.15#intersection" target="_blank" rel="external">lodash intersection</a> method. The _.intersection method will create an array of values that are in all the given arrays using the <a href="/2019/12/04/lodash_eq">lodash _.eq</a> method also known as same value zero for comparisons.</p>
-<p>This is yet another kind of task that is not so hard to do with just plain old javaScript by itself these days using array prototype methods such as array some, and array filter. However regardless if you use lodash or not this will be a post on creating arrays of intersecting values in javaScript in general.</p>
+<p>This is yet another kind of task that is not so hard to do with just plain old javaScript by itself these days using array prototype methods such as array some, and array filter. There is also a native method called <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is" target="_blank" rel="external">Object is</a> that can be used to get the same value result rather than just using equality and identity operators. However regardless if you use lodash or not this will be a post on creating arrays of intersecting values in javaScript in general so lets get to it.</p>
 <a id="more"></a>
 <h2 id="1-lodash-intersection-basic-example"><a href="#1-lodash-intersection-basic-example" class="headerlink" title="1 - lodash intersection basic example"></a>1 - lodash intersection basic example</h2><p>So for a basic example of the lodash intersection method, if I just have to arrays of primitives I can just pass those arrays as arguments to the lodash intersection method. The result that is returned will then be an array of values that are in all of those given arrays.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> arr1 = [<span class="number">1</span>, <span class="number">4</span>, <span class="number">5</span>],</div><div class="line">arr2 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>],</div><div class="line">arr3 = [<span class="number">1</span>, <span class="number">4</span>, <span class="number">5</span>],</div><div class="line"> </div><div class="line">result = _.intersection(arr1, arr2, arr3);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(result); <span class="comment">// [1]</span></div></pre></td></tr></table></figure>
 <p>So arrays of primitives are nice, but any real project will often involve arrays of objects. There are two other methods in lodash called _.intersectionBy and intersectionWith than can be used to work with more complex situation sin which collection of objects are involved.</p>
 <h2 id="2-Objects-and-lodash-intersection-by"><a href="#2-Objects-and-lodash-intersection-by" class="headerlink" title="2 - Objects and lodash intersection by"></a>2 - Objects and lodash intersection by</h2><p>when working with arrays of objects things can get a little more involved. However if I do just want to compare a uniform object property then the lodash _.intersectionBy method can be used.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> arr1 = [&#123;<span class="attr">id</span>: <span class="number">7</span>&#125;, &#123;<span class="attr">id</span>: <span class="number">10</span>&#125;],</div><div class="line">arr2 = [&#123;<span class="attr">id</span>:<span class="number">7</span>&#125;],</div><div class="line"> </div><div class="line">result = _.intersectionBy(arr1, arr2, <span class="string">'id'</span>);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(result); <span class="comment">// [ &#123; id: 7 &#125; ]</span></div></pre></td></tr></table></figure>
-<h2 id="3-Vanilla-javaScript-and-intersection"><a href="#3-Vanilla-javaScript-and-intersection" class="headerlink" title="3 - Vanilla javaScript and intersection"></a>3 - Vanilla javaScript and intersection</h2><p>Creating a true lodash intersection vanilla javaScript alternative is a little tricky. Keep in mind that the same value zero way of comparison is used rather than equality or identity. So a solution will have to involve the use of Object.is, or a polyfill of that just to make the comparisons.</p>
-<p>Still you might start out with something like this that will work fine for comparing just two arrays.</p>
+<h2 id="3-Vanilla-javaScript-and-intersection"><a href="#3-Vanilla-javaScript-and-intersection" class="headerlink" title="3 - Vanilla javaScript and intersection"></a>3 - Vanilla javaScript and intersection</h2><p>Creating a true lodash intersection vanilla javaScript alternative is a little tricky actually. As of this writing there is no native intersection method, however there are a few native methods that can be used together to get the same result. Keep in mind that the same value zero way of comparison is used rather than equality or identity by using the Object.is static method. So a solution will have to involve the use of Object.is, or a polyfill of that just to make the comparisons.</p>
+<p>Still you might start out with something like this that will work fine for comparing just two arrays at least for all the testes that I have do with this thus far.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> arr1 = [<span class="number">1</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="literal">NaN</span>],</div><div class="line">arr2 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="literal">NaN</span>];</div><div class="line"> </div><div class="line"><span class="keyword">let</span> intersectTwo = <span class="function">(<span class="params">a, b</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">return</span> a.filter(<span class="function">(<span class="params">x</span>) =&gt;</span> &#123;</div><div class="line">        <span class="keyword">return</span> b.some(<span class="function">(<span class="params">y</span>) =&gt;</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="built_in">Object</span>.is(x, y);</div><div class="line">        &#125;);</div><div class="line">    &#125;);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log( intersectTwo(arr1, arr2) );</div><div class="line"><span class="comment">// [1,NaN]</span></div></pre></td></tr></table></figure>
-<p>If I where to use just equality or identity for the comparisons then the NaN value will not be included.</p>
+<p>If I where to use just equality or identity for the comparisons then the NaN value will not be included. This is of course one of the reasons why we have yet another way to go about making comparisons on top of that of the two general operators that come to mind when comparing two values.</p>
 <h2 id="4-Conclusion"><a href="#4-Conclusion" class="headerlink" title="4 - Conclusion"></a>4 - Conclusion</h2><p>The lodash intersection method can be useful for finding common values in many arrays. However the lodash intersection method might not be the end all solution for this kind of task also. It is possible to do the same with native javaScript methods, but more than one will need to be used including the Object is static method, many of which might not be well supported.</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2019/12/03/lodash_intersection/" data-id="ckc7ni1pm013c60v1rxsunhf0" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2019/12/03/lodash_intersection/" data-id="ckcwgnxa0015b9wv1o431pt7x" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2019/12/03/lodash_intersection/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -248,7 +248,7 @@ s.setAttribute('data-timestamp', +new Date());
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/JSON/" style="font-size: 12.63px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.53px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.68px;">angular</a> <a href="/tags/animation/" style="font-size: 12.11px;">animation</a> <a href="/tags/automation/" style="font-size: 12.11px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.63px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.74px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.95px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.16px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.05px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.58px;">ejs</a> <a href="/tags/express/" style="font-size: 16.84px;">express</a> <a href="/tags/games/" style="font-size: 17.37px;">games</a> <a href="/tags/git/" style="font-size: 11.58px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.26px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.68px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.21px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.53px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.58px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 13.16px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.42px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.21px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.47px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.89px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.63px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.32px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.79px;">vuejs</a>
+      <a href="/tags/JSON/" style="font-size: 13px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.5px;">SEO</a> <a href="/tags/angular/" style="font-size: 14px;">angular</a> <a href="/tags/animation/" style="font-size: 12.5px;">animation</a> <a href="/tags/automation/" style="font-size: 12.5px;">automation</a> <a href="/tags/backbone/" style="font-size: 13px;">backbone</a> <a href="/tags/blog/" style="font-size: 15px;">blog</a> <a href="/tags/canvas/" style="font-size: 19px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.5px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.5px;">ejs</a> <a href="/tags/express/" style="font-size: 17px;">express</a> <a href="/tags/games/" style="font-size: 17.5px;">games</a> <a href="/tags/git/" style="font-size: 12px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.5px;">hapi</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.5px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.5px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.5px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 13.5px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.5px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.5px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.5px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18px;">phaser</a> <a href="/tags/statistics/" style="font-size: 13px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.5px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16px;">vuejs</a>
     </div>
   </div>
 
@@ -270,23 +270,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2020/07/02/canvas-example-grass-blades/">Canvas Example grass blades</a>
+            <a href="/2020/07/21/js-window-inner-width-height/">Window innerWidth, innerHeight, centering and scaling elements</a>
           </li>
         
           <li>
-            <a href="/2020/07/01/lodash_reject/">lodash reject compaired to lodash filter and other native javaScript options</a>
+            <a href="/2020/07/20/canvas-example-object-pool/">A canvas example of an object pool</a>
           </li>
         
           <li>
-            <a href="/2020/06/30/nodejs-module/">Nodejs module object and modules in general</a>
+            <a href="/2020/07/14/js-to-string/">The js to string method in objects, and setting what the string value should be for an object</a>
           </li>
         
           <li>
-            <a href="/2020/06/26/js-javascript-example-fizzbuzz/">JavaScript fizzbuzz examples</a>
+            <a href="/2020/07/13/js-array-concat/">The array concat method and some other ways of adding two arrays together</a>
           </li>
         
           <li>
-            <a href="/2020/06/25/js-javascript-mouse/">JavaScript mouse basics including events and pit falls.</a>
+            <a href="/2020/07/10/canvas-example-game-fixed-shooter-hybrid/">A canvas example game that is a fixed shooter hybrid</a>
           </li>
         
       </ul>

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>A canvas example of an object pool | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2020/07/20/canvas-example-object-pool/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="This will be just a quick canvas examples post on object pools. An object pool is what I have come to call a collection of display object when making a canvas project that calls for them. So these obj">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A canvas example of an object pool">
+<meta property="og:url" content="https://dustinpfister.github.io/2020/07/20/canvas-example-object-pool/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="This will be just a quick canvas examples post on object pools. An object pool is what I have come to call a collection of display object when making a canvas project that calls for them. So these obj">
+<meta property="og:updated_time" content="2020-07-21T21:35:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="A canvas example of an object pool">
+<meta name="twitter:description" content="This will be just a quick canvas examples post on object pools. An object pool is what I have come to call a collection of display object when making a canvas project that calls for them. So these obj">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-canvas-example-object-pool" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/07/20/canvas-example-object-pool/" class="article-date"> Published:
+  <time datetime="2020-07-20T13:40:00.000Z" itemprop="datePublished">2020-07-20</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2020/07/20/canvas-example-object-pool/" class="article-date"> Modified:
+  <time datetime="2020-07-21T21:35:40.000Z" itemprop="dateModified">2020-07-21</time>
+</a>
+
+    <span class="article-date">V1.15</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/canvas/">canvas</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      A canvas example of an object pool
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>This will be just a quick <a href="/2020/03/23/canvas-example/">canvas examples</a> post on object pools. An object pool is what I have come to call a collection of display object when making a canvas project that calls for them. So these objects will often contain properties like x and y for the current position as well as width, and height as one might expected. Depending on the nature of the canvas project they will often have additional properties like heading, pixels per second, max hit points, damage, and so forth. However than main point of this canvas example is just to show one way of how to go about creating a collection of these kinds of objects.</p>
+<p>There is creating a collection pool as just an empty array, and then have code that pushes new display objects into the pool, and purge them out as needed. However there is also creating an array of display objects once of a certain set length, and then have an active property of the display object that is used to set if the display object is currently being used or not. This way I am setting fixed amounts of display objects rather than just pushing them in and out out as needed.So then in this post I will be going over an example that involves a fixed pool.</p>
+<a id="more"></a>
+<p><div id="canvas-app" style="width:320px;height:240px;margin-left:auto;margin-right:auto;"></div></p>
+<script>var Pool=(function(){var createPool=function(opt){opt=opt||{};var state={ver:'0.1.0',canvas:opt.canvas||{width:320,height:240},pool:[],spawnRate:0.1,secs:0,colors:['red','green','blue']};var i=opt.count||10;while(i--){state.pool.push({x:32,y:32,w:32,h:32,heading:0,pps:64,lifespan:3,hcps:0,alpha:0.5,fill:state.colors[i%state.colors.length],active:false});}return state;};var spawn=function(state,secs){var bx;state.secs+=secs;if(state.secs>=state.spawnRate){bx=getInactive(state.pool);if(bx){bx.active=true;bx.x=state.canvas.width/2;bx.y=state.canvas.height/2;bx.heading=Math.PI*2*Math.random();bx.pps=32+128*Math.random();bx.hcps=-90+180*Math.random();bx.lifespan=10;}state.secs%=state.spawnRate;}};update=function(state,secs){var i=state.pool.length,bx;while(i--){bx=state.pool[i];if(bx.active){bx.x+=Math.cos(bx.heading)*bx.pps*secs;bx.y+=Math.sin(bx.heading)*bx.pps*secs;bx.heading+=Math.PI/180*bx.hcps*secs;bx.lifespan-=secs;bx.lifespan=bx.lifespan<0?0:bx.lifespan;if(bx.lifespan===0){bx.hcps=0;}}checkBounds(bx,canvas);}spawn(state,secs);};var getInactive=function(pool){var p=state.player,i=pool.length,obj;while(i--){obj=pool[i];if(!obj.active){return obj;}}return false;};var checkBounds=function(bx,canvas){if(bx.x>=canvas.width||bx.x<bx.w* -1||bx.y>canvas.height||bx.y<bx.h* -1){bx.active=false;}};return{create:createPool,update:update}}());var draw={};draw.back=function(ctx,canvas){ctx.fillStyle='black';ctx.fillRect(0,0,canvas.width,canvas.height);};draw.pool=function(ctx,state){var i=state.pool.length,bx;ctx.fillStyle='white';ctx.strokeStyle='black';ctx.lineWidth=3;while(i--){bx=state.pool[i];if(bx.active){ctx.save();ctx.fillStyle=bx.fill;ctx.globalAlpha=bx.alpha;ctx.translate(bx.x,bx.y);ctx.rotate(bx.heading);ctx.beginPath();ctx.rect(bx.w/2* -1,bx.h/2* -1,bx.w,bx.h);ctx.fill();ctx.stroke();ctx.restore();}}};draw.info=function(ctx,state){ctx.font='10px couriter';ctx.fillStyle='white';ctx.fillText('v'+state.ver,5,15);};var container=document.getElementById('canvas-app'),canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');canvas.width=320;canvas.height=240;container.appendChild(canvas);var state=Pool.create({canvas:canvas,count:100});var lt=new Date();var loop=function(){var now=new Date(),t=now-lt,secs=t/1000;requestAnimationFrame(loop);draw.back(ctx,canvas);draw.pool(ctx,state);draw.info(ctx,state);Pool.update(state,secs);lt=now;};loop();</script>
+
+<h2 id="1-The-pool-js-file"><a href="#1-The-pool-js-file" class="headerlink" title="1 - The pool.js file"></a>1 - The pool.js file</h2><p>So the main event of this post is then the pool.js file that I have work out here. In this module I have just two public methods, one to create a pool, and the other to update the pool. In more complex projects I might need some additional methods when it comes to working with two or more pools of objects, and how they interact with each other, or I might be able to just work that out via arguments.</p>
+<p>So at the top of the module I have my create pool method, that will be made public. For now I am not doing anything that involved with arguments, it just creates a pool of objects in a property of a state object that it returns. I have some additional properties outside of the pool attached to the state object that have to do with spawn rate, and how much time has passed sense the last spawn. So any additional properties outside of the pool that have to do with the pool would also be attached to this main state object for it.</p>
+<p>I then also have a spawn method that will not really spawn new objects into the pool, but just activate ones that are not being used from the pool.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Pool = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// create a pool</span></div><div class="line">    <span class="keyword">var</span> createPool = <span class="function"><span class="keyword">function</span> (<span class="params">opt</span>) </span>&#123;</div><div class="line">        opt = opt || &#123;&#125;;</div><div class="line">        <span class="keyword">var</span> state = &#123;</div><div class="line">            <span class="attr">ver</span>: <span class="string">'0.1.0'</span>,</div><div class="line">            <span class="attr">canvas</span>: opt.canvas || &#123;</div><div class="line">                <span class="attr">width</span>: <span class="number">320</span>,</div><div class="line">                <span class="attr">height</span>: <span class="number">240</span></div><div class="line">            &#125;,</div><div class="line">            <span class="attr">pool</span>: [],</div><div class="line">            <span class="attr">spawnRate</span>: <span class="number">0.1</span>,</div><div class="line">            <span class="attr">secs</span>: <span class="number">0</span>,</div><div class="line">            <span class="attr">colors</span>: [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>]</div><div class="line">        &#125;;</div><div class="line">        <span class="keyword">var</span> i = opt.count || <span class="number">10</span>;</div><div class="line">        <span class="keyword">while</span> (i--) &#123;</div><div class="line">            state.pool.push(&#123;</div><div class="line">                <span class="attr">x</span>: <span class="number">32</span>,</div><div class="line">                <span class="attr">y</span>: <span class="number">32</span>,</div><div class="line">                <span class="attr">w</span>: <span class="number">32</span>,</div><div class="line">                <span class="attr">h</span>: <span class="number">32</span>,</div><div class="line">                <span class="attr">heading</span>: <span class="number">0</span>,</div><div class="line">                <span class="attr">pps</span>: <span class="number">64</span>,</div><div class="line">                <span class="attr">lifespan</span>: <span class="number">3</span>,</div><div class="line">                <span class="attr">hcps</span>: <span class="number">0</span>, <span class="comment">// heading change per second in degrees</span></div><div class="line">                alpha: <span class="number">0.5</span>,</div><div class="line">                <span class="attr">fill</span>: state.colors[i % state.colors.length],</div><div class="line">                <span class="attr">active</span>: <span class="literal">false</span></div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> state;</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> spawn = <span class="function"><span class="keyword">function</span> (<span class="params">state, secs</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> bx;</div><div class="line">        state.secs += secs;</div><div class="line">        <span class="keyword">if</span> (state.secs &gt;= state.spawnRate) &#123;</div><div class="line">            bx = getInactive(state.pool);</div><div class="line">            <span class="keyword">if</span> (bx) &#123;</div><div class="line">                bx.active = <span class="literal">true</span>;</div><div class="line">                bx.x = state.canvas.width / <span class="number">2</span>;</div><div class="line">                bx.y = state.canvas.height / <span class="number">2</span>;</div><div class="line">                bx.heading = <span class="built_in">Math</span>.PI * <span class="number">2</span> * <span class="built_in">Math</span>.random();</div><div class="line">                bx.pps = <span class="number">32</span> + <span class="number">128</span> * <span class="built_in">Math</span>.random();</div><div class="line">                bx.hcps = <span class="number">-90</span> + <span class="number">180</span> * <span class="built_in">Math</span>.random();</div><div class="line">                bx.lifespan = <span class="number">10</span>;</div><div class="line">            &#125;</div><div class="line">            state.secs %= state.spawnRate;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    update = <span class="function"><span class="keyword">function</span> (<span class="params">state, secs</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> i = state.pool.length,</div><div class="line">        bx;</div><div class="line">        <span class="keyword">while</span> (i--) &#123;</div><div class="line">            bx = state.pool[i];</div><div class="line">            <span class="keyword">if</span> (bx.active) &#123;</div><div class="line">                <span class="comment">// move</span></div><div class="line">                bx.x += <span class="built_in">Math</span>.cos(bx.heading) * bx.pps * secs;</div><div class="line">                bx.y += <span class="built_in">Math</span>.sin(bx.heading) * bx.pps * secs;</div><div class="line">                bx.heading += <span class="built_in">Math</span>.PI / <span class="number">180</span> * bx.hcps * secs;</div><div class="line">                bx.lifespan -= secs;</div><div class="line">                bx.lifespan = bx.lifespan &lt; <span class="number">0</span> ? <span class="number">0</span> : bx.lifespan;</div><div class="line">                <span class="keyword">if</span> (bx.lifespan === <span class="number">0</span>) &#123;</div><div class="line">                    bx.hcps = <span class="number">0</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            <span class="comment">// set inactive if out of bounds</span></div><div class="line">            checkBounds(bx, canvas);</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// spawn</span></div><div class="line">        spawn(state, secs);</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// get an inactive object or return false</span></div><div class="line">    <span class="keyword">var</span> getInactive = <span class="function"><span class="keyword">function</span> (<span class="params">pool</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> p = state.player,</div><div class="line">        i = pool.length,</div><div class="line">        obj;</div><div class="line">        <span class="keyword">while</span> (i--) &#123;</div><div class="line">            obj = pool[i];</div><div class="line">            <span class="keyword">if</span> (!obj.active) &#123;</div><div class="line">                <span class="keyword">return</span> obj;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// check bounds with the given object and set it inactive if it is out</span></div><div class="line">    <span class="keyword">var</span> checkBounds = <span class="function"><span class="keyword">function</span> (<span class="params">bx, canvas</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (bx.x &gt;= canvas.width || bx.x &lt; bx.w * <span class="number">-1</span> || bx.y &gt; canvas.height || bx.y &lt; bx.h * <span class="number">-1</span>) &#123;</div><div class="line">            bx.active = <span class="literal">false</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// public</span></div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        <span class="attr">create</span>: createPool,</div><div class="line">        <span class="attr">update</span>: update</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;</div><div class="line">    ());</div></pre></td></tr></table></figure>
+<h2 id="2-The-draw-js-module"><a href="#2-The-draw-js-module" class="headerlink" title="2 - The draw.js module"></a>2 - The draw.js module</h2><p>So this is very much a canvas example, so there is of course the draw.js module for this example. This time around I wanted to make things simple, so there is mainly just one method to draw a background, and another to just darw the state of the pool.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> draw = &#123;&#125;;</div><div class="line"> </div><div class="line">draw.back = <span class="function"><span class="keyword">function</span> (<span class="params">ctx, canvas</span>) </span>&#123;</div><div class="line">    ctx.fillStyle = <span class="string">'black'</span>;</div><div class="line">    ctx.fillRect(<span class="number">0</span>, <span class="number">0</span>, canvas.width, canvas.height);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line">draw.pool = <span class="function"><span class="keyword">function</span> (<span class="params">ctx, state</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> i = state.pool.length,</div><div class="line">    bx;</div><div class="line">    ctx.fillStyle = <span class="string">'white'</span>;</div><div class="line">    ctx.strokeStyle = <span class="string">'black'</span>;</div><div class="line">    ctx.lineWidth = <span class="number">3</span>;</div><div class="line">    <span class="keyword">while</span> (i--) &#123;</div><div class="line">        bx = state.pool[i];</div><div class="line">        <span class="keyword">if</span> (bx.active) &#123;</div><div class="line">            ctx.save();</div><div class="line">            ctx.fillStyle = bx.fill;</div><div class="line">            ctx.globalAlpha = bx.alpha;</div><div class="line">            ctx.translate(bx.x, bx.y);</div><div class="line">            ctx.rotate(bx.heading);</div><div class="line">            ctx.beginPath();</div><div class="line">            ctx.rect(bx.w / <span class="number">2</span> * <span class="number">-1</span>, bx.h / <span class="number">2</span> * <span class="number">-1</span>, bx.w, bx.h);</div><div class="line">            ctx.fill();</div><div class="line">            ctx.stroke();</div><div class="line">            ctx.restore();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line">draw.info = <span class="function"><span class="keyword">function</span> (<span class="params">ctx, state</span>) </span>&#123;</div><div class="line">    ctx.font = <span class="string">'10px couriter'</span>;</div><div class="line">    ctx.fillStyle = <span class="string">'white'</span>;</div><div class="line">    ctx.fillText(<span class="string">'v'</span> + state.ver, <span class="number">5</span>, <span class="number">15</span>);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="3-Main-js"><a href="#3-Main-js" class="headerlink" title="3 - Main.js"></a>3 - Main.js</h2><p>So now just for a main.js file to make use of the pool.js and draw.js modules. Here I create and inject a canvas element into a container element. I then also pass the canvas element to the create method of my Pool.js module when creating a pool for the canvas area, while I am at it I also set a count for the size of the pool.</p>
+<p>In here I also have my main app loop where I am updating the stat of the pool, by calling the update method of the Pool module and pass the state object I want to update along with a value that is the number of seconds that has passed sense the last update. I am also of course using mu draw methods to render the current state of the pool.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> container = <span class="built_in">document</span>.getElementById(<span class="string">'canvas-app'</span>),</div><div class="line">canvas = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>),</div><div class="line">ctx = canvas.getContext(<span class="string">'2d'</span>);</div><div class="line">canvas.width = <span class="number">320</span>;</div><div class="line">canvas.height = <span class="number">240</span>;</div><div class="line">container.appendChild(canvas);</div><div class="line"> </div><div class="line"><span class="comment">// create a state with pool</span></div><div class="line"><span class="keyword">var</span> state = Pool.create(&#123;</div><div class="line">        <span class="attr">canvas</span>: canvas,</div><div class="line">        <span class="attr">count</span>: <span class="number">100</span></div><div class="line">    &#125;);</div><div class="line"> </div><div class="line"><span class="comment">// LOOP</span></div><div class="line"><span class="keyword">var</span> lt = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"><span class="keyword">var</span> loop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> now = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">    t = now - lt,</div><div class="line">    secs = t / <span class="number">1000</span>;</div><div class="line"> </div><div class="line">    requestAnimationFrame(loop);</div><div class="line">    draw.back(ctx, canvas);</div><div class="line">    draw.pool(ctx, state);</div><div class="line">    draw.info(ctx, state);</div><div class="line">    Pool.update(state, secs);</div><div class="line"> </div><div class="line">    lt = now;</div><div class="line"> </div><div class="line">&#125;;</div><div class="line">loop();</div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>canvas example object pool<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"canvas-app"</span> <span class="attr">style</span>=<span class="string">"width:320px;height:240px;margin-left:auto;margin-right:auto;"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"pool.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"draw.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"main.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="4-Conclusion"><a href="#4-Conclusion" class="headerlink" title="4 - Conclusion"></a>4 - Conclusion</h2><p>This post was yet another exercise of creating something that I find myself creating over and over again each time I make another canvas example. Just about any game or animation type thing will involve creating at least one if not more pools of display objects that are used for rendering enemy object sprites, power ups, or anything else to that effect.</p>
+<p>I wanted to go in a different direction with this example, but I did not quite get around to it. I might get around to putting a little more time into this one when I get some more time though. I would like to make it so that there is more than one pool and they interact with each other.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2020/07/20/canvas-example-object-pool/" data-id="ckcwgnvmz00g49wv1i1wz9hlo" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2020/07/20/canvas-example-object-pool/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/canvas/">canvas</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/07/21/js-window-inner-width-height/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Window innerWidth, innerHeight, centering and scaling elements
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/07/14/js-to-string/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">The js to string method in objects, and setting what the string value should be for an object</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2020/07/20/canvas-example-object-pool/index.html';
+    this.page.identifier = '683';
+    this.page.title = 'A canvas example of an object pool';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 13px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.5px;">SEO</a> <a href="/tags/angular/" style="font-size: 14px;">angular</a> <a href="/tags/animation/" style="font-size: 12.5px;">animation</a> <a href="/tags/automation/" style="font-size: 12.5px;">automation</a> <a href="/tags/backbone/" style="font-size: 13px;">backbone</a> <a href="/tags/blog/" style="font-size: 15px;">blog</a> <a href="/tags/canvas/" style="font-size: 19px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.5px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.5px;">ejs</a> <a href="/tags/express/" style="font-size: 17px;">express</a> <a href="/tags/games/" style="font-size: 17.5px;">games</a> <a href="/tags/git/" style="font-size: 12px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.5px;">hapi</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.5px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.5px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.5px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 13.5px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.5px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.5px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.5px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18px;">phaser</a> <a href="/tags/statistics/" style="font-size: 13px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.5px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/07/21/js-window-inner-width-height/">Window innerWidth, innerHeight, centering and scaling elements</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/20/canvas-example-object-pool/">A canvas example of an object pool</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/14/js-to-string/">The js to string method in objects, and setting what the string value should be for an object</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/13/js-array-concat/">The array concat method and some other ways of adding two arrays together</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/10/canvas-example-game-fixed-shooter-hybrid/">A canvas example game that is a fixed shooter hybrid</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2020/07/20/canvas-example-object-pool/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
