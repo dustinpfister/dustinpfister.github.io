@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2020/02/19/canvas-example-animation-fractal/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="I would say that Fractals are fun, the math can get a little challenging too so it is also an example of the kind of thing to get into these days when it comes to me trying to find novel and inserting">
-<meta property="og:updated_time" content="2020-05-06T13:58:32.000Z">
+<meta property="og:updated_time" content="2020-08-03T20:55:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Basic Canvas fractal example">
 <meta name="twitter:description" content="I would say that Fractals are fun, the math can get a little challenging too so it is also an example of the kind of thing to get into these days when it comes to me trying to find novel and inserting">
@@ -96,6 +96,10 @@ ga('send', 'pageview');
         
           <a class="main-nav-link" href="/archives">Archives</a>
         
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
           <a class="main-nav-link" href="/about">About</a>
         
       </nav>
@@ -121,10 +125,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2020/02/19/canvas-example-animation-fractal/" class="article-date"> Modified:
-  <time datetime="2020-05-06T13:58:32.000Z" itemprop="dateModified">2020-05-06</time>
+  <time datetime="2020-08-03T20:55:00.000Z" itemprop="dateModified">2020-08-03</time>
 </a>
 
-    <span class="article-date">V1.22</span>
+    <span class="article-date">V1.23</span>
 
     
   <div class="article-category">
@@ -150,6 +154,9 @@ ga('send', 'pageview');
         <p>I would say that <a href="https://en.wikipedia.org/wiki/Fractal" target="_blank" rel="external">Fractals</a> are fun, the math can get a little challenging too so it is also an example of the kind of thing to get into these days when it comes to me trying to find novel and inserting things to do with javaScript. I am always looking for more things to get into with javaScript purely for the sake of continuing to sharpen my skills, and just make more <a href="/2020/03/23/canvas-example/">canvas examples</a> to play around with. However fractals are also just simply a fun and interesting way to apply what I all ready know with javaScript in an artful way for what that is worth to me.</p>
 <p>The basic idea of a fractal as I see it is that I am dealing with some kind of image pattern that repeats as I continue to zoom in. That might be a pretty crude definition that does not do the subject justice, but more often then not it would appear that is what a fractal is. So a very simple canvas fractal example could just be an animation of some squares getting bigger from a single starting point, and then looping back to that point once they get big enough. So that would maybe be a good starting point actually, but I would not stop there with this sort of thing.</p>
 <a id="more"></a>
+<p><div id="canvas-app" style="width:320px;height:240px;margin-left:auto;margin-right:auto;"></div></p>
+<script>var FF=function(opt){var api={};opt=opt||{};api.ani={ver:opt.ver||'0.0.a'};api.forFrame=opt.forFrame||function(){};var setMainPerAndBias=function(api){api.per=api.frameIndex/api.maxFrame;api.bias=1-Math.abs(0.5-api.per)/0.5;};var forFrame=function(frameIndex,maxFrame){api.frameIndex=frameIndex;api.maxFrame=maxFrame;setMainPerAndBias(api);api.forFrame.call(api,api,frameIndex,maxFrame);return api.ani;};return function(frame,maxFrame){frame=frame===undefined?0:frame;maxFrame=maxFrame===undefined?50:maxFrame;frame=frame>maxFrame?frame%maxFrame:frame;frame=frame<0?maxFrame-Math.abs(frame)%maxFrame:frame;forFrame(frame,maxFrame);return api.ani;};};var draw={};draw.bx=function(ctx,bx){ctx.strokeStyle='white';ctx.globalAlpha=0.05+bx.per*0.95;ctx.lineWidth=6;ctx.beginPath();ctx.rect(bx.x,bx.y,bx.w,bx.h);ctx.stroke();};draw.bxArr=function(ctx,ani){var i=0,len=ani.bxArr.length;ctx.save();while(i<len){draw.bx(ctx,ani.bxArr[i]);i+=1;}ctx.restore();};draw.back=function(ctx,canvas){ctx.fillStyle='black';ctx.fillRect(0,0,canvas.width,canvas.height);};draw.ver=function(ctx,canvas,ani){ctx.fillStyle='white';ctx.textBaseline='top';ctx.font='10px courier';ctx.fillText('v'+ani.ver,10,canvas.height-15);};var container=document.getElementById('canvas-app'),canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');canvas.width=320;canvas.height=240;ctx.translate(0.5,0.5);container.appendChild(canvas);var opt={ver:'0.0.0',forFrame:function(api,f,mf){var bxArr=api.ani.bxArr=[];var i=0,per,bxCount=10,maxSize=canvas.width;while(i<bxCount){per=api.per+1/bxCount*i;per%=1;bx={};bx.w=maxSize*per;bx.h=maxSize*per;bx.x=canvas.width/2-(bx.w/2);bx.y=canvas.height/2-(bx.h/2);bx.per=bx.w/maxSize;bxArr.push(bx);i+=1;}bxArr.sort(function(a,b){if(a.per>b.per){return 1;}return-1;});}};var ani=FF(opt);var frame=0;var loop=function(){requestAnimationFrame(loop);var state=ani(frame,200);draw.back(ctx,canvas);draw.bxArr(ctx,state);draw.ver(ctx,canvas,state);frame+=1;frame%=200;};loop();</script>
+
 <h2 id="1-A-Basic-looping-square-array-fractal-canvas-animation-example"><a href="#1-A-Basic-looping-square-array-fractal-canvas-animation-example" class="headerlink" title="1 - A Basic looping square array fractal canvas animation example"></a>1 - A Basic looping square array fractal canvas animation example</h2><p>So maybe a good starting exercise for fractals would be to just have and array of squares, and as I continue to zoom in the square of a certain index value in the array will get bigger, at some point though that square will end up being small again at the starring point. In other words it is just a repeating loop of squares getting larger, until they get to a certain size, at which point they become the new small square, and this is happening in an offset way where each square in the collection is at a certain point in this transition.</p>
 <p>Maybe another way to explain this is that I have and array of box objects with x, y, width, and height properties. All I am doing is setting say the first box in the array with an index of zero to a width and height of zero, and then setting the position to a certain starting point at say the center of the canvas. As I move up in the index values of the array of box objects the size of the boxes gets bigger in terms of the width and height, and the position of the upper left corner moves to the upper left corner of the canvas. When updating the values of this collection  at some point the largest box gets to a certain max size at which point it will become the new box with a width and height of zero at the starting position. Thus the result is a simple loop of boxes getting bigger from a starting location looping over and over again.</p>
 <p>So with that said this section will be a canvas fractal animation of just some boxes getting bigger from a starting point over and over again.</p>
@@ -167,7 +174,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2020/02/19/canvas-example-animation-fractal/" data-id="ckcwgnvi700dh9wv16rcds4oe" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2020/02/19/canvas-example-animation-fractal/" data-id="ckdnrsyl20057icv1wyejmsrk" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2020/02/19/canvas-example-animation-fractal/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -260,7 +267,7 @@ s.setAttribute('data-timestamp', +new Date());
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
     </div>
   </div>
 
@@ -273,23 +280,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2020/07/21/js-window-inner-width-height/">Window innerWidth, innerHeight, centering and scaling elements</a>
+            <a href="/2020/08/08/canvas-example-percent-math-log/">Canvas example percent values and Math log</a>
           </li>
         
           <li>
-            <a href="/2020/07/20/canvas-example-object-pool/">A canvas example of an object pool</a>
+            <a href="/2020/08/03/vuejs-lifecycle-destroyed/">vue destroyed lifecycle hook</a>
           </li>
         
           <li>
-            <a href="/2020/07/14/js-to-string/">The js to string method in objects, and setting what the string value should be for an object</a>
+            <a href="/2020/08/01/lodash_isarraylike/">The lodash is array like method, and array like objects in general</a>
           </li>
         
           <li>
-            <a href="/2020/07/13/js-array-concat/">The array concat method and some other ways of adding two arrays together</a>
+            <a href="/2020/07/29/canvas-example-game-crosshairs/">Canvas example of a cross hairs game</a>
           </li>
         
           <li>
-            <a href="/2020/07/10/canvas-example-game-fixed-shooter-hybrid/">A canvas example game that is a fixed shooter hybrid</a>
+            <a href="/2020/07/28/vuejs-model/">The vuejs model directive</a>
           </li>
         
       </ul>
@@ -317,6 +324,10 @@ s.setAttribute('data-timestamp', +new Date());
     <a href="/" class="mobile-nav-link">Home</a>
   
     <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
   
     <a href="/about" class="mobile-nav-link">About</a>
   

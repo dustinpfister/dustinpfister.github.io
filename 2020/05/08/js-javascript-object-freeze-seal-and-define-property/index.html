@@ -11,16 +11,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2020/05/08/js-javascript-object-freeze-seal-and-define-property/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="In the Core javaScript Object class there is the object freeze static method that can be used to freeze an object at which point none of the value of the object can be changed. There is however also t">
+  <meta name="description" content="In the Core javaScript Object there is the object freeze static method that can be used to freeze an object. Once an object is frozen none of the properties of the object can be changed. In addition t">
 <meta property="og:type" content="article">
 <meta property="og:title" content="The javaScript Object freeze method as well as seal and define property">
 <meta property="og:url" content="https://dustinpfister.github.io/2020/05/08/js-javascript-object-freeze-seal-and-define-property/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="In the Core javaScript Object class there is the object freeze static method that can be used to freeze an object at which point none of the value of the object can be changed. There is however also t">
-<meta property="og:updated_time" content="2020-05-08T22:48:36.000Z">
+<meta property="og:description" content="In the Core javaScript Object there is the object freeze static method that can be used to freeze an object. Once an object is frozen none of the properties of the object can be changed. In addition t">
+<meta property="og:updated_time" content="2020-08-02T13:24:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The javaScript Object freeze method as well as seal and define property">
-<meta name="twitter:description" content="In the Core javaScript Object class there is the object freeze static method that can be used to freeze an object at which point none of the value of the object can be changed. There is however also t">
+<meta name="twitter:description" content="In the Core javaScript Object there is the object freeze static method that can be used to freeze an object. Once an object is frozen none of the properties of the object can be changed. In addition t">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -96,6 +96,10 @@ ga('send', 'pageview');
         
           <a class="main-nav-link" href="/archives">Archives</a>
         
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
           <a class="main-nav-link" href="/about">About</a>
         
       </nav>
@@ -121,10 +125,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2020/05/08/js-javascript-object-freeze-seal-and-define-property/" class="article-date"> Modified:
-  <time datetime="2020-05-08T22:48:36.000Z" itemprop="dateModified">2020-05-08</time>
+  <time datetime="2020-08-02T13:24:47.000Z" itemprop="dateModified">2020-08-02</time>
 </a>
 
-    <span class="article-date">V1.7</span>
+    <span class="article-date">V1.8</span>
 
     
   <div class="article-category">
@@ -147,7 +151,8 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>In the Core javaScript Object class there is the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze" target="_blank" rel="external">object freeze</a> static method that can be used to freeze an object at which point none of the value of the object can be changed. There is however also <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal" target="_blank" rel="external">the seal static method</a> that is also of interest that is a little different. The seal method does not freeze and object, however it does make it so no additional properties can be added to the object. There is set another static method that is relevant to this topic and that is the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" target="_blank" rel="external">define property</a> static method of the Object class. These three static methods allow for the creation of objects that have a strict set of conditions regarding the properties of an object.</p>
+        <p>In the Core <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" target="_blank" rel="external">javaScript Object</a> there is the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze" target="_blank" rel="external">object freeze</a> static method that can be used to freeze an object. Once an object is frozen none of the properties of the object can be changed. In addition to the Object freeze method there is also <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal" target="_blank" rel="external">the seal static method</a> that is also of interest that is a little different from object freeze. The seal method does not freeze an object, however it does make it so no additional properties can be added to the object once it is sealed. </p>
+<p>There is set another static method that is relevant to this topic and that is the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" target="_blank" rel="external">define property</a> static method of the the main javaScript Object. These three static methods allow for the creation of objects that have a strict set of conditions regarding the properties of an object when it comes to what can be added, changed, or show up in loops. So lets look at some examples mainly of the Object freeze method, but also some additional topics that might be related to this sort of thing.</p>
 <a id="more"></a>
 <h2 id="1-JavaScript-objects-and-the-const-keyword"><a href="#1-JavaScript-objects-and-the-const-keyword" class="headerlink" title="1 - JavaScript objects and the const keyword"></a>1 - JavaScript objects and the const keyword</h2><p>So the const keyword is used to define constant variable in javaScript. The constant values are indeed just that when it comes to primitive values, but if it is an object it just means that it can not be set to anything other than that object. The properties of an object that are defined with const can still be mutated.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> n = <span class="number">42</span>;</div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    n = <span class="number">40</span>;</div><div class="line">&#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">    <span class="built_in">console</span>.log(e.message);</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(n); <span class="comment">// 42</span></div><div class="line"> </div><div class="line"><span class="keyword">const</span> obj = &#123;</div><div class="line">    <span class="attr">n</span>: <span class="number">42</span></div><div class="line">&#125;;</div><div class="line">obj.n = <span class="number">40</span>;</div><div class="line"><span class="built_in">console</span>.log(obj.n);</div></pre></td></tr></table></figure>
@@ -164,7 +169,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2020/05/08/js-javascript-object-freeze-seal-and-define-property/" data-id="ckcwgnwnf00ww9wv1k6zkligo" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2020/05/08/js-javascript-object-freeze-seal-and-define-property/" data-id="ckdnrt00j00oiicv169hr8z5a" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2020/05/08/js-javascript-object-freeze-seal-and-define-property/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -257,7 +262,7 @@ s.setAttribute('data-timestamp', +new Date());
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
     </div>
   </div>
 
@@ -270,23 +275,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2020/07/21/js-window-inner-width-height/">Window innerWidth, innerHeight, centering and scaling elements</a>
+            <a href="/2020/08/08/canvas-example-percent-math-log/">Canvas example percent values and Math log</a>
           </li>
         
           <li>
-            <a href="/2020/07/20/canvas-example-object-pool/">A canvas example of an object pool</a>
+            <a href="/2020/08/03/vuejs-lifecycle-destroyed/">vue destroyed lifecycle hook</a>
           </li>
         
           <li>
-            <a href="/2020/07/14/js-to-string/">The js to string method in objects, and setting what the string value should be for an object</a>
+            <a href="/2020/08/01/lodash_isarraylike/">The lodash is array like method, and array like objects in general</a>
           </li>
         
           <li>
-            <a href="/2020/07/13/js-array-concat/">The array concat method and some other ways of adding two arrays together</a>
+            <a href="/2020/07/29/canvas-example-game-crosshairs/">Canvas example of a cross hairs game</a>
           </li>
         
           <li>
-            <a href="/2020/07/10/canvas-example-game-fixed-shooter-hybrid/">A canvas example game that is a fixed shooter hybrid</a>
+            <a href="/2020/07/28/vuejs-model/">The vuejs model directive</a>
           </li>
         
       </ul>
@@ -314,6 +319,10 @@ s.setAttribute('data-timestamp', +new Date());
     <a href="/" class="mobile-nav-link">Home</a>
   
     <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
   
     <a href="/about" class="mobile-nav-link">About</a>
   

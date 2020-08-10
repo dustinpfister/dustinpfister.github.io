@@ -11,16 +11,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2019/11/08/canvas-move/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="With canvas moving display objects is one of the first things I started to get up to speed with. However years later I am now aware of many different ways to go about moving a display object in a canv">
+  <meta name="description" content="With canvas moving display objects is one of the first things I started to get up to speed with by just moving by a fixed delta each frame tick. However years later I am now aware of many different wa">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Canvas move objects by Pixels per second">
 <meta property="og:url" content="https://dustinpfister.github.io/2019/11/08/canvas-move/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="With canvas moving display objects is one of the first things I started to get up to speed with. However years later I am now aware of many different ways to go about moving a display object in a canv">
-<meta property="og:updated_time" content="2020-04-15T16:56:51.000Z">
+<meta property="og:description" content="With canvas moving display objects is one of the first things I started to get up to speed with by just moving by a fixed delta each frame tick. However years later I am now aware of many different wa">
+<meta property="og:updated_time" content="2020-07-31T10:04:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Canvas move objects by Pixels per second">
-<meta name="twitter:description" content="With canvas moving display objects is one of the first things I started to get up to speed with. However years later I am now aware of many different ways to go about moving a display object in a canv">
+<meta name="twitter:description" content="With canvas moving display objects is one of the first things I started to get up to speed with by just moving by a fixed delta each frame tick. However years later I am now aware of many different wa">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -96,6 +96,10 @@ ga('send', 'pageview');
         
           <a class="main-nav-link" href="/archives">Archives</a>
         
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
           <a class="main-nav-link" href="/about">About</a>
         
       </nav>
@@ -121,10 +125,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2019/11/08/canvas-move/" class="article-date"> Modified:
-  <time datetime="2020-04-15T16:56:51.000Z" itemprop="dateModified">2020-04-15</time>
+  <time datetime="2020-07-31T10:04:59.000Z" itemprop="dateModified">2020-07-31</time>
 </a>
 
-    <span class="article-date">V1.17</span>
+    <span class="article-date">V1.2</span>
 
     
   <div class="article-category">
@@ -147,10 +151,10 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>With <a href="https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_Breakout_game_pure_JavaScript/Move_the_ball" target="_blank" rel="external">canvas moving display objects</a> is one of the first things I started to get up to speed with. However years later I am now aware of many different ways to go about moving a display object in a canvas project. Some of which to strike me as a better choice when going about handing movement of objects in a canvas project compared to just stepping by some kind of fixed deltas for x and y on each frame tick when I was first starting  out with canvas.</p>
-<p>In my earliest projects I would just step the position of an object by delta values on each frame tick, and maybe that is still not such a bad way of doing so with some simple projects that are maybe event driven. However now I know that it is better to go by a pixels per second value and multiply that by the amount of time that has elapsed sense the last update of a state when it comes to projects that need to move things in real time. </p>
+        <p>With <a href="https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_Breakout_game_pure_JavaScript/Move_the_ball" target="_blank" rel="external">canvas moving display objects</a> is one of the first things I started to get up to speed with by just moving by a fixed delta each frame tick. However years later I am now aware of many different ways to go about moving a display object in a <a href="/2020/07/22/canvas/">canvas project</a>, some of which strike me as a better choice when going about handing movement of objects in a canvas project. I now mostly see about moving objects by way of an amount of time that has passed sense the last tick by having a pixels per second value as a prototype value or as an own property for each display object in an object pool.</p>
+<p>The thing to keep in mind is that computers and browsers will differ a lot when it comes to how fast things will move when things are not tied to the system timer. Many old games where often tired to processor clock speed, and as computers got faster the games would speed up also along with them. So it would make sense to have it so that objects move in relationship to the flow of the system time rather than processor speed, and the many other factors at play when it comes to how fast a computer and a browser can get things done.</p>
 <p>In addition there are other ways of moving objects that center around a current index or frame value relative to a set number of max frames. This kind of way of moving display objects in canvas can be though of as a very functional way of going about moving objects. Methods can be authored where I pass a frame index, and max frame value, and what is returned is an animation state that will always be the same for the same values that are passed to the method. In other words an animation method that is in line with the rules of what is often called a pure function. This might be the kind of canvas movement I would follow if I am working out some kind of fixed frame by frame animation rather that moving a display object that might be skinned with such an animation.</p>
-<p>So In this post I will be touching base on each of these kinds of ways to pull off canvas movement with javaScript and html 5 canvas elements.</p>
+<p>So In this post I will be touching base on each of these kinds of ways to pull off canvas movement with javaScript and HTML 5 canvas elements.</p>
 <a id="more"></a>
 <h2 id="1-A-very-basic-Canvas-Movement-example"><a href="#1-A-very-basic-Canvas-Movement-example" class="headerlink" title="1 - A very basic Canvas Movement example"></a>1 - A very basic Canvas Movement example</h2><p>In this section I will be starting off with a very basic canvas movement example. If you have at least some experience with canvas chances are you might all ready be moving display object around this way. The reason why I say that is because in this section I will be starting out with the way to move a display object in canvas by just stepping by a fixed delta that is often just a number literal for each frame tick.</p>
 <p>So for the most part this section is here for the sake of just writing about the very basic starting point when it comes to canvas movement. If you are all ready familiar with this way of doing so you might want to skip over this section.</p>
@@ -172,7 +176,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2019/11/08/canvas-move/" data-id="ckcwgnvrb00i59wv1oouj6ljt" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2019/11/08/canvas-move/" data-id="ckdnrsz46009wicv1d23bql0a" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2019/11/08/canvas-move/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -265,7 +269,7 @@ s.setAttribute('data-timestamp', +new Date());
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
     </div>
   </div>
 
@@ -278,23 +282,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2020/07/21/js-window-inner-width-height/">Window innerWidth, innerHeight, centering and scaling elements</a>
+            <a href="/2020/08/08/canvas-example-percent-math-log/">Canvas example percent values and Math log</a>
           </li>
         
           <li>
-            <a href="/2020/07/20/canvas-example-object-pool/">A canvas example of an object pool</a>
+            <a href="/2020/08/03/vuejs-lifecycle-destroyed/">vue destroyed lifecycle hook</a>
           </li>
         
           <li>
-            <a href="/2020/07/14/js-to-string/">The js to string method in objects, and setting what the string value should be for an object</a>
+            <a href="/2020/08/01/lodash_isarraylike/">The lodash is array like method, and array like objects in general</a>
           </li>
         
           <li>
-            <a href="/2020/07/13/js-array-concat/">The array concat method and some other ways of adding two arrays together</a>
+            <a href="/2020/07/29/canvas-example-game-crosshairs/">Canvas example of a cross hairs game</a>
           </li>
         
           <li>
-            <a href="/2020/07/10/canvas-example-game-fixed-shooter-hybrid/">A canvas example game that is a fixed shooter hybrid</a>
+            <a href="/2020/07/28/vuejs-model/">The vuejs model directive</a>
           </li>
         
       </ul>
@@ -322,6 +326,10 @@ s.setAttribute('data-timestamp', +new Date());
     <a href="/" class="mobile-nav-link">Home</a>
   
     <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
   
     <a href="/about" class="mobile-nav-link">About</a>
   

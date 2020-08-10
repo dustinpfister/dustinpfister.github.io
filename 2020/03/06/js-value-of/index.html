@@ -11,16 +11,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2020/03/06/js-value-of/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="The js value of method is a way to define what the primitive value of an object is. There is a value of object prototype methods that will always be used by default when making an object part of an ex">
+  <meta name="description" content="The js valueOf Object prototype method is a way to define what the number primitive value of an object is. So because the valueOf method is part of the main Object prototype object there is a default">
 <meta property="og:type" content="article">
 <meta property="og:title" content="js value of object method">
 <meta property="og:url" content="https://dustinpfister.github.io/2020/03/06/js-value-of/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="The js value of method is a way to define what the primitive value of an object is. There is a value of object prototype methods that will always be used by default when making an object part of an ex">
-<meta property="og:updated_time" content="2020-03-07T15:54:36.000Z">
+<meta property="og:description" content="The js valueOf Object prototype method is a way to define what the number primitive value of an object is. So because the valueOf method is part of the main Object prototype object there is a default">
+<meta property="og:updated_time" content="2020-07-26T15:01:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="js value of object method">
-<meta name="twitter:description" content="The js value of method is a way to define what the primitive value of an object is. There is a value of object prototype methods that will always be used by default when making an object part of an ex">
+<meta name="twitter:description" content="The js valueOf Object prototype method is a way to define what the number primitive value of an object is. So because the valueOf method is part of the main Object prototype object there is a default">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -96,6 +96,10 @@ ga('send', 'pageview');
         
           <a class="main-nav-link" href="/archives">Archives</a>
         
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
           <a class="main-nav-link" href="/about">About</a>
         
       </nav>
@@ -121,10 +125,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2020/03/06/js-value-of/" class="article-date"> Modified:
-  <time datetime="2020-03-07T15:54:36.000Z" itemprop="dateModified">2020-03-07</time>
+  <time datetime="2020-07-26T15:01:35.000Z" itemprop="dateModified">2020-07-26</time>
 </a>
 
-    <span class="article-date">V1.11</span>
+    <span class="article-date">V1.15</span>
 
     
   <div class="article-category">
@@ -147,8 +151,9 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>The js <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/valueOf" target="_blank" rel="external">value of</a> method is a way to define what the primitive value of an object is. There is a value of object prototype methods that will always be used by default when making an object part of an expression that involves operators like addition. However it is possible to add a value of method for the prototype object of a Class, or just make it an own property of an object instance which will supersede the default value of method in the object prototype.</p>
-<p>Typically I would want a value of method to return a number or string value, however it should return whatever is appreciate when using an an object in an expression that will be used to compute a product.</p>
+        <p>The js <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/valueOf" target="_blank" rel="external">valueOf</a> Object prototype method is a way to define what the number primitive value of an object is. So because the valueOf method is part of the main Object prototype object there is a default valueOf method that will be used for all objects when there is a need for javaScript to convert an object to a number value. However it is often required, or at least a good idea, to define a custom valueOf method for an Object or Class of Objects.</p>
+<p>When making my own valueOf method then method should return a number value rather than a string value. A string value would be more appropriate when it comes to making a custom toString method for an Object or class of Objects when making a prototype object. With that said yes the toString method is the String equivalent of the valueOf method that should return a number value. The two methods can, and should be used as the standard way of returning string and number values of an object. </p>
+<p>In this post the focus will be more so on the vlaueOf method, and how this can come into play and be useful when making certain modules and frameworks.</p>
 <a id="more"></a>
 <h2 id="1-js-value-of-basic-example"><a href="#1-js-value-of-basic-example" class="headerlink" title="1 - js value of basic example"></a>1 - js value of basic example</h2><p>So to get a basic idea of what the value of method is all about here is a very basic example of the value of method in action. I have just a simple object literal with two number values, and a value of method that returns another number value that makes use of those properties. I then assign this object literal to a variable named obj which I then use in an expression to get a number value that i then assign to the variable n.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">    <span class="attr">exp</span>: <span class="number">4</span>,</div><div class="line">    <span class="attr">base</span>: <span class="number">2</span>,</div><div class="line">    <span class="attr">valueOf</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="built_in">Math</span>.pow(<span class="keyword">this</span>.base, <span class="keyword">this</span>.exp);</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> n = obj + <span class="number">5</span>;</div><div class="line"><span class="built_in">console</span>.log(n); <span class="comment">// 21</span></div></pre></td></tr></table></figure>
@@ -161,10 +166,13 @@ ga('send', 'pageview');
 <p>Not a full game by itself of course, but you get the basic idea. There would be additional logic that would be used to set what the tax and upkeep values are along with rent. Much more logic would need to be written to make some kind of interface. However this is all ready starting to be kind of fun. Lets look at some other use case examples of the js value of method.</p>
 <h2 id="4-Notation-example-of-value-of"><a href="#4-Notation-example-of-value-of" class="headerlink" title="4 - Notation example of value of"></a>4 - Notation example of value of</h2><p>Another example that comes to mind would involve scientific notation. The process of Scientific notation is to have a mantissa value that is then raised by to to the power of an order of magnitude to get an actual number value. So an Object could be used to store these values and the js value of method could be used as a way to produce a primitive value in expressions as long as it is a value that is below max safe integer at least.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Note = <span class="function"><span class="keyword">function</span> (<span class="params">m, n</span>) </span>&#123;</div><div class="line">   <span class="keyword">this</span>.mantissa = m;</div><div class="line">   <span class="keyword">this</span>.orderOfMagnitude  = n;</div><div class="line">&#125;;</div><div class="line">Note.prototype.valueOf = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.mantissa * <span class="built_in">Math</span>.pow(<span class="number">10</span>, <span class="keyword">this</span>.orderOfMagnitude);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> n = <span class="keyword">new</span> Note(<span class="number">1.57</span>, <span class="number">10</span>);</div><div class="line"><span class="built_in">console</span>.log(n + <span class="number">1</span>); <span class="comment">// 15700000001</span></div></pre></td></tr></table></figure>
+<h2 id="5-Conclusion"><a href="#5-Conclusion" class="headerlink" title="5 - Conclusion"></a>5 - Conclusion</h2><p>So the valueOf method can be used to define what a number value of an object should be. It can be called directly off of an object, however it is often not needed. More often then not it is a way to define number values with object properties that should be used in math expressions that will evaluate to a number rather than a string.</p>
+<p>The <a href="https://blog.klipse.tech/javascript/2016/09/21/valueOf-js.html" target="_blank" rel="external">valueOf method might come up when it comes to getting into the details of functional programing</a> the reason why is because when making what you might think is a pure function might not be when it comes to arrays containing objects that can have there valueOf methods mutated. However getting into pure functions might be a matter for another post.</p>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2020/03/06/js-value-of/" data-id="ckcwgnwxf01129wv1v8gfkj75" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2020/03/06/js-value-of/" data-id="ckdnrt0bt00taicv12oqhpvnb" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2020/03/06/js-value-of/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -257,7 +265,7 @@ s.setAttribute('data-timestamp', +new Date());
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
     </div>
   </div>
 
@@ -270,23 +278,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2020/07/21/js-window-inner-width-height/">Window innerWidth, innerHeight, centering and scaling elements</a>
+            <a href="/2020/08/08/canvas-example-percent-math-log/">Canvas example percent values and Math log</a>
           </li>
         
           <li>
-            <a href="/2020/07/20/canvas-example-object-pool/">A canvas example of an object pool</a>
+            <a href="/2020/08/03/vuejs-lifecycle-destroyed/">vue destroyed lifecycle hook</a>
           </li>
         
           <li>
-            <a href="/2020/07/14/js-to-string/">The js to string method in objects, and setting what the string value should be for an object</a>
+            <a href="/2020/08/01/lodash_isarraylike/">The lodash is array like method, and array like objects in general</a>
           </li>
         
           <li>
-            <a href="/2020/07/13/js-array-concat/">The array concat method and some other ways of adding two arrays together</a>
+            <a href="/2020/07/29/canvas-example-game-crosshairs/">Canvas example of a cross hairs game</a>
           </li>
         
           <li>
-            <a href="/2020/07/10/canvas-example-game-fixed-shooter-hybrid/">A canvas example game that is a fixed shooter hybrid</a>
+            <a href="/2020/07/28/vuejs-model/">The vuejs model directive</a>
           </li>
         
       </ul>
@@ -314,6 +322,10 @@ s.setAttribute('data-timestamp', +new Date());
     <a href="/" class="mobile-nav-link">Home</a>
   
     <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
   
     <a href="/about" class="mobile-nav-link">About</a>
   
