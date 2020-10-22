@@ -11,16 +11,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2017/05/18/api-fixer-progressive-enhancement/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="A few months back I wrote a post on the fixer api, and how it is a great free solution for grabbing up to date currency exchange rates. When I wrote the post I was still somewhat new to using hexo,">
+  <meta name="description" content="A few months back I wrote a post on the fixer api, and how it is a great free solution for grabbing up to date currency exchange rates. When I wrote the post I was still somewhat new to using hexo, an">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Progressive enhancement of static site structurer, with Hexo, and the Fixer.io JSON API">
 <meta property="og:url" content="https://dustinpfister.github.io/2017/05/18/api-fixer-progressive-enhancement/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="A few months back I wrote a post on the fixer api, and how it is a great free solution for grabbing up to date currency exchange rates. When I wrote the post I was still somewhat new to using hexo,">
-<meta property="og:updated_time" content="2017-09-30T22:37:19.000Z">
+<meta property="og:description" content="A few months back I wrote a post on the fixer api, and how it is a great free solution for grabbing up to date currency exchange rates. When I wrote the post I was still somewhat new to using hexo, an">
+<meta property="og:updated_time" content="2020-10-11T17:45:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Progressive enhancement of static site structurer, with Hexo, and the Fixer.io JSON API">
-<meta name="twitter:description" content="A few months back I wrote a post on the fixer api, and how it is a great free solution for grabbing up to date currency exchange rates. When I wrote the post I was still somewhat new to using hexo,">
+<meta name="twitter:description" content="A few months back I wrote a post on the fixer api, and how it is a great free solution for grabbing up to date currency exchange rates. When I wrote the post I was still somewhat new to using hexo, an">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -125,10 +125,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/05/18/api-fixer-progressive-enhancement/" class="article-date"> Modified:
-  <time datetime="2017-09-30T22:37:19.000Z" itemprop="dateModified">2017-09-30</time>
+  <time datetime="2020-10-11T17:45:25.000Z" itemprop="dateModified">2020-10-11</time>
 </a>
 
-    <span class="article-date">V1.5</span>
+    <span class="article-date">V1.7</span>
 
     
   <div class="article-category">
@@ -151,145 +151,26 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        
-<meta itemprop="keywords" content="fixer.io,api&#32;fixer,jsonp,hexo,progressive,enhancement">
-
-<p>A few months back I <a href="/2017/02/09/api-fixer/">wrote a post on the fixer api</a>, and how it is a great free solution for grabbing up to date currency exchange rates. When I wrote the post I was still somewhat new to using hexo, and how to properly handle things when it comes to progressive enhancement of my simple static website.</p>
+        <p>A few months back I <a href="/2017/02/09/api-fixer/">wrote a post on the fixer api</a>, and how it is a great free solution for grabbing up to date currency exchange rates. When I wrote the post I was still somewhat new to using hexo, and how to properly handle things when it comes to progressive enhancement of my simple static website.</p>
 <a id="more"></a>
-<h1 id="The-situation"><a href="#The-situation" class="headerlink" title="The situation"></a>The situation</h1><p>Say you have this situation in which you have a static web page, that has content that is augmented with data that is gained via an API call to some kind of micro service hosted at another domain ( such as <a href="http://fixer.io" target="_blank" rel="external">fixer.io</a> ). You want to have it so that if the call to the service fails, for whatever reason, an out of date, but still useful static alternative of the content is still presented. This results in a nice, robust solution, that will always present something of value, even in the event of failure.</p>
-<h2 id="Hard-Code-State"><a href="#Hard-Code-State" class="headerlink" title="Hard Code State"></a>Hard Code State</h2><p>This is a situation in which an API call has failed, and to make matters even worse JavaScript has failed to execute as well, so any value that exists as a javaScript value in a variable is not being displayed as well, as the necessary DOM manipulation has not taken place. </p>
+<h2 id="1-The-situation"><a href="#1-The-situation" class="headerlink" title="1 - The situation"></a>1 - The situation</h2><p>Say you have this situation in which you have a static web page, that has content that is augmented with data that is gained via an API call to some kind of micro service hosted at another domain ( such as <a href="http://fixer.io" target="_blank" rel="external">fixer.io</a> ). You want to have it so that if the call to the service fails, for whatever reason, an out of date, but still useful static alternative of the content is still presented. This results in a nice, robust solution, that will always present something of value, even in the event of failure.</p>
+<h2 id="2-Hard-Code-State"><a href="#2-Hard-Code-State" class="headerlink" title="2 - Hard Code State"></a>2 - Hard Code State</h2><p>This is a situation in which an API call has failed, and to make matters even worse JavaScript has failed to execute as well, so any value that exists as a javaScript value in a variable is not being displayed as well, as the necessary DOM manipulation has not taken place. </p>
 <p>This may happen because the visitor has JavaScript disabled, or for whatever reason my code broke when it ran client side. As such only what is “hard coded” in the HTML itself is what will be displayed to the visitor. This is a kind of worst case scenario fail safe of sorts, that helps to give me peace of mind in the event that everything goes wrong. Yes the data may be out of date, but at least the visitor sees something.</p>
-<h2 id="Warn-state"><a href="#Warn-state" class="headerlink" title="Warn state"></a>Warn state</h2><p>This is a situation in which javaScript executed, but something went wrong with the request to fixer. As such javaScript is working, but up to date data has not been retrieved. As such the same out of date data is being used as a fall back still.</p>
-<h2 id="Success-state"><a href="#Success-state" class="headerlink" title="Success state"></a>Success state</h2><p>This is a state in which my javaScipt program has succeed in retrieving up to date data from fixer.io. All is well in this case, and the only thing to care about at this point is if the program should still check in every once in a while for newer data. Considering that the values at fixer are only updated once a day, and the average visitor to my site spends no more than six minutes at a page, I would not say that is necessary, but in other projects like this it may be important.</p>
-<h2 id="The-static-HTML"><a href="#The-static-HTML" class="headerlink" title="The static HTML"></a>The static HTML</h2><p>So The static html that will go inti the post will end up looking something like this:</p>
+<h2 id="3-Warn-state"><a href="#3-Warn-state" class="headerlink" title="3 - Warn state"></a>3 - Warn state</h2><p>This is a situation in which javaScript executed, but something went wrong with the request to fixer. As such javaScript is working, but up to date data has not been retrieved. As such the same out of date data is being used as a fall back still.</p>
+<h2 id="4-Success-state"><a href="#4-Success-state" class="headerlink" title="4 - Success state"></a>4 - Success state</h2><p>This is a state in which my javaScipt program has succeed in retrieving up to date data from fixer.io. All is well in this case, and the only thing to care about at this point is if the program should still check in every once in a while for newer data. Considering that the values at fixer are only updated once a day, and the average visitor to my site spends no more than six minutes at a page, I would not say that is necessary, but in other projects like this it may be important.</p>
+<h2 id="5-The-static-HTML"><a href="#5-The-static-HTML" class="headerlink" title="5 - The static HTML"></a>5 - The static HTML</h2><p>So The static html that will go inti the post will end up looking something like this:</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"augmented-content"</span>&gt;</span></div><div class="line"> </div><div class="line">  <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Dollars to Rupees<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div><div class="line"> </div><div class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>status: <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">"fixer-status"</span> <span class="attr">class</span>=<span class="string">"fail-text"</span>&gt;</span>hard code<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>date: <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">"fixer-date"</span>&gt;</span>2017-05-17<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>rate: <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">"fixer-rate"</span>&gt;</span>64.101<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"> </div><div class="line">  <span class="tag">&lt;<span class="name">table</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">tr</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">td</span>&gt;</span>Dollars<span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">td</span>&gt;</span>Rupees<span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">tr</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">td</span>&gt;</span>1000<span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">td</span> <span class="attr">id</span>=<span class="string">"fixer-amount"</span>&gt;</span>64,101<span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">table</span>&gt;</span></div><div class="line"> </div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
 <p>The data that goes into this HTML can be updated manually, or I could have a automation script of some kind that does it. In any case it should inform the visitor of how dated that data may be.</p>
-<h2 id="The-javaScript-app"><a href="#The-javaScript-app" class="headerlink" title="The javaScript app"></a>The javaScript app</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> amount = <span class="number">1000</span>,</div><div class="line">      status = <span class="string">'warn'</span>,</div><div class="line"> </div><div class="line">      <span class="comment">// js hard coded data</span></div><div class="line">      data = &#123;</div><div class="line"> </div><div class="line">        <span class="attr">base</span>: <span class="string">'USD'</span>,</div><div class="line">        <span class="attr">date</span>: <span class="string">'2017-05-17'</span>,</div><div class="line">        <span class="attr">rates</span>: &#123;</div><div class="line"> </div><div class="line">          <span class="attr">INR</span>: <span class="number">64.101</span></div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">      &#125;,</div><div class="line"> </div><div class="line">      get = <span class="function"><span class="keyword">function</span>(<span class="params">id</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> <span class="built_in">document</span>.getElementById(id);</div><div class="line"> </div><div class="line">      &#125;,</div><div class="line"> </div><div class="line">      <span class="comment">// augment the old static content, with current data</span></div><div class="line">      augmentTable = <span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> statEl = get(<span class="string">'fixer-status'</span>);</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (status === <span class="string">'success'</span>) &#123;</div><div class="line"> </div><div class="line">          statEl.innerHTML = <span class="string">'success'</span>;</div><div class="line">          statEl.className = <span class="string">'success-text'</span>;</div><div class="line"> </div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">          statEl.innerHTML = <span class="string">'warn'</span>;</div><div class="line">          statEl.className = <span class="string">'warn-text'</span>;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        get(<span class="string">'fixer-amount'</span>).innerHTML = amount * data.rates.INR;</div><div class="line">        get(<span class="string">'fixer-date'</span>).innerHTML = data.date;</div><div class="line">        get(<span class="string">'fixer-rate'</span>).innerHTML = data.rates.INR;</div><div class="line"> </div><div class="line">      &#125;,</div><div class="line"> </div><div class="line">      <span class="comment">// making a request for a more up to date rate</span></div><div class="line">      updateTable = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> req = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line"> </div><div class="line">        req.open(<span class="string">'GET'</span>, <span class="string">'https://api.fixer.io/latest?base=USD'</span>);</div><div class="line"> </div><div class="line">        req.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">          <span class="keyword">if</span> (<span class="keyword">this</span>.readyState === <span class="number">4</span> &amp;&amp; <span class="keyword">this</span>.status === <span class="number">200</span>) &#123;</div><div class="line"> </div><div class="line">            data = <span class="built_in">JSON</span>.parse(<span class="keyword">this</span>.response);</div><div class="line">            status = <span class="string">'success'</span>;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(data);</div><div class="line"> </div><div class="line">            augmentTable();</div><div class="line"> </div><div class="line">          &#125;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        req.send();</div><div class="line"> </div><div class="line">      &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// agument with what we have</span></div><div class="line">    augmentTable();</div><div class="line"> </div><div class="line">    updateTable();</div><div class="line"> </div><div class="line">  &#125;</div><div class="line">  ());</div></pre></td></tr></table></figure>
+<h2 id="6-The-javaScript-app"><a href="#6-The-javaScript-app" class="headerlink" title="6 - The javaScript app"></a>6 - The javaScript app</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> amount = <span class="number">1000</span>,</div><div class="line">      status = <span class="string">'warn'</span>,</div><div class="line"> </div><div class="line">      <span class="comment">// js hard coded data</span></div><div class="line">      data = &#123;</div><div class="line"> </div><div class="line">        <span class="attr">base</span>: <span class="string">'USD'</span>,</div><div class="line">        <span class="attr">date</span>: <span class="string">'2017-05-17'</span>,</div><div class="line">        <span class="attr">rates</span>: &#123;</div><div class="line"> </div><div class="line">          <span class="attr">INR</span>: <span class="number">64.101</span></div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">      &#125;,</div><div class="line"> </div><div class="line">      get = <span class="function"><span class="keyword">function</span>(<span class="params">id</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> <span class="built_in">document</span>.getElementById(id);</div><div class="line"> </div><div class="line">      &#125;,</div><div class="line"> </div><div class="line">      <span class="comment">// augment the old static content, with current data</span></div><div class="line">      augmentTable = <span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> statEl = get(<span class="string">'fixer-status'</span>);</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (status === <span class="string">'success'</span>) &#123;</div><div class="line"> </div><div class="line">          statEl.innerHTML = <span class="string">'success'</span>;</div><div class="line">          statEl.className = <span class="string">'success-text'</span>;</div><div class="line"> </div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">          statEl.innerHTML = <span class="string">'warn'</span>;</div><div class="line">          statEl.className = <span class="string">'warn-text'</span>;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        get(<span class="string">'fixer-amount'</span>).innerHTML = amount * data.rates.INR;</div><div class="line">        get(<span class="string">'fixer-date'</span>).innerHTML = data.date;</div><div class="line">        get(<span class="string">'fixer-rate'</span>).innerHTML = data.rates.INR;</div><div class="line"> </div><div class="line">      &#125;,</div><div class="line"> </div><div class="line">      <span class="comment">// making a request for a more up to date rate</span></div><div class="line">      updateTable = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> req = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line"> </div><div class="line">        req.open(<span class="string">'GET'</span>, <span class="string">'https://api.fixer.io/latest?base=USD'</span>);</div><div class="line"> </div><div class="line">        req.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">          <span class="keyword">if</span> (<span class="keyword">this</span>.readyState === <span class="number">4</span> &amp;&amp; <span class="keyword">this</span>.status === <span class="number">200</span>) &#123;</div><div class="line"> </div><div class="line">            data = <span class="built_in">JSON</span>.parse(<span class="keyword">this</span>.response);</div><div class="line">            status = <span class="string">'success'</span>;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(data);</div><div class="line"> </div><div class="line">            augmentTable();</div><div class="line"> </div><div class="line">          &#125;</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        req.send();</div><div class="line"> </div><div class="line">      &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// agument with what we have</span></div><div class="line">    augmentTable();</div><div class="line"> </div><div class="line">    updateTable();</div><div class="line"> </div><div class="line">  &#125;</div><div class="line">  ());</div></pre></td></tr></table></figure>
 <p>So there is always a better way of doing it, but hopefully you get the idea in mind here. You have the hard coded HTML only level content that is what is always displayed, then you have a state in which javaScript is working but for whatever the reason it was unable to gain more up to date data from fixer.io. Then if all goes well in which the code does not break, and a response is gained, you have a final success state in which the static content is updated. This is an example of progressive enhancement working the way that it should, where there is always a fall back of sorts, that can potentially get enhanced with javaScript.</p>
-<h2 id="Updating-the-hard-coded-content-of-the-project-manually"><a href="#Updating-the-hard-coded-content-of-the-project-manually" class="headerlink" title="Updating the hard coded content of the project manually"></a>Updating the hard coded content of the project manually</h2><p>One way to go about doing it, is to just manually copy and paste what I have worked out into the markdown of this post. The markdown parser will of course just copy over any, and all HTML markup over into the finished index.html for this post when I generate the site.</p>
-<h2 id="Updating-the-hard-coded-content-with-the-use-of-a-tag"><a href="#Updating-the-hard-coded-content-with-the-use-of-a-tag" class="headerlink" title="Updating the hard coded content with the use of a tag."></a>Updating the hard coded content with the use of a tag.</h2><p>Another idea would be to <a href="/2017/02/04/hexo-tags/">write a tag</a> that will generate up to date markup each time the site is built. I have <a href="/2017/05/19/hexo-tags-http-requests/">wrote a post</a> on how to make a hexo tag that grabs data from an JSON API like fixer.io, in fact I use that as the example there as well. This can get annoying as sometimes I may not want it to happen each time, in addition it will generated HTML content, but not update the markdown file source itself.</p>
-<h2 id="The-app-in-action"><a href="#The-app-in-action" class="headerlink" title="The app in action"></a>The app in action</h2><p>So here it is, you should see something at least.</p>
-<!-- can i put css here? It looks like I can at least. -->
-<style>
-.augmented-content {
-  background: #afafaf;
-  padding: 5px;
-}
-
-.augmented-content > table {
-  width: 80%;
-  background: #cfcfcf;
-}
-
-.fail-text {
-  color: red;
-}
-
-.warn-text {
-  color: orange;
-}
-
-.success-text {
-  color: green;
-}
-
-</style>
-
-<!-- The good, old, reliable HTML -->
-<div class="augmented-content"><h1>Dollars to Rupees</h1><p>status: <span id="fixer-status" class="fail-text">hard code</span></p><p>date: <span id="fixer-date">2017-05-16</span></p><p>rate: <span id="fixer-rate">64.101</span></p><table><tr><td>Dollars</td><td>Rupess</td></tr><tr><td>1000</td><td id="fixer-amount">64,101</td></tr></table></div>
-
-<!-- hold onto your buts -->
-<script>
-(function() {
-
-    var amount = 1000,
-      status = 'warn',
-
-      // js hard coded data
-      data = {
-
-        base: 'USD',
-        date: '2017-05-17',
-        rates: {
-
-          INR: 64.101
-
-        }
-
-      },
-
-      get = function(id) {
-
-        return document.getElementById(id);
-
-      },
-
-      // augment the old static content, with current data
-      augmentTable = function(res) {
-
-        var statEl = get('fixer-status');
-
-        if (status === 'success') {
-
-
-          statEl.innerHTML = 'success';
-          statEl.className = 'success-text';
-
-        } else {
-
-          statEl.innerHTML = 'warn';
-          statEl.className = 'warn-text';
-
-        }
-
-        get('fixer-amount').innerHTML = amount * data.rates.INR;
-        get('fixer-date').innerHTML = data.date;
-        get('fixer-rate').innerHTML = data.rates.INR;
-
-      },
-
-      // making a request for a more up to date rate
-      updateTable = function() {
-
-        var req = new XMLHttpRequest();
-
-        req.open('GET', 'https://api.fixer.io/latest?base=USD');
-
-        req.onreadystatechange = function() {
-
-          if (this.readyState === 4 && this.status === 200) {
-
-            data = JSON.parse(this.response);
-            status = 'success';
-
-            console.log(data);
-
-            augmentTable();
-
-          }
-
-        }
-
-        req.send();
-
-      };
-
-    // agument with what we have
-    augmentTable();
-
-    updateTable();
-
-  }
-  ());
-
-</script>
-
-<h2 id="conclusion"><a href="#conclusion" class="headerlink" title="conclusion"></a>conclusion</h2><p>Be sure to check out my other posts on <a href="/categories/hexo/">hexo</a>, and <a href="/categories/api/">api’s</a>.</p>
+<h2 id="7-Updating-the-hard-coded-content-of-the-project-manually"><a href="#7-Updating-the-hard-coded-content-of-the-project-manually" class="headerlink" title="7 - Updating the hard coded content of the project manually"></a>7 - Updating the hard coded content of the project manually</h2><p>One way to go about doing it, is to just manually copy and paste what I have worked out into the markdown of this post. The markdown parser will of course just copy over any, and all HTML markup over into the finished index.html for this post when I generate the site.</p>
+<h2 id="8-Updating-the-hard-coded-content-with-the-use-of-a-tag"><a href="#8-Updating-the-hard-coded-content-with-the-use-of-a-tag" class="headerlink" title="8 - Updating the hard coded content with the use of a tag."></a>8 - Updating the hard coded content with the use of a tag.</h2><p>Another idea would be to <a href="/2017/02/04/hexo-tags/">write a tag</a> that will generate up to date markup each time the site is built. I have <a href="/2017/05/19/hexo-tags-http-requests/">wrote a post</a> on how to make a hexo tag that grabs data from an JSON API like fixer.io, in fact I use that as the example there as well. This can get annoying as sometimes I may not want it to happen each time, in addition it will generated HTML content, but not update the markdown file source itself.</p>
+<h2 id="9-conclusion"><a href="#9-conclusion" class="headerlink" title="9 - conclusion"></a>9 - conclusion</h2><p>Be sure to check out my other posts on <a href="/categories/hexo/">hexo</a>, and <a href="/categories/api/">apis</a>.</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2017/05/18/api-fixer-progressive-enhancement/" data-id="ckfvh8upn000l9kv1tzg7gmzn" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2017/05/18/api-fixer-progressive-enhancement/" data-id="ckglap11d00ah88v12zei25bj" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2017/05/18/api-fixer-progressive-enhancement/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -373,7 +254,7 @@ s.setAttribute('data-timestamp', +new Date());
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/JSON/" style="font-size: 12.63px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.53px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.68px;">angular</a> <a href="/tags/animation/" style="font-size: 12.11px;">animation</a> <a href="/tags/automation/" style="font-size: 12.11px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.63px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.74px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.95px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.16px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.05px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.58px;">ejs</a> <a href="/tags/express/" style="font-size: 16.84px;">express</a> <a href="/tags/games/" style="font-size: 17.37px;">games</a> <a href="/tags/git/" style="font-size: 12.63px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.26px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.68px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.21px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.53px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.58px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 15.26px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.42px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.21px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.47px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.89px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.63px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.32px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.79px;">vuejs</a>
+      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.5px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.5px;">angular</a> <a href="/tags/animation/" style="font-size: 12px;">animation</a> <a href="/tags/automation/" style="font-size: 12px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.5px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.5px;">blog</a> <a href="/tags/canvas/" style="font-size: 19px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.5px;">ejs</a> <a href="/tags/express/" style="font-size: 17px;">express</a> <a href="/tags/games/" style="font-size: 17.5px;">games</a> <a href="/tags/git/" style="font-size: 12.5px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.5px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.5px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.5px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 15.5px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.5px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.5px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.5px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.5px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16px;">vuejs</a>
     </div>
   </div>
 
@@ -395,23 +276,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2020/10/03/js-array-filter/">The JS Array filter method</a>
+            <a href="/2020/10/22/nodejs-example-word-count-history/">Word Count History nodejs example</a>
           </li>
         
           <li>
-            <a href="/2020/10/02/linux-redirection/">Linux redirection of standard output to a file</a>
+            <a href="/2020/10/21/nodejs-child-process-exec/">The node exec child process method</a>
           </li>
         
           <li>
-            <a href="/2020/10/01/lodash_constant/">lodash constant and functions that return values</a>
+            <a href="/2020/10/20/linux-aspell/">Linux aspell for spellcheck on the command line</a>
           </li>
         
           <li>
-            <a href="/2020/09/26/linux-xargs/">Creating arguments from standard input with the Linux xargs command</a>
+            <a href="/2020/10/17/js-onvisibilitychange/">On visibility change event</a>
           </li>
         
           <li>
-            <a href="/2020/09/25/linux-curl/">Linux find command</a>
+            <a href="/2020/10/14/linux-ls/">Linux ls command and listing contents of folders</a>
           </li>
         
       </ul>
