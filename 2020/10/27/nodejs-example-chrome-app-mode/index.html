@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Chrome app mode to create a window for a nodejs project | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2020/10/27/nodejs-example-chrome-app-mode/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="For this nodejs example I will be using the child process module to launch a new instance of chrome that will be started in app mode. This will result in a chrome window being opened, but it will not">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Chrome app mode to create a window for a nodejs project">
+<meta property="og:url" content="https://dustinpfister.github.io/2020/10/27/nodejs-example-chrome-app-mode/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="For this nodejs example I will be using the child process module to launch a new instance of chrome that will be started in app mode. This will result in a chrome window being opened, but it will not">
+<meta property="og:updated_time" content="2020-10-27T20:51:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chrome app mode to create a window for a nodejs project">
+<meta name="twitter:description" content="For this nodejs example I will be using the child process module to launch a new instance of chrome that will be started in app mode. This will result in a chrome window being opened, but it will not">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-example-chrome-app-mode" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/10/27/nodejs-example-chrome-app-mode/" class="article-date"> Published:
+  <time datetime="2020-10-27T16:21:00.000Z" itemprop="datePublished">2020-10-27</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2020/10/27/nodejs-example-chrome-app-mode/" class="article-date"> Modified:
+  <time datetime="2020-10-27T20:51:08.000Z" itemprop="dateModified">2020-10-27</time>
+</a>
+
+    <span class="article-date">V1.16</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Chrome app mode to create a window for a nodejs project
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>For this <a href="https://nodejs.org/api/synopsis.html" target="_blank" rel="external">nodejs example</a> I will be using the child process module to launch a new instance of chrome that will be <a href="https://superuser.com/a/1421401" target="_blank" rel="external">started in app mode</a>. This will result in a chrome window being opened, but it will not have a navigation bar, or any of the other features of a web browser. It will just be a window with a single page opened up in it.</p>
+<p>This example will be kept fairly simple and sever as a possible starting point for other projects that might actually do something. This example when up and running will just result in a browser window starting in app mode, and once that browser window is close the <a href="/2020/06/02/js-onunload/">window onload event</a> will fire sending a post request back to the server that started it causes the process to exit. Nothing much, but I just wanted to get together a basic starting point for this kind of nodejs application, and with that said I guess that is what this is.</p>
+<a id="more"></a>
+<h2 id="1-setup-of-this-nodejs-chrome-app-mode-example"><a href="#1-setup-of-this-nodejs-chrome-app-mode-example" class="headerlink" title="1 - setup of this nodejs chrome app mode example"></a>1 - setup of this nodejs chrome app mode example</h2><p>There are two general ways of getting started with this node example. One would be to just clone it down, install the packages that it uses, and then just run the index.js file with node. This would be the best way to go about just getting up and ruining with this, and start hacking over the code to make it into an actually project of some kind. The other way would be to create a new node project from scratch, and copy and past the files in making edits as you go.</p>
+<h3 id="1-1-Just-clone-it-down-and-run-it"><a href="#1-1-Just-clone-it-down-and-run-it" class="headerlink" title="1.1 - Just clone it down and run it"></a>1.1 - Just clone it down and run it</h3><p>To get this up and running right away with this, just <a href="https://github.com/dustinpfister/nodejs-example-chrome-app-mode/tree/0.0.0" target="_blank" rel="external">clone down the repo on my github</a>, and do an npm install to get the node modules for the example installed. Once that is all set and down then the main index.html file is what will need to be started in order to get the example up and running.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ git clone --depth 1 https://github.com/dustinpfister/nodejs-example-chrome-app-mode/tree/0.0.0</div><div class="line">$ cd nodejs-example-chrome-app-mode</div><div class="line">$ npm install</div><div class="line">$ nohup node index 8080 &amp;</div></pre></td></tr></table></figure>
+<h3 id="1-2-reproduce-from-scratch"><a href="#1-2-reproduce-from-scratch" class="headerlink" title="1.2 - reproduce from scratch"></a>1.2 - reproduce from scratch</h3><p>The other alternative is to start a new nodejs project from the ground up, and just start to copy things over. This just might only be a good idea if you do not yet know how to go about making a new node project from the beginning.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ mkdir node-example-chrome-app-mode</div><div class="line">$ cd node-example-chrome-app-mode</div><div class="line">$ npm init</div><div class="line">$ npm install express --save</div><div class="line">$ npm install ejs --save</div><div class="line">$ mkdir views</div><div class="line">$ mkdir public</div><div class="line">$ cd public</div><div class="line">$ mkdir js</div></pre></td></tr></table></figure>
+<p>In any case this example is just a starting point for this kind of nodejs project. When things are up and running you will just get a browser window pop up. Once you close the browser window the nodejs process will be closed also. The only thing about this that is of interest really is that the browser window will be started in app mode.</p>
+<h2 id="2-The-main-index-js-file"><a href="#2-The-main-index-js-file" class="headerlink" title="2 - The main index.js file"></a>2 - The main index.js file</h2><p>In this section I will be going over the main index.js file in detail. The main thing of interest here is that I am using express to set up a basic server that will respond to get and post requests. Once the sever is up and running the script will also use the child process module in nodejs to start chromium in app mode making the url to the root path of the server the single page that will open in the browser window.</p>
+<p>So at the very top off the file I am using the <a href="https://dustinpfister.github.io/2017/03/26/linux_shebang/">nodejs shebang</a> to make this index file executable. I often just run the script by calling node and then passing the name of this script, however this allows for me to just run the script directly in a Linux system. Simply put the shebang is to just simply let bash know what binary it needs to use in order to run this script which is of course nodejs.</p>
+<p>I am the requiring in the <a href="/2020/10/21/nodejs-child-process-exec">node exec method</a> that will be used to call chrome. This will be used later in the index.js file once the sever is started up using express. Speaking of express in this example I am making use of the <a href="/2018/05/25/express-rendering-with-ejs/">ejs rendering engine for creating a view sever side in express</a>, I am using <a href="/2018/05/24/express-static/">express static</a> to sever up a static path for front end javaScript files, and I am also using the <a href="/2018/05/27/express-body-parser/">body parser</a> to help with incoming post requests.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env node</span></div><div class="line"><span class="comment">// using exec</span></div><div class="line"><span class="keyword">let</span> exec = <span class="built_in">require</span>(<span class="string">'child_process'</span>).exec,</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"><span class="comment">// getting a post and appURL string</span></div><div class="line"><span class="keyword">let</span> port = process.argv[<span class="number">2</span>] || <span class="number">8000</span>,</div><div class="line">appURL = <span class="string">'http://localhost:'</span> + port;</div><div class="line"><span class="comment">// start express app</span></div><div class="line"><span class="keyword">let</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>),</div><div class="line">app = express();</div><div class="line"><span class="comment">// view engine setup</span></div><div class="line">app.set(<span class="string">'views'</span>, path.join(__dirname, <span class="string">'views'</span>));</div><div class="line">app.set(<span class="string">'view engine'</span>, <span class="string">'ejs'</span>);</div><div class="line"><span class="comment">// public js folder</span></div><div class="line">app.use(<span class="string">'/js'</span>, express.static(<span class="string">'public/js'</span>));</div><div class="line"><span class="comment">// root / GET requests</span></div><div class="line">app.get(<span class="string">'/'</span>, (req, res) =&gt; &#123;</div><div class="line">    res.render(<span class="string">'index'</span>,&#123;&#125;);</div><div class="line">&#125;);</div><div class="line"><span class="comment">// root / POST requests</span></div><div class="line">app.use(<span class="built_in">require</span>(<span class="string">'body-parser'</span>).json());</div><div class="line">app.post(<span class="string">'/'</span>, (req, res) =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'post request'</span>);</div><div class="line">    <span class="built_in">console</span>.log(req.body);</div><div class="line">    <span class="comment">// kill process if action === 'kill'</span></div><div class="line">    <span class="keyword">if</span>(req.body)&#123;</div><div class="line">       <span class="keyword">if</span>(req.body.action === <span class="string">'kill'</span>)&#123;</div><div class="line">           process.exit(<span class="number">0</span>);</div><div class="line">       &#125;</div><div class="line">    &#125;</div><div class="line">    res.json(&#123;</div><div class="line">        <span class="attr">mess</span>: <span class="string">'okay'</span></div><div class="line">    &#125;);</div><div class="line">&#125;);</div><div class="line"><span class="comment">// start express app on port and start chrome child process</span></div><div class="line">app.listen(port, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'nodejs express app is up on port: '</span> + port);</div><div class="line">    <span class="comment">// start chrome in app mode</span></div><div class="line">    <span class="keyword">let</span> com = <span class="string">'chromium-browser --app='</span> + appURL + <span class="string">' --new-window --incognito'</span>;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'starting chrome in app mode'</span>);</div><div class="line">    <span class="built_in">console</span>.log(com);</div><div class="line">    <span class="comment">// the chrome child</span></div><div class="line">    <span class="keyword">let</span> chromeChild = exec(com, &#123;</div><div class="line">        <span class="attr">cwd</span>: process.cwd()</div><div class="line">    &#125;);</div><div class="line">    chromeChild.stdout.on(<span class="string">'data'</span>, (data) =&gt; &#123;</div><div class="line">        <span class="built_in">console</span>.log(data);</div><div class="line">    &#125;);</div><div class="line">    chromeChild.on(<span class="string">'message'</span>, (data) =&gt; &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'message'</span>);</div><div class="line">    &#125;);</div><div class="line">    <span class="comment">// on exit of chrome child kill this process</span></div><div class="line">    chromeChild.on(<span class="string">'exit'</span>, () =&gt; &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'cromeChild exit'</span>);</div><div class="line">        <span class="comment">//process.exit();</span></div><div class="line">    &#125;)</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="3-The-public-folder"><a href="#3-The-public-folder" class="headerlink" title="3 - The public folder"></a>3 - The public folder</h2><p>There is a public folder that is intended to be used for any and all static assets that are to be used as part of the client system for this example. For now as of this writing at least there is just a http client, and a script that will cause the sever to stop when the onload event happens. In the event that I fork this the number of assets in this folder will of course likely expand beyond this.</p>
+<p>In the main index.js file I am using the express static method to make the js folder in this public folder work as the js path for the client system. Any front end javaScript that should be part of the client system for an project that is made from this point should be placed there.</p>
+<h3 id="3-1-public-js-axios-0-21-0-axios-min-js"><a href="#3-1-public-js-axios-0-21-0-axios-min-js" class="headerlink" title="3.1 - /public/js/axios/0.21.0/axios.min.js"></a>3.1 - /public/js/axios/0.21.0/axios.min.js</h3><p>For the simple yet function client system of this nodejs example I am using <a href="/2018/01/10/nodejs-axios/">axios</a> for the http client. I will not be getting into axios in detail here, but if you want the source code for axios it can be found in the <a href="https://github.com/axios/axios/tree/v0.21.0/dist" target="_blank" rel="external">axios repo on github</a> just like many other usful projects.</p>
+<h3 id="3-2-public-js-kill-process-js"><a href="#3-2-public-js-kill-process-js" class="headerlink" title="3.2 - /public/js/kill-process.js"></a>3.2 - /public/js/kill-process.js</h3><p>Here I have the script that is made part of the main index of the client system. It has just once function and that is to send a post request that will cause the sever to exit when the window onload event fires.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// kill process when window is closed</span></div><div class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'unload'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">   axios.post(<span class="string">'/'</span>, &#123;</div><div class="line">    <span class="attr">action</span>: <span class="string">'kill'</span></div><div class="line">  &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="4-The-views-folder"><a href="#4-The-views-folder" class="headerlink" title="4 - The views folder"></a>4 - The views folder</h2><p>As I have mentioned I am using ejs for sever side rendering, so there is a views folder. Here for this example I just have a single index.ejs file that will render the view for this nodejs example.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">  &lt;title&gt;Chrome App&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">  &lt;h1&gt;Basic Chrome App with nodejs and express&lt;/h1&gt;</div><div class="line">  &lt;script src=&quot;/js/axios/0.21.0/axios.min.js&quot;&gt;&lt;/script&gt;</div><div class="line">  &lt;script src=&quot;/js/kill-process.js&quot;&gt;&lt;/script&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<h2 id="5-Conclusion"><a href="#5-Conclusion" class="headerlink" title="5 - Conclusion"></a>5 - Conclusion</h2><p>So this is just a basic example of a nodejs project that make use of chrome in app mode. There might be a little more work to do with this project in order to make it a little cleaner, and stable, but the basic idea that I had in might is working okay for me at least.</p>
+<p>All I wanted is to find out if I can use chrome as a way to start making projects that look and work just like traditional desktop software, and it would seem that there are indeed some options that can be used to do just that.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2020/10/27/nodejs-example-chrome-app-mode/" data-id="ckhcho6ow01gwpsv1c228aojr" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2020/10/27/nodejs-example-chrome-app-mode/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/10/28/linux-base32/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Linux base32 encoding and decoding on the command line
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/10/26/nodejs-child-process-stdin/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Standard Input in node.js wuth the child-process module</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2020/10/27/nodejs-example-chrome-app-mode/index.html';
+    this.page.identifier = '730';
+    this.page.title = 'Chrome app mode to create a window for a nodejs project';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.5px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.5px;">angular</a> <a href="/tags/animation/" style="font-size: 12px;">animation</a> <a href="/tags/automation/" style="font-size: 12px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.5px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.5px;">blog</a> <a href="/tags/canvas/" style="font-size: 19px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.5px;">ejs</a> <a href="/tags/express/" style="font-size: 17px;">express</a> <a href="/tags/games/" style="font-size: 17.5px;">games</a> <a href="/tags/git/" style="font-size: 13px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.5px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.5px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.5px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 15.5px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.5px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.5px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.5px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.5px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/11/10/linux-bash-script-build-js/">Linux Build Bash Script JavaScript Style</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/06/canvas-example-game-mr-sun-geo/">Mr Sun Geo.js and additional plug-ins</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/04/canvas-example-game-mr-sun-temp/">Mr sun Temp and Fusion plug-ins canvas example</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/03/canvas-example-game-mr-sun/">Mr sun canvas example</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/02/lodash_rearg/">The lodash _.rearg method and rearranging function arguments</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2020/10/27/nodejs-example-chrome-app-mode/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
