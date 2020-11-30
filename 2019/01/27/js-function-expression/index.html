@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
   
   <title>function expressions in javaScript | Dustin John Pfister at github pages</title>
   
@@ -17,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2019/01/27/js-function-expression/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="There are many ways to go about defining a function in javaScript one such was is by writing Function expressions, which are also sometimes called function literals. A function expression is a way to">
-<meta property="og:updated_time" content="2020-07-05T16:17:00.000Z">
+<meta property="og:updated_time" content="2020-11-17T17:55:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="function expressions in javaScript">
 <meta name="twitter:description" content="There are many ways to go about defining a function in javaScript one such was is by writing Function expressions, which are also sometimes called function literals. A function expression is a way to">
@@ -125,10 +127,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2019/01/27/js-function-expression/" class="article-date"> Modified:
-  <time datetime="2020-07-05T16:17:00.000Z" itemprop="dateModified">2020-07-05</time>
+  <time datetime="2020-11-17T17:55:52.000Z" itemprop="dateModified">2020-11-17</time>
 </a>
 
-    <span class="article-date">V1.22</span>
+    <span class="article-date">V1.24</span>
 
     
   <div class="article-category">
@@ -151,7 +153,8 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>There are many ways to go about defining a function in javaScript one such was is by writing <a href="https://developer.mozilla.org/en-US/docs/web/JavaScript/Reference/Operators/function" target="_blank" rel="external">Function expressions</a>, which are also sometimes called function literals. A function expression is a way to define a function as an expression rather than a statement, or declaration which is another traditional way of defining a function. There are even more ways to go about defining a function on top of just expressions and declarations such as <a href="/2019/02/17/js-arrow-functions/">arrow functions</a>, and using the function constructor to create functions my way of passing a string to a constructor function.</p>
+        <p>There are many ways to go about defining a function in javaScript one such was is by writing <a href="https://developer.mozilla.org/en-US/docs/web/JavaScript/Reference/Operators/function" target="_blank" rel="external">Function expressions</a>, which are also sometimes called function literals. A function expression is a way to define a function as an expression rather than a statement, or declaration which is another traditional way of defining a function. </p>
+<p>There are even more ways to go about defining a function on top of just expressions and declarations in modern specs of javaScript there are now <a href="/2019/02/17/js-arrow-functions/">arrow functions</a> which often prove to be a more concise way t define a function, however the this keyword is handled differently so it is not always a drop in replacement for expressions and declarations. There is also using the function constructor to create functions my way of passing a string of javaScript code for the function to a constructor, the returned result is then a new function. I can not say I create functions that way often, but it is yet another way to do so. However this post is mainly just on function expressions, so I will not be getting into those in detail here.</p>
 <p>Function Expressions have some advantages over <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function" target="_blank" rel="external">function statements or declarations</a>, but they are also not necessary a full replacement for function statements. There are also may other ways to create a function in javaScript such as array functions and the Function constructor.  However in this post I will be going mainly over some of the ins and outs of function expressions in javaScript, and why they can come in handy now and then.</p>
 <a id="more"></a>
 <h2 id="1-function-expressions-in-javaScript-a-basic-example"><a href="#1-function-expressions-in-javaScript-a-basic-example" class="headerlink" title="1 - function expressions in javaScript a basic example"></a>1 - function expressions in javaScript a basic example</h2><p>A function expression is a named or unnamed function that can be assigned to a variable using a keyword like var or let. However they also do nit have to be assigned to a variables they can remain anonymous, and are often what is used to create such a function in javaScript. A very basic example of a function expression might look something like this.</p>
@@ -162,7 +165,7 @@ ga('send', 'pageview');
 <p>However if the bar method where to be called outside the scope of the function expression it would result in the value undefined being called which of course would result in an error.</p>
 <h2 id="3-Variable-hoisting-and-function-expressions"><a href="#3-Variable-hoisting-and-function-expressions" class="headerlink" title="3 - Variable hoisting and function expressions"></a>3 - Variable hoisting and function expressions</h2><p>Variable hoisting in javaScript is where a variable can get hoisted up to the top of the variable scope. With function expressions that are assigned to a variable using the var keyword, the variable does get hoisted to the top, but with the value of undefined. This is one of the reasons why many javaScript developers tend to prefer function statements because the identifiers that are used with function statements can be used anywhere within the variable scope.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// a function expression where the bar variable</span></div><div class="line"><span class="comment">// is getting hoisted but with the value of undefined</span></div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    bar(); <span class="comment">// ERROR calling undefined</span></div><div class="line"></div><div class="line">&#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line"></div><div class="line">    <span class="built_in">console</span>.log(<span class="keyword">typeof</span> bar); <span class="comment">// undefined</span></div><div class="line"></div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> bar = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="string">'foo'</span>;</div><div class="line"></div><div class="line">&#125;;</div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> bar); <span class="comment">// function</span></div><div class="line"> </div><div class="line"><span class="comment">// with function statements this is not a problem</span></div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(foo()); <span class="comment">// bar</span></div><div class="line"> </div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="string">'bar'</span>;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(foo()); <span class="comment">// bar</span></div></pre></td></tr></table></figure>
-<h2 id="4-Using-a-function-expression-as-an-object"><a href="#4-Using-a-function-expression-as-an-object" class="headerlink" title="4 - Using a function expression as an object"></a>4 - Using a function expression as an object</h2><p>So functions are a kind of object in javaScript, so they can be used just like plain old objects.</p>
+<h2 id="4-Using-a-function-expression-as-an-object"><a href="#4-Using-a-function-expression-as-an-object" class="headerlink" title="4 - Using a function expression as an object"></a>4 - Using a function expression as an object</h2><p>So functions are a kind of object in javaScript, so they can be used just like plain old objects on top of functions. So it is possible to create a function as an expression, and then attach additional static functions to the object that is returned. This is often used as a way to define what the public API of a module should be by making it so that the module returns a main function of some kind, but then also has all kinds of static methods and properties attached to what is returned bu the module also.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> foo = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="string">'bar'</span>;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// function expressions are a kind of object</span></div><div class="line"><span class="comment">// and they can be used as such</span></div><div class="line">foo.bar = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="string">'foobar'</span>;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(foo()); <span class="comment">// bar</span></div><div class="line"><span class="built_in">console</span>.log(foo.bar()); <span class="comment">// foobar</span></div></pre></td></tr></table></figure>
 <h2 id="5-iife-Immediately-Invoked-Function-Expression"><a href="#5-iife-Immediately-Invoked-Function-Expression" class="headerlink" title="5 - iife (Immediately Invoked Function Expression)"></a>5 - iife (Immediately Invoked Function Expression)</h2><p>One of the reasons why function expressions are a little more flexible is that they can be used as iifes or Immediately Invoked Function Expressions. In other words I can define an anonymous function via a function expression and then encapsulate that expression in parenthesis and then call that expression right away. This has many advantages and is often used as a way to create modules.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mod = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">let</span> api = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">'bar'</span>;</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    api.bar = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">'foo'</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> api;</div><div class="line">&#125;</div><div class="line">    ());</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(mod()); <span class="comment">// 'bar'</span></div><div class="line"><span class="built_in">console</span>.log(mod.bar()); <span class="comment">// 'foo'</span></div></pre></td></tr></table></figure>
@@ -181,7 +184,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2019/01/27/js-function-expression/" data-id="ckhcho50500v3psv1zdwfmleh" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2019/01/27/js-function-expression/" data-id="cki53exj400m0u0v1cnd1k42l" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2019/01/27/js-function-expression/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -287,23 +290,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2020/11/10/linux-bash-script-build-js/">Linux Build Bash Script JavaScript Style</a>
+            <a href="/2020/11/30/linux-bashrc-aliases/">Linux Bashrc file command aliases</a>
           </li>
         
           <li>
-            <a href="/2020/11/06/canvas-example-game-mr-sun-geo/">Mr Sun Geo.js and additional plug-ins</a>
+            <a href="/2020/11/27/linux-bash-script/">Linux Bash Scripts</a>
           </li>
         
           <li>
-            <a href="/2020/11/04/canvas-example-game-mr-sun-temp/">Mr sun Temp and Fusion plug-ins canvas example</a>
+            <a href="/2020/11/25/js-javascript-example-percent-module/">A percent module javaScript example</a>
           </li>
         
           <li>
-            <a href="/2020/11/03/canvas-example-game-mr-sun/">Mr sun canvas example</a>
+            <a href="/2020/11/24/linux-nano/">The Linux nano editor</a>
           </li>
         
           <li>
-            <a href="/2020/11/02/lodash_rearg/">The lodash _.rearg method and rearranging function arguments</a>
+            <a href="/2020/11/23/linux-df/">Linux df command examples</a>
           </li>
         
       </ul>

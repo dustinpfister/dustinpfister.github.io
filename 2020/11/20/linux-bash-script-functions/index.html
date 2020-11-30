@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
+  
+  <title>Functions in Linux Bash Scripts | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2020/11/20/linux-bash-script-functions/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="When working out a bash script there are some times situations in which I find myself repeating the same bash code over and over again in a script. So there should be a way to define a block of bash s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Functions in Linux Bash Scripts">
+<meta property="og:url" content="https://dustinpfister.github.io/2020/11/20/linux-bash-script-functions/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="When working out a bash script there are some times situations in which I find myself repeating the same bash code over and over again in a script. So there should be a way to define a block of bash s">
+<meta property="og:updated_time" content="2020-11-21T00:38:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Functions in Linux Bash Scripts">
+<meta name="twitter:description" content="When working out a bash script there are some times situations in which I find myself repeating the same bash code over and over again in a script. So there should be a way to define a block of bash s">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-linux-bash-script-functions" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/20/linux-bash-script-functions/" class="article-date"> Published:
+  <time datetime="2020-11-20T18:00:00.000Z" itemprop="datePublished">2020-11-20</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2020/11/20/linux-bash-script-functions/" class="article-date"> Modified:
+  <time datetime="2020-11-21T00:38:11.000Z" itemprop="dateModified">2020-11-20</time>
+</a>
+
+    <span class="article-date">V1.9</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Functions in Linux Bash Scripts
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>When working out a bash script there are some times situations in which I find myself repeating the same bash code over and over again in a script. So there should be a way to define a block of bash script code as part of a function that will take one or more arguments, and then just call that function over and over again rather than repeating the whole block of code.</p>
+<p>So in this post I will be going over some of the basics of <a href="https://linuxize.com/post/bash-functions/" target="_blank" rel="external">functions when writing bash scripts</a>.</p>
+<a id="more"></a>
+<h2 id="1-basic-bash-function"><a href="#1-basic-bash-function" class="headerlink" title="1 - basic bash function"></a>1 - basic bash function</h2><p>Lets start with the very basics of bash functions. I can define one by typing a name for a function, followed by and opening and closing set of parentheses after which I will be placing what I want the function to be inside a set of curly brackets.</p>
+<p>Once I have my function worked out I can call it any number of times that I want in the body of a script.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line"> </div><div class="line"># here I have a mess shell variable</div><div class="line">mess=&quot;hello bash functions&quot;</div><div class="line"> </div><div class="line"># I can create a function that will echo that</div><div class="line"># $mess variable each time it is called</div><div class="line">hw()&#123;</div><div class="line">    echo -n &quot; $mess - &quot;</div><div class="line">&#125;</div><div class="line"> </div><div class="line"># Now I can call mess as many times as I like</div><div class="line">hw</div><div class="line">hw</div><div class="line">hw</div><div class="line">echo &quot;&quot;</div></pre></td></tr></table></figure>
+<p>So once I have my bash script together in an editor I can save it as something like func_basic.sh. I can then call it with bash or make the script executable with chmod and run it directly because of the bash shebang at the top of the file.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ chmod 755 func_basic.sh</div><div class="line">$ ./func_basic.sh</div><div class="line"> hello bash functions -  hello bash functions -  hello bash functions -</div></pre></td></tr></table></figure>
+<p>So now we have the basic idea of a function in bash. However maybe there is a few more things to cover when it comes to functions in bash scripts. There is the question of arguments, how to return something, and other function related topics. So maybe at least a few more examples are called for before moving on to some other bash script related topics.</p>
+<h2 id="2-Arguments-in-bash-functions"><a href="#2-Arguments-in-bash-functions" class="headerlink" title="2 - Arguments in bash functions"></a>2 - Arguments in bash functions</h2><p>So now about arguments with bash functions. Each bash function has its own set of positioned arguments just like that of the main script file. When I do to call the function I just need to pass the values that I want for $1 $2 and so forth.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line"> </div><div class="line"># a function has its own set of positioned arguments</div><div class="line">func_add()&#123;</div><div class="line">    echo $(( $1 + $2 ))</div><div class="line">&#125;</div><div class="line"> </div><div class="line"># using shell arguments too</div><div class="line">let &quot;a = 0&quot;</div><div class="line">let &quot;b = 0&quot;</div><div class="line">if [ ! -z $1 ]; then</div><div class="line">   let &quot;a = $1&quot;</div><div class="line">fi</div><div class="line">if [ ! -z $2 ]; then</div><div class="line">   let &quot;b = $2&quot;</div><div class="line">fi</div><div class="line"># can call a function with arguments like this</div><div class="line">func_add $a $b</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ chmod 755 func_argu.sh</div><div class="line">$ ./func_argu.sh</div><div class="line">0</div><div class="line">$ ./func_argu.sh 5</div><div class="line">5</div><div class="line">$ ./func_argu.sh 5 7</div><div class="line">12</div></pre></td></tr></table></figure>
+<h2 id="3-Return-something-from-a-function"><a href="#3-Return-something-from-a-function" class="headerlink" title="3 - Return something from a function"></a>3 - Return something from a function</h2><p>There is a return keyword in bash, but it does not work the same way as in other languages such as javaScript. There seems to be no standard way to defined a return value for a function, but there are a few tricks that give a similar result.</p>
+<p>The best way to go about defining a return value might be to just echo out the return value as ways just use $() as a way to call it.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line"> </div><div class="line"># math_pow base exponent</div><div class="line"># echo $(math_pow 2 4)</div><div class="line"># 16</div><div class="line">math_pow()&#123;</div><div class="line">    local n=$(($1 ** $2))</div><div class="line">    echo $n</div><div class="line">&#125;</div><div class="line"> </div><div class="line">a=$(math_pow 2 4)</div><div class="line">let &quot;b = $a - 100&quot;</div><div class="line">echo $b</div><div class="line">echo $n</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ chmod 755 func_return.sh</div><div class="line">$ ./func_return.sh</div><div class="line">-84</div><div class="line"></div><div class="line">$</div></pre></td></tr></table></figure>
+<h2 id="4-Math-functions-example"><a href="#4-Math-functions-example" class="headerlink" title="4 - Math functions example"></a>4 - Math functions example</h2><p>Now for a more complex example of bash functions that has to do with making a few math functions with bash. It might be better to make use of a command that will tap into another language such as node, or awk, when it comes to doing some actually programing. However it is possible to do some basics with bash itself at least.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line"> </div><div class="line"># math_pow base exponent</div><div class="line"># echo $(math_pow 2 4)</div><div class="line"># 16</div><div class="line">math_pow()&#123;</div><div class="line">    local n=$(($1 ** $2))</div><div class="line">    echo $n</div><div class="line">&#125;</div><div class="line"> </div><div class="line">## math_sqrt n</div><div class="line">math_sqrt()&#123;</div><div class="line">    echo $(awk &quot;BEGIN &#123;printf \&quot;%.30f\n\&quot;, sqrt($1)&#125;&quot;)</div><div class="line">&#125;</div><div class="line"> </div><div class="line">## math_round n</div><div class="line">math_round()&#123;</div><div class="line">    echo $(awk &quot;BEGIN &#123; rounded = sprintf(\&quot;%.0f\&quot;, $1); print rounded &#125;&quot;)</div><div class="line">&#125;</div><div class="line"> </div><div class="line"># math_dist x1 y1 x2 y2</div><div class="line">math_dist()&#123;</div><div class="line">    local a=$(($1 - $3))</div><div class="line">    local b=$(($2 - $4))</div><div class="line">    local c=$(math_pow $a 2)</div><div class="line">    local d=$(math_pow $b 2)</div><div class="line">    local e=$(($c + $d))</div><div class="line">    echo $(math_sqrt $e)</div><div class="line">&#125;</div><div class="line"> </div><div class="line">d=$(math_dist 10 5 20 5)</div><div class="line">dr=$(math_round $d)</div><div class="line">echo $dr</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ chmod 755 example_math.sh</div><div class="line">$ ./example_math.sh</div><div class="line">10</div></pre></td></tr></table></figure>
+<p>In this example I used awk for some of the math methods, but if you do not know awk no problem there is a whole would of Linux commands to play with. Awk is a fairly good one to tap into, and that deserves one ore more posts when it comes to getting into that one. However another great language is javaScript so lets look as a node example next.</p>
+<h2 id="5-Using-node-to-do-math-in-bash"><a href="#5-Using-node-to-do-math-in-bash" class="headerlink" title="5 - Using node to do math in bash"></a>5 - Using node to do math in bash</h2><p>In bash I can use any Linux command that I want to produce some kind of result including node. When it comes to working in a more powerful programing environment than bash I like javaScript. In core javaScript there is the Math object that has a whole bunch of useful Math functions. So if I really want to I can make a quick javaScript file that I can then call from bash where I can bass the math function that I want to use followed by some arguments for it.</p>
+<h3 id="5-1-The-math-js-file-to-use-with-node"><a href="#5-1-The-math-js-file-to-use-with-node" class="headerlink" title="5.1 - The math.js file to use with node"></a>5.1 - The math.js file to use with node</h3><p>First off I will want a javaScript file that will serve as a way to use the Math object, and maybe a few custom methods from the command line.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/node</span></div><div class="line"><span class="comment">// parse options</span></div><div class="line"><span class="keyword">var</span> prop = process.argv[<span class="number">2</span>],</div><div class="line">len = process.argv.length;</div><div class="line">args = process.argv.slice(<span class="number">3</span>, len);</div><div class="line"><span class="comment">// log</span></div><div class="line"><span class="keyword">var</span> log = <span class="function"><span class="keyword">function</span>(<span class="params">num</span>)</span>&#123;</div><div class="line">    process.stdout.write(<span class="built_in">String</span>(num) + <span class="string">'\n'</span>);</div><div class="line">&#125;;</div><div class="line"><span class="keyword">if</span>(prop)&#123;</div><div class="line">   <span class="keyword">var</span> MathProp = <span class="built_in">Math</span>[prop];</div><div class="line">   <span class="comment">// a Math function</span></div><div class="line">   <span class="keyword">if</span>(<span class="keyword">typeof</span> MathProp === <span class="string">'function'</span>)&#123;</div><div class="line">       log(MathProp.apply(<span class="literal">null</span>, args));</div><div class="line">   &#125;</div><div class="line">   <span class="comment">// a Math propery</span></div><div class="line">   <span class="keyword">if</span>(<span class="keyword">typeof</span> MathProp === <span class="string">'number'</span>)&#123;</div><div class="line">       log(MathProp);</div><div class="line">   &#125;</div><div class="line">   <span class="comment">// some of my own</span></div><div class="line">   <span class="keyword">if</span>(<span class="keyword">typeof</span> MathProp === <span class="string">'undefined'</span>)&#123;</div><div class="line">      <span class="comment">// multiply two numbers</span></div><div class="line">      <span class="keyword">if</span>(prop === <span class="string">'multi'</span>)&#123;</div><div class="line">          log(args[<span class="number">0</span>] * args[<span class="number">1</span>]);</div><div class="line">      &#125;</div><div class="line">      <span class="comment">// distance between two points</span></div><div class="line">      <span class="keyword">if</span>(prop === <span class="string">'dist'</span>)&#123;</div><div class="line">          <span class="keyword">var</span> a = <span class="built_in">Math</span>.pow(args[<span class="number">0</span>] - args[<span class="number">2</span>], <span class="number">2</span>)</div><div class="line">          b = <span class="built_in">Math</span>.pow(args[<span class="number">1</span>] - args[<span class="number">3</span>], <span class="number">2</span>);</div><div class="line">          log(<span class="built_in">Math</span>.sqrt( a + b));</div><div class="line">      &#125;</div><div class="line">      <span class="comment">// eval an expression</span></div><div class="line">      <span class="keyword">if</span>(prop === <span class="string">'eval'</span>)&#123;</div><div class="line">          log(<span class="built_in">eval</span>(args[<span class="number">0</span>]));</div><div class="line">      &#125;</div><div class="line">   &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>So now I have a little javaScirpt that I can use with node.</p>
+<h2 id="5-2-using-Math-js-by-itself-with-node"><a href="#5-2-using-Math-js-by-itself-with-node" class="headerlink" title="5.2 - using Math.js by itself with node"></a>5.2 - using Math.js by itself with node</h2><p>So I can test out the javaScript file with node on the command line just to make sure everything works as I want it to.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">:$ node math.js PI</div><div class="line">3.141592653589793</div></pre></td></tr></table></figure>
+<p>Just like bash scripts I can make the script executable because I placed the nodejs shebang at the top of the file.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ chmod 755 math.js</div><div class="line">$ ./math.js atan2 50 0</div><div class="line">1.5707963267948966</div></pre></td></tr></table></figure>
+<p>Looks like my eval method works for what it is worth also.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ./math.js eval &quot;Math.floor(Math.atan2(0,50)/(Math.PI*2)*360)&quot;</div><div class="line">90</div></pre></td></tr></table></figure>
+<p>Okay cool, now it is just a matter of making some functions in bash that will make use of this little javaScript file.</p>
+<h2 id="5-3-Making-a-bash-script-that-will-use-math-js"><a href="#5-3-Making-a-bash-script-that-will-use-math-js" class="headerlink" title="5.3 - Making a bash script that will use math.js"></a>5.3 - Making a bash script that will use math.js</h2><p>So now that I have my math.js script I can now do whatever I want to do in bash with these javaScript math methods.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line"></div><div class="line">node_math()&#123;</div><div class="line">    echo $(node &quot;math.js&quot; $1 $2 $3)</div><div class="line">&#125;</div><div class="line"></div><div class="line">get_angle()&#123;</div><div class="line">    x=$1</div><div class="line">    y=$2</div><div class="line">    echo $(node_math &quot;eval&quot; &quot;Math.floor(Math.atan2($y,$x)/(Math.PI*2)*360)&quot;)</div><div class="line">&#125;</div><div class="line"></div><div class="line">pi=$(node_math &quot;PI&quot;)</div><div class="line">pi2=$(node_math &quot;eval&quot; &quot;$pi*2&quot;)</div><div class="line">atan2=$(node_math &quot;atan2&quot; &quot;50&quot; &quot;0&quot;)</div><div class="line">a=$(node_math &quot;eval&quot; &quot;($atan2/$pi2*360).toFixed(2)&quot;)</div><div class="line"></div><div class="line">echo &quot;$pi $pi2 $atan2&quot;</div><div class="line">echo $a</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ chmod 755 example_math_js.sh</div><div class="line">$ ./example_math_js.sh</div><div class="line">16</div><div class="line">90</div></pre></td></tr></table></figure>
+<p>The math object is just one thing, when it comes to javaScript programing in nodejs there is a wide range of things that I can do with it of course. I can make http requests, read and write files, start up a sever, and work with a whole world of npm packages. There are of course other programing environments, and also every Linux command to play with. Linux commands can be used from within nodejs via the child process module, and of course there is using them with bash outside of nodejs.</p>
+<h2 id="6-Conclusion"><a href="#6-Conclusion" class="headerlink" title="6 - Conclusion"></a>6 - Conclusion</h2><p>So functions in bash are yet another feature in bash that one should become familiar with to learn how to read and write bash scripts. They ming be a bit lacking compared to what I am useful in other languages, but the basic features that I would expect in an environment such as bash are there.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2020/11/20/linux-bash-script-functions/" data-id="cki53ey6400wju0v1v4ozilej" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2020/11/20/linux-bash-script-functions/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/11/23/linux-df/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Linux df command examples
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/11/19/linux-cut/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">The Linux Cut command for cutting a string in bash</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2020/11/20/linux-bash-script-functions/index.html';
+    this.page.identifier = '746';
+    this.page.title = 'Functions in Linux Bash Scripts';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.5px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.5px;">angular</a> <a href="/tags/animation/" style="font-size: 12px;">animation</a> <a href="/tags/automation/" style="font-size: 12px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.5px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.5px;">blog</a> <a href="/tags/canvas/" style="font-size: 19px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.5px;">ejs</a> <a href="/tags/express/" style="font-size: 17px;">express</a> <a href="/tags/games/" style="font-size: 17.5px;">games</a> <a href="/tags/git/" style="font-size: 13px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.5px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.5px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.5px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 15.5px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.5px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.5px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.5px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.5px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/11/30/linux-bashrc-aliases/">Linux Bashrc file command aliases</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/27/linux-bash-script/">Linux Bash Scripts</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/25/js-javascript-example-percent-module/">A percent module javaScript example</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/24/linux-nano/">The Linux nano editor</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/23/linux-df/">Linux df command examples</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2020/11/20/linux-bash-script-functions/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

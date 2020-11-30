@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
+  
+  <title>The Linux Cut command for cutting a string in bash | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2020/11/19/linux-cut/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="The Linux cut command is the standard tool for cutting a string into one or more sub strings. The first and for most way of using cut as I see it at least is by field and delimiter, that is using a de">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Linux Cut command for cutting a string in bash">
+<meta property="og:url" content="https://dustinpfister.github.io/2020/11/19/linux-cut/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="The Linux cut command is the standard tool for cutting a string into one or more sub strings. The first and for most way of using cut as I see it at least is by field and delimiter, that is using a de">
+<meta property="og:updated_time" content="2020-11-19T19:36:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The Linux Cut command for cutting a string in bash">
+<meta name="twitter:description" content="The Linux cut command is the standard tool for cutting a string into one or more sub strings. The first and for most way of using cut as I see it at least is by field and delimiter, that is using a de">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-linux-cut" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/19/linux-cut/" class="article-date"> Published:
+  <time datetime="2020-11-19T17:19:00.000Z" itemprop="datePublished">2020-11-19</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2020/11/19/linux-cut/" class="article-date"> Modified:
+  <time datetime="2020-11-19T19:36:50.000Z" itemprop="dateModified">2020-11-19</time>
+</a>
+
+    <span class="article-date">V1.15</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      The Linux Cut command for cutting a string in bash
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>The <a href="https://linuxize.com/post/linux-cut-command/" target="_blank" rel="external">Linux cut</a> command is the standard tool for cutting a string into one or more sub strings. The first and for most way of using cut as I see it at least is by field and delimiter, that is using a delimiter like a line break or a space as a way to split a string into fields, and then using a field index to get the sub string value that I want.</p>
+<p>There are a few other options with The Linux cut command, but I will just be sticking to a few basic examples that actually come into play when writing bash scripts. So in this post I will not be going over every little detail about the Linux cut command, when it comes to that there is always the <a href="https://man7.org/linux/man-pages/man1/cut.1.html" target="_blank" rel="external">man page on Linux cut</a>, as well as many other blog posts on Linux cut that go over all the features and options. Here in this post I will just be going over the options that I am using thus far, and give some actually use case examples for the Linux Cut command. I will also be touching base one many other Linux commands and features such as echo, piping, basic bash files, and the basename command to just name a few things.</p>
+<a id="more"></a>
+<h2 id="1-Cutting-by-delimiter-and-field"><a href="#1-Cutting-by-delimiter-and-field" class="headerlink" title="1 - Cutting by delimiter and field"></a>1 - Cutting by delimiter and field</h2><p>I am going to start off with Linux cut examples that have to do with using the delimiter option ( -d ) to set a char that is to be used to break a string down into fields. Once a delimiter is given the the field option ( -f ) can be used to set what the field index is that I want.</p>
+<p>The cut command can be given a file as a way to supply content that is to be cut, but if no file is given then content can be piped into it via the standard input. All the examples in this section are doing just that by making use of the echo command to create an example string.</p>
+<h3 id="1-1-Basic-example-of-using-delimiter-and-field-options-with-Linux-Cut"><a href="#1-1-Basic-example-of-using-delimiter-and-field-options-with-Linux-Cut" class="headerlink" title="1.1 - Basic example of using delimiter and field options with Linux Cut"></a>1.1 - Basic example of using delimiter and field options with Linux Cut</h3><p>For a basic example say I have a bunch of values separated by a comma as a string. With this kind of string I can use a comma as a delimiter to break the string down into fields. The field option can then be used as a way to get the field that I want by way of a one relative index value. In other words the index values start with one rather than zero</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ echo &quot;[1a,2b,3c,4d,5e,6f,7g,8h,9i]&quot; | cut -d , -f 3</div><div class="line">3c</div></pre></td></tr></table></figure>
+<h3 id="1-2-More-than-one-field-index-can-be-given"><a href="#1-2-More-than-one-field-index-can-be-given" class="headerlink" title="1.2 - More than one field index can be given"></a>1.2 - More than one field index can be given</h3><p>When using the field option it is possible to give more than one index value. Just pass the index values from left to right separated by commas, the result will be the fields in the order of the given field index values.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ echo &quot;[1a,2b,3c,4d,5e,6f,7g,8h,9i]&quot; | cut -d , -f 8,2,6</div><div class="line">2b,6f,8h</div></pre></td></tr></table></figure>
+<h3 id="1-3-Be-sure-to-use-quotes-when-needed"><a href="#1-3-Be-sure-to-use-quotes-when-needed" class="headerlink" title="1.3 - Be sure to use quotes when needed"></a>1.3 - Be sure to use quotes when needed</h3><p>Quotes may have to be used when dealing with white space as a delimiter. For example if I have a sentence and I want the delimiter to be a space, then I will want to have a space between to double quotes.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ echo &quot;this is some text to cut for example&quot; | cut -d &quot; &quot; -f 6</div><div class="line">cut</div></pre></td></tr></table></figure>
+<h2 id="2-Change-the-output-delimiter"><a href="#2-Change-the-output-delimiter" class="headerlink" title="2 - Change the output delimiter"></a>2 - Change the output delimiter</h2><p>In some cases I might want to change the output delimiter. To do so I just need to use the –output-delimiter option. If I want for there to be no delimiter at all between fields in the output then I just need to give an empty string as the output delimiter. So when it comes to one of my simple examples from above I can use the -d option to set a delimiter for the source, and the -f option to select the fields that I want, and then the –output-delimiter option to change the output delimiter to something other than a comma.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ echo &quot;[1a,2b,3c,4d,5e,6f,7g,8h,9i]&quot; | cut -d , -f 8,2,6 --output-delimiter=&apos;&apos;</div><div class="line">2b6f8h</div></pre></td></tr></table></figure>
+<h2 id="3-Get-the-basename-of-a-file-with-cut-by-itself-and-with-the-basename-command"><a href="#3-Get-the-basename-of-a-file-with-cut-by-itself-and-with-the-basename-command" class="headerlink" title="3 - Get the basename of a file with cut by itself, and with the basename command"></a>3 - Get the basename of a file with cut by itself, and with the basename command</h2><p>One thing that I have been using the Linux cut command for thus far is to get the base name of a file name. This might work okay, but there are other options and commands to work with often. I will be getting to the basename command later in this section, but for now lets start out just with cut. The Linux cut command will work okay when it comes to getting the basename from a path or filename, but there are some situations in which I can lead to making a solution that is more complex than it needs to be for this.</p>
+<p>Still when it comes to something like this:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ echo &apos;filename.txt.b64&apos; | cut -d . -f 1</div><div class="line">filename</div></pre></td></tr></table></figure>
+<p>The Linux cut command works just fine if I have the file name first of course. If however I have a long path name that has dots in any of the folders before hand, that will throw a wrench in the works and give me a wring result. To help with that it, and using the Linux cut command without looking into the basename command, I might have to create a bash script like this:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line">filepath=&quot;/home/pi/foo.bar/.fonts/filename.txt.b64&quot;</div><div class="line">fcount=$( echo -n $filepath | grep -o &quot;\/&quot; | wc -w )</div><div class="line">filename=$( echo -n $filepath | cut -d &apos;/&apos; -f $(( $fcount + 1)) )</div><div class="line">basename=$( echo -n $filename | cut -d &apos;.&apos; -f 1 )</div><div class="line">echo $basename</div></pre></td></tr></table></figure>
+<p>If I save the above bash as something like filename_last.sh I can then make it executable or call it with bash.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ bash filename_last.sh</div><div class="line">filename</div></pre></td></tr></table></figure>
+<p>I have not tested this with every little possible thing when it comes to path names, but so far it seems to work. However I would say that this is more or less making something very simple far more complex than it needs to be if the Linux basename command is there to work with in the system. Using that command with the path string will give me the file name to which I can then pipe to Linux cut to get the base name of the file less the file extensions.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ basename &quot;/home/pi/foo.bar/.fonts/filename.txt.b64&quot; | cut -d . -f 1</div><div class="line">filename</div></pre></td></tr></table></figure>
+<p>It would make sense for there to be a base name command because this is something that I find myself running into often. In fact if I know the full extension of the file I can give that as an option to the basename command, in which case I do not even need to bother with cut.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ basename -s .txt.b64 &quot;/home/pi/foo.bar/.fonts/filename.txt.b64&quot;</div><div class="line">filename</div></pre></td></tr></table></figure>
+<p>It might take time to learn all these little commands, but once I know a lot of them it helps to make quick work of trivial tasks such as this.</p>
+<h2 id="3-Conclusion"><a href="#3-Conclusion" class="headerlink" title="3 - Conclusion"></a>3 - Conclusion</h2><p>The Linux cut command seems to come up now and then when writing bash scripts. I often want to cut the extension off of a file name to get the base of the filename to which I then create a new file with the same base name but a new extension. The cut command also will come into play when I want to do anything else that might be needed when working with string values in a Linux and bash environment.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2020/11/19/linux-cut/" data-id="cki53ey7u00xbu0v12d5ae9g2" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2020/11/19/linux-cut/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/11/20/linux-bash-script-functions/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Functions in Linux Bash Scripts
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/11/18/linux-raspberry-pi-os-change-bash-prompt/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Change Bash prompt in Raspberry PI OS and most Linux Systems</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2020/11/19/linux-cut/index.html';
+    this.page.identifier = '745';
+    this.page.title = 'The Linux Cut command for cutting a string in bash';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.5px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.5px;">angular</a> <a href="/tags/animation/" style="font-size: 12px;">animation</a> <a href="/tags/automation/" style="font-size: 12px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.5px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.5px;">blog</a> <a href="/tags/canvas/" style="font-size: 19px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.5px;">ejs</a> <a href="/tags/express/" style="font-size: 17px;">express</a> <a href="/tags/games/" style="font-size: 17.5px;">games</a> <a href="/tags/git/" style="font-size: 13px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.5px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.5px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.5px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 15.5px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.5px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.5px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18px;">phaser</a> <a href="/tags/statistics/" style="font-size: 12.5px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.5px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/11/30/linux-bashrc-aliases/">Linux Bashrc file command aliases</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/27/linux-bash-script/">Linux Bash Scripts</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/25/js-javascript-example-percent-module/">A percent module javaScript example</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/24/linux-nano/">The Linux nano editor</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/23/linux-df/">Linux df command examples</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2020/11/19/linux-cut/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

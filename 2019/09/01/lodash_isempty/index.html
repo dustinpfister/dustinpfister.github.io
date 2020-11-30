@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
   
   <title>The lodash is empty object method for finding out if an object is empty or not | Dustin John Pfister at github pages</title>
   
@@ -17,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2019/09/01/lodash_isempty/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="In lodash there is the _.isEmpty method than can be used to find if a collection object is empty or not. This is not to be confused with other possible values that might be considered empty such as nu">
-<meta property="og:updated_time" content="2020-06-07T20:45:13.000Z">
+<meta property="og:updated_time" content="2020-11-23T17:29:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The lodash is empty object method for finding out if an object is empty or not">
 <meta name="twitter:description" content="In lodash there is the _.isEmpty method than can be used to find if a collection object is empty or not. This is not to be confused with other possible values that might be considered empty such as nu">
@@ -125,10 +127,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2019/09/01/lodash_isempty/" class="article-date"> Modified:
-  <time datetime="2020-06-07T20:45:13.000Z" itemprop="dateModified">2020-06-07</time>
+  <time datetime="2020-11-23T17:29:38.000Z" itemprop="dateModified">2020-11-23</time>
 </a>
 
-    <span class="article-date">V1.5</span>
+    <span class="article-date">V1.9</span>
 
     
   <div class="article-category">
@@ -153,16 +155,23 @@ ga('send', 'pageview');
       
         <p>In lodash there is the <a href="https://lodash.com/docs/4.17.15#isEmpty" target="_blank" rel="external">_.isEmpty</a> method than can be used to find if a collection object is empty or not. This is not to be confused with other possible values that might be considered empty such as null, a false boolean value and so forth. There are also a number of ways to go about doing the same when it comes to working with just plain old native javaScript in addition to using the lodash is empty method. </p>
 <p>So this makes the lodash is empty method yet another one of those kinds of methods that make me scratch my head wondering if lodash is something that a developer should be bothering with at all even. I have to admit whenever I do use lodash in a project it is to use just one or two methods that are in there, it often makes more sense to install methods one at a time rather than bothering with the whole utility library, but never the less lets take a look at this one and maybe some vanilla javaScript alternatives to it also while we are at it.</p>
+<p>In any case in this post I will be taking a quick look at the lodash is empty method, and also some vanilla javaScript code that also does what the lodash is empty method is for.</p>
 <a id="more"></a>
 <h2 id="1-Lodash-is-empty-basic-example"><a href="#1-Lodash-is-empty-basic-example" class="headerlink" title="1 - Lodash is empty basic example"></a>1 - Lodash is empty basic example</h2><p>So the lodash _.isEmpty method can be used to check if an object collection is empty or not. If the collection is just an object with one or more public key value pairs then it is not empty, the same is true with arrays when they have one ore more indexed values.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Is empty can be used with Object Collections</span></div><div class="line"><span class="built_in">console</span>.log( _.isEmpty(&#123;&#125;) ); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log( _.isEmpty(&#123;<span class="attr">x</span>:<span class="number">42</span>&#125;) ); <span class="comment">// false</span></div><div class="line"> </div><div class="line"><span class="comment">// and Array Object Collections</span></div><div class="line"><span class="built_in">console</span>.log( _.isEmpty([]) ); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log( _.isEmpty([<span class="number">12</span>,<span class="number">42</span>,<span class="number">87</span>]) ); <span class="comment">// false</span></div></pre></td></tr></table></figure>
 <p>This is the intended use of the is empty method in lodash</p>
-<h2 id="1-Lodash-is-empty-and-types"><a href="#1-Lodash-is-empty-and-types" class="headerlink" title="1 - Lodash is empty and types"></a>1 - Lodash is empty and types</h2><p>The lodash is empty method is for finding out if a collection does not have any items and that is it. It is not for finding out if a value fits other meanings of the word empty. For example when passing boolean values to the is empty method a boolean value will always return true even if the value is false.</p>
+<h2 id="2-Lodash-is-empty-and-types"><a href="#2-Lodash-is-empty-and-types" class="headerlink" title="2 - Lodash is empty and types"></a>2 - Lodash is empty and types</h2><p>The lodash is empty method is for finding out if a collection does not have any items and that is it. It is not for finding out if a value fits other meanings of what the word empty might mean to some. For example when passing boolean values to the is empty method a boolean value will always return true even if the value is false.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Booleans</span></div><div class="line"><span class="built_in">console</span>.log( _.isEmpty(<span class="literal">true</span>) ); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log( _.isEmpty(<span class="literal">false</span>) ); <span class="comment">// true</span></div><div class="line"> </div><div class="line"><span class="comment">// Numbers</span></div><div class="line"><span class="built_in">console</span>.log( _.isEmpty(<span class="number">123</span>) ); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log( _.isEmpty(<span class="number">0</span>) ); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log( _.isEmpty(<span class="number">-123</span>) ); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log( _.isEmpty(<span class="literal">NaN</span>) ); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log( _.isEmpty(<span class="literal">Infinity</span>) ); <span class="comment">// true</span></div><div class="line"> </div><div class="line"><span class="comment">// Strings</span></div><div class="line"><span class="built_in">console</span>.log( _.isEmpty(<span class="string">''</span>) ); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log( _.isEmpty(<span class="string">'foo'</span>) ); <span class="comment">// false</span></div><div class="line"> </div><div class="line"><span class="comment">// Other</span></div><div class="line"><span class="built_in">console</span>.log( _.isEmpty(<span class="literal">null</span>) ); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log( _.isEmpty(<span class="literal">undefined</span>) ); <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<h2 id="3-Vanilla-javaScript-isEmpty-method"><a href="#3-Vanilla-javaScript-isEmpty-method" class="headerlink" title="3 - Vanilla javaScript isEmpty method"></a>3 - Vanilla javaScript isEmpty method</h2><p>It is not so hard to make a vanilla javaScript isEmpty method when one is familiar with the basics of what to look for when it comes to finding out if an object is empty or not. Maybe the idea is a little subjective when it comes to hidden properties of objects and if they count or not, as well as maybe something that is going on in the prototype chain. However I would say that an object is empty when there are no public keys in the Object. So one way to find out if an object is empty or not is to use a method like Object.kets to get an array of public key names, and if the length of that array is greater than or equal to one, then the object is not empty.</p>
+<p>Before I can check the key length of an object first I might want to make sure that I am dealing with an object by making use of the typeof keyword and checking if the type is indeed object. I also need to make sure that I am not dealing with a null value because that will return as object for typeof also. I can then just pass the object to to Object.keys method and check the length of the resulting array of key names returning true of false depending on the length. I can then later in the method return true by default for anything and everything else that might be passed.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> isEmpty = <span class="function">(<span class="params">obj</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> obj === <span class="string">'object'</span> &amp;&amp; obj != <span class="literal">null</span>) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="built_in">Object</span>.keys(obj).length &gt;= <span class="number">1</span> ? <span class="literal">false</span> : <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// Is empty can be used with Object Collections</span></div><div class="line"><span class="built_in">console</span>.log(isEmpty(&#123;&#125;)); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(isEmpty(&#123;<span class="attr">x</span>: <span class="number">42</span>&#125;)); <span class="comment">// false</span></div><div class="line"> </div><div class="line"><span class="comment">// and Array Object Collections</span></div><div class="line"><span class="built_in">console</span>.log(isEmpty([])); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(isEmpty([<span class="number">12</span>, <span class="number">42</span>, <span class="number">87</span>])); <span class="comment">// false</span></div><div class="line"> </div><div class="line"><span class="comment">// Booleans</span></div><div class="line"><span class="built_in">console</span>.log( isEmpty(<span class="literal">true</span>) ); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log( isEmpty(<span class="literal">false</span>) ); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log( isEmpty(<span class="number">123</span>) ); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log( isEmpty(<span class="number">0</span>) ); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log( isEmpty(<span class="number">-123</span>) ); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log( isEmpty(<span class="literal">NaN</span>) ); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log( isEmpty(<span class="literal">Infinity</span>) ); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log( isEmpty(<span class="string">''</span>) ); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log( isEmpty(<span class="string">'foo'</span>) ); <span class="comment">// false</span></div><div class="line"><span class="built_in">console</span>.log( isEmpty(<span class="literal">null</span>) ); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log( isEmpty(<span class="literal">undefined</span>) ); <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<p>Seems to work more or less just as well compared to the lodash isEmoty method.</p>
+<h2 id="4-Conclusion"><a href="#4-Conclusion" class="headerlink" title="4 - Conclusion"></a>4 - Conclusion</h2><p>the ldoash is empty method is an example of a collection method in lodash, which in other words means that it will work with both objects and arrays in general. I can not say that the lodash is empty method is the best example of this in lodash, but understanding the differences between Arrays and other Objects is important in any case. The real difference is juts that when dealing with arrays it is just more or less an object just like any other only it is a collection of numbered rather than names key names for elements, a length property, and it is an instance of the Array constructor. Other than that an Array is just another Object just like any other, and as such certain methods such as this will work with Objects in general.</p>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2019/09/01/lodash_isempty/" data-id="ckhcho5za018opsv1pqpocotd" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2019/09/01/lodash_isempty/" data-id="cki53eylq0132u0v1ddyfhfup" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2019/09/01/lodash_isempty/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -268,23 +277,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2020/11/10/linux-bash-script-build-js/">Linux Build Bash Script JavaScript Style</a>
+            <a href="/2020/11/30/linux-bashrc-aliases/">Linux Bashrc file command aliases</a>
           </li>
         
           <li>
-            <a href="/2020/11/06/canvas-example-game-mr-sun-geo/">Mr Sun Geo.js and additional plug-ins</a>
+            <a href="/2020/11/27/linux-bash-script/">Linux Bash Scripts</a>
           </li>
         
           <li>
-            <a href="/2020/11/04/canvas-example-game-mr-sun-temp/">Mr sun Temp and Fusion plug-ins canvas example</a>
+            <a href="/2020/11/25/js-javascript-example-percent-module/">A percent module javaScript example</a>
           </li>
         
           <li>
-            <a href="/2020/11/03/canvas-example-game-mr-sun/">Mr sun canvas example</a>
+            <a href="/2020/11/24/linux-nano/">The Linux nano editor</a>
           </li>
         
           <li>
-            <a href="/2020/11/02/lodash_rearg/">The lodash _.rearg method and rearranging function arguments</a>
+            <a href="/2020/11/23/linux-df/">Linux df command examples</a>
           </li>
         
       </ul>

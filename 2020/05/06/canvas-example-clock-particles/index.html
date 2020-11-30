@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
   
   <title>A canvas example of a particle clock | Dustin John Pfister at github pages</title>
   
@@ -17,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2020/05/06/canvas-example-clock-particles/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="I have made a basic clock canvas example before however maybe now it is time for another canvas example of a clock this time maybe I can make it into something a little more interesting. There are man">
-<meta property="og:updated_time" content="2020-05-21T18:53:23.000Z">
+<meta property="og:updated_time" content="2020-11-29T20:26:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="A canvas example of a particle clock">
 <meta name="twitter:description" content="I have made a basic clock canvas example before however maybe now it is time for another canvas example of a clock this time maybe I can make it into something a little more interesting. There are man">
@@ -125,10 +127,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2020/05/06/canvas-example-clock-particles/" class="article-date"> Modified:
-  <time datetime="2020-05-21T18:53:23.000Z" itemprop="dateModified">2020-05-21</time>
+  <time datetime="2020-11-29T20:26:03.000Z" itemprop="dateModified">2020-11-29</time>
 </a>
 
-    <span class="article-date">V1.24</span>
+    <span class="article-date">V1.26</span>
 
     
   <div class="article-category">
@@ -155,8 +157,13 @@ ga('send', 'pageview');
 <p>This will be a clock that involves a pool of display objects or particles as they are some times called that move around the canvas. As the day progresses the count of particle objects that are active will increase to to a certain point at which it will come back down again. </p>
 <p>This is just one silly little idea that came to mind when it comes to be thing about making some additional canvas examples that are just basic clock like projects. Making clocks is a nice diversion from other canvas projects such as games that can become very complicated and time consuming endeavorers. My experience with making clocks thus far however has been a more rewarding, and therapeutic experience thus far. Just like with games there is a lot of room for originally and creativity, so lets take a look at this slightly more advanced canvas clock with particle objects.</p>
 <a id="more"></a>
-<h2 id="1-The-Utils-js-for-this-particles-clock-example"><a href="#1-The-Utils-js-for-this-particles-clock-example" class="headerlink" title="1 - The Utils.js for this particles clock example"></a>1 - The Utils.js for this particles clock example</h2><p>First off there are a few methods that I will be using in the clock.js file that creates the state object as well as the draw,js file also. So I will be wanting an general utility library to pack methods like this.</p>
+<p><div id="canvas-app" style="width:320px;height:240px;margin-left:auto;margin-right:auto;"></div></p>
+<script src="/js/canvas-examples/clock-particles/0.0.0/pkg.js"></script>
+
+<h2 id="1-The-Utils-js-for-this-particles-clock-example"><a href="#1-The-Utils-js-for-this-particles-clock-example" class="headerlink" title="1 - The Utils.js for this particles clock example"></a>1 - The Utils.js for this particles clock example</h2><p>I often have a general utility library in my canvas examples, this is just a place where I will park methods that I think that I will be using in two or more modules in the source code. Often that is not the case when I keep many of these fairly simple, however I do that anyway.</p>
+<p>For this canvas example I just have a distance method, and a method that helps me with padding a string.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// UTILS</span></div><div class="line"><span class="keyword">var</span> u = &#123;&#125;;</div><div class="line"> </div><div class="line">u.distance = <span class="function"><span class="keyword">function</span> (<span class="params">x1, y1, x2, y2</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Math</span>.sqrt(<span class="built_in">Math</span>.pow(x1 - x2, <span class="number">2</span>) + <span class="built_in">Math</span>.pow(y1 - y2, <span class="number">2</span>));</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// pad a value</span></div><div class="line">u.pad = <span class="function"><span class="keyword">function</span> (<span class="params">a</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">String</span>(<span class="string">'00'</span> + a).slice(<span class="number">-2</span>);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>So now that I have that out of the way lets move on to the actual clock module.</p>
 <h2 id="2-Clock-js"><a href="#2-Clock-js" class="headerlink" title="2 - Clock.js"></a>2 - Clock.js</h2><p>The clock.js file creates a module that is used to create the main state object for this canvas example. I then use this state object with another module in my draw.js file that will draw the state of this object to the canvas. In my basic clock example I just had a create method that would be used over an over again to create an up to date clock object, however in this example I have both a create method and an update method. The reason why is that I do not want to recreate the pool of particles over and over again each time.</p>
 <h3 id="2-1-The-start-of-the-module-getTimeText-and-getDayStart"><a href="#2-1-The-start-of-the-module-getTimeText-and-getDayStart" class="headerlink" title="2.1 - The start of the module, getTimeText and getDayStart"></a>2.1 - The start of the module, getTimeText and getDayStart</h3><p>At the top of the module I have a helper method that I use to create a text format of the current time. After that I have another helper method that returns a date the represents the starting time of the current day, this is used to find a percent value for the progression of the current day later on.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> clockMod = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> getTimeText = <span class="function"><span class="keyword">function</span> (<span class="params">clock</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> u.pad(clock.now.getHours()) + <span class="string">' : '</span> +</div><div class="line">        u.pad(clock.now.getMinutes()) + <span class="string">' : '</span> +</div><div class="line">        u.pad(clock.now.getSeconds());</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> getDayStart = <span class="function"><span class="keyword">function</span> (<span class="params">clock</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Date</span>(clock.now.getFullYear(), clock.now.getMonth(), clock.now.getDate(), <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)</div><div class="line">    &#125;;</div></pre></td></tr></table></figure>
@@ -184,7 +191,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2020/05/06/canvas-example-clock-particles/" data-id="ckhcho3zo00e5psv14q9qfm71" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2020/05/06/canvas-example-clock-particles/" data-id="cki53ewlp003iu0v1gsooo3pp" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2020/05/06/canvas-example-clock-particles/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -290,23 +297,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2020/11/10/linux-bash-script-build-js/">Linux Build Bash Script JavaScript Style</a>
+            <a href="/2020/11/30/linux-bashrc-aliases/">Linux Bashrc file command aliases</a>
           </li>
         
           <li>
-            <a href="/2020/11/06/canvas-example-game-mr-sun-geo/">Mr Sun Geo.js and additional plug-ins</a>
+            <a href="/2020/11/27/linux-bash-script/">Linux Bash Scripts</a>
           </li>
         
           <li>
-            <a href="/2020/11/04/canvas-example-game-mr-sun-temp/">Mr sun Temp and Fusion plug-ins canvas example</a>
+            <a href="/2020/11/25/js-javascript-example-percent-module/">A percent module javaScript example</a>
           </li>
         
           <li>
-            <a href="/2020/11/03/canvas-example-game-mr-sun/">Mr sun canvas example</a>
+            <a href="/2020/11/24/linux-nano/">The Linux nano editor</a>
           </li>
         
           <li>
-            <a href="/2020/11/02/lodash_rearg/">The lodash _.rearg method and rearranging function arguments</a>
+            <a href="/2020/11/23/linux-df/">Linux df command examples</a>
           </li>
         
       </ul>

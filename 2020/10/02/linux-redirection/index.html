@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
   
   <title>Linux redirection of standard output to a file | Dustin John Pfister at github pages</title>
   
@@ -17,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2020/10/02/linux-redirection/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="One thing that comes up for me often when working something out with one or more Linux commands is to have a way to write the standard output of what happens to a file rather than the console window.">
-<meta property="og:updated_time" content="2020-10-02T18:34:31.000Z">
+<meta property="og:updated_time" content="2020-11-28T17:37:21.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux redirection of standard output to a file">
 <meta name="twitter:description" content="One thing that comes up for me often when working something out with one or more Linux commands is to have a way to write the standard output of what happens to a file rather than the console window.">
@@ -125,10 +127,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2020/10/02/linux-redirection/" class="article-date"> Modified:
-  <time datetime="2020-10-02T18:34:31.000Z" itemprop="dateModified">2020-10-02</time>
+  <time datetime="2020-11-28T17:37:21.000Z" itemprop="dateModified">2020-11-28</time>
 </a>
 
-    <span class="article-date">V1.7</span>
+    <span class="article-date">V1.19</span>
 
     
   <div class="article-category">
@@ -151,25 +153,67 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>One thing that comes up for me often when working something out with one or more Linux commands is to have a way to write the standard output of what happens to a file rather than the console window. I guess if I wanted to I could just copy and paste the output to a text editor, but there must be a more professional way to do it in the command line right? When it comes to piping I guess I could pipe the output alone to a text editor, but there is another option called <a href="https://en.wikipedia.org/wiki/Redirection_%28computing%29" target="_blank" rel="external">Linux redirection</a>. So in this post I will be writing a thing or two about redirection in Linux and how it can be used with, or as a replacement to a Linux pipeline of two or more commands.</p>
+        <p>One thing that comes up for me often when working something out with one or more Linux commands is to have a way to write the standard output of what happens to a file rather than the console window. I guess if I wanted to I could just copy and paste the output to a text editor, but there must be a more professional way to do it in the command line right? </p>
+<p>When it comes to <a href="https://opensource.com/article/18/8/introduction-pipes-linux" target="_blank" rel="external">piping</a> I guess I could pipe the output alone to a text editor such as <a href="/2020/11/24/linux-nano/">nano</a>, but there is another option called <a href="https://en.wikipedia.org/wiki/Redirection_%28computing%29" target="_blank" rel="external">Linux redirection</a> where I would not need to bother with an editor. </p>
+<p>So in this post I will be writing a thing or two about redirection in Linux. and how it can be used with, or as a replacement to a Linux pipeline of two or more commands to and editor.</p>
 <a id="more"></a>
-<h2 id="1-Basic-Linux-redirection-of-standard-output-using-echo"><a href="#1-Basic-Linux-redirection-of-standard-output-using-echo" class="headerlink" title="1 - Basic Linux redirection of standard output using echo"></a>1 - Basic Linux redirection of standard output using echo</h2><p>So for this section I will be starting out with redirection and the <a href="/2019/08/15/linux-echo/">Linux echo</a> command to just start out with the very basic of what redirection is all about. If you are not familiar with the echo command it is just a way to spit out text that I give via the command line as the output to the standard output of the console. This nature of the Linux echo command makes it a good command for working out very basic stuff with commands before moving on to something that actually solves a problem that I am having.</p>
-<h3 id="1-1-Using-echo-to-redirect-to-a-file-that-will-be-created-or-written-over"><a href="#1-1-Using-echo-to-redirect-to-a-file-that-will-be-created-or-written-over" class="headerlink" title="1.1 - Using echo to redirect to a file that will be created or written over"></a>1.1 - Using echo to redirect to a file that will be created or written over</h3><p>So to just simple redirect the text foo for example to a file rather than the standard output I just need to use a greater than symbol once between the command and then a path to the file that I want to create or write over again.</p>
+<h2 id="1-Linux-redirection-and-what-to-know-first"><a href="#1-Linux-redirection-and-what-to-know-first" class="headerlink" title="1 - Linux redirection and what to know first"></a>1 - Linux redirection and what to know first</h2><p>There are maybe a few basic things to cover first before getting into redirection. That is before getting into how to go about redirecting standard output of a command to a file it is first important to know a thing or two about what standard output is to begin with. There are also some related topics that I should at least touch base on before continuing on to redirection such as knowing what piping is, and how it can be used to pipe two or more commands together.</p>
+<p>So in this section I will be going over some quick basics of what to know before getting into redirection.</p>
+<h3 id="1-1-The-basic-idea-of-standard-output"><a href="#1-1-The-basic-idea-of-standard-output" class="headerlink" title="1.1 - The basic idea of standard output"></a>1.1 - The basic idea of standard output</h3><p>One way to create standard output is to use the Linux Echo command, this command will just echo a string value given as an argument as standard output.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ echo &quot;hello world&quot;</div><div class="line">hello world</div></pre></td></tr></table></figure>
+<p>There are all kinds of commands that will produce standard output, it is the standard stream where the result of a command will be spit out to. With this simple hello world example of the Linux echo command the standard output of the command is ending up in the console, however that does not need to be the final place that it goes to. The standard output of this command could be piped to another command that would in turn place it somewhere other than the console depending on the nature of the command.</p>
+<p>For example I can take the standard output of the echo command, and pipe it into the standard input of the nano text editor.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ echo &quot;I want to pipe this into nano ==&gt; &quot; | nano -</div></pre></td></tr></table></figure>
+<p>This will result in the string value that I have cerated with the Linux Echo command to be the opening text in the nano text editor. In the editor I can make any changes that I want to the text, and then save the file at any location within the editor. So then this is one way to go about creating a file with some output from a Linux command, however there is another way that one might like better in most situations and that is of course redirection which I will be getting to of course. First however I think that I should also touch base on standard input, and standard error a bit more before getting into some redirection examples.</p>
+<h3 id="1-2-Standard-input"><a href="#1-2-Standard-input" class="headerlink" title="1.2 - Standard input"></a>1.2 - Standard input</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ cat | grep -e &quot;.js$&quot; | xargs echo &quot;javaScript files: $1&quot;</div><div class="line">foo.js</div><div class="line">hello there</div><div class="line">bar.js</div><div class="line">I like the linux</div></pre></td></tr></table></figure>
+<p>When done press ctrl+d, and then the output should be something like this.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">javaScript files:  foo.js bar.js</div></pre></td></tr></table></figure>
+<p>The standard input does not always have to be from the keyboard though, it can also be from another command, or it can be feed in from a file or some other kind of stream. Linux redirection can also be used as a way to redirect standard input to come into a command from a file rather than the keyboard or a command.</p>
+<h2 id="2-Basic-Linux-redirection-of-standard-output-using-echo"><a href="#2-Basic-Linux-redirection-of-standard-output-using-echo" class="headerlink" title="2 - Basic Linux redirection of standard output using echo"></a>2 - Basic Linux redirection of standard output using echo</h2><p>So for this section I will be starting out with redirection and the <a href="/2019/08/15/linux-echo/">Linux echo</a> command to just start out with the very basic of what redirection is all about. If you are not familiar with the echo command it is just a way to spit out text that I give via the command line as the output to the standard output of the console. This nature of the Linux echo command makes it a good command for working out very basic stuff with commands before moving on to something that actually solves a problem that I am having.</p>
+<h3 id="2-1-Using-echo-to-redirect-to-a-file-that-will-be-created-or-written-over"><a href="#2-1-Using-echo-to-redirect-to-a-file-that-will-be-created-or-written-over" class="headerlink" title="2.1 - Using echo to redirect to a file that will be created or written over"></a>2.1 - Using echo to redirect to a file that will be created or written over</h3><p>So to just simple redirect the text foo for example to a file rather than the standard output I just need to use a greater than symbol once between the command and then a path to the file that I want to create or write over again.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ echo &apos;foo&apos; &gt; ~/foo.txt</div></pre></td></tr></table></figure>
 <p>So then this is the basic idea of what redirection is I take the standard output and have it stored in a file in my home path rather than the standard output. With something like this if the file is not there it will be created, and if it is there the text foo will replace anything else that might be there.</p>
-<h3 id="1-1-appending-to-a-file"><a href="#1-1-appending-to-a-file" class="headerlink" title="1.1 - appending to a file"></a>1.1 - appending to a file</h3><p>Sometimes I might want to append what is in a file rather than just write over the file. To append I just need to use two greater than symbols rather than just one.</p>
+<h3 id="2-1-appending-to-a-file"><a href="#2-1-appending-to-a-file" class="headerlink" title="2.1 - appending to a file"></a>2.1 - appending to a file</h3><p>Sometimes I might want to append what is in a file rather than just write over the file. To append I just need to use two greater than symbols rather than just one.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ echo &apos;foo&apos; &gt;&gt; ~/foo.txt</div></pre></td></tr></table></figure>
-<h2 id="2-Linux-grep-example-using-redirection"><a href="#2-Linux-grep-example-using-redirection" class="headerlink" title="2 - Linux grep example using redirection"></a>2 - Linux grep example using redirection</h2><p>Here is a real example that involves using <a href="/2020/09/14/linux-grep/">Linux grep</a> to create a list of blog post id numbers. That is I have a whole bunch of markdown files that have id numbers at the top of each file, and I want a list of file names and id numbers. I use the Linux grep command to create the list that I want, but now I need a way to save that list to a file rather than just have it in the console window. So one way to go about doing this would be to use Linux redirection.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ grep &apos;^id: [0-9]*&apos; *.md &gt; ~/post_id.txt</div></pre></td></tr></table></figure>
-<h2 id="3-redirect-standard-input-from-a-file"><a href="#3-redirect-standard-input-from-a-file" class="headerlink" title="3 - redirect standard input from a file"></a>3 - redirect standard input from a file</h2><p>I can also redirect the standard input just like I am doing with the standard output. The only thing I need to do is just use a less than symbol rather than a greater than symbol. So say I have a file with a list of id numbers I can use linux redirection to use the data in that file as the standard input of a command like cat, and then from there I can pipe the results of that to soemthing else.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ cat &lt; ~/post_id.txt | grep &apos;id: [0-9]*&apos;</div></pre></td></tr></table></figure>
-<h2 id="3-Conclusion"><a href="#3-Conclusion" class="headerlink" title="3 - Conclusion"></a>3 - Conclusion</h2><p>Linux redirection is yet another one of those things in Linux that I feel that I just need to take a moment to write a post on it in order to get everything solid with it, and to also have a resource that I can revise from time to time as I continue to learn more about how to go about taking things to the next level when it comes to becoming Linux competent. </p>
+<h2 id="3-redirect-standard-input-from-a-file"><a href="#3-redirect-standard-input-from-a-file" class="headerlink" title="3 - redirect standard input from a file"></a>3 - redirect standard input from a file</h2><p>I can also redirect the standard input just like I am doing with the standard output. The only thing I need to do is just use a less than symbol rather than a greater than symbol. So Say I have a file that has some text and I want to use the base32 command to create a base32 encoding of that text file. There are a number of ways to do so with the base32 command and bash features.</p>
+<p>In any case I would start with a text file called hello.txt that will contain some text</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Hello World</div></pre></td></tr></table></figure>
+<p>One way to create a base32 encoding of the file would be to pass a path to the file as an argument to base32</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ base32 hello.txt</div><div class="line">JBSWY3DPEBLW64TMMQFA====</div></pre></td></tr></table></figure>
+<p>Another option would be to open the file with a command like cat, and then pipe the standard output of the cat command which would be the text of the file to the standard input of the base32 command.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cat hello.txt | base32</div><div class="line">JBSWY3DPEBLW64TMMQFA====</div></pre></td></tr></table></figure>
+<p>However I do not have to depend on a command like cat to open the file first when it comes to using the content of a file as a standard input source for a command like base32. Yet another option would be to use standard input redirection to redirect the content of the hello.txt file to the standard input of the base32 command.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ base32 &lt; ./hello.txt</div><div class="line">JBSWY3DPEBLW64TMMQFA====</div></pre></td></tr></table></figure>
+<p>I could then use a combination of redirection of standard input, as well as output to create a hello.b32 file using just the base32 command and redirection.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ base32 &lt; ./hello.txt &gt; hello.b32</div></pre></td></tr></table></figure>
+<h2 id="4-redirection-of-standard-error"><a href="#4-redirection-of-standard-error" class="headerlink" title="4 - redirection of standard error"></a>4 - redirection of standard error</h2><p>It is possible to also redirect standard error streams from commands in the same manor as standard output. Just standard error can be redirected, or both the standard out and standard error together.</p>
+<h3 id="4-1-Redirect-both-standard-error-and-standard-output"><a href="#4-1-Redirect-both-standard-error-and-standard-output" class="headerlink" title="4.1 - Redirect both standard error and standard output"></a>4.1 - Redirect both standard error and standard output</h3><p>To both redirect the standard error, and standard output to a file there is using an ampersand and pointy brackets syntax that can be used to do so. Using just one pointy bracket will overwrite a file if it is there to begin with, and using two will append to a file that might be there.</p>
+<p>For example say I have this output in a folder then calling the ls command for the current folder.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ls .</div><div class="line">ls.log  stderr_stdout.sh</div></pre></td></tr></table></figure>
+<p>Then say I redirect the output of the log form of an ls command to a file called log.js. Again for the current path, but also for an invalid path name which will result in an error.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ls -l . &amp;&gt;&gt; ls.log</div><div class="line">$ ls -l % &amp;&gt;&gt; ls.log</div></pre></td></tr></table></figure>
+<p>The content of sl.log then looks like this</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">total 4</div><div class="line">-rw-r--r-- 1 pi pi  0 Nov 28 11:43 ls.log</div><div class="line">-rwxr-xr-x 1 pi pi 49 Nov 28 11:42 stderr_stdout.sh</div><div class="line">ls: cannot access &apos;%&apos;: No such file or directory</div></pre></td></tr></table></figure>
+<p>So then this is generaly the best way to redirect all output both error and exspected to a single file.</p>
+<h2 id="5-Linux-redirection-example-uisng-grep-to-get-a-list-of-blog-post-id-numbers"><a href="#5-Linux-redirection-example-uisng-grep-to-get-a-list-of-blog-post-id-numbers" class="headerlink" title="5 - Linux redirection example uisng grep to get a list of blog post id numbers"></a>5 - Linux redirection example uisng grep to get a list of blog post id numbers</h2><p>Here is a real example that involves using <a href="/2020/09/14/linux-grep/">Linux grep</a> to create a list of blog post id numbers. That is I have a whole bunch of markdown files that have id numbers at the top of each file, and I want a list of file names and id numbers. I use the Linux grep command to create the list that I want, but now I need a way to save that list to a file rather than just have it in the console window. So one way to go about doing this would be to use Linux redirection.</p>
+<p>So each markdown file has some info about the file at the top like this:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">---</div><div class="line">title: Post 0 here we go!</div><div class="line">id: 0</div><div class="line">---</div><div class="line"> </div><div class="line">This is post id 0, this is just a demo post of a blog post mark down file.</div><div class="line"> </div><div class="line">&lt;!-- more --&gt;</div><div class="line"> </div><div class="line">Now lets get to the point here.</div></pre></td></tr></table></figure>
+<p>I can use grep to get a list of each file name, and the id field of each set of data at the top like this.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ grep &apos;^id: [0-9]*&apos; *.md &gt; ./post_id.txt</div></pre></td></tr></table></figure>
+<p>Which will result in the list that I want in post_id.txt.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">post0.md:id: 0</div><div class="line">post1.md:id: 1</div></pre></td></tr></table></figure>
+<p>I could then do additional checks to make sure that there are not any gaps, or more than one instance of the same id, but you get the basic idea. Linux redirection can be used in conjunction with the whole world of Linux commands including grep to create useful lists and reports.</p>
+<h2 id="6-redirecting-to-the-void-with-dev-null"><a href="#6-redirecting-to-the-void-with-dev-null" class="headerlink" title="6 - redirecting to the void with /dev/null"></a>6 - redirecting to the void with /dev/null</h2><p>I have a lof of javaScript apps that I like to start up as an independent process on a system now and then. To do so I call node followed by the name of the javaScript file if I am in the folder in which it is located. I then also pass a port that I would like for the script to listen on also as an argument to the script.</p>
+<p>To make it so the script will run as an independent command I use it with the nohup command, but doing so will result in logs being created for the standard output and error of the script. To prevent this I can use redirection to send all the output of the script to /dev/null.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ nohup node app 8000 &amp;&gt; /dev/null &amp;</div></pre></td></tr></table></figure>
+<p>The effect of this is that all output from my script will end up just being discarded, which is not a problem as log as the script is working fine. If I wanted to debug the script I would not start the script this way. However the basic idea is there, if I just want to discard output from a command, it can be redirected to /dev/null. As such the terminal window to which I start this will not have the output of that command in it, and when using the nohup command it will not end up in these files that will show up otherwise.</p>
+<h2 id="7-Conclusion"><a href="#7-Conclusion" class="headerlink" title="7 - Conclusion"></a>7 - Conclusion</h2><p><a href="https://www.digitalocean.com/community/tutorials/an-introduction-to-linux-i-o-redirection" target="_blank" rel="external">Linux redirection</a> is yet another one of those things in Linux that I feel that I just need to take a moment to write a post on it in order to get everything solid with it, and to also have a resource that I can revise from time to time as I continue to learn more about how to go about taking things to the next level when it comes to becoming Linux competent. </p>
 <p>Linux redirection can be used with or in some cases as a replacement for Linux pipelines where I am piping the standard output as the input of another command. In addition redirection can be used to redirect bolt the standard output as well as the standard input of commands.</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2020/10/02/linux-redirection/" data-id="ckhcho5n5014lpsv1mueg5kiq" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2020/10/02/linux-redirection/" data-id="cki53eybb00ywu0v12zby8o4b" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2020/10/02/linux-redirection/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -275,23 +319,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2020/11/10/linux-bash-script-build-js/">Linux Build Bash Script JavaScript Style</a>
+            <a href="/2020/11/30/linux-bashrc-aliases/">Linux Bashrc file command aliases</a>
           </li>
         
           <li>
-            <a href="/2020/11/06/canvas-example-game-mr-sun-geo/">Mr Sun Geo.js and additional plug-ins</a>
+            <a href="/2020/11/27/linux-bash-script/">Linux Bash Scripts</a>
           </li>
         
           <li>
-            <a href="/2020/11/04/canvas-example-game-mr-sun-temp/">Mr sun Temp and Fusion plug-ins canvas example</a>
+            <a href="/2020/11/25/js-javascript-example-percent-module/">A percent module javaScript example</a>
           </li>
         
           <li>
-            <a href="/2020/11/03/canvas-example-game-mr-sun/">Mr sun canvas example</a>
+            <a href="/2020/11/24/linux-nano/">The Linux nano editor</a>
           </li>
         
           <li>
-            <a href="/2020/11/02/lodash_rearg/">The lodash _.rearg method and rearranging function arguments</a>
+            <a href="/2020/11/23/linux-df/">Linux df command examples</a>
           </li>
         
       </ul>

@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
   
   <title>The node.js shebang | Dustin John Pfister at github pages</title>
   
@@ -17,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2017/03/26/linux_shebang/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="The definition of the word shebang is “a matter, operation, or set of circumstances.” so then the set of circumstances in the case of using Linux is what scripting language is being used when running">
-<meta property="og:updated_time" content="2020-10-02T18:52:29.000Z">
+<meta property="og:updated_time" content="2020-11-28T18:32:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The node.js shebang">
 <meta name="twitter:description" content="The definition of the word shebang is “a matter, operation, or set of circumstances.” so then the set of circumstances in the case of using Linux is what scripting language is being used when running">
@@ -125,10 +127,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/03/26/linux_shebang/" class="article-date"> Modified:
-  <time datetime="2020-10-02T18:52:29.000Z" itemprop="dateModified">2020-10-02</time>
+  <time datetime="2020-11-28T18:32:25.000Z" itemprop="dateModified">2020-11-28</time>
 </a>
 
-    <span class="article-date">V1.6</span>
+    <span class="article-date">V1.8</span>
 
     
   <div class="article-category">
@@ -162,12 +164,23 @@ ga('send', 'pageview');
 <h2 id="2-Check-your-jsMin-or-jsFormat-tools"><a href="#2-Check-your-jsMin-or-jsFormat-tools" class="headerlink" title="2 - Check your jsMin, or jsFormat tools."></a>2 - Check your jsMin, or jsFormat tools.</h2><p>If you use formating or minification tools it can sometimes mess up the shebang, so if you are using one make sure that it leaves it alone. there are often ways to configure a tool that formates javaScript to ignore the first few lines if so that should be done when using it. If not then I am just going to have to do whatever is necessary to make sure that the shebang does not get messed up.</p>
 <p>In major projects I often might take a moment to write a script that will act as a custom build tool for the project. If I am taking the time to make such a tool the shebang should be placed at the very top of the file, followed by legal text, followed then by the compressed javaScript code when making builds of the project.</p>
 <h2 id="3-This-is-an-important-step-in-making-a-CLI-tool-with-node-js"><a href="#3-This-is-an-important-step-in-making-a-CLI-tool-with-node-js" class="headerlink" title="3 - This is an important step in making a CLI tool with node.js"></a>3 - This is an important step in making a CLI tool with node.js</h2><p>I have written a newer post that covers in greater detail <a href="/2017/11/13/linux-nodejs-cli-tools-getting-started/">how to go about getting started making a CLI tool in node.js</a>. Be sure to check that out if you want to learn more about how to make global scripts that you can call from anywhere within the Command Line Interface.</p>
-<h2 id="4-Conclusion"><a href="#4-Conclusion" class="headerlink" title="4 - Conclusion"></a>4 - Conclusion</h2><p>That’s it, this is a short post aimed at a very specific topic of interest. It is a relevant part of getting into what is needed to be understood when it comes to developing CLI tools with node.js, but that is a whole other ball of wax as I see it. When it comes to it I will link and and expand this post accordingly.</p>
+<h2 id="4-Other-examples-of-shebangs-the-shebang-should-always-point-to-the-binary-to-use-to-call-a-script"><a href="#4-Other-examples-of-shebangs-the-shebang-should-always-point-to-the-binary-to-use-to-call-a-script" class="headerlink" title="4 - Other examples of shebangs, the shebang should always point to the binary to use to call a script."></a>4 - Other examples of shebangs, the shebang should always point to the binary to use to call a script.</h2><p>A Linux shebang should be placed on top of any script, or source code file that is to be called directly and the script is in a langauge that is not compiled. For example if I where to write a simple little projecty in the C langaue there is no need to place a shebang at the top of a source code file, becuase C lanague source is compiled to a binary, and that binary file is what I can then call directly.</p>
+<p>So in other words a shebang is a way of letting bash know what binary to use to call a script when the script is called directly from the command line. With javaScript files it makes sense to place a shebang pointing to the location of where the nodejs binary is in a system. However with other scripting langaues the shebang should point to whatever binary is used to call the script. </p>
+<p>For example when working out a bash script I would want to have a shebang point to bash.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line">echo &quot;Hello Bash!&quot;</div></pre></td></tr></table></figure>
+<p>Whatever the scripting langaue is theer should be a binary that ise used to call it, the location of that binary should be the shebang.</p>
+<h2 id="5-Making-a-script-exacutabule-with-chmod"><a href="#5-Making-a-script-exacutabule-with-chmod" class="headerlink" title="5 - Making a script exacutabule with chmod"></a>5 - Making a script exacutabule with chmod</h2><p>To make a script exacutabule by itself with chmod I just need to call chmod and use an octal code like 755 so that the file is exacuabule for at least the owner of the file, and still be able to read and write to it also.</p>
+<p>So say I have a simple hello world script like this:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/node</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">'hello world'</span>);</div></pre></td></tr></table></figure>
+<p>If I save it as something like hello.js I can then use chmod to make is exacutabule, and once that is the case I can call the script by itself.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ chmod 755 hello.js</div><div class="line">$ ./hello.js</div><div class="line">hello world</div></pre></td></tr></table></figure>
+<p>There are many other octal codes for setting file access permissions of a file, including scripts. Setting a coe such as 777 will make it so all users have full permisions for reading, writing, and calling the script for example. I will not be getting into detail about the chmod script and file permsions in detail here though of course. I have wrote a <a href="/2020/11/13/linux-chmod/">post on chmod, and permsions</a> if you want to read more about this one.</p>
+<h2 id="6-Conclusion"><a href="#6-Conclusion" class="headerlink" title="6 - Conclusion"></a>6 - Conclusion</h2><p>That’s it, this is a short post aimed at a very specific topic of interest. It is a relevant part of getting into what is needed to be understood when it comes to developing CLI tools with node.js, but that is a whole other ball of wax as I see it. When it comes to it I will link and and expand this post accordingly.</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2017/03/26/linux_shebang/" data-id="ckhcho5o0014xpsv1gjd7e413" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2017/03/26/linux_shebang/" data-id="cki53eyc600z8u0v1k3urs23d" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2017/03/26/linux_shebang/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -273,23 +286,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2020/11/10/linux-bash-script-build-js/">Linux Build Bash Script JavaScript Style</a>
+            <a href="/2020/11/30/linux-bashrc-aliases/">Linux Bashrc file command aliases</a>
           </li>
         
           <li>
-            <a href="/2020/11/06/canvas-example-game-mr-sun-geo/">Mr Sun Geo.js and additional plug-ins</a>
+            <a href="/2020/11/27/linux-bash-script/">Linux Bash Scripts</a>
           </li>
         
           <li>
-            <a href="/2020/11/04/canvas-example-game-mr-sun-temp/">Mr sun Temp and Fusion plug-ins canvas example</a>
+            <a href="/2020/11/25/js-javascript-example-percent-module/">A percent module javaScript example</a>
           </li>
         
           <li>
-            <a href="/2020/11/03/canvas-example-game-mr-sun/">Mr sun canvas example</a>
+            <a href="/2020/11/24/linux-nano/">The Linux nano editor</a>
           </li>
         
           <li>
-            <a href="/2020/11/02/lodash_rearg/">The lodash _.rearg method and rearranging function arguments</a>
+            <a href="/2020/11/23/linux-df/">Linux df command examples</a>
           </li>
         
       </ul>

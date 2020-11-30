@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
   
   <title>Javascript iframe basics | Dustin John Pfister at github pages</title>
   
@@ -11,16 +13,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2019/02/10/js-javascript-iframe/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Sometimes it is called for to do something that involves an iFrame element when it comes to developing a client side system with javaScript. An iframe is a way to have another html page inside an html">
+  <meta name="description" content="Sometimes it is called for to do something that involves the use of an iFrame element, when it comes to developing a client side system with javaScript. An iframe is a way to have another html page in">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Javascript iframe basics">
 <meta property="og:url" content="https://dustinpfister.github.io/2019/02/10/js-javascript-iframe/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="Sometimes it is called for to do something that involves an iFrame element when it comes to developing a client side system with javaScript. An iframe is a way to have another html page inside an html">
-<meta property="og:updated_time" content="2020-07-09T12:17:54.000Z">
+<meta property="og:description" content="Sometimes it is called for to do something that involves the use of an iFrame element, when it comes to developing a client side system with javaScript. An iframe is a way to have another html page in">
+<meta property="og:updated_time" content="2020-11-30T15:58:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Javascript iframe basics">
-<meta name="twitter:description" content="Sometimes it is called for to do something that involves an iFrame element when it comes to developing a client side system with javaScript. An iframe is a way to have another html page inside an html">
+<meta name="twitter:description" content="Sometimes it is called for to do something that involves the use of an iFrame element, when it comes to developing a client side system with javaScript. An iframe is a way to have another html page in">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -125,10 +127,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2019/02/10/js-javascript-iframe/" class="article-date"> Modified:
-  <time datetime="2020-07-09T12:17:54.000Z" itemprop="dateModified">2020-07-09</time>
+  <time datetime="2020-11-30T15:58:26.000Z" itemprop="dateModified">2020-11-30</time>
 </a>
 
-    <span class="article-date">V1.14</span>
+    <span class="article-date">V1.19</span>
 
     
   <div class="article-category">
@@ -151,7 +153,8 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>Sometimes it is called for to do something that involves an <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" target="_blank" rel="external">iFrame</a> element when it comes to developing a client side system with javaScript. An iframe is a way to have another html page inside an html page, when it comes to javaScript it is also a way to have another window object.</p>
+        <p>Sometimes it is called for to do something that involves the use of an <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" target="_blank" rel="external">iFrame</a> element, when it comes to developing a client side system with javaScript. An iframe is a way to have another html page inside an html page, when it comes to javaScript it is also a way to have another window object to work with. </p>
+<p>Thats is that I can have a completely separate window object that will not collide with the what is going on in the parent window object. However doing so WILL NOT result in a separate event loop when it comes to running javaScript on the page as a whole. Both the javaScript code that runs in the parent window object, as well as any iframes will share a single event loop. So iframes are not an alternative to something such as web worker, and when it comes to rending in a page there is still one main thread for that.</p>
 <p>The subject of iframes can become a little complicated there is much to write about with them when it comes to more advanced topics involving hidden iframes, and security concerns when with things like <a href="https://en.wikipedia.org/wiki/Clickjacking" target="_blank" rel="external">click jacking</a> that ca be preformed with iframes. So in this post I will be sticking to just the basics for now as many of these other topics are matters for another post.</p>
 <a id="more"></a>
 <h2 id="1-javaScript-iFrame-basics"><a href="#1-javaScript-iFrame-basics" class="headerlink" title="1 - javaScript iFrame basics"></a>1 - javaScript iFrame basics</h2><p>To get started with iframes there are two general ways of doing so, one would be to add one to the actual hard coded html by editing an html file or template, and the other way would be to create and inject one into a document with something like the document create element method. In this section I will be covering how to go about doing just this involving a single html file. I assume that you have at least some background with javaScript, and html before hand.</p>
@@ -167,12 +170,20 @@ ga('send', 'pageview');
 <p>Never the less if the url is at the same domain, or if it is a url where this sort of thing will happen without issue then the following might work out okay. </p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>javascript iframe<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">iframe</span> <span class="attr">id</span>=<span class="string">"theframe"</span> <span class="attr">width</span>=<span class="string">"320"</span> <span class="attr">height</span>=<span class="string">"240"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line"><span class="keyword">let</span> iFrame = <span class="built_in">document</span>.querySelector(<span class="string">'#theframe'</span>),</div><div class="line">w = iFrame.contentWindow;</div><div class="line"> </div><div class="line">iFrame.setAttribute(<span class="string">'src'</span>, <span class="string">'./basic.html'</span>);</div><div class="line">        <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
 <p>To do so I just need to set the src attribute of the iframe to the url of the resource that I want to load and display in the iframe. If all goes well that alone should work, if not finding a solution to this is outside the scope of this post.</p>
-<h2 id="3-Conclusion"><a href="#3-Conclusion" class="headerlink" title="3 - Conclusion"></a>3 - Conclusion</h2><p>The basics of iframes are not so hard but there is much more to write about them when it comes to sandboxing, hidden iframes, and cross domain issues. Hopefully thing post has served you well when it comes to the basics of iframes and javaScript for now.</p>
+<h2 id="3-Threading-with-an-iframe-will-not-result-in-a-separate-event-loop-or-‘true-threading’-as-it-is-sometimes-called"><a href="#3-Threading-with-an-iframe-will-not-result-in-a-separate-event-loop-or-‘true-threading’-as-it-is-sometimes-called" class="headerlink" title="3 - Threading with an iframe will not result in a separate event loop, or ‘true threading’ as it is sometimes called"></a>3 - Threading with an iframe will not result in a separate event loop, or ‘true threading’ as it is sometimes called</h2><p>Conventional wisdom might lead one to believe that it is possible to have more than one event loop when creating iframes. That is that each iframe will result in not just a new window object, but also a new event loop when it comes to running javaScript code in a page. However as of this writing it would seem that this is not true.</p>
+<p>I can define separate javaScript code in an iframe yes, but that javaScript code will share an event loop with the parent page also. So if I do something heavy in an iframe that can end up bogging down what is going on in the main page also. However do not just take my word for it, prove it to yourself with just a little html and javaScript. In fact I will save you the trouble and go over something in this section that helps to prove this point.</p>
+<h3 id="3-1-A-thread-html-file-that-will-be-loaded-into-an-iFrame"><a href="#3-1-A-thread-html-file-that-will-be-loaded-into-an-iFrame" class="headerlink" title="3.1 - A thread.html file that will be loaded into an iFrame"></a>3.1 - A thread.html file that will be loaded into an iFrame</h3><p>Here I have a page that is doing something that will take a little time that I will be saving as thread.html. This page can be loaded up by itself, however I intend to load it up in an iframe in a main html file that will open this file up via the src attribute. If an iframe where to get its own event loop, then the while loop taking a long time to count to a large number would not interfere with something else going on in the main page.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>javascript iframe<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line"><span class="keyword">let</span> out = <span class="built_in">document</span>.createElement(<span class="string">'p'</span>);</div><div class="line">out.innerText = <span class="string">''</span>;</div><div class="line"><span class="built_in">document</span>.body.appendChild(out);</div><div class="line"><span class="keyword">var</span> lt = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"><span class="keyword">var</span> loop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    setTimeout(loop, <span class="number">100</span>);</div><div class="line">    <span class="keyword">var</span> i = <span class="number">500000000</span>;</div><div class="line">    <span class="keyword">while</span> (i--) &#123;&#125;;</div><div class="line">    <span class="keyword">var</span> secs = (<span class="keyword">new</span> <span class="built_in">Date</span>() - lt) / <span class="number">1000</span>;</div><div class="line">    lt = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line">    out.innerText = secs;</div><div class="line">&#125;;</div><div class="line">loop();</div><div class="line">        <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="3-2-The-main-index-html-file-that-will-contain-the-iframe"><a href="#3-2-The-main-index-html-file-that-will-contain-the-iframe" class="headerlink" title="3.2 - The main index.html file that will contain the iframe"></a>3.2 - The main index.html file that will contain the iframe</h3><p>Here I have a main html file in which I am loading the thread.html page that I went over in the above sub section. In this page I also have a little javaScript code running, but I am not doing anything that should take a long time. If the page that I am loading in the iframe has its own event loop then the javaScript code in this page should run faster, and not end up getting effected by the javaScript code running in the iframe that much.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>javascript iframe<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">iframe</span> <span class="attr">id</span>=<span class="string">"theframe"</span> <span class="attr">width</span>=<span class="string">"640"</span> <span class="attr">height</span>=<span class="string">"480"</span> <span class="attr">src</span>=<span class="string">"thread.html"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line"><span class="keyword">let</span> out = <span class="built_in">document</span>.createElement(<span class="string">'p'</span>);</div><div class="line">out.innerText = <span class="string">''</span>;</div><div class="line"><span class="built_in">document</span>.body.appendChild(out);</div><div class="line"><span class="keyword">var</span> lt = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"><span class="keyword">var</span> loop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    setTimeout(loop, <span class="number">100</span>);</div><div class="line">    <span class="keyword">var</span> secs = (<span class="keyword">new</span> <span class="built_in">Date</span>() - lt) / <span class="number">1000</span>;</div><div class="line">    lt = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line">    out.innerText = secs;</div><div class="line">&#125;;</div><div class="line">loop();</div><div class="line">        <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>When I start this up the javaScript code in the thread.html file ends up causing the code in the main page to slow down also. If the iframe had its own event loop this would not be the case. So then the use of an iframe is not a replacement for web workers, or opening the separate html file in a whole other tab or window all together. That is that if I where to open the thread.html file op in its own window that will run independently from any additional windows, and have its own event loop it would seem.</p>
+<p>So no using an iframe is not an alternative to using web workers, if for some reason you want more than one event loop that is the way that it is done in a web browser.</p>
+<h2 id="4-Conclusion"><a href="#4-Conclusion" class="headerlink" title="4 - Conclusion"></a>4 - Conclusion</h2><p>The basics of iframes are not so hard but there is much more to write about them when it comes to sandboxing, hidden iframes, and cross domain issues. Hopefully thing post has served you well when it comes to the basics of iframes and javaScript for now.</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2019/02/10/js-javascript-iframe/" data-id="ckhcho56700xrpsv1zdm8zzcw" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2019/02/10/js-javascript-iframe/" data-id="cki53exqh00pju0v1e1p3yhun" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2019/02/10/js-javascript-iframe/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -278,23 +289,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2020/11/10/linux-bash-script-build-js/">Linux Build Bash Script JavaScript Style</a>
+            <a href="/2020/11/30/linux-bashrc-aliases/">Linux Bashrc file command aliases</a>
           </li>
         
           <li>
-            <a href="/2020/11/06/canvas-example-game-mr-sun-geo/">Mr Sun Geo.js and additional plug-ins</a>
+            <a href="/2020/11/27/linux-bash-script/">Linux Bash Scripts</a>
           </li>
         
           <li>
-            <a href="/2020/11/04/canvas-example-game-mr-sun-temp/">Mr sun Temp and Fusion plug-ins canvas example</a>
+            <a href="/2020/11/25/js-javascript-example-percent-module/">A percent module javaScript example</a>
           </li>
         
           <li>
-            <a href="/2020/11/03/canvas-example-game-mr-sun/">Mr sun canvas example</a>
+            <a href="/2020/11/24/linux-nano/">The Linux nano editor</a>
           </li>
         
           <li>
-            <a href="/2020/11/02/lodash_rearg/">The lodash _.rearg method and rearranging function arguments</a>
+            <a href="/2020/11/23/linux-df/">Linux df command examples</a>
           </li>
         
       </ul>
