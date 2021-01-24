@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
+  
+  <title>Named arguments for python scripts using the argparse standard library | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2021/01/19/python-standard-library-argparse/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="When learning a new language that can be used to create scripts that can be called from the command line one of the first things that I like to learn is how to access any positional arguments that mig">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Named arguments for python scripts using the argparse standard library">
+<meta property="og:url" content="https://dustinpfister.github.io/2021/01/19/python-standard-library-argparse/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="When learning a new language that can be used to create scripts that can be called from the command line one of the first things that I like to learn is how to access any positional arguments that mig">
+<meta property="og:updated_time" content="2021-01-20T18:59:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Named arguments for python scripts using the argparse standard library">
+<meta name="twitter:description" content="When learning a new language that can be used to create scripts that can be called from the command line one of the first things that I like to learn is how to access any positional arguments that mig">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-python-standard-library-argparse" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/01/19/python-standard-library-argparse/" class="article-date"> Published:
+  <time datetime="2021-01-19T18:06:00.000Z" itemprop="datePublished">2021-01-19</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2021/01/19/python-standard-library-argparse/" class="article-date"> Modified:
+  <time datetime="2021-01-20T18:59:01.000Z" itemprop="dateModified">2021-01-20</time>
+</a>
+
+    <span class="article-date">V1.12</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/python/">python</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Named arguments for python scripts using the argparse standard library
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>When learning a new language that can be used to create scripts that can be called from the command line one of the first things that I like to learn is how to access any positional arguments that might have been given when the script was called. If I do just want to check positional arguments then there is just using the sys libraries argv property to do so. However there should be a way to parse named arguments with a built in library or there should at least be a decent user space options when it comes to parsing named options.</p>
+<p>WHen it comes to option parsers in some programing languages I have to look for a user space option, or even go so far as to create and maintain my own options parser. This is, or at least as of this writing was the case when it comes to nodejs, as such I would go with a user space npm package for option parsing such as commander, or yargs. However one nice thing about writing scripts with python is that there is a great built in option parser called <a href="https://docs.python.org/3.7/library/argparse.html#argparse.ArgumentParser.add_argument" target="_blank" rel="external">argparse</a>.</p>
+<a id="more"></a>
+<h2 id="1-Basic-getting-started-example-of-argparse"><a href="#1-Basic-getting-started-example-of-argparse" class="headerlink" title="1 - Basic getting started example of argparse"></a>1 - Basic getting started example of argparse</h2><p>The basic flow of argparse is to like always import the library first. The next step is to create a new instance of the parser by calling the Argument Parser method of the argparse library. Once I have an instance of a parser I can then start adding some arguments for the parser by calling the add argument method of a parser instance. When doing so there are a number of parameters for the add argument method that I will be getting into greater detail later in this post. Once I have one or more arguments for the parser instance I can the call the parse args method of the parser instance, and the returned value of that will be an arguments object that I can then use in the rest of the code of my script.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> argparse</div><div class="line"> </div><div class="line"><span class="comment"># create a parser</span></div><div class="line">parser = argparse.ArgumentParser(description=<span class="string">'Basic argparse example.'</span>)</div><div class="line"> </div><div class="line"><span class="comment"># have at least one argument</span></div><div class="line">parser.add_argument(<span class="string">'--foo'</span>,</div><div class="line">                    dest=<span class="string">'mode'</span>,</div><div class="line">                    action=<span class="string">'store_true'</span>,</div><div class="line">                    default=<span class="keyword">False</span>,</div><div class="line">                    help=<span class="string">'set foo mode true (default: False)'</span>)</div><div class="line"></div><div class="line"><span class="comment"># parse the arguments</span></div><div class="line">args = parser.parse_args()</div><div class="line"> </div><div class="line"><span class="comment"># use the arguments</span></div><div class="line"><span class="keyword">if</span>(args.mode):</div><div class="line">    print(<span class="string">'FOO MODE!'</span>)</div><div class="line"><span class="keyword">else</span>:</div><div class="line">    print(<span class="string">'bar mode'</span>)</div></pre></td></tr></table></figure>
+<h2 id="2-The-add-argument-method-in-detail"><a href="#2-The-add-argument-method-in-detail" class="headerlink" title="2 - The add argument method in detail"></a>2 - The add argument method in detail</h2><p>The add argument method of a parser instance is a key part of the process of defining what the named arguments for a script should be. At a bare minimum I should at least set a name for an argument. However there are a number of other parameters for this method that are worth getting into detail with. So in this section I will be quickly going over some of the parameters of the method that I should be aware of when using it to define the name options for a script.</p>
+<h3 id="2-1-The-name-argumnet"><a href="#2-1-The-name-argumnet" class="headerlink" title="2.1 - The name argumnet"></a>2.1 - The name argumnet</h3><p>The first argument that is given when calling the add argument method of a parser instance will be that is used in the command line to set the argument. The value will also be used for a default value for a destination of the argument object if another value is not given with the dest property. More than one positional argument can be given when setting a name for the argument.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> argparse</div><div class="line"> </div><div class="line">parser = argparse.ArgumentParser()</div><div class="line"> </div><div class="line">parser.add_argument(<span class="string">'--foo'</span>)</div><div class="line"> </div><div class="line"><span class="comment"># parse the arguments</span></div><div class="line">args = parser.parse_args()</div><div class="line"> </div><div class="line">print(args.foo);</div></pre></td></tr></table></figure>
+<h3 id="2-2-The-action-parameter"><a href="#2-2-The-action-parameter" class="headerlink" title="2.2 - The action parameter"></a>2.2 - The action parameter</h3><p>There are a number of additional parameters for the add argument method that are worth mentioning beyond just setting the name of the option. The action parameter is one such parameter that is worth mentioning, this is what can be used to define several types of actions when it comes to how options should be treated. What I mean by that is that there are options where it just sets a boolen value from false to true, or the other way around, and then there are options that can be used to set some kind of value. The action parameter is how to go about setting what kind of option it is when it comes to these things.</p>
+<p>The default action is store, so there is not much need to bother setting that kind iof action, unless for some reason I want to make sure that it is clear that is the kind of action it should be. This kind of action will just store any given value after the option is used as a value for the property in the args object.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> argparse</div><div class="line"> </div><div class="line">parser = argparse.ArgumentParser()</div><div class="line"> </div><div class="line"><span class="comment"># default action is 'store' which will just store any given value for</span></div><div class="line"><span class="comment"># the argument. If no default is set then the default value for the</span></div><div class="line"><span class="comment"># argument will be None. The default dist for the argument will be the name</span></div><div class="line"><span class="comment"># of the argument</span></div><div class="line"> </div><div class="line">parser.add_argument(<span class="string">'--foo'</span>)</div><div class="line"> </div><div class="line"><span class="comment"># here is another argument, with values set to what the defaults are</span></div><div class="line">parser.add_argument(<span class="string">'--bar'</span>,</div><div class="line">                    action=<span class="string">'store'</span>,</div><div class="line">                    default=<span class="keyword">None</span>,</div><div class="line">                    dest=<span class="string">'bar'</span>)</div><div class="line"> </div><div class="line">args = parser.parse_args()</div><div class="line">print(args.foo);</div><div class="line">print(args.bar);</div></pre></td></tr></table></figure>
+<p>There are a number of other actions other that the default sore action, I will be getting to those later in this post.</p>
+<h3 id="2-3-Have-two-or-more-arguments-for-an-option"><a href="#2-3-Have-two-or-more-arguments-for-an-option" class="headerlink" title="2.3 - Have two or more arguments for an option"></a>2.3 - Have two or more arguments for an option</h3><p>The nargs parameter of add arguments is what I will want to use if for example I want to set two or more values for an option. What I mean by this is that when using an option there is often an option that does not take any values, it just sets a boolean true or false, there is also the kind of option that takes just one value, but the nargs parameter can be used to set a number of arguments for an option.</p>
+<p>For example say I want to have an add option that will take two number values after the option.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> argparse</div><div class="line">parser = argparse.ArgumentParser()</div><div class="line"> </div><div class="line">parser.add_argument(<span class="string">'--add'</span>, nargs=<span class="number">2</span>)</div><div class="line"> </div><div class="line">args = parser.parse_args()</div><div class="line">print(args.add);</div></pre></td></tr></table></figure>
+<h2 id="3-Actions-in-detail"><a href="#3-Actions-in-detail" class="headerlink" title="3 - Actions in detail"></a>3 - Actions in detail</h2><p>Now that I have a basic example out of the way, and I went over the various parameters for the add argument method, I think I should take a moment to get into actions a little deeper. In many of the examples thus far I have just been using the default action which is a store action. However there are a number of other options when it comes to actions. There are two boolean actions, one for setting up an argument that will be set to true when used, and the other as you might have guessed is to set something false. There are a few other options that might be a good choice over the default store action in some cases, so lets take a look at the options are when it comes to actions.</p>
+<h3 id="3-2-Store-Ture-and-False-values-for-simple-boolean-options-with-store-true-and-store-false-actions"><a href="#3-2-Store-Ture-and-False-values-for-simple-boolean-options-with-store-true-and-store-false-actions" class="headerlink" title="3.2 - Store Ture and False values for simple boolean options with store_true, and store_false actions"></a>3.2 - Store Ture and False values for simple boolean options with store_true, and store_false actions</h3><p>The kind of option that is just a flag that sets a boolean value to true is pretty typically when working out a script for something. Setting the action to store_true will set up and option that will be true when the flag is given in the command line.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> argparse</div><div class="line"> </div><div class="line"><span class="comment"># create a parser</span></div><div class="line">parser = argparse.ArgumentParser(description=<span class="string">'Basic argparse boolean example.'</span>)</div><div class="line"> </div><div class="line"><span class="comment"># a bool argument can be created by using the 'store_true', or 'store_false' value for</span></div><div class="line"><span class="comment"># the action argument of the add_argument method. If for example the 'store_true' action</span></div><div class="line"><span class="comment"># is used, then it would make sense to set the default argument to False</span></div><div class="line">parser.add_argument(<span class="string">'--foo'</span>,</div><div class="line">                    dest=<span class="string">'foomode'</span>,</div><div class="line">                    action=<span class="string">'store_true'</span>,</div><div class="line">                    default=<span class="keyword">False</span>,</div><div class="line">                    help=<span class="string">'set foomode true (default: False)'</span>)</div><div class="line"> </div><div class="line"><span class="comment"># parse the arguments</span></div><div class="line">args = parser.parse_args()</div><div class="line"><span class="comment"># use the arguments</span></div><div class="line"><span class="keyword">if</span>(args.foomode):</div><div class="line">    print(<span class="string">'FOO MODE!'</span>)</div><div class="line"><span class="keyword">else</span>:</div><div class="line">    print(<span class="string">'bar mode'</span>)</div></pre></td></tr></table></figure>
+<h3 id="3-3-Store-const"><a href="#3-3-Store-const" class="headerlink" title="3.3 - Store const"></a>3.3 - Store const</h3><p>So what if I want an option that is like a boolean option, but in place of a true or false value there is a number value, or some other constant value that will be used with some code. In other words say I want a value that is a scale value that can be set to 360 with a degree flag, or left to a default value that is 6.28. For these kinds of options there is the store_const action that can be used to set a const value when the flag is set. The default parameter can be used to set a default value for this in the event that the flag is not given.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> argparse</div><div class="line"> </div><div class="line">parser = argparse.ArgumentParser(description=<span class="string">'Basic argparse boolean example.'</span>)</div><div class="line"> </div><div class="line"><span class="comment"># sore_const action</span></div><div class="line">parser.add_argument(<span class="string">'--degree'</span>, <span class="string">'-d'</span>,</div><div class="line">                    action=<span class="string">'store_const'</span>,</div><div class="line">                    dest=<span class="string">'scale'</span>,</div><div class="line">                    const=<span class="number">360.00</span>,</div><div class="line">                    default=<span class="number">6.28</span>,</div><div class="line">                    help=<span class="string">'set scale to 360'</span>)</div><div class="line"> </div><div class="line">parser.add_argument(<span class="string">'--angle'</span>, <span class="string">'-a'</span>,</div><div class="line">                    dest=<span class="string">'angle'</span>,</div><div class="line">                    action=<span class="string">'store'</span>,</div><div class="line">                    default=<span class="number">0</span>,</div><div class="line">                    help=<span class="string">'an angle value'</span>)</div><div class="line"> </div><div class="line">args = parser.parse_args()</div><div class="line">per = float(args.angle) / args.scale;</div><div class="line">print(<span class="string">'per='</span> + str(per), <span class="string">'scale='</span> + str(args.scale), <span class="string">'angle='</span> + str(args.angle))</div></pre></td></tr></table></figure>
+<h2 id="4-Conclusion"><a href="#4-Conclusion" class="headerlink" title="4 - Conclusion"></a>4 - Conclusion</h2><p>This standard library is a great part of the collection of built in python libraries. In many other languages I have to waste time hunting down a decent option parser, or waste a great deal of time coming up with my own solution for doing so. However with python there is a great solution for this built into python itself, along with a whole bunch of other pretty useful built in libraries. So far I have not found much or a reason to even start looking into user space packages actually because there is just so much to work with when it comes to built in libraries.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2021/01/19/python-standard-library-argparse/" data-id="ckkbkuba101s7acv1tz71sbhh" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2021/01/19/python-standard-library-argparse/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/01/20/python-standard-library-re/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          regular expressions in Python
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/01/18/python-string/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Strings in python</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2021/01/19/python-standard-library-argparse/index.html';
+    this.page.identifier = '784';
+    this.page.title = 'Named arguments for python scripts using the argparse standard library';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.63px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.53px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.68px;">angular</a> <a href="/tags/animation/" style="font-size: 12.11px;">animation</a> <a href="/tags/automation/" style="font-size: 12.11px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.63px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.74px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.95px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.16px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.05px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.58px;">ejs</a> <a href="/tags/express/" style="font-size: 16.84px;">express</a> <a href="/tags/games/" style="font-size: 17.37px;">games</a> <a href="/tags/git/" style="font-size: 13.16px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.74px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.68px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.21px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.53px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.58px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 16.32px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.42px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.21px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.47px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.89px;">phaser</a> <a href="/tags/python/" style="font-size: 15.26px;">python</a> <a href="/tags/statistics/" style="font-size: 12.63px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.32px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.79px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/01/22/python-standard-library-random/">Random Numbers in Python</a>
+          </li>
+        
+          <li>
+            <a href="/2021/01/21/python-standard-library-datetime/">Date objects in Python</a>
+          </li>
+        
+          <li>
+            <a href="/2021/01/20/python-standard-library-re/">regular expressions in Python</a>
+          </li>
+        
+          <li>
+            <a href="/2021/01/19/python-standard-library-argparse/">Named arguments for python scripts using the argparse standard library</a>
+          </li>
+        
+          <li>
+            <a href="/2021/01/18/python-string/">Strings in python</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2021/01/19/python-standard-library-argparse/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
