@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2019/05/26/vuejs-lifecycle-before-create/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="The vue before create lifecycle hook is the first of many hooks that fire throughout the lifecycle of a vuejs instance. It is in this hook that I would go about doing anything that I might want to hap">
-<meta property="og:updated_time" content="2021-02-09T14:16:15.000Z">
+<meta property="og:updated_time" content="2021-02-28T17:42:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="vue before create lifecycle hook">
 <meta name="twitter:description" content="The vue before create lifecycle hook is the first of many hooks that fire throughout the lifecycle of a vuejs instance. It is in this hook that I would go about doing anything that I might want to hap">
@@ -127,10 +127,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2019/05/26/vuejs-lifecycle-before-create/" class="article-date"> Modified:
-  <time datetime="2021-02-09T14:16:15.000Z" itemprop="dateModified">2021-02-09</time>
+  <time datetime="2021-02-28T17:42:35.000Z" itemprop="dateModified">2021-02-28</time>
 </a>
 
-    <span class="article-date">V1.6</span>
+    <span class="article-date">V1.7</span>
 
     
   <div class="article-category">
@@ -164,12 +164,12 @@ ga('send', 'pageview');
 <h2 id="2-Hard-coded-object-vue-before-create-example"><a href="#2-Hard-coded-object-vue-before-create-example" class="headerlink" title="2 - Hard coded object vue before create example"></a>2 - Hard coded object vue before create example</h2><p>So here is another example that comes to mind. Although there is not much that can be done during the before create hook of the vue lifecycle, one thing that can be done is to append a plain old object to the vue instance.</p>
 <p>So in this example I am creating a hard coded data object for the vue instance in the before create hook. The thing about the vue data object is that it contains the current state of a vuejs project model, but not any kind f hard coded initial state. So maybe the before Create hook would be a good place to create such an object, maybe not, In any case that is what I am doing here.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> Vue(&#123;</div><div class="line">    <span class="attr">el</span>: <span class="string">'#demo-lifecycle-before-create'</span>,</div><div class="line">    <span class="attr">template</span>: <span class="string">'&lt;div&gt;&lt;span&gt;n:&#123;&#123; n &#125;&#125; &lt;/span&gt;&lt;br&gt;&lt;span&gt; mess: &#123;&#123; mess &#125;&#125;&lt;/span&gt;&lt;/div&gt;'</span>,</div><div class="line">    <span class="attr">data</span>: &#123;</div><div class="line">        <span class="attr">n</span>: <span class="literal">null</span>,</div><div class="line">        <span class="attr">mess</span>: <span class="string">''</span></div><div class="line">    &#125;,</div><div class="line">    <span class="comment">// default create hook</span></div><div class="line">    beforeCreate: <span class="function"><span class="params">()</span>=&gt;</span> &#123;</div><div class="line">        <span class="comment">// define hard coded data object</span></div><div class="line">        <span class="keyword">this</span>.hardData = &#123;</div><div class="line">            <span class="attr">n</span>: <span class="number">21</span>,</div><div class="line">            <span class="attr">mess</span>: <span class="string">'hard coded data is used'</span></div><div class="line">        &#125;;</div><div class="line">    &#125;,</div><div class="line">    <span class="comment">// create hook</span></div><div class="line">    created: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> self = <span class="keyword">this</span>;</div><div class="line">        <span class="comment">// fetch data</span></div><div class="line">        fetch(<span class="string">'/data'</span>)</div><div class="line">        .then(<span class="function">(<span class="params">res</span>)=&gt;</span> &#123;</div><div class="line">            <span class="keyword">return</span> res.json();</div><div class="line">        &#125;)</div><div class="line">        .then(<span class="function">(<span class="params">data</span>)=&gt;</span> &#123;</div><div class="line">            <span class="comment">// if all goes well use that</span></div><div class="line">            self.$data.n = data.n;</div><div class="line">            self.$data.mess = <span class="string">'Got data from back end'</span>;</div><div class="line">        &#125;)</div><div class="line">        .catch (<span class="function">(<span class="params">e</span>)=&gt;</span> &#123;</div><div class="line">            <span class="comment">// else use hard data</span></div><div class="line">            self.$data.n = self.hardData.n;</div><div class="line">            self.$data.mess = self.hardData.mess + <span class="string">' : '</span> + e.message;</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<h2 id="3-Conclusion"><a href="#3-Conclusion" class="headerlink" title="3 - Conclusion"></a>3 - Conclusion</h2><p>I can not say that I use the before create hook that often when working out actual projects thus far. Most of the time I am just using the created, mounted, and updated hooks. Still I am sure there will be times now and then where I will want to use this before create hook now and then when doing so is called for. If I do end up with some real life examples of the before create hook I will be sure to update this post with that example. In any case this hook might be a good starting point whenit comes to just learning about vuejs life cycle hooks for the first time, it is the first in line when it comes to a linear progression for sorts with this it would seem.</p>
+<h2 id="3-Conclusion"><a href="#3-Conclusion" class="headerlink" title="3 - Conclusion"></a>3 - Conclusion</h2><p>I can not say that I use the before create hook that often when working out actual projects thus far. Most of the time I am just using the created, mounted, and updated hooks. Still I am sure there will be times now and then where I will want to use this before create hook now and then when doing so is called for. If I do end up with some real life examples of the before create hook I will be sure to update this post with that example. In any case this hook might be a good starting point when it comes to just learning about vuejs life cycle hooks for the first time, it is the first in line when it comes to a linear progression for sorts with this it would seem.</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2019/05/26/vuejs-lifecycle-before-create/" data-id="ckl74qdw1026ghcv1va8guvtu" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2019/05/26/vuejs-lifecycle-before-create/" data-id="cklpl4oip02crrgv1iak4i0hy" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2019/05/26/vuejs-lifecycle-before-create/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -253,7 +253,7 @@ s.setAttribute('data-timestamp', +new Date());
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.5px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.5px;">angular</a> <a href="/tags/animation/" style="font-size: 12px;">animation</a> <a href="/tags/automation/" style="font-size: 12px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.5px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.5px;">blog</a> <a href="/tags/canvas/" style="font-size: 19px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.5px;">ejs</a> <a href="/tags/express/" style="font-size: 16px;">express</a> <a href="/tags/games/" style="font-size: 17.5px;">games</a> <a href="/tags/git/" style="font-size: 13px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.5px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.5px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.5px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.5px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 16.5px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.5px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.5px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18px;">phaser</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/statistics/" style="font-size: 12.5px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 15.5px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 17px;">vuejs</a>
+      <a href="/tags/JSON/" style="font-size: 12.63px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.53px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.68px;">angular</a> <a href="/tags/animation/" style="font-size: 12.11px;">animation</a> <a href="/tags/automation/" style="font-size: 12.11px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.63px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.74px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.95px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.16px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.05px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.58px;">ejs</a> <a href="/tags/express/" style="font-size: 15.79px;">express</a> <a href="/tags/games/" style="font-size: 17.37px;">games</a> <a href="/tags/git/" style="font-size: 13.16px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.74px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.68px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.21px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.53px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.58px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 16.32px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.42px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.21px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.47px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.89px;">phaser</a> <a href="/tags/python/" style="font-size: 15.26px;">python</a> <a href="/tags/statistics/" style="font-size: 12.63px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.32px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16.84px;">vuejs</a>
     </div>
   </div>
 
@@ -275,23 +275,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2021/02/15/threejs-examples-land-sections/">A Three js example of my land sections idea</a>
+            <a href="/2021/02/26/python-standard-library-statistics/">The statistics standard library in Python</a>
           </li>
         
           <li>
-            <a href="/2021/02/12/linux-bash-builtin/">Linux Bash builtin command(s)</a>
+            <a href="/2021/02/25/python-standard-library-json/">The JSON standard library in Python</a>
           </li>
         
           <li>
-            <a href="/2021/02/11/linux-type/">Find if a command is there with the type builtin command in Linux</a>
+            <a href="/2021/02/24/python-example-dice/">Python Basic Dice example</a>
           </li>
         
           <li>
-            <a href="/2021/02/10/linux-cd/">Linux change directory bash built in command</a>
+            <a href="/2021/02/23/python-standard-library-textwrap/">The textwrap standard library in python</a>
           </li>
         
           <li>
-            <a href="/2021/02/09/linux-eval/">Linux eval bash built in command</a>
+            <a href="/2021/02/22/python-standard-library-cmd/">The cmd standard library in python</a>
           </li>
         
       </ul>

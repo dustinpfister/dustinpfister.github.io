@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2021/01/19/python-standard-library-argparse/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="When learning a new language that can be used to create scripts that can be called from the command line one of the first things that I like to learn is how to access any positional arguments that mig">
-<meta property="og:updated_time" content="2021-01-20T18:59:01.000Z">
+<meta property="og:updated_time" content="2021-02-24T21:24:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Named arguments for python scripts using the argparse standard library">
 <meta name="twitter:description" content="When learning a new language that can be used to create scripts that can be called from the command line one of the first things that I like to learn is how to access any positional arguments that mig">
@@ -127,10 +127,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2021/01/19/python-standard-library-argparse/" class="article-date"> Modified:
-  <time datetime="2021-01-20T18:59:01.000Z" itemprop="dateModified">2021-01-20</time>
+  <time datetime="2021-02-24T21:24:58.000Z" itemprop="dateModified">2021-02-24</time>
 </a>
 
-    <span class="article-date">V1.12</span>
+    <span class="article-date">V1.13</span>
 
     
   <div class="article-category">
@@ -156,7 +156,7 @@ ga('send', 'pageview');
         <p>When learning a new language that can be used to create scripts that can be called from the command line one of the first things that I like to learn is how to access any positional arguments that might have been given when the script was called. If I do just want to check positional arguments then there is just using the sys libraries argv property to do so. However there should be a way to parse named arguments with a built in library or there should at least be a decent user space options when it comes to parsing named options.</p>
 <p>WHen it comes to option parsers in some programing languages I have to look for a user space option, or even go so far as to create and maintain my own options parser. This is, or at least as of this writing was the case when it comes to nodejs, as such I would go with a user space npm package for option parsing such as commander, or yargs. However one nice thing about writing scripts with python is that there is a great built in option parser called <a href="https://docs.python.org/3.7/library/argparse.html#argparse.ArgumentParser.add_argument" target="_blank" rel="external">argparse</a>.</p>
 <a id="more"></a>
-<h2 id="1-Basic-getting-started-example-of-argparse"><a href="#1-Basic-getting-started-example-of-argparse" class="headerlink" title="1 - Basic getting started example of argparse"></a>1 - Basic getting started example of argparse</h2><p>The basic flow of argparse is to like always import the library first. The next step is to create a new instance of the parser by calling the Argument Parser method of the argparse library. Once I have an instance of a parser I can then start adding some arguments for the parser by calling the add argument method of a parser instance. When doing so there are a number of parameters for the add argument method that I will be getting into greater detail later in this post. Once I have one or more arguments for the parser instance I can the call the parse args method of the parser instance, and the returned value of that will be an arguments object that I can then use in the rest of the code of my script.</p>
+<h2 id="1-Basic-getting-started-example-of-argparse"><a href="#1-Basic-getting-started-example-of-argparse" class="headerlink" title="1 - Basic getting started example of argparse"></a>1 - Basic getting started example of argparse</h2><p>The basic flow of argparse is to start out by always importing the library first just like any other python lybrary. The next step is to create a new instance of the parser by calling the Argument Parser method of the argparse library. Once I have an instance of a parser I can then start adding some arguments for the parser by calling the add argument method of a parser instance. When doing so there are a number of parameters for the add argument method that I will be getting into greater detail later in this post. Once I have one or more arguments for the parser instance I can the call the parse args method of the parser instance, and the returned value of that will be an arguments object that I can then use in the rest of the code of my script.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> argparse</div><div class="line"> </div><div class="line"><span class="comment"># create a parser</span></div><div class="line">parser = argparse.ArgumentParser(description=<span class="string">'Basic argparse example.'</span>)</div><div class="line"> </div><div class="line"><span class="comment"># have at least one argument</span></div><div class="line">parser.add_argument(<span class="string">'--foo'</span>,</div><div class="line">                    dest=<span class="string">'mode'</span>,</div><div class="line">                    action=<span class="string">'store_true'</span>,</div><div class="line">                    default=<span class="keyword">False</span>,</div><div class="line">                    help=<span class="string">'set foo mode true (default: False)'</span>)</div><div class="line"></div><div class="line"><span class="comment"># parse the arguments</span></div><div class="line">args = parser.parse_args()</div><div class="line"> </div><div class="line"><span class="comment"># use the arguments</span></div><div class="line"><span class="keyword">if</span>(args.mode):</div><div class="line">    print(<span class="string">'FOO MODE!'</span>)</div><div class="line"><span class="keyword">else</span>:</div><div class="line">    print(<span class="string">'bar mode'</span>)</div></pre></td></tr></table></figure>
 <h2 id="2-The-add-argument-method-in-detail"><a href="#2-The-add-argument-method-in-detail" class="headerlink" title="2 - The add argument method in detail"></a>2 - The add argument method in detail</h2><p>The add argument method of a parser instance is a key part of the process of defining what the named arguments for a script should be. At a bare minimum I should at least set a name for an argument. However there are a number of other parameters for this method that are worth getting into detail with. So in this section I will be quickly going over some of the parameters of the method that I should be aware of when using it to define the name options for a script.</p>
 <h3 id="2-1-The-name-argumnet"><a href="#2-1-The-name-argumnet" class="headerlink" title="2.1 - The name argumnet"></a>2.1 - The name argumnet</h3><p>The first argument that is given when calling the add argument method of a parser instance will be that is used in the command line to set the argument. The value will also be used for a default value for a destination of the argument object if another value is not given with the dest property. More than one positional argument can be given when setting a name for the argument.</p>
@@ -178,7 +178,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2021/01/19/python-standard-library-argparse/" data-id="ckl74qcxr01yahcv1qienrcwx" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2021/01/19/python-standard-library-argparse/" data-id="cklpl4naf023rrgv1eo6e1laa" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2021/01/19/python-standard-library-argparse/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -262,7 +262,7 @@ s.setAttribute('data-timestamp', +new Date());
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.5px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.5px;">angular</a> <a href="/tags/animation/" style="font-size: 12px;">animation</a> <a href="/tags/automation/" style="font-size: 12px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.5px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.5px;">blog</a> <a href="/tags/canvas/" style="font-size: 19px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.5px;">ejs</a> <a href="/tags/express/" style="font-size: 16px;">express</a> <a href="/tags/games/" style="font-size: 17.5px;">games</a> <a href="/tags/git/" style="font-size: 13px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.5px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.5px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.5px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.5px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 16.5px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.5px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.5px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18px;">phaser</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/statistics/" style="font-size: 12.5px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 15.5px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 17px;">vuejs</a>
+      <a href="/tags/JSON/" style="font-size: 12.63px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.53px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.68px;">angular</a> <a href="/tags/animation/" style="font-size: 12.11px;">animation</a> <a href="/tags/automation/" style="font-size: 12.11px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.63px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.74px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.95px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13.16px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11.05px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.58px;">ejs</a> <a href="/tags/express/" style="font-size: 15.79px;">express</a> <a href="/tags/games/" style="font-size: 17.37px;">games</a> <a href="/tags/git/" style="font-size: 13.16px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.74px;">hapi</a> <a href="/tags/heroku/" style="font-size: 13.68px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.21px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.53px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.58px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 16.32px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.42px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.21px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.47px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.89px;">phaser</a> <a href="/tags/python/" style="font-size: 15.26px;">python</a> <a href="/tags/statistics/" style="font-size: 12.63px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 16.32px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16.84px;">vuejs</a>
     </div>
   </div>
 
@@ -284,23 +284,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2021/02/15/threejs-examples-land-sections/">A Three js example of my land sections idea</a>
+            <a href="/2021/02/26/python-standard-library-statistics/">The statistics standard library in Python</a>
           </li>
         
           <li>
-            <a href="/2021/02/12/linux-bash-builtin/">Linux Bash builtin command(s)</a>
+            <a href="/2021/02/25/python-standard-library-json/">The JSON standard library in Python</a>
           </li>
         
           <li>
-            <a href="/2021/02/11/linux-type/">Find if a command is there with the type builtin command in Linux</a>
+            <a href="/2021/02/24/python-example-dice/">Python Basic Dice example</a>
           </li>
         
           <li>
-            <a href="/2021/02/10/linux-cd/">Linux change directory bash built in command</a>
+            <a href="/2021/02/23/python-standard-library-textwrap/">The textwrap standard library in python</a>
           </li>
         
           <li>
-            <a href="/2021/02/09/linux-eval/">Linux eval bash built in command</a>
+            <a href="/2021/02/22/python-standard-library-cmd/">The cmd standard library in python</a>
           </li>
         
       </ul>
