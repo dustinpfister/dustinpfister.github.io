@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
+  
+  <title>Box Geometry in Threejs | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2021/04/26/threejs-box-geometry/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="After looking over my old content on three js it would seem that I never took a moment to write a post On the Box Geometry Constructor. I guess I thought that I knew what I need to know about it and t">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Box Geometry in Threejs">
+<meta property="og:url" content="https://dustinpfister.github.io/2021/04/26/threejs-box-geometry/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="After looking over my old content on three js it would seem that I never took a moment to write a post On the Box Geometry Constructor. I guess I thought that I knew what I need to know about it and t">
+<meta property="og:updated_time" content="2021-04-26T21:04:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Box Geometry in Threejs">
+<meta name="twitter:description" content="After looking over my old content on three js it would seem that I never took a moment to write a post On the Box Geometry Constructor. I guess I thought that I knew what I need to know about it and t">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-threejs-box-geometry" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/04/26/threejs-box-geometry/" class="article-date"> Published:
+  <time datetime="2021-04-26T17:33:00.000Z" itemprop="datePublished">2021-04-26</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2021/04/26/threejs-box-geometry/" class="article-date"> Modified:
+  <time datetime="2021-04-26T21:04:25.000Z" itemprop="dateModified">2021-04-26</time>
+</a>
+
+    <span class="article-date">V1.3</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Box Geometry in Threejs
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>After looking over my old content on <a href="https://threejs.org/" target="_blank" rel="external">three js</a> it would seem that I never took a moment to write a post On the <a href="https://threejs.org/docs/#api/en/geometries/BoxGeometry" target="_blank" rel="external">Box Geometry Constructor</a>. I guess I thought that I knew what I need to know about it and thus I could move on to more advanced topics, if so maybe that was a mistake. Better late than never though so I thought I would take a moment to work out some examples centered around just using the basic Box Geometry constructor in three.js as a way to create a Geometry to be used with a Mesh in a three.js scene.</p>
+<p>This will then be a basic post, or at least it will start out that way, for those of you that have some more experienced with three.js I might get into some more advanced topics towards then end of the post, just for the sake of not letting this post end up being to thin. There is just starting out with a simple moving cube example which is not so hard, but then there is getting into how to go about skinning a cube with textures, and not just simple solid color maps with the basic material in that regard.</p>
+<a id="more"></a>
+<h2 id="1-Box-Geometry-in-thee-js-and-what-to-know-first"><a href="#1-Box-Geometry-in-thee-js-and-what-to-know-first" class="headerlink" title="1 - Box Geometry in thee.js and what to know first"></a>1 - Box Geometry in thee.js and what to know first</h2><p>This is a post on the Box Geometry Constructor in three.js, and many little related topics that branch off from that. This is not a <a href="/2018/04/04/threejs-getting-started/">getting started post on three.js</a>, but many of the examples here will be not so far beyond that point. So I assume that you know how to set up a basic client side javaScript project using three.js, and so forth.</p>
+<h3 id="1-1-Version-Numbers-matter-with-three-js"><a href="#1-1-Version-Numbers-matter-with-three-js" class="headerlink" title="1.1 - Version Numbers matter with three.js"></a>1.1 - Version Numbers matter with three.js</h3><p>When I wrote this post I was using three.js r127, and many code breaking changes where made recently. Always take note of what version of three.js you are using.</p>
+<h2 id="2-Basic-Box-Geometry-example-using-Normal-Material"><a href="#2-Basic-Box-Geometry-example-using-Normal-Material" class="headerlink" title="2 - Basic Box Geometry example using Normal Material"></a>2 - Basic Box Geometry example using Normal Material</h2><p>To create a basic Box three.js example using the Box Geometry Constructor the First thing I am going to want to do is create a Mesh. This Mesh will accept a geometry as the first argument such as one that is created using the Box Geometry Constructor. However I am also going to want to pass a material as the second argument for the Mesh also. For this example I have choses to go with the Normal Material as this is a nice quick choice for skinning a Mesh because the default Basic material will just show the whole area as one solid color.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// creating a box mesh with the Box Geometry constructor,</span></div><div class="line"><span class="comment">// and the normal material</span></div><div class="line"><span class="keyword">var</span> box = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</div><div class="line">        <span class="keyword">new</span> THREE.MeshNormalMaterial());</div><div class="line"> </div><div class="line"><span class="comment">// creating a scene</span></div><div class="line"><span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"> </div><div class="line"><span class="comment">// add the box mesh to the scene</span></div><div class="line">scene.add(box);</div><div class="line"> </div><div class="line"><span class="comment">// camera and renderer</span></div><div class="line"><span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">60</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">0.8</span>, <span class="number">1.3</span>, <span class="number">0.8</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line">renderer.render(scene, camera);</div></pre></td></tr></table></figure>
+<h2 id="3-Position-and-rotation"><a href="#3-Position-and-rotation" class="headerlink" title="3 - Position and rotation"></a>3 - Position and rotation</h2><p>Once that basic hello world cube example is up and running, the first thing I remember wanting to do next was to learn how to rotate and move the box. This is more so a subject of the Mesh Class than the Box Geometry Constructor, and even then it is really more of a subject of the <a href="/2018/04/23/threejs-object3d/">Object3d class</a> from which the Mesh Class inherits from. With that said reading up more on the Mesh Class and really Object3d would be best, but for the hell of it I will cover an example of this here.</p>
+<p>The two properties of interest here are the rotation property and position properties of the mesh when creating a box with the Box Geometry constructor and a material. The rotation property is an instance of <a href="https://threejs.org/docs/#api/en/math/Euler" target="_blank" rel="external">THREE.Euler</a>, and the position property is an instance of <a href="/2018/04/15/threejs-vector3/">THREE.Vector3</a>. With that said it would be best to look into each of these classes in detail to know everything there is to work with them. However the main methods of interest with both of these classes are the set and copy methods.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> box = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</div><div class="line">        <span class="keyword">new</span> THREE.MeshNormalMaterial());</div><div class="line"><span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line">scene.add(box);</div><div class="line"> </div><div class="line"><span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">60</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">3</span>, <span class="number">3</span>, <span class="number">3</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"> </div><div class="line"><span class="keyword">var</span> lt = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">state = &#123;</div><div class="line">    <span class="attr">frame</span>: <span class="number">0</span>,</div><div class="line">    <span class="attr">maxFrame</span>: <span class="number">100</span>,</div><div class="line">    <span class="attr">per</span>: <span class="number">0</span>,</div><div class="line">    <span class="attr">bias</span>: <span class="number">0</span>,</div><div class="line">    <span class="attr">radian</span>: <span class="number">0</span>,</div><div class="line">    <span class="attr">r</span>: <span class="keyword">new</span> THREE.Euler(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>),</div><div class="line">    <span class="attr">p</span>: <span class="keyword">new</span> THREE.Vector3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> loop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> now = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">    secs = (now - lt) / <span class="number">1000</span>;</div><div class="line"> </div><div class="line">    requestAnimationFrame(loop);</div><div class="line"> </div><div class="line">    state.per = state.frame / state.maxFrame;</div><div class="line">    state.bias = <span class="number">1</span> - <span class="built_in">Math</span>.abs(state.per - <span class="number">0.5</span>) / <span class="number">0.5</span>;</div><div class="line">    state.radian = <span class="built_in">Math</span>.PI * <span class="number">2</span> * state.bias;</div><div class="line"> </div><div class="line">    state.p.z = <span class="number">-2</span> * <span class="built_in">Math</span>.cos(<span class="built_in">Math</span>.PI * <span class="number">2</span> * state.bias);</div><div class="line">    state.p.x = <span class="number">-2</span> * <span class="built_in">Math</span>.sin(<span class="built_in">Math</span>.PI * <span class="number">8</span> * state.bias);</div><div class="line"> </div><div class="line">    <span class="comment">// changing values</span></div><div class="line">    state.r.x += <span class="number">1</span> * secs;</div><div class="line">    state.r.y += <span class="number">2</span> * secs;</div><div class="line">    state.r.z += <span class="number">3</span> * secs;</div><div class="line"> </div><div class="line">    <span class="comment">// copy the state of the THREE.Euler instance in the state object</span></div><div class="line">    <span class="comment">// as the new rotation value of the box</span></div><div class="line">    box.rotation.copy(state.r);</div><div class="line"> </div><div class="line">    <span class="comment">// using the copy method for Vector3 also</span></div><div class="line">    box.position.copy(state.p);</div><div class="line"> </div><div class="line">    renderer.render(scene, camera);</div><div class="line"> </div><div class="line">    state.frame += <span class="number">4</span> * secs;</div><div class="line">    state.frame %= state.maxFrame;</div><div class="line"> </div><div class="line">    lt = now;</div><div class="line">&#125;;</div><div class="line">loop();</div></pre></td></tr></table></figure>
+<p>In this example I am using the copy method to copy the instances of Euler and Vector 3 in my state object as the values for the corresponding properties for position and rotation. However there is also the set method that can be used to set the values of these class instances of a mesh. Both set methods will take three values, only with a Vector3 instance I will want to given position values for x, y, and z, and with a Euler instance I will want to give radian values for the angles of the rotation.</p>
+<h2 id="4-Using-an-Array-of-Materials"><a href="#4-Using-an-Array-of-Materials" class="headerlink" title="4 - Using an Array of Materials"></a>4 - Using an Array of Materials</h2><p>An Array of materials can be passed to the Mesh constructor rather than just a single material. When doing so by default I would want to pass an array of six materials, one for each face. However it is possible to pass less than six materials when doing this, it is just that when doing so I might want to change what the material index values are for the Box geometry. In this section I will be going over a few quick basic cube examples using the Box Geometry constructor and an array of materials. </p>
+<p>For more on this kind of subject you might want to check out my post on <a href="/2018/05/14/threejs-mesh-material-index/">material index values when working with geometries and a array of materials with a mesh</a>. I do not care to get into this subject in depth here, but I think I should go over at least a few quick basic examples making use of just the box geometry.</p>
+<h3 id="4-1-Using-an-array-of-six-materials"><a href="#4-1-Using-an-array-of-six-materials" class="headerlink" title="4.1 - Using an array of six materials"></a>4.1 - Using an array of six materials</h3><p>A property of interest when working with a buffer geometry as of late versions of three.js is the groups array of the geometry. This is, or at least should be an array of objects where each objects is a material index for a side, or face if you prefer of the geometry. When making a custom geometry this groups array will have to be created manually by making use of the add group method, however with the built in Box Geometry constructor this array should all ready be there.</p>
+<p>Out of the box there should be six objects in the groups array, and the material index values for each should go from  and including 0 to 5. So if I am doing going to change any of those values I will want to give an array of six materials, one for each side.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> materials = [</div><div class="line">    <span class="keyword">new</span> THREE.MeshBasicMaterial(&#123;</div><div class="line">        <span class="attr">color</span>: <span class="string">'red'</span></div><div class="line">    &#125;),</div><div class="line">    <span class="keyword">new</span> THREE.MeshBasicMaterial(&#123;</div><div class="line">        <span class="attr">color</span>: <span class="string">'red'</span></div><div class="line">    &#125;),</div><div class="line">    <span class="keyword">new</span> THREE.MeshBasicMaterial(&#123;</div><div class="line">        <span class="attr">color</span>: <span class="string">'lime'</span></div><div class="line">    &#125;),</div><div class="line">    <span class="keyword">new</span> THREE.MeshBasicMaterial(&#123;</div><div class="line">        <span class="attr">color</span>: <span class="string">'lime'</span></div><div class="line">    &#125;),</div><div class="line">    <span class="keyword">new</span> THREE.MeshBasicMaterial(&#123;</div><div class="line">        <span class="attr">color</span>: <span class="string">'blue'</span></div><div class="line">    &#125;),</div><div class="line">    <span class="keyword">new</span> THREE.MeshBasicMaterial(&#123;</div><div class="line">        <span class="attr">color</span>: <span class="string">'blue'</span></div><div class="line">    &#125;)</div><div class="line">];</div><div class="line"> </div><div class="line"><span class="keyword">var</span> box = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</div><div class="line">        materials);</div><div class="line"></div><div class="line"><span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line">scene.add(box);</div><div class="line"> </div><div class="line"><span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">60</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">0.8</span>, <span class="number">1.3</span>, <span class="number">0.8</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"> </div><div class="line"><span class="keyword">var</span> lt = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">state = &#123;</div><div class="line">    <span class="attr">x</span>: <span class="number">0</span>,</div><div class="line">    <span class="attr">y</span>: <span class="number">0</span>,</div><div class="line">    <span class="attr">z</span>: <span class="number">0</span></div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> loop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> now = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">    secs = (now - lt) / <span class="number">1000</span>;</div><div class="line">    requestAnimationFrame(loop);</div><div class="line">    state.x += <span class="number">1</span> * secs;</div><div class="line">    state.y += <span class="number">2</span> * secs;</div><div class="line">    state.z += <span class="number">3</span> * secs;</div><div class="line">    box.rotation.set(state.x, state.y, state.z);</div><div class="line">    renderer.render(scene, camera);</div><div class="line">    lt = now;</div><div class="line">&#125;;</div><div class="line">loop();</div></pre></td></tr></table></figure>
+<h3 id="4-2-Using-an-array-of-materials-more-or-less-than-six"><a href="#4-2-Using-an-array-of-materials-more-or-less-than-six" class="headerlink" title="4.2 - Using an array of materials more or less than six"></a>4.2 - Using an array of materials more or less than six</h3><p>When using an array of materials that is more or less than six chances are that I am going to want to change what the material index values are for the Box Geometry. To do this I just need to loop over the groups array of the box geometry and set the material index values for each group t the desired index value in the array of the materials.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// the array of materials that is only two materials</span></div><div class="line"><span class="keyword">var</span> materials = [</div><div class="line">    <span class="keyword">new</span> THREE.MeshNormalMaterial(),</div><div class="line">    <span class="keyword">new</span> THREE.MeshDepthMaterial()</div><div class="line">];</div><div class="line"><span class="comment">// create the box geometry</span></div><div class="line"><span class="keyword">var</span> geo = <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>);</div><div class="line"><span class="comment">// The objects in the groups array is what there is to</span></div><div class="line"><span class="comment">// use to set material index values for each face</span></div><div class="line">geo.groups.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">face, i</span>) </span>&#123;</div><div class="line">    face.materialIndex = face.materialIndex % materials.length;</div><div class="line">&#125;);</div><div class="line"><span class="comment">// now create the box like always passing the geometry first,</span></div><div class="line"><span class="comment">// and the array of materials second</span></div><div class="line"><span class="keyword">var</span> box = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        geo,</div><div class="line">        materials);</div><div class="line"> </div><div class="line"><span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line">scene.background = <span class="keyword">new</span> THREE.Color(<span class="number">0xafafaf</span>);</div><div class="line">scene.add(box);</div><div class="line"> </div><div class="line"><span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">60</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">0.8</span>, <span class="number">1.3</span>, <span class="number">0.8</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"></div><div class="line"><span class="keyword">var</span> lt = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">state = &#123;</div><div class="line">    <span class="attr">x</span>: <span class="number">0</span>,</div><div class="line">    <span class="attr">y</span>: <span class="number">0</span>,</div><div class="line">    <span class="attr">z</span>: <span class="number">0</span></div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> loop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> now = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">    secs = (now - lt) / <span class="number">1000</span>;</div><div class="line">    requestAnimationFrame(loop);</div><div class="line">    state.x += <span class="number">1</span> * secs;</div><div class="line">    state.y += <span class="number">2</span> * secs;</div><div class="line">    state.z += <span class="number">3</span> * secs;</div><div class="line">    box.rotation.set(state.x, state.y, state.z);</div><div class="line">    renderer.render(scene, camera);</div><div class="line">    lt = now;</div><div class="line">&#125;;</div><div class="line">loop();</div></pre></td></tr></table></figure>
+<h2 id="5-Canvas-Generated-Textures-maps-light-and-light-responding-materials"><a href="#5-Canvas-Generated-Textures-maps-light-and-light-responding-materials" class="headerlink" title="5 - Canvas Generated Textures, maps, light, and light responding materials."></a>5 - Canvas Generated Textures, maps, light, and light responding materials.</h2><p>Now it is time to get into something fun with a simple cube in three.js using the Box Geometry Constructor for the geometry. In this section I will be creating textures using canvas elements, and then use the state of those canvas elements to create textures for the various kind of maps when it comes to skinning faces of a cube.</p>
+<p>To create a canvas texture I am first going to have a canvas element, and something drawn to it to use as a texture. This is of course a topic that is beyond the scope of this post. I have my <a href="/2017/05/17/canvas-getting-started/">getting started post on canvas elements</a> that might be a good starting point if you are new to canvas, and I have also made a number of canvas example type posts that might also be worth checking out on this topic.</p>
+<h3 id="5-1-First-off-the-Create-Canvas-texture-helper"><a href="#5-1-First-off-the-Create-Canvas-texture-helper" class="headerlink" title="5.1 - First off the Create Canvas texture helper"></a>5.1 - First off the Create Canvas texture helper</h3><p>All of the examples here make use of this create canvas texture helps method. In each example I can just call this method and then pass a single draw method. In this draw method I can then create a texture using the 2d drawing context of a canvas element. After that the question is what to do with the texture when making one or more materials for a cube.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params">utils</span>) </span>&#123;</div><div class="line"> </div><div class="line">    utils.createCanvasTexture = <span class="function"><span class="keyword">function</span> (<span class="params">draw, size</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> canvas = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>),</div><div class="line">        ctx = canvas.getContext(<span class="string">'2d'</span>);</div><div class="line">        canvas.width = size || <span class="number">32</span>;</div><div class="line">        canvas.height = size || <span class="number">32</span>;</div><div class="line">        canvas.style.imageRendering = <span class="string">'pixelated'</span>;</div><div class="line">        ctx.imageSmoothingEnabled = <span class="literal">false</span>;</div><div class="line">        draw(ctx, canvas);</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> THREE.CanvasTexture(canvas);</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">&#125;</div><div class="line">    (<span class="keyword">this</span>[<span class="string">'utils'</span>] = &#123;&#125;));</div></pre></td></tr></table></figure>
+<h3 id="5-2-Basic-color-map-example-using-the-Basic-Material"><a href="#5-2-Basic-color-map-example-using-the-Basic-Material" class="headerlink" title="5.2 - Basic color map example using the Basic Material"></a>5.2 - Basic color map example using the Basic Material</h3><p>If I do not want or need to do anything fancy with lighting, transparency and so forth I can just use the Basic material. The problem with using the basic material without a texture is that iw will end up being a solid mass of color, and because the basic material does not respond to a light source there is no way of showing some depth for the cube, unless a color map is used.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> colorMap = utils.createCanvasTexture(<span class="function"><span class="keyword">function</span> (<span class="params">ctx, canvas</span>) </span>&#123;</div><div class="line">        ctx.fillStyle = <span class="string">'red'</span>;</div><div class="line">        ctx.fillRect(<span class="number">0</span>, <span class="number">0</span>, canvas.width, canvas.height);</div><div class="line">        ctx.strokeStyle = <span class="string">'white'</span>;</div><div class="line">        ctx.beginPath();</div><div class="line">        ctx.lineWidth = <span class="number">3</span>;</div><div class="line">        ctx.rect(<span class="number">1</span>, <span class="number">1</span>, canvas.width - <span class="number">2</span>, canvas.height - <span class="number">2</span>);</div><div class="line">        ctx.stroke();</div><div class="line">    &#125;);</div><div class="line"> </div><div class="line"><span class="keyword">var</span> box = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</div><div class="line">        <span class="keyword">new</span> THREE.MeshBasicMaterial(&#123;</div><div class="line">            <span class="attr">map</span>: colorMap</div><div class="line">        &#125;));</div><div class="line"><span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line">scene.add(box);</div><div class="line"> </div><div class="line"><span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">60</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"> </div><div class="line">renderer.render(scene, camera);</div></pre></td></tr></table></figure>
+<h3 id="5-3-Using-the-standard-material-and-a-light-source"><a href="#5-3-Using-the-standard-material-and-a-light-source" class="headerlink" title="5.3 - Using the standard material and a light source"></a>5.3 - Using the standard material and a light source</h3><p>The basic material works okay if I just want to have a color map, and I do not want to bother with light at all. However when it does come to working with light I will want to use a material that will respond to a light source. There are a few options when it comes to this kind of material, however I often like to go with the standard material.</p>
+<p>When it comes to using the standard material over the basic material the process is more or less the same as the basic material, when it comes to what it is that I do with the texture. Once again I am going to want to set the texture as the value for the map property of the material. However now nothing will show up, unless of course I use a light source. When it comes to light sources there are once again many options, however I often light to use the point light.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> colorMap = utils.createCanvasTexture(<span class="function"><span class="keyword">function</span> (<span class="params">ctx, canvas</span>) </span>&#123;</div><div class="line">        ctx.fillStyle = <span class="string">'red'</span>;</div><div class="line">        ctx.fillRect(<span class="number">0</span>, <span class="number">0</span>, canvas.width, canvas.height);</div><div class="line">        ctx.strokeStyle = <span class="string">'white'</span>;</div><div class="line">        ctx.beginPath();</div><div class="line">        ctx.lineWidth = <span class="number">3</span>;</div><div class="line">        ctx.rect(<span class="number">1</span>, <span class="number">1</span>, canvas.width - <span class="number">2</span>, canvas.height - <span class="number">2</span>);</div><div class="line">        ctx.stroke();</div><div class="line">    &#125;);</div><div class="line"> </div><div class="line"><span class="keyword">var</span> box = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</div><div class="line">        <span class="comment">// using the standard material</span></div><div class="line">        <span class="keyword">new</span> THREE.MeshStandardMaterial(&#123;</div><div class="line">            <span class="attr">map</span>: colorMap</div><div class="line">        &#125;));</div><div class="line"><span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line">scene.add(box);</div><div class="line"> </div><div class="line"><span class="keyword">var</span> sun = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.SphereGeometry(<span class="number">1</span>),</div><div class="line">        <span class="keyword">new</span> THREE.MeshBasicMaterial());</div><div class="line">sun.add(<span class="keyword">new</span> THREE.PointLight(<span class="number">0xffffff</span>, <span class="number">1</span>));</div><div class="line">sun.position.set(<span class="number">2</span>, <span class="number">8</span>, <span class="number">4</span>);</div><div class="line">scene.add(sun);</div><div class="line"> </div><div class="line"><span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">60</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"> </div><div class="line">renderer.render(scene, camera);</div></pre></td></tr></table></figure>
+<h2 id="6-Conclusion"><a href="#6-Conclusion" class="headerlink" title="6 - Conclusion"></a>6 - Conclusion</h2><p>So then the Box geometry is a great starting point when it comes to starting to explore everything that there is to work with when it comes to three.js. Much of what applies for a Box geometry will also apply for other built in geometries when it comes to geometries and the index values for a geometry. However sooner or later it might be called for to get into creating a custom geometry using the <a href="/2021/04/22/threejs-buffer-geometry/">Buffer Geometry constructor</a> directly rather than using one of the built in geometries. However it is also possible to just create simple, crude, yet effective models of things using just groups of the built in geometry constructors such as the Box Geometry constructor.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2021/04/26/threejs-box-geometry/" data-id="cko7o3r9x01zzm4v1j80w2ujk" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2021/04/26/threejs-box-geometry/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/04/27/threejs-standard-material/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          The Standard Material in Threejs
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/04/23/threejs-examples-house/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Simple house model example in threejs</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2021/04/26/threejs-box-geometry/index.html';
+    this.page.identifier = '853';
+    this.page.title = 'Box Geometry in Threejs';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.38px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.48px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.33px;">angular</a> <a href="/tags/animation/" style="font-size: 11.9px;">animation</a> <a href="/tags/automation/" style="font-size: 11.9px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.38px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.76px;">blog</a> <a href="/tags/canvas/" style="font-size: 19.05px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.86px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.95px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.43px;">ejs</a> <a href="/tags/express/" style="font-size: 16.19px;">express</a> <a href="/tags/games/" style="font-size: 17.14px;">games</a> <a href="/tags/git/" style="font-size: 12.86px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.76px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.9px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.29px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.48px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.43px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 16.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.57px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.29px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.52px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.1px;">phaser</a> <a href="/tags/python/" style="font-size: 15.24px;">python</a> <a href="/tags/statistics/" style="font-size: 13.81px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 17.62px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.71px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/04/30/threejs-dae-collada-loader/">The dae or Collada file loader in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2021/04/29/threejs-examples-guy-one/">Basic Guy Model threejs example</a>
+          </li>
+        
+          <li>
+            <a href="/2021/04/28/threejs-euler/">The Euler Class in Threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2021/04/27/threejs-standard-material/">The Standard Material in Threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2021/04/26/threejs-box-geometry/">Box Geometry in Threejs</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2021/04/26/threejs-box-geometry/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
