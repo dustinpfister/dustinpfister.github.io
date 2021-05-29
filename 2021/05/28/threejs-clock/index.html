@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
+  
+  <title>The Clock constructor in threejs | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2021/05/28/threejs-clock/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="When it comes to making an animation loop in three.js I have been using the built in JavaScript Date class along with request animation frame, but have not been making use of the Built in THREE.Clock">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Clock constructor in threejs">
+<meta property="og:url" content="https://dustinpfister.github.io/2021/05/28/threejs-clock/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="When it comes to making an animation loop in three.js I have been using the built in JavaScript Date class along with request animation frame, but have not been making use of the Built in THREE.Clock">
+<meta property="og:updated_time" content="2021-05-28T17:14:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The Clock constructor in threejs">
+<meta name="twitter:description" content="When it comes to making an animation loop in three.js I have been using the built in JavaScript Date class along with request animation frame, but have not been making use of the Built in THREE.Clock">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-threejs-clock" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/05/28/threejs-clock/" class="article-date"> Published:
+  <time datetime="2021-05-28T14:33:00.000Z" itemprop="datePublished">2021-05-28</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2021/05/28/threejs-clock/" class="article-date"> Modified:
+  <time datetime="2021-05-28T17:14:11.000Z" itemprop="dateModified">2021-05-28</time>
+</a>
+
+    <span class="article-date">V1.15</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      The Clock constructor in threejs
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>When it comes to making an animation loop in <a href="https://threejs.org/docs/#manual/en/introduction/Creating-a-scene" target="_blank" rel="external">three.js</a> I have been using the built in JavaScript Date class along with request animation frame, but have not been making use of the Built in <a href="https://threejs.org/docs/#api/en/core/Clock" target="_blank" rel="external">THREE.Clock</a> constructor. Turns out that there are still a whole lot of basic features that I have not got around to looking into with three.js when it comes to this constructor and why it might be a good idea to go with this in place of the way that I have been making animation loops thus far. Still better late than never, so in this post I will be looking into the THREE.Clock constructor and also touching base on some client side javaScript features that are closely related to the class such as the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Performance" target="_blank" rel="external">performance global</a> mainly the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Performance/now" target="_blank" rel="external">now method</a> of that.</p>
+<a id="more"></a>
+<h2 id="1-THREE-Clock-and-what-to-know-first"><a href="#1-THREE-Clock-and-what-to-know-first" class="headerlink" title="1 - THREE.Clock and what to know first"></a>1 - THREE.Clock and what to know first</h2><p>This is a post on using the THREE.Clock class in the javaScript library known as three.js. In this post I am also using a lot of other features of the library, and client side javaScript in general that I will not be getting into detail here. So I assume that you have at least some experience working with threejs, and client side javaScript, otherwise you might end up having a hard time gaining something of value from reading this. So in this section I will be mentioning some things that you might want to look into if you feel you need to take a step back.</p>
+<h3 id="1-1-There-are-some-client-side-javaScript-features-you-should-be-aware-of"><a href="#1-1-There-are-some-client-side-javaScript-features-you-should-be-aware-of" class="headerlink" title="1.1 - There are some client side javaScript features you should be aware of."></a>1.1 - There are some client side javaScript features you should be aware of.</h3><p>The use of the THREE.Clock class can be used with, or as a replacement for the built in javaScript Date object when it comes to setting up an animation loop with function. This kind of function is something that deserves a post on its own when it comes to how to go about making such a loop outside of threejs when it comes to native javaScript features. In fact I have wrote a few posts on this sort of thing when it comes to the use of the <a href="/2018/12/06/js-settimeout/">setTimeout method</a>, and <a href="/2018/03/13/js-request-animation-frame/">requestAnaimationFrame</a> methods that are typically used to cerate main application update loops.</p>
+<h3 id="1-2-Version-Numbers-matter-with-threejs"><a href="#1-2-Version-Numbers-matter-with-threejs" class="headerlink" title="1.2 - Version Numbers matter with threejs"></a>1.2 - Version Numbers matter with threejs</h3><p>WhenI first wrote this post I was using r127 of threejs, always be mindful of what version of threejs you are suing and what version the developer of a content piece like this was suing when looking at threejs examples on the open web. Threejs is a fast moving project in terms of development and code breaking changes are made to it often.</p>
+<h2 id="2-Basic-loop-example-using-THREE-Clock"><a href="#2-Basic-loop-example-using-THREE-Clock" class="headerlink" title="2 - Basic loop example using THREE.Clock"></a>2 - Basic loop example using THREE.Clock</h2><p>To start out with the THREE.Clock class I made a basic example where I am using the THREE.Clock class as a way to replace the use of the javaScript Date constructor. When I make an animation loop I often have some kind of state object that will contain a property that contains a date object that is the time stamp at which the last time a frame tick was rendered. I then use that as a way to gage how much time has elapsed sense the last time the scene has rendered and then use that as a way to update objects by way of a per second value for everything. For example say I want to rotate a cube on the y axis at a rate of 45 degrees per second, I can take Math.PI divide by 180, multiply by 45, and then multiply by the number of seconds that have passed sense the last frame update to get a delta value in radians.</p>
+<p>With this example in place of having an instance of Date, I am creating an instance of THREE.Clock. I then start the clock by calling the state method of the clock instance, and start the loop. I then call the get delta method of the clock inside the body of the loop which will return an amount of time in seconds. I can then use this seconds value to update the state of objects when it comes to working out some expressions for doing so. On top of that each time I call the get delta method that will result in the old time property of the clock being reset, so just calling the method is all I need to do, for this example at least.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// A STATE OBJECT WITH A THREE.CLOCK INSTANCE</span></div><div class="line"><span class="keyword">var</span> state = &#123;</div><div class="line">    <span class="attr">clock</span>: <span class="keyword">new</span> THREE.Clock(),</div><div class="line">    <span class="attr">frame</span>: <span class="number">0</span>,</div><div class="line">    <span class="attr">maxFrame</span>: <span class="number">90</span>,</div><div class="line">    <span class="attr">fps</span>: <span class="number">30</span>,</div><div class="line">    <span class="attr">per</span>: <span class="number">0</span></div><div class="line">&#125;;</div><div class="line"><span class="comment">// a scene</span></div><div class="line"><span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"><span class="comment">// a mesh</span></div><div class="line"><span class="keyword">var</span> box = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</div><div class="line">        <span class="keyword">new</span> THREE.MeshNormalMaterial());</div><div class="line">scene.add(box);</div><div class="line"><span class="comment">// camera render</span></div><div class="line"><span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">60</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"><span class="comment">// START CLOCK</span></div><div class="line">state.clock.start();</div><div class="line"><span class="comment">// loop</span></div><div class="line"><span class="keyword">var</span> loop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">// USING THE GET DELTA METHOD</span></div><div class="line">    <span class="keyword">var</span> secs = state.clock.getDelta();</div><div class="line">    state.per = state.frame / state.maxFrame;</div><div class="line">    requestAnimationFrame(loop);</div><div class="line">    box.rotation.y = <span class="built_in">Math</span>.PI * <span class="number">2</span> * state.per;</div><div class="line">    state.frame += state.fps * secs;</div><div class="line">    state.frame %= state.maxFrame;</div><div class="line">    renderer.render(scene, camera);</div><div class="line">&#125;;</div><div class="line">loop();</div></pre></td></tr></table></figure>
+<p>So then this might prove to be an okay basic example, however there are some times a range of things that I might want to do differently when working out some kind of pattern for a main application loop like this. So I think that at least a few more additional examples of this THREE.Clock class are in order.</p>
+<h2 id="3-Elapsed-Time-Demo"><a href="#3-Elapsed-Time-Demo" class="headerlink" title="3 - Elapsed Time Demo"></a>3 - Elapsed Time Demo</h2><p>The get delta method is great for getting an amount of time that has elapse sense the last frame update, but if I want to get the total about of time that has elapsed sense the clock has started then there is the get elapsed time method. In this example I am still updating the rotation of a cube by way of the get delta method, but I am also rotating on anther axis over all time using get elapsed time.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// A STATE OBJECT WITH A THREE.CLOCK INSTANCE</span></div><div class="line"><span class="keyword">var</span> state = &#123;</div><div class="line">    <span class="attr">clock</span>: <span class="keyword">new</span> THREE.Clock(),</div><div class="line">    <span class="attr">frame</span>: <span class="number">0</span>,</div><div class="line">    <span class="attr">maxFrame</span>: <span class="number">90</span>,</div><div class="line">    <span class="attr">fps</span>: <span class="number">30</span>,</div><div class="line">    <span class="attr">per</span>: <span class="number">0</span></div><div class="line">&#125;;</div><div class="line"><span class="comment">// a scene</span></div><div class="line"><span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"><span class="comment">// a mesh</span></div><div class="line"><span class="keyword">var</span> box = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</div><div class="line">        <span class="keyword">new</span> THREE.MeshNormalMaterial());</div><div class="line">scene.add(box);</div><div class="line"><span class="comment">// camera render</span></div><div class="line"><span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">60</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"><span class="comment">// START CLOCK</span></div><div class="line">state.clock.start();</div><div class="line"><span class="comment">// loop</span></div><div class="line"><span class="keyword">var</span> loop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">// USING THE GET DELTA METHOD FOR SECS</span></div><div class="line">    <span class="comment">// AND GET ELAPSED TIME DELTA FOR TOTAL SECS</span></div><div class="line">    <span class="keyword">var</span> secs = state.clock.getDelta(),</div><div class="line">    totalSecs = state.clock.getElapsedTime();</div><div class="line">    requestAnimationFrame(loop);</div><div class="line">    <span class="comment">// rotating box on y by SECS</span></div><div class="line">    state.per = state.frame / state.maxFrame;</div><div class="line">    state.frame += state.fps * secs;</div><div class="line">    state.frame %= state.maxFrame;</div><div class="line">    box.rotation.y = <span class="built_in">Math</span>.PI * <span class="number">2</span> * state.per;</div><div class="line"> </div><div class="line">    <span class="comment">// rotating x by TOTAL SECS</span></div><div class="line">    box.rotation.x = <span class="built_in">Math</span>.PI / <span class="number">180</span> * <span class="number">45</span> * (<span class="number">1</span> / totalSecs);</div><div class="line"> </div><div class="line">    renderer.render(scene, camera);</div><div class="line">&#125;;</div><div class="line">loop();</div></pre></td></tr></table></figure>
+<h2 id="4-Cap-FPS-example"><a href="#4-Cap-FPS-example" class="headerlink" title="4 - Cap FPS example"></a>4 - Cap FPS example</h2><p>One thing that is impotent to be aware of when it comes to these loop functions is having a way to limit the number or frames that are being rendered for every second. If no effort is made to do so the example might prove to eat up to much processor overhead on many clients and result in a bad user experience. It might be best to have some way to let users let what the target frame rate should be when it comes to some kind of options menu in a user interface. However maybe a good starting point would be to cope up with some kind of hard coded frame rate that still works well, while still being a low frame rate. Basically the lower the frame rate the lower the load on the processor and graphics adapter of the client, that means it will then use less power, and also have more resources to do other things that might be going on in the page.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// A STATE OBJECT WITH A THREE.CLOCK INSTANCE</span></div><div class="line"><span class="keyword">var</span> state = &#123;</div><div class="line">    <span class="attr">clock</span>: <span class="keyword">new</span> THREE.Clock(),</div><div class="line">    <span class="attr">frame</span>: <span class="number">0</span>,</div><div class="line">    <span class="attr">maxFrame</span>: <span class="number">90</span>,</div><div class="line">    <span class="attr">fps</span>: <span class="number">12</span>, <span class="comment">// capping at 12 fps</span></div><div class="line">    per: <span class="number">0</span></div><div class="line">&#125;;</div><div class="line"><span class="comment">// a scene</span></div><div class="line"><span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"><span class="comment">// a mesh</span></div><div class="line"><span class="keyword">var</span> box = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</div><div class="line">        <span class="keyword">new</span> THREE.MeshNormalMaterial());</div><div class="line">scene.add(box);</div><div class="line"><span class="comment">// camera render</span></div><div class="line"><span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">60</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"> </div><div class="line"><span class="comment">// loop</span></div><div class="line"><span class="keyword">var</span> loop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> wSecs = performance.now() - state.clock.oldTime,</div><div class="line">    secs;</div><div class="line">    requestAnimationFrame(loop);</div><div class="line">    <span class="keyword">if</span> (wSecs &gt; <span class="number">1</span> / state.fps) &#123;</div><div class="line">        secs = state.clock.getDelta();</div><div class="line">        state.per = state.frame / state.maxFrame;</div><div class="line">        box.rotation.y = <span class="built_in">Math</span>.PI * <span class="number">2</span> * state.per;</div><div class="line">        state.frame += state.fps * secs;</div><div class="line">        state.frame %= state.maxFrame;</div><div class="line">        renderer.render(scene, camera);</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"><span class="comment">// START CLOCK</span></div><div class="line">state.clock.start();</div><div class="line"><span class="built_in">console</span>.log();</div><div class="line"><span class="comment">// start loop</span></div><div class="line">loop();</div></pre></td></tr></table></figure>
+<h2 id="5-Conclusion"><a href="#5-Conclusion" class="headerlink" title="5 - Conclusion"></a>5 - Conclusion</h2><p>The THREE.Clock class might prove to me a more convenient solution when it comes to setting up an animation loop in threejs compared to what I often work out with just plane vanilla javaScript features. However there is not just using the Clock class when it comes to learning a thing or two about what is going on when it comes to vanilla javaScript by itself. What if I want to apply what it is that the Clock class is all about to a project outside that of three.js when it comes to a vanilla javaScript project for example? With that said there is not just using the Clock class there is also looking into the preference object in general in client side javaScript, however maybe getting deep into that is a matter for a whole other post.</p>
+<p>This is a topic that I seem to keep coming back to now and then, not so much the THREE.Clock class, but the subject of main application loops in general. There is a lot to write about when it comes to this one little thing about client side javaScript in general, and every now and then I come up with new ways to go about doing the same thing when it comes to this. So I should end up getting around to editing this post at some point in the future when I become aware of something more about it.</p>
+<p>There is not juct the THREE.Clock class but also getting into making one or more simple project examples where the goal is to create some kind of clock using three.js. These kind sof examples can prove to be simple, fun little projects, but there is also a great deal or room to do all kinds of things that are creative and original. I made a <a href="/2019/12/16/threejs-examples-clock-basic/">threejs project example in which the goal was to make a simple clock</a> type project with three.js that might be worth checking out.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2021/05/28/threejs-clock/" data-id="ckp9xpqyl01xzp8v1jivhqvkr" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2021/05/28/threejs-clock/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2021/05/27/threejs-torus/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Torus Geometry in threejs</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2021/05/28/threejs-clock/index.html';
+    this.page.identifier = '877';
+    this.page.title = 'The Clock constructor in threejs';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.38px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.48px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.33px;">angular</a> <a href="/tags/animation/" style="font-size: 11.9px;">animation</a> <a href="/tags/automation/" style="font-size: 11.9px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.38px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.76px;">blog</a> <a href="/tags/canvas/" style="font-size: 19.05px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.86px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.95px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.43px;">ejs</a> <a href="/tags/express/" style="font-size: 16.19px;">express</a> <a href="/tags/games/" style="font-size: 17.14px;">games</a> <a href="/tags/git/" style="font-size: 12.86px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.76px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.9px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.29px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.48px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.43px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 16.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.57px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.29px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.52px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.1px;">phaser</a> <a href="/tags/python/" style="font-size: 15.24px;">python</a> <a href="/tags/statistics/" style="font-size: 13.81px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 17.62px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.71px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/05/28/threejs-clock/">The Clock constructor in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/27/threejs-torus/">Torus Geometry in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/26/threejs-sphere/">Sphere Geometry in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/25/threejs-object3d-get-world-position/">Getting world position of any object in three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/24/threejs-object3d-visible/">Making objects visible or not in three.js</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2021/05/28/threejs-clock/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

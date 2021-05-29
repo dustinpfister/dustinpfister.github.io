@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
+  
+  <title>Clicking a mesh in three.js with the Raycaster class | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2021/05/18/threejs-raycaster/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="When making a three.js project there might be situations in which it would be nice to have a way to click on a mesh object in a scene. When dong so this will result in some kind of action being prefor">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Clicking a mesh in three.js with the Raycaster class">
+<meta property="og:url" content="https://dustinpfister.github.io/2021/05/18/threejs-raycaster/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="When making a three.js project there might be situations in which it would be nice to have a way to click on a mesh object in a scene. When dong so this will result in some kind of action being prefor">
+<meta property="og:updated_time" content="2021-05-22T17:37:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Clicking a mesh in three.js with the Raycaster class">
+<meta name="twitter:description" content="When making a three.js project there might be situations in which it would be nice to have a way to click on a mesh object in a scene. When dong so this will result in some kind of action being prefor">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-threejs-raycaster" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/05/18/threejs-raycaster/" class="article-date"> Published:
+  <time datetime="2021-05-18T13:46:00.000Z" itemprop="datePublished">2021-05-18</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2021/05/18/threejs-raycaster/" class="article-date"> Modified:
+  <time datetime="2021-05-22T17:37:30.000Z" itemprop="dateModified">2021-05-22</time>
+</a>
+
+    <span class="article-date">V1.15</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Clicking a mesh in three.js with the Raycaster class
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>When making a <a href="https://threejs.org/docs/#manual/en/introduction/Creating-a-scene" target="_blank" rel="external">three.js</a> project there might be situations in which it would be nice to have a way to click on a mesh object in a scene. When dong so this will result in some kind of action being preformed that is event driven by way of user input rather than some kind of script. To do this I need a way to cast a ray from the camera outward based on a 2d location of the canvas, and then get a collection of mesh objects that intersect with this ray that is going from the camera outward. Luckily this kind of functionality is built into three.js itself and it is called the <a href="https://threejs.org/docs/#api/en/core/Raycaster" target="_blank" rel="external">THREE.RayCaster Class</a>.</p>
+<p>There is just getting started with the very basics when it comes to ray casting in three.js, and of course I will be starting out with that in this post. However there might be a whole bunch more advanced topics that will also come up when it comes to this sort of thing. So I think that it might be called for to go over at least a few examples of the ray cater class in three.js.</p>
+<a id="more"></a>
+<h2 id="1-Clicking-a-Mesh-in-three-js-and-what-to-know-before-hand"><a href="#1-Clicking-a-Mesh-in-three-js-and-what-to-know-before-hand" class="headerlink" title="1 - Clicking a Mesh in three.js and what to know before hand"></a>1 - Clicking a Mesh in three.js and what to know before hand</h2><p>This is a post on using the THREE.Raycaster class in three.js as a way to help with the process of clicking on a mesh object. This is then a post on a topic that might prove to be a little to advanced for some developers that are still a little to new with three.js and javaScript. In this section I will then be going over a few topics that are worth checking out for the first time, or refreshing on before continuing with the rest of the continent here.</p>
+<h3 id="1-1-version-Numbers-matter-with-three-js"><a href="#1-1-version-Numbers-matter-with-three-js" class="headerlink" title="1.1 - version Numbers matter with three.js"></a>1.1 - version Numbers matter with three.js</h3><p>When I made these examples and wrote this post I was using r127 of three.js which was still a fairly later version of three.js as of this writing. Code breaking changes are always made with three.js as new revision s come out so if you run into problems with getting this to work on your end that might be the first thing you should check actually.</p>
+<h2 id="2-A-Basic-Raycaster-example"><a href="#2-A-Basic-Raycaster-example" class="headerlink" title="2 - A Basic Raycaster example"></a>2 - A Basic Raycaster example</h2><p>The main method of interest with the Raycaster class is the intersect objects method, but in order to set the state of the Raycaster instance first I will want to use the set from camera method. In order to use the set from camera method of course I am going to need an instance of a camera, but I am also going to need a Vector2 instance that is the mouse position in the canvas.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> raycaster = <span class="keyword">new</span> THREE.Raycaster();</div><div class="line"><span class="keyword">var</span> mouse = <span class="keyword">new</span> THREE.Vector2(<span class="number">1</span>, <span class="number">1</span>);</div><div class="line"> </div><div class="line"><span class="keyword">var</span> onMouseMove = <span class="function"><span class="keyword">function</span>(<span class="params"> event </span>) </span>&#123;</div><div class="line">    <span class="comment">// calculate mouse position in normalized device coordinates</span></div><div class="line">    <span class="comment">// (-1 to +1) for both components</span></div><div class="line">    <span class="keyword">var</span> canvas = event.target,</div><div class="line">    box = canvas.getBoundingClientRect(),</div><div class="line">    x = event.clientX - box.left,</div><div class="line">    y = event.clientY - box.top;</div><div class="line">    <span class="comment">// set mouse Vector2 values</span></div><div class="line">    mouse.x = ( x / canvas.scrollWidth ) * <span class="number">2</span> - <span class="number">1</span>;</div><div class="line">    mouse.y = - ( y / canvas.scrollHeight ) * <span class="number">2</span> + <span class="number">1</span>;</div><div class="line">    <span class="comment">//console.log(mouse.x.toFixed(2), mouse.y.toFixed(2));</span></div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> update = <span class="function"><span class="keyword">function</span>(<span class="params">group</span>)</span>&#123;</div><div class="line">    <span class="comment">// default scale</span></div><div class="line">    group.children.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">obj</span>)</span>&#123;</div><div class="line">        obj.scale.set(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>);</div><div class="line">    &#125;);</div><div class="line">    <span class="comment">// update the picking ray with the camera and mouse position</span></div><div class="line">    raycaster.setFromCamera( mouse, camera );</div><div class="line">    <span class="keyword">var</span> intersects = raycaster.intersectObjects(group.children, <span class="literal">true</span> );</div><div class="line">    <span class="keyword">if</span>(intersects.length &gt; <span class="number">0</span>)&#123;</div><div class="line">        <span class="keyword">var</span> mesh = intersects[<span class="number">0</span>].object;</div><div class="line">        mesh.scale.set(<span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>);</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// camera and renderer</span></div><div class="line"><span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">60</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"> </div><div class="line"><span class="comment">// Attach mouse event</span></div><div class="line">renderer.domElement.addEventListener( <span class="string">'mousemove'</span>, onMouseMove, <span class="literal">false</span> );</div><div class="line"> </div><div class="line"><span class="comment">// creating a scene</span></div><div class="line"><span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line">scene.add(<span class="keyword">new</span> THREE.GridHelper(<span class="number">9</span>, <span class="number">9</span>));</div><div class="line"> </div><div class="line"><span class="keyword">var</span> boxGroup = <span class="keyword">new</span> THREE.Group();</div><div class="line">scene.add(boxGroup);</div><div class="line"> </div><div class="line"><span class="comment">// box 1</span></div><div class="line"><span class="keyword">var</span> box = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</div><div class="line">        <span class="keyword">new</span> THREE.MeshNormalMaterial());</div><div class="line">box.position.set(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">boxGroup.add(box);</div><div class="line"><span class="comment">// box 2</span></div><div class="line">box = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</div><div class="line">        <span class="keyword">new</span> THREE.MeshNormalMaterial());</div><div class="line">box.position.set(<span class="number">3</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">boxGroup.add(box);</div><div class="line"><span class="comment">// box 3</span></div><div class="line">box = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</div><div class="line">        <span class="keyword">new</span> THREE.MeshNormalMaterial());</div><div class="line">box.position.set(<span class="number">-3</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">boxGroup.add(box);</div><div class="line"> </div><div class="line"><span class="comment">// orbit controls</span></div><div class="line"><span class="keyword">var</span> controls = <span class="keyword">new</span> THREE.OrbitControls(camera, renderer.domElement);</div><div class="line"> </div><div class="line"><span class="comment">// loop</span></div><div class="line"><span class="keyword">var</span> lt = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">fps = <span class="number">30</span>;</div><div class="line"><span class="keyword">var</span> loop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> now = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">    secs = (now - lt) / <span class="number">1000</span>;</div><div class="line">    requestAnimationFrame(loop);</div><div class="line">    <span class="keyword">if</span> (secs &gt; <span class="number">1</span> / fps) &#123;</div><div class="line">        <span class="comment">// update</span></div><div class="line">        update(boxGroup);</div><div class="line">        <span class="comment">// render</span></div><div class="line">        renderer.render(scene, camera);</div><div class="line">        lt = now;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">loop();</div></pre></td></tr></table></figure>
+<h2 id="3-Cube-Group-Raycaster-class-example"><a href="#3-Cube-Group-Raycaster-class-example" class="headerlink" title="3 - Cube Group Raycaster class example"></a>3 - Cube Group Raycaster class example</h2><p>For this example of the Raycaster class I decided to make use of a module that I made for my <a href="/2021/05/10/threejs-examples-nested-groups/">post on nested groups in three.js</a> that is a kind of cube group model. This module is just a way to create a group of eight mesh objects where each mesh object has an instance of the built in box geometry of three.js as its geometry. These eight mesh objects are positioned in such a way so that they from a larger cube of cubes sort of speak. I can then use an update method of the cube group module to update the state of ones of these cube groups so that the cubes expand outward from the center of the group, and back again.</p>
+<h3 id="3-1-Cube-Group-module"><a href="#3-1-Cube-Group-module" class="headerlink" title="3.1 - Cube Group module"></a>3.1 - Cube Group module</h3><p>Here I have the state of the cube group module as I have used it for this example. I did not change much with this from what I have worked out in the for the other three.js example post. Still I often do make a few minor changes here and there with these when I use them in other projects, so I just got into the habit of always posing what it is that I am using here.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params">api</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> ANGLES_A = [<span class="number">225</span>, <span class="number">315</span>, <span class="number">135</span>, <span class="number">45</span>];</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> toRadians = <span class="function"><span class="keyword">function</span> (<span class="params">array</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> array.map(<span class="function"><span class="keyword">function</span>(<span class="params">deg</span>)</span>&#123;</div><div class="line">            <span class="keyword">return</span> <span class="built_in">Math</span>.PI / <span class="number">180</span> * deg;</div><div class="line">        &#125;);</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// create a single cube mesh</span></div><div class="line">    <span class="keyword">var</span> createCube = <span class="function"><span class="keyword">function</span> (<span class="params">rotationCounts, position, materials</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> cube = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">                <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</div><div class="line">                materials || <span class="keyword">new</span> THREE.MeshNormalMaterial());</div><div class="line">        <span class="comment">// USER DATA OBJECT FOR A SINGLE CUBE</span></div><div class="line">        <span class="keyword">var</span> ud = cube.userData;</div><div class="line">        ud.rotationCounts = rotationCounts || [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>];</div><div class="line">        cube.position.copy(position || <span class="keyword">new</span> THREE.Vector3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>));</div><div class="line">        <span class="keyword">return</span> cube;</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// update a single cube</span></div><div class="line">    <span class="keyword">var</span> updateCube = <span class="function"><span class="keyword">function</span> (<span class="params">cube, per</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> ud = cube.userData,</div><div class="line">        rc = ud.rotationCounts,</div><div class="line">        pi2 = <span class="built_in">Math</span>.PI * <span class="number">2</span>;</div><div class="line">        cube.rotation.x = pi2 * rc[<span class="number">0</span>] * per;</div><div class="line">        cube.rotation.y = pi2 * rc[<span class="number">1</span>] * per;</div><div class="line">        cube.rotation.z = pi2 * rc[<span class="number">2</span>] * per;</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// public method to create a cube group</span></div><div class="line">    api.create = <span class="function"><span class="keyword">function</span>(<span class="params">opt</span>) </span>&#123;</div><div class="line">        opt = opt || &#123;&#125;;</div><div class="line">        opt.cubeRotations = opt.cubeRotations || [];</div><div class="line">        <span class="keyword">var</span> cubes = <span class="keyword">new</span> THREE.Group(),</div><div class="line">        <span class="comment">// USER DATA OBJECT FOR A GROUP OF CUBES</span></div><div class="line">        gud = cubes.userData;</div><div class="line">        gud.frame = <span class="number">0</span>;</div><div class="line">        gud.maxFrame = opt.maxFrame || <span class="number">60</span>;</div><div class="line">        gud.fps = opt.fps || <span class="number">30</span>;</div><div class="line">        gud.anglesA = toRadians(opt.anglesA || ANGLES_A);</div><div class="line">        gud.yDelta = opt.yDelta === <span class="literal">undefined</span> ? <span class="number">2</span> : opt.yDelta;</div><div class="line">        gud.xzDelta = opt.xzDelta === <span class="literal">undefined</span> ? <span class="number">2</span> : opt.xzDelta;</div><div class="line">        gud.rotations = opt.rotations || [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>];</div><div class="line">        gud.secs = <span class="number">0</span>;</div><div class="line">        gud.type = <span class="string">'cubegroup'</span>;</div><div class="line">        gud.active = <span class="literal">false</span>;</div><div class="line">        <span class="keyword">var</span> i = <span class="number">0</span>;</div><div class="line">        <span class="keyword">while</span>(i &lt; <span class="number">8</span>)&#123;</div><div class="line">            <span class="keyword">var</span> cubeRotations = opt.cubeRotations[i] || [<span class="number">0.00</span>, <span class="number">0.00</span>, <span class="number">0.00</span>];</div><div class="line">            <span class="keyword">var</span> cube = createCube(</div><div class="line">                cubeRotations, </div><div class="line">                <span class="keyword">new</span> THREE.Vector3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>),</div><div class="line">                opt.materials);</div><div class="line">            cubes.add(cube);</div><div class="line">            i += <span class="number">1</span>;</div><div class="line">        &#125;;        </div><div class="line">        <span class="keyword">return</span> cubes;</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> setCubesRotation = <span class="function"><span class="keyword">function</span>(<span class="params">cubes, per</span>)</span>&#123;</div><div class="line">        <span class="keyword">var</span> gud = cubes.userData,</div><div class="line">        r = gud.rotations,</div><div class="line">        PI2 = <span class="built_in">Math</span>.PI * <span class="number">2</span>;</div><div class="line">        <span class="keyword">var</span> x = PI2 * r[<span class="number">0</span>] * per,</div><div class="line">        y = PI2 * r[<span class="number">1</span>] * per,</div><div class="line">        z = PI2 * r[<span class="number">2</span>] * per;</div><div class="line">        cubes.rotation.set(x, y, z);</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> updateCubes = <span class="function"><span class="keyword">function</span>(<span class="params">cubes, per, bias</span>)</span>&#123;</div><div class="line">        <span class="keyword">var</span> gud = cubes.userData;</div><div class="line">        <span class="comment">// update cubes</span></div><div class="line">        cubes.children.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">cube, i</span>) </span>&#123;</div><div class="line">            <span class="comment">// start values</span></div><div class="line">            <span class="keyword">var</span> sx = i % <span class="number">2</span> - <span class="number">0.5</span>,</div><div class="line">            sz = <span class="built_in">Math</span>.floor(i / <span class="number">2</span>) - <span class="built_in">Math</span>.floor(i / <span class="number">4</span>) * <span class="number">2</span> - <span class="number">0.5</span>,</div><div class="line">            sy = <span class="built_in">Math</span>.floor(i / (<span class="number">2</span> * <span class="number">2</span>)) - <span class="number">0.5</span>;</div><div class="line">            <span class="comment">// adjusted</span></div><div class="line">            <span class="keyword">var</span> aIndex = i % <span class="number">4</span>,</div><div class="line">            bIndex = <span class="built_in">Math</span>.floor(i / <span class="number">4</span>),</div><div class="line">            r1 = gud.anglesA[aIndex],</div><div class="line">            x = sx + <span class="built_in">Math</span>.cos(r1) * gud.xzDelta * bias,</div><div class="line">            y = sy + gud.yDelta * bias * (bIndex === <span class="number">0</span> ? <span class="number">-1</span> : <span class="number">1</span>),</div><div class="line">            z = sz + <span class="built_in">Math</span>.sin(r1) * gud.xzDelta * bias;</div><div class="line">            <span class="comment">// set position of cube</span></div><div class="line">            cube.position.set(x, y, z);</div><div class="line">            <span class="comment">// call cube update method</span></div><div class="line">            updateCube(cube, per);</div><div class="line">        &#125;);</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// update the group</span></div><div class="line">    api.update = <span class="function"><span class="keyword">function</span>(<span class="params">cubes, secs</span>) </span>&#123;</div><div class="line">        <span class="comment">// GROUP USER DATA OBJECT</span></div><div class="line">        <span class="keyword">var</span> gud = cubes.userData;</div><div class="line">        <span class="keyword">var</span> per = gud.frame / gud.maxFrame,</div><div class="line">        bias = <span class="number">1</span> - <span class="built_in">Math</span>.abs(per - <span class="number">0.5</span>) / <span class="number">0.5</span>;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span>(gud.active)&#123;</div><div class="line">            updateCubes(cubes, per, bias);</div><div class="line">            <span class="comment">// whole group rotation</span></div><div class="line">            setCubesRotation(cubes, bias);</div><div class="line">            <span class="comment">// step frame</span></div><div class="line">            gud.secs += secs;</div><div class="line">            <span class="keyword">if</span>(gud.secs &gt;= <span class="number">1</span> / gud.fps)&#123;</div><div class="line">                gud.frame += <span class="number">1</span>; <span class="comment">// gud.fps * secs;</span></div><div class="line">                gud.frame %= gud.maxFrame;</div><div class="line">                gud.secs %= <span class="number">1</span> / gud.fps;</div><div class="line">                <span class="keyword">if</span>(gud.frame === <span class="number">0</span>)&#123;</div><div class="line">                    gud.active = <span class="literal">false</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">&#125;</div><div class="line">    (<span class="keyword">this</span>[<span class="string">'CubeGroupMod'</span>] = &#123;&#125;));</div></pre></td></tr></table></figure>
+<h3 id="3-2-the-main-javaScript-file"><a href="#3-2-the-main-javaScript-file" class="headerlink" title="3.2 - the main javaScript file"></a>3.2 - the main javaScript file</h3><p>Now for a main javaScript file in which I am using the Raycaster class to run an animation for any and all cube groups that intersect when using a Raycater. When it comes to working with an instance of this cube group of mine it is a little different from working with a collection of mesh objects, as what I am dealing with here is a collection of groups of mesh objects. However the situation is not all that more involved as I just need to loop over the collection of cube groups, and pass the children of each group to the intersects objects method. I can then just the the first mesh object if any and just use the parent property of that mesh to get a reference to the group of cube mesh objects. I can then set the active flag of the cube group to true.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> raycaster = <span class="keyword">new</span> THREE.Raycaster();</div><div class="line"><span class="keyword">var</span> mouse = <span class="keyword">new</span> THREE.Vector2(<span class="number">1</span>, <span class="number">1</span>);</div><div class="line"> </div><div class="line"><span class="comment">// on mouse move</span></div><div class="line"><span class="keyword">var</span> onMouseMove = <span class="function"><span class="keyword">function</span>(<span class="params"> event </span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> canvas = event.target,</div><div class="line">    box = canvas.getBoundingClientRect(),</div><div class="line">    x = event.clientX - box.left,</div><div class="line">    y = event.clientY - box.top;</div><div class="line">    mouse.x = ( x / canvas.scrollWidth ) * <span class="number">2</span> - <span class="number">1</span>;</div><div class="line">    mouse.y = - ( y / canvas.scrollHeight ) * <span class="number">2</span> + <span class="number">1</span>;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// update the picking ray with the camera and mouse position</span></div><div class="line"><span class="keyword">var</span> update = <span class="function"><span class="keyword">function</span>(<span class="params">cubeGroups, secs</span>)</span>&#123;</div><div class="line">    raycaster.setFromCamera( mouse, camera );</div><div class="line">    cubeGroups.children.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">cubeGroup</span>)</span>&#123;</div><div class="line">        <span class="keyword">var</span> intersects = raycaster.intersectObjects( cubeGroup.children, <span class="literal">true</span> );</div><div class="line">        <span class="keyword">if</span>(intersects.length &gt; <span class="number">0</span>)&#123;</div><div class="line">            <span class="keyword">var</span> mesh = intersects[<span class="number">0</span>].object,</div><div class="line">            group = mesh.parent;</div><div class="line">            group.userData.active = <span class="literal">true</span>;</div><div class="line">        &#125;</div><div class="line">        CubeGroupMod.update(cubeGroup, secs);</div><div class="line">    &#125;);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// creating a scene</span></div><div class="line"><span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line">scene.add(<span class="keyword">new</span> THREE.GridHelper(<span class="number">9</span>, <span class="number">9</span>));</div><div class="line"> </div><div class="line"><span class="keyword">var</span> cubeGroups = <span class="keyword">new</span> THREE.Group();</div><div class="line">scene.add(cubeGroups);</div><div class="line"> </div><div class="line"><span class="keyword">var</span> cg = CubeGroupMod.create(&#123;</div><div class="line">   <span class="attr">maxFrame</span>: <span class="number">30</span>,</div><div class="line">   <span class="attr">yDelta</span>: <span class="number">0.5</span>,</div><div class="line">   <span class="attr">xzDelta</span>: <span class="number">0.5</span></div><div class="line">&#125;);</div><div class="line">cg.position.x = <span class="number">0</span>;</div><div class="line">cubeGroups.add(cg);</div><div class="line"> </div><div class="line"><span class="keyword">var</span> cg = CubeGroupMod.create(&#123;</div><div class="line">   <span class="attr">maxFrame</span>: <span class="number">30</span>,</div><div class="line">   <span class="attr">yDelta</span>: <span class="number">0.5</span>,</div><div class="line">   <span class="attr">xzDelta</span>: <span class="number">0.5</span></div><div class="line">&#125;);</div><div class="line">cg.position.x = <span class="number">3</span>;</div><div class="line">cubeGroups.add(cg);</div><div class="line"> </div><div class="line"><span class="keyword">var</span> cg = CubeGroupMod.create(&#123;</div><div class="line">   <span class="attr">maxFrame</span>: <span class="number">30</span>,</div><div class="line">   <span class="attr">yDelta</span>: <span class="number">0.5</span>,</div><div class="line">   <span class="attr">xzDelta</span>: <span class="number">0.5</span></div><div class="line">&#125;);</div><div class="line">cg.position.x = <span class="number">-3</span>;</div><div class="line">cubeGroups.add(cg);</div><div class="line"> </div><div class="line"><span class="comment">// camera and renderer</span></div><div class="line"><span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">60</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"> </div><div class="line">renderer.domElement.addEventListener( <span class="string">'mousemove'</span>, onMouseMove, <span class="literal">false</span> );</div><div class="line"> </div><div class="line"><span class="keyword">var</span> controls = <span class="keyword">new</span> THREE.OrbitControls(camera, renderer.domElement);</div><div class="line"> </div><div class="line"><span class="comment">// loop</span></div><div class="line"><span class="keyword">var</span> lt = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">frame = <span class="number">0</span>,</div><div class="line">maxFrame = <span class="number">300</span>,</div><div class="line">fps = <span class="number">30</span>;</div><div class="line"><span class="keyword">var</span> loop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> now = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">    per = frame / maxFrame,</div><div class="line">    bias = <span class="number">1</span> - <span class="built_in">Math</span>.abs(per - <span class="number">0.5</span>) / <span class="number">0.5</span>,</div><div class="line">    secs = (now - lt) / <span class="number">1000</span>;</div><div class="line">    requestAnimationFrame(loop);</div><div class="line">    <span class="keyword">if</span> (secs &gt; <span class="number">1</span> / fps) &#123;</div><div class="line"> </div><div class="line">        update(cubeGroups, secs);</div><div class="line"> </div><div class="line">        renderer.render(scene, camera);</div><div class="line">        frame += fps * secs;</div><div class="line">        frame %= maxFrame;</div><div class="line">        lt = now;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">loop();</div></pre></td></tr></table></figure>
+<p>So then the outcome of this is more or less what I had in mind when it comes to what I wanted to do. When I mouse over a cube group the cube group beginnings an animation loop, until the loop is over at which point the active false ends up getting set back to false. Maybe not the most interesting example, but I wanted to do something at least a little more advanced then just the usual basic copy and paste cook book style code examples.</p>
+<h2 id="4-Conclusion"><a href="#4-Conclusion" class="headerlink" title="4 - Conclusion"></a>4 - Conclusion</h2><p>So then the raycaster class is a useful tool to go about clicking on mesh objects in three.js. However I am sure that there are many uses for the class that will come up when it comes to writing scripts that update some kind of simulation also when it comes to getting a collection of mesh objects from a given object outward or anything to that effect. I think that there might be a need for maybe a few more basic examples of this kind of class as I am sure that there are a number of issues that will come up here and there when using this class. Not just with the class itself, but also when it comes to three.js, and javaScript in general. For example many of the examples that I have worked out as of this writing will just work with a mouse, but I did not do anything when it comes to working with touch devices, and this day in age I have to take that into account when making any kind of production project.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2021/05/18/threejs-raycaster/" data-id="ckp9xprfi021kp8v1b86px5zt" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2021/05/18/threejs-raycaster/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/05/19/threejs-examples-tree-sphere/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Tree Sphere threejs example
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/05/17/threejs-examples-build-a-box/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Build a Box Helper Three.js example</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2021/05/18/threejs-raycaster/index.html';
+    this.page.identifier = '869';
+    this.page.title = 'Clicking a mesh in three.js with the Raycaster class';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.38px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.48px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.33px;">angular</a> <a href="/tags/animation/" style="font-size: 11.9px;">animation</a> <a href="/tags/automation/" style="font-size: 11.9px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.38px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.76px;">blog</a> <a href="/tags/canvas/" style="font-size: 19.05px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.86px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.95px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.43px;">ejs</a> <a href="/tags/express/" style="font-size: 16.19px;">express</a> <a href="/tags/games/" style="font-size: 17.14px;">games</a> <a href="/tags/git/" style="font-size: 12.86px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.76px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.9px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.29px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.48px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.43px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 16.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.57px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.29px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.52px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.1px;">phaser</a> <a href="/tags/python/" style="font-size: 15.24px;">python</a> <a href="/tags/statistics/" style="font-size: 13.81px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 17.62px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.71px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/05/28/threejs-clock/">The Clock constructor in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/27/threejs-torus/">Torus Geometry in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/26/threejs-sphere/">Sphere Geometry in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/25/threejs-object3d-get-world-position/">Getting world position of any object in three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/24/threejs-object3d-visible/">Making objects visible or not in three.js</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2021/05/18/threejs-raycaster/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

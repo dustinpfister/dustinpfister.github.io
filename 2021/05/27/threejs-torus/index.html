@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
+  
+  <title>Torus Geometry in threejs | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2021/05/27/threejs-torus/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Today I thought I world write another post on a built in geometry constructor in three.js, this time the Torus Geometry Constructor which results in a donut like shape. There are many interesting thin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Torus Geometry in threejs">
+<meta property="og:url" content="https://dustinpfister.github.io/2021/05/27/threejs-torus/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="Today I thought I world write another post on a built in geometry constructor in three.js, this time the Torus Geometry Constructor which results in a donut like shape. There are many interesting thin">
+<meta property="og:updated_time" content="2021-05-27T19:41:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Torus Geometry in threejs">
+<meta name="twitter:description" content="Today I thought I world write another post on a built in geometry constructor in three.js, this time the Torus Geometry Constructor which results in a donut like shape. There are many interesting thin">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-threejs-torus" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/05/27/threejs-torus/" class="article-date"> Published:
+  <time datetime="2021-05-27T15:33:00.000Z" itemprop="datePublished">2021-05-27</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2021/05/27/threejs-torus/" class="article-date"> Modified:
+  <time datetime="2021-05-27T19:41:16.000Z" itemprop="dateModified">2021-05-27</time>
+</a>
+
+    <span class="article-date">V1.18</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Torus Geometry in threejs
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>Today I thought I world write another post on a built in geometry constructor in <a href="https://threejs.org/docs/#manual/en/introduction/Creating-a-scene" target="_blank" rel="external">three.js</a>, this time the <a href="https://threejs.org/docs/#api/en/geometries/TorusGeometry" target="_blank" rel="external">Torus Geometry Constructor</a> which results in a donut like shape. There are many interesting things about the <a href="https://en.wikipedia.org/wiki/Torus" target="_blank" rel="external">geometry of a torus in general</a> that are worth looking into in detail. It is a shape that is composed of a collection of circles where each circle is positioned and rotated around a point that results in the formation of a tube that in turn is a kind of 3d circle. So then there are two general arguments of concern that come up with this when it comes to the number of sides of each circle, and the number of circles, as one might expect these values can be tweaked when calling the geometry constructor.</p>
+<a id="more"></a>
+<h2 id="1-A-donut-or-torus-geometry-in-threejs-and-what-to-know-first"><a href="#1-A-donut-or-torus-geometry-in-threejs-and-what-to-know-first" class="headerlink" title="1 - A donut or torus geometry in threejs and what to know first"></a>1 - A donut or torus geometry in threejs and what to know first</h2><p>This is a post on the Torus Geometry constructor in the javaScript library known as three.js. In addition to the constructor function itself I will also be making use of a whole bunch of other features of the threejs library in these code examples. So I trust that you have at least some background when it comes to the very basic of how to get up and running with a three.js project, if nit you might want to start out with some kind of getting started guide.</p>
+<h3 id="1-1-Do-not-just-stop-with-the-Torus-Constructor-of-course"><a href="#1-1-Do-not-just-stop-with-the-Torus-Constructor-of-course" class="headerlink" title="1.1 - Do not just stop with the Torus Constructor of course"></a>1.1 - Do not just stop with the Torus Constructor of course</h3><p>The torus geometry constructor is of course just one option when it comes to the many built in geometry constrictors there are to work with in three.js. The <a href="/2021/05/26/threejs-sphere/">Sphere</a>, <a href="/2019/06/05/threejs-plane/">plane</a>, and <a href="/2021/04/26/threejs-box-geometry/">Box geometry</a> constructors are all also worth checking out in detail if you have not done so before hand. There is a lot to learn about these constructors and not just with respect to how to just call the function and pass a few arguments when calling them. In the long run sooner or later in make sense to look into the <a href="/2021/04/22/threejs-buffer-geometry/">buffer geometry constructor</a> and how to create a custom geometry.</p>
+<h3 id="1-2-Version-Numbers-matter-with-three-js"><a href="#1-2-Version-Numbers-matter-with-three-js" class="headerlink" title="1.2 - Version Numbers matter with three.js"></a>1.2 - Version Numbers matter with three.js</h3><p>When I first made the source code for these examples and wrote this post I was using r127 of three.js. I do not think a lot of changes hand been made to the torus geometry constructor that will case code breaking changes, but still in the future many such changes might happen to other features of the library that I am using.</p>
+<h2 id="2-Starting-out-with-a-basic-Torus-example"><a href="#2-Starting-out-with-a-basic-Torus-example" class="headerlink" title="2 - Starting out with a basic Torus example"></a>2 - Starting out with a basic Torus example</h2><p>To start out with there is just making a simple hello world type demo of the Torus Constructor with a simple example that is just one mesh object. With that said when calling the THREE.TorusGeometry constructor function the first argument is the main radius of the torus as a whole, while the second argument is the radius of each circle in the torus or the tube radius if you prefer. The next two arguments of the constructor are to set the number of circles in the torus, and how many sides per circle.</p>
+<p>Once I have my torus geometry I can then pass it as the first argument to the mesh constructor, and pass a material as the second argument for the mesh constructor and then add the resulting mesh to a scene object. After that I just need to set up a camera and a renderer for this example.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// creating a donut mesh with the Torus Geometry constructor,</span></div><div class="line"><span class="comment">// and the normal material</span></div><div class="line"><span class="keyword">var</span> radius = <span class="number">1</span>,</div><div class="line">tubeRadius = <span class="number">0.25</span>,</div><div class="line">radialSegments = <span class="number">16</span>,</div><div class="line">tubeSegments = <span class="number">32</span>;</div><div class="line"><span class="keyword">var</span> donut = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.TorusGeometry(radius, tubeRadius, radialSegments, tubeSegments),</div><div class="line">        <span class="keyword">new</span> THREE.MeshNormalMaterial());</div><div class="line"> </div><div class="line"><span class="comment">// creating a scene</span></div><div class="line"><span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"> </div><div class="line"><span class="comment">// add the donut mesh to the scene</span></div><div class="line">scene.add(donut);</div><div class="line"> </div><div class="line"><span class="comment">// camera and renderer</span></div><div class="line"><span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">60</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">1</span>, <span class="number">1.5</span>, <span class="number">2</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0.25</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line">renderer.render(scene, camera);</div></pre></td></tr></table></figure>
+<h2 id="3-Creating-a-group-of-mesh-objects-using-a-torus"><a href="#3-Creating-a-group-of-mesh-objects-using-a-torus" class="headerlink" title="3 - Creating a group of mesh objects using a torus"></a>3 - Creating a group of mesh objects using a torus</h2><p>In this example I am creating a group of mesh objects where each mesh object is created with a create donut helper method to which I pass two arguments one of the current child index, and the other for the total number of children in the group.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> createDonutChild = <span class="function"><span class="keyword">function</span>(<span class="params">index, len</span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> per = index / len,</div><div class="line">    radius = <span class="number">0.6</span>,</div><div class="line">    tubeRadius = <span class="number">0.25</span>,</div><div class="line">    radialSegments = <span class="number">4</span> + <span class="built_in">Math</span>.round(<span class="number">20</span> * per),</div><div class="line">    tubeSegments = <span class="number">4</span> + <span class="built_in">Math</span>.round(<span class="number">20</span> * per);</div><div class="line">    <span class="keyword">var</span> donut = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.TorusGeometry(radius, tubeRadius, radialSegments, tubeSegments),</div><div class="line">        <span class="keyword">new</span> THREE.MeshNormalMaterial(&#123;<span class="attr">wireframe</span>:<span class="literal">true</span>&#125;));</div><div class="line">    <span class="keyword">return</span> donut;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> createDonutGroup = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> i = <span class="number">0</span>,</div><div class="line">    len = <span class="number">10</span>,</div><div class="line">    group = <span class="keyword">new</span> THREE.Group();</div><div class="line">    <span class="keyword">while</span>(i &lt; len)&#123;</div><div class="line">        <span class="keyword">var</span> donut = createDonutChild(i, len);</div><div class="line">        donut.position.set(<span class="number">0</span>, <span class="number">0</span>, <span class="number">4</span> - i * <span class="number">1.125</span>);</div><div class="line">        group.add(donut);</div><div class="line">        i += <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> group;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// creating a scene</span></div><div class="line"><span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line">scene.add(<span class="keyword">new</span> THREE.GridHelper(<span class="number">10</span>, <span class="number">10</span>));</div><div class="line"></div><div class="line"><span class="keyword">var</span> group = createDonutGroup();</div><div class="line">scene.add(group);</div><div class="line"> </div><div class="line"><span class="comment">// camera and renderer</span></div><div class="line"><span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">60</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">6</span>, <span class="number">4</span>, <span class="number">4.5</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0.5</span>);</div><div class="line"><span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line">renderer.render(scene, camera);</div></pre></td></tr></table></figure>
+<h2 id="4-Camera-moving-threw-holes-animation"><a href="#4-Camera-moving-threw-holes-animation" class="headerlink" title="4 - Camera moving threw holes animation"></a>4 - Camera moving threw holes animation</h2><p>So now there is an idea that I just have to do with this because it is just a cool thing to do when it comes to just playing around with three.js. In this example I am once again creating a group of mesh objects that are using the torus geometry constructor but this time I am positing each of them in a circle, so then all the torus objects then begin to from another torus of sorts out of torus objects. I am then creating an animation loop, and moving the camera so that it passes along the the holes of each torus mesh object which results in a cool effect.</p>
+<p>Just like my other group example of donut mesh objects I have a create donut child helper that also gets the same arguments. This time I am playing around with the expressions a little in a different way, and I am also making use of the standard material this time because I want to do something with light for this one. Another thing that I am doing differently with this create donut child method is that I am rotating the geometry of the torus so that when I create the group they are all aliened in a way that I want so that I can have a camera move threw them by just having the camera move along the circumference of a circle.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> MAIN_RADIUS = <span class="number">8</span>,</div><div class="line">DONUT_COUNT = <span class="number">30</span>;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> createDonutChild = <span class="function"><span class="keyword">function</span>(<span class="params">index, len</span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> per = index / len,</div><div class="line">    bias = <span class="number">1</span> - <span class="built_in">Math</span>.abs(per - <span class="number">0.5</span>) / <span class="number">0.5</span>,</div><div class="line">    radius = <span class="number">0.6</span> + <span class="number">2.3</span> * bias,</div><div class="line">    tubeRadius = <span class="number">0.125</span> + <span class="number">0.25</span> * bias,</div><div class="line">    radialSegments = <span class="number">32</span>,</div><div class="line">    tubeSegments = <span class="number">32</span>;</div><div class="line">    <span class="keyword">var</span> donut = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.TorusGeometry(radius, tubeRadius, radialSegments, tubeSegments),</div><div class="line">        <span class="keyword">new</span> THREE.MeshStandardMaterial(&#123;</div><div class="line">           <span class="attr">color</span>: <span class="number">0xffffff</span>,</div><div class="line">           <span class="attr">emissive</span>: <span class="number">0x2a0000</span></div><div class="line">        &#125;));</div><div class="line">    donut.geometry.rotateY(<span class="built_in">Math</span>.PI * <span class="number">0.5</span>);</div><div class="line">    <span class="keyword">return</span> donut;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> createDonutGroup = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> i = <span class="number">0</span>,</div><div class="line">    len = DONUT_COUNT,</div><div class="line">    group = <span class="keyword">new</span> THREE.Group();</div><div class="line">    <span class="keyword">while</span>(i &lt; len)&#123;</div><div class="line">        <span class="keyword">var</span> per = i / len,</div><div class="line">        radian = <span class="built_in">Math</span>.PI * <span class="number">2</span> * per;</div><div class="line">        <span class="keyword">var</span> donut = createDonutChild(i, len);</div><div class="line">        donut.position.set(<span class="built_in">Math</span>.cos(radian) * MAIN_RADIUS, <span class="number">0</span>, <span class="built_in">Math</span>.sin(radian) * MAIN_RADIUS);</div><div class="line">        donut.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">        group.add(donut);</div><div class="line">        i += <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> group;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// creating a scene</span></div><div class="line"><span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line">scene.background = <span class="keyword">new</span> THREE.Color(<span class="number">0xafafaf</span>);</div><div class="line"><span class="comment">//var grid = new THREE.GridHelper(10, 100);</span></div><div class="line"><span class="comment">//grid.rotation.z = Math.PI * 0.5;</span></div><div class="line"><span class="comment">//scene.add(grid);</span></div><div class="line"> </div><div class="line"><span class="keyword">var</span> group = createDonutGroup();</div><div class="line">scene.add(group);</div><div class="line"> </div><div class="line"><span class="comment">// camera and renderer</span></div><div class="line"><span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">40</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.1</span>, <span class="number">100</span>);</div><div class="line">camera.position.set(<span class="number">6</span>, <span class="number">4</span>, <span class="number">4.5</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0.5</span>);</div><div class="line"><span class="keyword">var</span> light = <span class="keyword">new</span> THREE.PointLight(<span class="number">0xffffff</span>, <span class="number">0.5</span>);</div><div class="line">light.position.set(<span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">camera.add(light);</div><div class="line">scene.add(camera);</div><div class="line"><span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"> </div><div class="line"><span class="comment">// loop</span></div><div class="line"><span class="keyword">var</span> lt = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">frame = <span class="number">0</span>,</div><div class="line">maxFrame = <span class="number">1200</span>,</div><div class="line">fps = <span class="number">24</span>;</div><div class="line"><span class="keyword">var</span> loop = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> now = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">    per = frame / maxFrame,</div><div class="line">    secs = (now - lt) / <span class="number">1000</span>;</div><div class="line">    requestAnimationFrame(loop);</div><div class="line">    <span class="keyword">if</span>(secs &gt; <span class="number">1</span> / fps)&#123;</div><div class="line">        <span class="keyword">var</span> radian = <span class="built_in">Math</span>.PI * <span class="number">2</span> * per;</div><div class="line">        camera.position.set(<span class="built_in">Math</span>.cos(radian) * MAIN_RADIUS, <span class="number">0</span>, <span class="built_in">Math</span>.sin(radian) * MAIN_RADIUS);</div><div class="line">        camera.lookAt(<span class="built_in">Math</span>.cos(radian + <span class="number">0.5</span>) * MAIN_RADIUS, <span class="built_in">Math</span>.sin(radian) * <span class="number">0.5</span>, <span class="built_in">Math</span>.sin(radian - <span class="number">0.5</span>) * MAIN_RADIUS);</div><div class="line">        renderer.render(scene, camera);</div><div class="line">        frame += fps * secs;</div><div class="line">        frame %= maxFrame;</div><div class="line">        lt = now;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line">loop();</div></pre></td></tr></table></figure>
+<p>There are a great number of other ways that I can play around with this kind of example to make all kinds of interesting animations. Another idea that might be nice is to have the torus mesh objects rotated in a way so that all the holes are facing the center rather than each other and have the camera weave in and own in a sine wave like pattern.</p>
+<h2 id="5-Conclusion"><a href="#5-Conclusion" class="headerlink" title="5 - Conclusion"></a>5 - Conclusion</h2><p>The torus geometry constructor is fun geometry constructor to play around with when it comes to making a few quick examples and getting a feel for how to make some interesting animations with three.js. There is many other little details to work with here and there also when it comes to a lot of these examples. For example there is learning how to work with not just the torus geometry, but geometry in general when it comes to rotating them, and working with the various properties of a geometry. There is also not just the geometry, but the objects that contain the geometry, and groups of such objects when it come to the Mesh constructor and the Object3d class that it is based on.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2021/05/27/threejs-torus/" data-id="ckp9xprgt021tp8v1pds17mpz" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2021/05/27/threejs-torus/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/05/28/threejs-clock/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          The Clock constructor in threejs
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/05/26/threejs-sphere/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Sphere Geometry in threejs</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2021/05/27/threejs-torus/index.html';
+    this.page.identifier = '876';
+    this.page.title = 'Torus Geometry in threejs';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.38px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.48px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.33px;">angular</a> <a href="/tags/animation/" style="font-size: 11.9px;">animation</a> <a href="/tags/automation/" style="font-size: 11.9px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.38px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.76px;">blog</a> <a href="/tags/canvas/" style="font-size: 19.05px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.86px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.95px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.43px;">ejs</a> <a href="/tags/express/" style="font-size: 16.19px;">express</a> <a href="/tags/games/" style="font-size: 17.14px;">games</a> <a href="/tags/git/" style="font-size: 12.86px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.76px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.9px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.29px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.48px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.43px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 16.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.57px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.29px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.52px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.1px;">phaser</a> <a href="/tags/python/" style="font-size: 15.24px;">python</a> <a href="/tags/statistics/" style="font-size: 13.81px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 17.62px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.71px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/05/28/threejs-clock/">The Clock constructor in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/27/threejs-torus/">Torus Geometry in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/26/threejs-sphere/">Sphere Geometry in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/25/threejs-object3d-get-world-position/">Getting world position of any object in three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/24/threejs-object3d-visible/">Making objects visible or not in three.js</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2021/05/27/threejs-torus/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
