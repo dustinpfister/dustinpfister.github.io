@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
+  
+  <title>Loop over all objects in a threejs scene with the Object3d traverse method | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2021/06/03/threejs-object3d-traverse/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="If for some reason I want to loop over all objects in a threejs scene, or all the objects attached to any single object I can use the object3d traverse method. The way this works is I just call the tr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Loop over all objects in a threejs scene with the Object3d traverse method">
+<meta property="og:url" content="https://dustinpfister.github.io/2021/06/03/threejs-object3d-traverse/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="If for some reason I want to loop over all objects in a threejs scene, or all the objects attached to any single object I can use the object3d traverse method. The way this works is I just call the tr">
+<meta property="og:updated_time" content="2021-06-03T18:54:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Loop over all objects in a threejs scene with the Object3d traverse method">
+<meta name="twitter:description" content="If for some reason I want to loop over all objects in a threejs scene, or all the objects attached to any single object I can use the object3d traverse method. The way this works is I just call the tr">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-threejs-object3d-traverse" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/06/03/threejs-object3d-traverse/" class="article-date"> Published:
+  <time datetime="2021-06-03T16:17:00.000Z" itemprop="datePublished">2021-06-03</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2021/06/03/threejs-object3d-traverse/" class="article-date"> Modified:
+  <time datetime="2021-06-03T18:54:51.000Z" itemprop="dateModified">2021-06-03</time>
+</a>
+
+    <span class="article-date">V1.18</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Loop over all objects in a threejs scene with the Object3d traverse method
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>If for some reason I want to <a href="https://discourse.threejs.org/t/to-get-array-of-all-meshes/17458/2" target="_blank" rel="external">loop over all objects</a> in a <a href="https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene" target="_blank" rel="external">threejs</a> scene, or all the objects attached to any single object I can use the <a href="https://threejs.org/docs/index.html#api/en/core/Object3D.traverse" target="_blank" rel="external">object3d traverse</a> method. The way this works is I just call the traverse method off of the scene object, or any object based off the object3c class for that matter, and pass a callback function as the first argument. This call back function will then be called for every nested child attached to the object that I call traverse, including the object itself. A reference to the current object will be passed as the first argument of the given callback function and it is then in the body of this function that I can preform whatever action I want to happen for all objects.</p>
+<p>So then in this post I will be going over the use of the traverse method of the object3d class. In the process of doing so I will also be touching base on a wide range of other topics of interest that will branch off from the use of this method. There are things like the type property of the object3d class that come to mind when it comes to checking out what kind of object it is that I am dealing with for example.</p>
+<a id="more"></a>
+<h2 id="1-Looping-over-all-objects-using-Object3d-traverse-and-what-to-know-first"><a href="#1-Looping-over-all-objects-using-Object3d-traverse-and-what-to-know-first" class="headerlink" title="1 - Looping over all objects using Object3d traverse and what to know first"></a>1 - Looping over all objects using Object3d traverse and what to know first</h2><p>This is a post centered on using just one little method in the object3d class in the javaScript library known as threejs, as well as a whole bunch of other little things that might branch off from this method. This is then not a getting started type post on threejs so I assume that you have the basic of the library out of the way so far. However in any case in this section I will be going over some things that you might want to get solid before continuing to read the rest of this post.</p>
+<h3 id="1-1-Take-a-look-at-the-object3d-class-in-general"><a href="#1-1-Take-a-look-at-the-object3d-class-in-general" class="headerlink" title="1.1 - Take a look at the object3d class in general"></a>1.1 - Take a look at the object3d class in general</h3><p>There is a lot to write about when it comes to the object3d class, and the traverse method is just one little item of interest. So it would be a good idea to maybe check out <a href="/2018/04/23/threejs-obhect3d/">my post on the object3d class in general</a> if you have some time to get into the thick of this class. Doing so is called for sooner or later when it comes to gaining a solid understanding of the library as the object3d class is a base class that apples to a lot of objects in the library such as Mesh objects, Groups, and even the main scene object.</p>
+<h3 id="1-2-Check-the-version-numbers-always"><a href="#1-2-Check-the-version-numbers-always" class="headerlink" title="1.2 - Check the version numbers, always"></a>1.2 - Check the version numbers, always</h3><p>This is something that I think that I just need to mentioning in ever post I write on threejs now, which is that I was using threejs version r127 when I made these code examples here. Threejs is a library that as of this writing is still moving very fast when it comes to development, and code breaking changes are made to the library often.</p>
+<h2 id="2-Loop-Over-all-objects-in-a-scene"><a href="#2-Loop-Over-all-objects-in-a-scene" class="headerlink" title="2 - Loop Over all objects in a scene"></a>2 - Loop Over all objects in a scene</h2><p>So first off this will be just a basic example of the object3d traverse method just for the sake of getting started with this method. In this example I am creating a main scene object and then I am adding some grid helpers objects to the scene. These grid helper objects are based off of the object3d class so they will show up in the traverse call that I will be using later in the source code. On top of the helpers I am also adding a group, and this group will have a whole bunch of children, each of which will be an instance of a Mesh. After that I am also adding a camera to the scene when it comes to setting up the camera, and the renderer that I will be suing.</p>
+<p>So then before I call the render method of my web gl renderer instance I call the traverse method off of the scene object and then pass a function that I want o call for every object attached to the scene object as a child. This will not just call for all the children, but also all the children of children which is the case for the group of mesh objects that I attached. In the body of the function I cam preforming an action for each mesh object, but then I am also looping over all the children for each group also.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">// Scene</span></div><div class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"> </div><div class="line">    <span class="comment">// ADDING GRID HELPERS TO THE SCENE</span></div><div class="line">    <span class="keyword">var</span> helper = <span class="keyword">new</span> THREE.GridHelper(<span class="number">10</span>, <span class="number">10</span>, <span class="string">'white'</span>, <span class="string">'#2a2a2a'</span>);</div><div class="line">    scene.add(helper);</div><div class="line">    helper = <span class="keyword">new</span> THREE.GridHelper(<span class="number">10</span>, <span class="number">10</span>, <span class="string">'white'</span>, <span class="string">'#2a2a2a'</span>);</div><div class="line">    helper.rotation.z = <span class="built_in">Math</span>.PI * <span class="number">0.5</span>;</div><div class="line">    scene.add(helper);</div><div class="line"> </div><div class="line">    <span class="comment">// ADDING A GROUP OF MESH OBJECTS</span></div><div class="line">    <span class="keyword">var</span> group = <span class="keyword">new</span> THREE.Group();</div><div class="line">    <span class="keyword">var</span> i = <span class="number">20</span>;</div><div class="line">    <span class="keyword">while</span>(i--)&#123;</div><div class="line">        group.add( <span class="keyword">new</span> THREE.Mesh( <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>,<span class="number">1</span>, <span class="number">1</span>), <span class="keyword">new</span> THREE.MeshNormalMaterial() ));</div><div class="line">    &#125;</div><div class="line">    scene.add( group );</div><div class="line"> </div><div class="line">    <span class="comment">// camera, renderer</span></div><div class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">45</span>, <span class="number">4</span> / <span class="number">3</span>, <span class="number">0.5</span>, <span class="number">25</span>);</div><div class="line">    camera.position.set(<span class="number">8</span>, <span class="number">8</span>, <span class="number">8</span>);</div><div class="line">    camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">    scene.add(camera); <span class="comment">// ADDING CAMERA OBJECT TO THE SCENE</span></div><div class="line"> </div><div class="line">    <span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">    renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"> </div><div class="line">    <span class="comment">// TRAVERSING ALL OBJECTS IN THE SCENE</span></div><div class="line">    scene.traverse(<span class="function"><span class="keyword">function</span>(<span class="params">obj</span>)</span>&#123;</div><div class="line">        <span class="keyword">if</span>(obj.type === <span class="string">'GridHelper'</span>)&#123;</div><div class="line">            obj.material.color = <span class="keyword">new</span> THREE.Color(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(obj.type === <span class="string">'Mesh'</span>)&#123;</div><div class="line">            obj.position.x = <span class="number">-5</span> + <span class="built_in">Math</span>.floor(<span class="number">10</span> * <span class="built_in">Math</span>.random());</div><div class="line">            obj.position.z = <span class="number">-5</span> + <span class="built_in">Math</span>.floor(<span class="number">10</span> * <span class="built_in">Math</span>.random());</div><div class="line">            obj.rotation.y = <span class="built_in">Math</span>.PI * <span class="number">2</span> * <span class="built_in">Math</span>.random();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(obj.type === <span class="string">'Group'</span>)&#123;</div><div class="line">            <span class="keyword">var</span> len = obj.children.length;</div><div class="line">            obj.children.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">child, i</span>)</span>&#123;</div><div class="line">                child.position.y = <span class="number">-5</span> + <span class="built_in">Math</span>.floor( <span class="number">10</span> * (i / len) );</div><div class="line">                <span class="keyword">var</span> s = <span class="number">0.25</span> + <span class="number">1.75</span> * (<span class="number">1</span> - i / len);</div><div class="line">                child.scale.set(s, s, s);</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">    renderer.render(scene, camera);</div><div class="line"> </div><div class="line">&#125;</div><div class="line">    ());</div></pre></td></tr></table></figure>
+<p>So then this should help to show the basic idea of what the traverse method is all about. It is a little more advanced than just looping over the children of an object as the traverse method will loop over the children, the children of children, and it will also include the object itself.</p>
+<h2 id="3-Setting-names-for-objects-example"><a href="#3-Setting-names-for-objects-example" class="headerlink" title="3 - Setting names for objects example"></a>3 - Setting names for objects example</h2><p>One use case example for traverse that comes to mind is that I can use it as a way to set name values for all objects if interest that are attached to a scene object. In this example I have a create cube method that will create and return a cube object with a cube group type set to the user data object of the mesh object that it is returned. I then have a create cube group helper that creates a collection of these cubes and also has a cube group type value set for the user data object of the group. I can then use these values parked in the user data object as a way to flag this object for the creation of a name. This is then done in the next method that does just that.</p>
+<p>I can then get a reference to any of these group objects, or a single mesh of one of the group objects, or a single stand alone method with the get by name method. This get by name method is yet another useful method of the object3d class that is a way to go about getting referenced to objects in a scene by way of a name that is set by the developer. In other worlds a name is like an id when it comes to html elements, I can set a unique value for the object and then use that as a way to get a reference to it later on when needed.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> createCube = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">        <span class="keyword">var</span> mesh = <span class="keyword">new</span> THREE.Mesh(<span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),<span class="keyword">new</span> THREE.MeshNormalMaterial());</div><div class="line">        mesh.userData.cubeGroupType = <span class="string">'Mesh'</span>;</div><div class="line">        <span class="keyword">return</span> mesh;</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> createCubeGroup = <span class="function"><span class="keyword">function</span>(<span class="params">id, count</span>)</span>&#123;</div><div class="line">        <span class="keyword">var</span> group = <span class="keyword">new</span> THREE.Group();</div><div class="line">        id = id || group.id;</div><div class="line">        count = count || <span class="number">10</span>;</div><div class="line">        <span class="keyword">var</span> i = count;</div><div class="line">        <span class="keyword">while</span>(i--)&#123;</div><div class="line">            group.add( createCube() );</div><div class="line">        &#125;</div><div class="line">        group.userData.id = id;</div><div class="line">        group.userData.count = count;</div><div class="line">        group.userData.cubeGroupType = <span class="string">'Group'</span>;</div><div class="line">        <span class="keyword">return</span> group;</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> setNamesForScene = <span class="function"><span class="keyword">function</span>(<span class="params">scene</span>)</span>&#123;</div><div class="line">        <span class="keyword">var</span> standAloneCount = <span class="number">0</span>;</div><div class="line">        <span class="comment">// TRAVERSING ALL OBJECTS IN THE SCENE</span></div><div class="line">        scene.traverse(<span class="function"><span class="keyword">function</span>(<span class="params">obj</span>)</span>&#123;        </div><div class="line">            <span class="comment">// SET NAMES FOR STAND ALONE MESH CUBES</span></div><div class="line">            <span class="keyword">if</span>(obj.userData.cubeGroupType === <span class="string">'Mesh'</span>)&#123;</div><div class="line">                <span class="keyword">var</span> parent = obj.parent;</div><div class="line">                <span class="keyword">if</span>(parent.type != <span class="string">'Group'</span>)&#123;</div><div class="line">                    <span class="keyword">if</span>(obj.userData.cubeGroupType === <span class="string">'Mesh'</span>)&#123;</div><div class="line">                        obj.name = <span class="string">'mesh:'</span> + standAloneCount;</div><div class="line">                        standAloneCount += <span class="number">1</span>;</div><div class="line">                        <span class="built_in">console</span>.log(obj.name);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            <span class="comment">// SET NAMES FOR GROUPS AND MESH OBJECTS OF GROUPS</span></div><div class="line">            <span class="keyword">if</span>(obj.userData.cubeGroupType === <span class="string">'Group'</span>)&#123;</div><div class="line">                obj.name = <span class="string">'cubegroup:'</span> + obj.userData.id;</div><div class="line">                <span class="built_in">console</span>.log(obj.name);</div><div class="line">                obj.children.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">child, i</span>)</span>&#123;</div><div class="line">                    <span class="keyword">if</span>(child.userData.cubeGroupType === <span class="string">'Mesh'</span>)&#123;</div><div class="line">                        child.name = <span class="string">'mesh:'</span> + i + <span class="string">'_'</span> + obj.name</div><div class="line">                        <span class="built_in">console</span>.log(child.name);</div><div class="line">                    &#125;</div><div class="line">                &#125;); </div><div class="line">            &#125;</div><div class="line">        &#125;);     </div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> positionGroup = <span class="function"><span class="keyword">function</span>(<span class="params">scene, groupId, y</span>)</span>&#123;</div><div class="line">        <span class="keyword">var</span> group = scene.getObjectByName(<span class="string">'cubegroup:'</span> + groupId), i, len;</div><div class="line">        y = y === <span class="literal">undefined</span> ? <span class="number">0</span> : y;</div><div class="line">        len = group.userData.count;</div><div class="line">        i = len;</div><div class="line">        <span class="keyword">while</span>(i--)&#123;</div><div class="line">            <span class="keyword">var</span> mesh = group.getObjectByName(<span class="string">'mesh:'</span> + i + <span class="string">'_cubegroup:'</span> + groupId),</div><div class="line">            rad = <span class="built_in">Math</span>.PI * <span class="number">2</span> * ( i / len ),</div><div class="line">            x = <span class="built_in">Math</span>.cos(rad) * <span class="number">5</span>,</div><div class="line">            z = <span class="built_in">Math</span>.sin(rad) * <span class="number">5</span>;</div><div class="line">            <span class="keyword">if</span>(mesh)&#123;</div><div class="line">                mesh.position.set(x, y, z);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// Scene</span></div><div class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"> </div><div class="line">    <span class="comment">// ADDING GRID HELPERS TO THE SCENE</span></div><div class="line">    <span class="keyword">var</span> helper = <span class="keyword">new</span> THREE.GridHelper(<span class="number">10</span>, <span class="number">10</span>, <span class="string">'white'</span>, <span class="string">'#2a2a2a'</span>);</div><div class="line">    scene.add(helper);</div><div class="line">    helper = <span class="keyword">new</span> THREE.GridHelper(<span class="number">10</span>, <span class="number">10</span>, <span class="string">'white'</span>, <span class="string">'#2a2a2a'</span>);</div><div class="line">    helper.rotation.z = <span class="built_in">Math</span>.PI * <span class="number">0.5</span>;</div><div class="line">    scene.add(helper);</div><div class="line"> </div><div class="line">    <span class="comment">// adding a group</span></div><div class="line">    <span class="keyword">var</span> group = createCubeGroup(<span class="string">'one'</span>);</div><div class="line">    scene.add( group );</div><div class="line">    <span class="keyword">var</span> group = createCubeGroup(<span class="string">'two'</span>);</div><div class="line">    scene.add( group );</div><div class="line"> </div><div class="line">    <span class="comment">// stand alone mesh</span></div><div class="line">    <span class="keyword">var</span> mesh = createCube();</div><div class="line">    scene.add( mesh );</div><div class="line"> </div><div class="line">    <span class="comment">// camera, renderer</span></div><div class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">45</span>, <span class="number">4</span> / <span class="number">3</span>, <span class="number">0.5</span>, <span class="number">25</span>);</div><div class="line">    camera.position.set(<span class="number">8</span>, <span class="number">8</span>, <span class="number">8</span>);</div><div class="line">    camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">    scene.add(camera); <span class="comment">// ADDING CAMERA OBJECT TO THE SCENE</span></div><div class="line"> </div><div class="line">    <span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">    renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"> </div><div class="line">    <span class="comment">// calling set names</span></div><div class="line">    setNamesForScene(scene);</div><div class="line"> </div><div class="line">    <span class="comment">// position groups</span></div><div class="line">    positionGroup(scene, <span class="string">'one'</span>, <span class="number">-1</span>);</div><div class="line">    positionGroup(scene, <span class="string">'two'</span>, <span class="number">1</span>);</div><div class="line"> </div><div class="line">    <span class="comment">// render</span></div><div class="line">    renderer.render(scene, camera);</div><div class="line"> </div><div class="line">&#125;</div><div class="line">    ());</div></pre></td></tr></table></figure>
+<h2 id="4-Conclusion"><a href="#4-Conclusion" class="headerlink" title="4 - Conclusion"></a>4 - Conclusion</h2><p>So then the object3d traverse method is a great way to go about looping over every object that is attached to the main scene object, or any other object from which the traverse method is called. There are a whole bunch of various use case examples that come to mind when it comes to suing this method to preform some kind of action that I would want to apply to all objects, or all objects of a given type. </p>
+<p>So it goes without saying that I will likely come up with additional use case examples when I come around to editing this post nest time. There are a whole lot of other ideas that comes to mind such as having methods where I just loop over all objects and return just a collection of objects by a certain type, or objects that meet certain requirements.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2021/06/03/threejs-object3d-traverse/" data-id="ckq9vbu7o022xfsv12dkxv6vk" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2021/06/03/threejs-object3d-traverse/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/06/04/threejs-object3d-layers/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Layers in threejs
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/06/02/threejs-object3d-parent/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Getting parent of an object in threejs</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2021/06/03/threejs-object3d-traverse/index.html';
+    this.page.identifier = '881';
+    this.page.title = 'Loop over all objects in a threejs scene with the Object3d traverse method';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.38px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.48px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.33px;">angular</a> <a href="/tags/animation/" style="font-size: 11.9px;">animation</a> <a href="/tags/automation/" style="font-size: 11.9px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.38px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.76px;">blog</a> <a href="/tags/canvas/" style="font-size: 19.05px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.86px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.95px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.43px;">ejs</a> <a href="/tags/express/" style="font-size: 16.19px;">express</a> <a href="/tags/games/" style="font-size: 17.14px;">games</a> <a href="/tags/git/" style="font-size: 12.86px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.76px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.9px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.29px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.48px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.43px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 16.67px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.1px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.29px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.52px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.62px;">phaser</a> <a href="/tags/python/" style="font-size: 15.24px;">python</a> <a href="/tags/statistics/" style="font-size: 13.81px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 18.57px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.71px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/06/23/threejs-normal-material/">The normal material in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2021/06/22/threejs-emissive-map/">Emissive maps in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2021/06/21/threejs-texture-loader/">The texture loader in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2021/06/18/threejs-vector3-apply-euler/">Apply Euler angles to a Vector3 in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2021/06/17/threejs-vector3-apply-axis-angle/">Vector3 apply axis method</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2021/06/03/threejs-object3d-traverse/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
