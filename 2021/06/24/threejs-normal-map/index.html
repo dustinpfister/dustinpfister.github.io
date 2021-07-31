@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
+  
+  <title>Making a normal map in threejs | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2021/06/24/threejs-normal-map/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="In threejs there is the normal attribute of a geometry which will come into play when it comes to figuring out how light should effect a surface. However it todays post I will be writing about a speci">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Making a normal map in threejs">
+<meta property="og:url" content="https://dustinpfister.github.io/2021/06/24/threejs-normal-map/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="In threejs there is the normal attribute of a geometry which will come into play when it comes to figuring out how light should effect a surface. However it todays post I will be writing about a speci">
+<meta property="og:updated_time" content="2021-06-30T19:23:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Making a normal map in threejs">
+<meta name="twitter:description" content="In threejs there is the normal attribute of a geometry which will come into play when it comes to figuring out how light should effect a surface. However it todays post I will be writing about a speci">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-threejs-normal-map" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/06/24/threejs-normal-map/" class="article-date"> Published:
+  <time datetime="2021-06-24T17:38:00.000Z" itemprop="datePublished">2021-06-24</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2021/06/24/threejs-normal-map/" class="article-date"> Modified:
+  <time datetime="2021-06-30T19:23:58.000Z" itemprop="dateModified">2021-06-30</time>
+</a>
+
+    <span class="article-date">V1.2</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Making a normal map in threejs
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>In <a href="https://threejs.org/docs/#manual/en/introduction/Creating-a-scene" target="_blank" rel="external">threejs</a> there is the normal attribute of a geometry which will come into play when it comes to figuring out how light should effect a surface. However it todays post I will be writing about a special kind of texture that can be added to some materials in threejs that can also be used to adjust lighting called a <a href="https://threejs.org/docs/#api/en/materials/MeshStandardMaterial.normalMap" target="_blank" rel="external">normal map</a>.</p>
+<p>A normal map is just one of many options to work with when it comes to the various kinds of texture maps such as emissive maps, alpha maps, and just plain old color maps.</p>
+<a id="more"></a>
+<h2 id="1-What-to-know-first-before-getting-into-normal-maps"><a href="#1-What-to-know-first-before-getting-into-normal-maps" class="headerlink" title="1 - What to know first before getting into normal maps"></a>1 - What to know first before getting into normal maps</h2><p>This is not a <a href="/2018/04/04/threejs-getting-started/">getting started type post on threejs</a>, I assume that you have at least some background working with threejs, javaScript, and client side web development in general. So I will not be getting into every little detail about the very basics of what you should know at this point. However in this section I will be quickly going over some things that you might want to read up more on if you need to.</p>
+<h3 id="1-1-The-source-code-here-can-be-found-on-github"><a href="#1-1-The-source-code-here-can-be-found-on-github" class="headerlink" title="1.1 - The source code here can be found on github"></a>1.1 - The source code here can be found on github</h3><p>The source code for these <a href="https://github.com/dustinpfister/test_threejs/tree/master/views/forpost/threejs-normal-map" target="_blank" rel="external">examples can be found in the for post</a> folder of my test threejs repository. If for some reason you want to make a pull request with one or the source code examples here that would be the place to do it. There is also the comments section of this blog post that can also be used as a way to bring something to my attention with this content.</p>
+<h3 id="1-2-Look-into-the-texture-loader-or-canvas-texture-constructor-to-create-textures"><a href="#1-2-Look-into-the-texture-loader-or-canvas-texture-constructor-to-create-textures" class="headerlink" title="1.2 - Look into the texture loader, or canvas texture constructor to create textures"></a>1.2 - Look into the texture loader, or canvas texture constructor to create textures</h3><p>In order to do anything with a normal map, or any kind of texture map for that matter I am going to want a texture to use for the map. One way to go about getting a texture to work with would be to use the <a href="/2021/06/21/threejs-texture-loader/">threejs built in texture loader</a>, and another way would be to load images by some other means and then use the texture constructor to create a texture object to be used in a material. However there are ways to go about creating textures with just javaScript code alone without having to bother with external images, and one way would be to use <a href="/2018/04/17/threejs-canvas-texture/">canvas elements, and the THREE.Canvas Texture</a> constructor.</p>
+<h3 id="1-3-There-are-many-other-options-for-texture-maps"><a href="#1-3-There-are-many-other-options-for-texture-maps" class="headerlink" title="1.3 - There are many other options for texture maps"></a>1.3 - There are many other options for texture maps</h3><p>In this post I am looking into normal maps, but there are many other kinds of maps that you should also be aware of. If you are first starting out with this sort of thing I might be better to start out with the usual simple color map, or maybe a <a href="/2021/06/22/threejs-emissive-map/">emissive map</a> when it comes to working with a material that will react to one or more light sources.</p>
+<h3 id="1-4-Know-your-options-with-materials"><a href="#1-4-Know-your-options-with-materials" class="headerlink" title="1.4 - Know your options with materials"></a>1.4 - Know your options with materials</h3><p>The normal map is a kind of map that effects lighting, so it does not make sense to use a normal map when it comes to using a material such as the basic material, the normal material, or any kind of material that does not support normal maps. In the source code examples here I am sticking to using just the <a href="/2021/04/27/threejs-standard-material/">standard material</a> which is one options that supports the normal map feature, there are some other options to be aware of so be sure to <a href="/2018/04/30/threejs-materials/">read up more on materials in general</a> if you have not done so.</p>
+<h3 id="1-5-Me-mindful-of-the-version-numbers-used-with-three-js"><a href="#1-5-Me-mindful-of-the-version-numbers-used-with-three-js" class="headerlink" title="1.5 - Me mindful of the version numbers used with three.js"></a>1.5 - Me mindful of the version numbers used with three.js</h3><p>When I wrote this post I was using r127 of threejs which was a later version of threejs in early 2021. As time goes by yet even more code breaking changes might be made to the library that will cause the source code examples here to no longer work.</p>
+<h2 id="2-Basic-normal-map-example"><a href="#2-Basic-normal-map-example" class="headerlink" title="2 - Basic normal map example"></a>2 - Basic normal map example</h2><p>In order to make even a basic getting started type example of the use of a normal map, I am first going to need a texture. So then I am going to want to either load an external image file with something like the texture loader, or create a texture with javaScriot code alone using something like canvas elements. When it comes to writing examples for these kinds of threejs features I like to stick to pure javaScript solutions so I will be using a canvas element to create the texture that I will be using for the normal map. So at the top of the source code of this example I have a create canvas texture helper that will create a canvas element, draw to it with a given draw function, and then return a texture using the THREE.CanvasTexture constructor.</p>
+<p>I then have a create normal map helper that will create and return a texture that I want by calling my create canvas texture helper and passing the draw function to use. The next helper function that I worked out just creates and returns a Mesh object that uses the box geometry constructor for the geometry, and the standard materials for a material which of course supports normal maps. When creating the instance of the standard material in this helper I of course call my create normal map helper and just set the resulting texture as the value for the normal map property of the material.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> createCanvasTexture = <span class="function"><span class="keyword">function</span> (<span class="params">draw</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> canvas = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>),</div><div class="line">    ctx = canvas.getContext(<span class="string">'2d'</span>);</div><div class="line">    canvas.width = <span class="number">32</span>;</div><div class="line">    canvas.height = <span class="number">32</span>;</div><div class="line">    draw(ctx, canvas);</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> THREE.CanvasTexture(canvas);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> createNormalMap = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> createCanvasTexture(<span class="function"><span class="keyword">function</span> (<span class="params">ctx, canvas</span>) </span>&#123;</div><div class="line">        ctx.lineWidth = <span class="number">1</span>;</div><div class="line">        ctx.fillStyle = <span class="keyword">new</span> THREE.Color(<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>).getStyle();</div><div class="line">        ctx.fillRect(<span class="number">0</span>, <span class="number">0</span>, canvas.width, canvas.height);</div><div class="line">        ctx.strokeStyle = <span class="keyword">new</span> THREE.Color(<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>).getStyle();</div><div class="line">        ctx.strokeRect(<span class="number">1</span>, <span class="number">1</span>, canvas.width - <span class="number">2</span>, canvas.height - <span class="number">2</span>);</div><div class="line">        ctx.strokeStyle = <span class="keyword">new</span> THREE.Color(<span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>).getStyle();</div><div class="line">        ctx.strokeRect(<span class="number">4</span>, <span class="number">4</span>, canvas.width - <span class="number">8</span>, canvas.height - <span class="number">8</span>);</div><div class="line">    &#125;);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> createNormalMapCube = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</div><div class="line">        <span class="keyword">new</span> THREE.MeshStandardMaterial(&#123;</div><div class="line">            <span class="attr">color</span>: <span class="keyword">new</span> THREE.Color(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</div><div class="line">            <span class="attr">normalMap</span>: createNormalMap()</div><div class="line">        &#125;));</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// scene</span></div><div class="line"><span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"> </div><div class="line"><span class="comment">// mesh</span></div><div class="line"><span class="keyword">var</span> box = createNormalMapCube();</div><div class="line">scene.add(box);</div><div class="line"> </div><div class="line"><span class="comment">// light</span></div><div class="line"><span class="keyword">var</span> light = <span class="keyword">new</span> THREE.PointLight(<span class="keyword">new</span> THREE.Color(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>), <span class="number">1</span>);</div><div class="line">light.position.set(<span class="number">8</span>, <span class="number">6</span>, <span class="number">2</span>);</div><div class="line">scene.add(light);</div><div class="line"> </div><div class="line"><span class="comment">// camera, render</span></div><div class="line"><span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">60</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line">renderer.render(scene, camera);</div></pre></td></tr></table></figure>
+<h2 id="3-Animation-loop-example"><a href="#3-Animation-loop-example" class="headerlink" title="3 - Animation loop example"></a>3 - Animation loop example</h2><p>In order to gain a better sense of what kind of effect the normal map has to the surface of a mesh I am going to want to make some kind of animation loop, and change some values over time. I could change things like the position of the point light that I am using, or rotate the cube. However I am thinking that it is the texture that I am using for the normal map that should be changing over time to see what the effect is when I change rgb values used when drawing to the canvas.</p>
+<p>So for this example I started out with my basic example, but I made some changes so that I can call the draw method over and over again in a loop rather than just once, and being done with it. So my create canvas texture helper function now returns an object that contains the texture as a property of the object, and also references to the canvas element, and the 2d drawing context.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> createCanvasTexture = <span class="function"><span class="keyword">function</span> (<span class="params">draw</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> canvas = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>),</div><div class="line">    ctx = canvas.getContext(<span class="string">'2d'</span>);</div><div class="line">    canvas.width = <span class="number">64</span>;</div><div class="line">    canvas.height = <span class="number">64</span>;</div><div class="line">    draw(ctx, canvas);</div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        <span class="attr">texture</span>: <span class="keyword">new</span> THREE.CanvasTexture(canvas),</div><div class="line">        <span class="attr">canvas</span>: canvas,</div><div class="line">        <span class="attr">ctx</span>: ctx</div><div class="line">    &#125;;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> draw = <span class="function"><span class="keyword">function</span> (<span class="params">ctx, canvas, x, y, color</span>) </span>&#123;</div><div class="line">    x = x === <span class="literal">undefined</span> ? <span class="number">1</span> : x;</div><div class="line">    y = y === <span class="literal">undefined</span> ? <span class="number">1</span> : y;</div><div class="line">    color = color === <span class="literal">undefined</span> ? <span class="keyword">new</span> THREE.Color(<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>) : color;</div><div class="line">    ctx.lineWidth = <span class="number">1</span>;</div><div class="line">    ctx.fillStyle = <span class="keyword">new</span> THREE.Color(<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>).getStyle();</div><div class="line">    ctx.fillRect(<span class="number">0</span>, <span class="number">0</span>, canvas.width, canvas.height);</div><div class="line"> </div><div class="line">    ctx.strokeStyle = color.getStyle();</div><div class="line">    ctx.strokeRect(x, y, canvas.width - ( x * <span class="number">2</span> ), canvas.height - ( y * <span class="number">2</span>));</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> canvasObj = createCanvasTexture(draw);</div><div class="line"> </div><div class="line"><span class="keyword">var</span> createNormalMapCube = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</div><div class="line">        <span class="keyword">new</span> THREE.MeshStandardMaterial(&#123;</div><div class="line">            <span class="attr">color</span>: <span class="keyword">new</span> THREE.Color(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</div><div class="line">            <span class="attr">normalMap</span>: canvasObj.texture</div><div class="line">        &#125;));</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// scene</span></div><div class="line"><span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"> </div><div class="line"><span class="comment">// mesh</span></div><div class="line"><span class="keyword">var</span> box = createNormalMapCube();</div><div class="line">scene.add(box);</div><div class="line"> </div><div class="line"><span class="comment">// light</span></div><div class="line"><span class="keyword">var</span> light = <span class="keyword">new</span> THREE.PointLight(<span class="keyword">new</span> THREE.Color(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>), <span class="number">1</span>);</div><div class="line">light.position.set(<span class="number">8</span>, <span class="number">6</span>, <span class="number">2</span>);</div><div class="line">scene.add(light);</div><div class="line"> </div><div class="line"><span class="comment">// camera, render</span></div><div class="line"><span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">60</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"> </div><div class="line"><span class="comment">// UPDATE</span></div><div class="line"><span class="keyword">var</span> update = <span class="function"><span class="keyword">function</span>(<span class="params">secs, per, bias, frame, maxFrame</span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> a = <span class="number">1</span> + <span class="built_in">Math</span>.round(<span class="number">15</span> * bias),</div><div class="line">    color = <span class="keyword">new</span> THREE.Color(<span class="number">1.0</span>, bias, <span class="number">0.0</span>);</div><div class="line">    draw(canvasObj.ctx, canvasObj.canvas, a, a, color);</div><div class="line">    canvasObj.texture.needsUpdate = <span class="literal">true</span>;</div><div class="line">    renderer.render(scene, camera);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// LOOP</span></div><div class="line"><span class="keyword">var</span> fps = <span class="number">30</span>,</div><div class="line">lt = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">frame = <span class="number">0</span>,</div><div class="line">maxFrame = <span class="number">90</span>;</div><div class="line"><span class="keyword">var</span> loop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> now = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">    per = frame / maxFrame,</div><div class="line">    bias = <span class="number">1</span> - <span class="built_in">Math</span>.abs(per - <span class="number">0.5</span>) / <span class="number">0.5</span>,</div><div class="line">    secs = (now - lt) / <span class="number">1000</span>;</div><div class="line">    requestAnimationFrame(loop);</div><div class="line">    <span class="keyword">if</span>(secs &gt; <span class="number">1</span> / fps)&#123;</div><div class="line">        update(secs, per, bias, frame, maxFrame);</div><div class="line">        renderer.render(scene, camera);</div><div class="line">        frame += fps * secs;</div><div class="line">        frame %= maxFrame;</div><div class="line">        lt = now;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line">loop();</div></pre></td></tr></table></figure>
+<h2 id="4-Conclusion"><a href="#4-Conclusion" class="headerlink" title="4 - Conclusion"></a>4 - Conclusion</h2><p>So far I can not say that I am using normal maps that often, in fact thus far I am not using them at all. However if I really truly get into 3d modeling at some point I am sure that I might want to create these kinds of maps now and then to adjust things a little when it comes to lighting.</p>
+<p>For now as of this writing at last I am still sticking to simple color maps, and also I like to play around with emissive maps. Those two kinds of maps just seem to be what comes first naturally when it comes to learning about all the various texture maps that there are to work with materials. Also in just about any project I am typically going to always want to use those two in most cases.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2021/06/24/threejs-normal-map/" data-id="ckrrzs309023es4v16mlibwc6" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2021/06/24/threejs-normal-map/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/06/25/threejs-examples-dae-tools/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          A dae tools module threejs example
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/06/23/threejs-normal-material/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">The normal material in threejs</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2021/06/24/threejs-normal-map/index.html';
+    this.page.identifier = '896';
+    this.page.title = 'Making a normal map in threejs';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.38px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.48px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.33px;">angular</a> <a href="/tags/animation/" style="font-size: 11.9px;">animation</a> <a href="/tags/automation/" style="font-size: 11.9px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.38px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.76px;">blog</a> <a href="/tags/canvas/" style="font-size: 19.05px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.86px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.95px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.43px;">ejs</a> <a href="/tags/express/" style="font-size: 16.19px;">express</a> <a href="/tags/games/" style="font-size: 16.67px;">games</a> <a href="/tags/git/" style="font-size: 12.86px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.76px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.9px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.29px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.48px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.43px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 17.14px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.1px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.29px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.52px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.62px;">phaser</a> <a href="/tags/python/" style="font-size: 15.24px;">python</a> <a href="/tags/statistics/" style="font-size: 13.81px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 18.57px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.71px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/07/30/js-function-one-to-one/">One to one functions in javaScript</a>
+          </li>
+        
+          <li>
+            <a href="/2021/07/29/js-function-many-to-one/">Many to one functions in javaScript</a>
+          </li>
+        
+          <li>
+            <a href="/2021/07/28/js-function-diminishing-returns/">Diminishing returns functions in javaScript</a>
+          </li>
+        
+          <li>
+            <a href="/2021/07/27/js-function-domain/">The domain of a function in javaScript</a>
+          </li>
+        
+          <li>
+            <a href="/2021/07/26/js-function-monotonic/">Writing monotonic functions in JavaScript</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2021/06/24/threejs-normal-map/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

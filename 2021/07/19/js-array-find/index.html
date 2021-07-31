@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
+  
+  <title>The array find method and alternatives in vanilla javaScript | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2021/07/19/js-array-find/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="A long time ago I wrote a post on the lodash find method that is a way to go about finding a single element in an array. Lodash might still not be a dead library just yet, but I have to say that for t">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The array find method and alternatives in vanilla javaScript">
+<meta property="og:url" content="https://dustinpfister.github.io/2021/07/19/js-array-find/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="A long time ago I wrote a post on the lodash find method that is a way to go about finding a single element in an array. Lodash might still not be a dead library just yet, but I have to say that for t">
+<meta property="og:updated_time" content="2021-07-21T16:11:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The array find method and alternatives in vanilla javaScript">
+<meta name="twitter:description" content="A long time ago I wrote a post on the lodash find method that is a way to go about finding a single element in an array. Lodash might still not be a dead library just yet, but I have to say that for t">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-js-array-find" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/07/19/js-array-find/" class="article-date"> Published:
+  <time datetime="2021-07-19T15:13:00.000Z" itemprop="datePublished">2021-07-19</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2021/07/19/js-array-find/" class="article-date"> Modified:
+  <time datetime="2021-07-21T16:11:15.000Z" itemprop="dateModified">2021-07-21</time>
+</a>
+
+    <span class="article-date">V1.24</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/js/">js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      The array find method and alternatives in vanilla javaScript
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>A long time ago I wrote a post on the <a href="/2017/09/14/lodash-find/">lodash find</a> method that is a way to go about finding a single element in an array. Lodash might still not be a dead library just yet, but I have to say that for the most part I am just making use of native javaScript features to do much of what can be done with lodash. One such method that might come to mind is the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find" target="_blank" rel="external">native array find</a> method of the array prototype I native javaScript. There is also the <a href="/2021/07/21/js-array-find-index/">array find index method</a> that works just the same as the array find method only it will return an index rather than a value.</p>
+<p>In many respects the array find method is just like the lodash fine method. There may be some talking points as to why the native array find method might not be a drop in replacement for the loadash fine method with respect to all use case scenarios. However there are many other native javaScript features that can be used to even over come those other situations in which the lodash fine method will work where the native array find method will not.</p>
+<p>There is also not just the question of using the native array find method or the lodash fine method, there are many other lodash method of course, and there are also many tools to work with in core javaScript also. Most of the time I can not say that I use the find methods if any kind to find something actually oddly enough. There is also many other lodash methods such as the lodash filter method, as well as the native array filter method that can also be used to find not just the first element, but all elements that meet a condition. There is also the question of how to go about sorting the results of what I get from filtering an array. So in this post I will be touching base on the array find method, but I will also be looking into what other methods there are to work with when it comes to finding something.</p>
+<a id="more"></a>
+<h2 id="1-Basic-examples-of-the-array-find-method"><a href="#1-Basic-examples-of-the-array-find-method" class="headerlink" title="1 - Basic examples of the array find method"></a>1 - Basic examples of the array find method</h2><p>To start out with there is just playing around with a few basic examples of the array find method. So in this section I will just be doing just that with some basic examples that just involve finding the first value in an array from left to right with the array find method. The focus here will just be on the array find method for the most part, and keeping the examples fairly simple. Alter in this post I will be getting into some alternatives array methods and features in javaScript that might prove to also be useful ways to go about finding something in an array.</p>
+<h3 id="1-1-Simple-array-find-numbers-example"><a href="#1-1-Simple-array-find-numbers-example" class="headerlink" title="1.1 - Simple array find numbers example"></a>1.1 - Simple array find numbers example</h3><p>In this example I am using the array find method to just fine the first number in an array that is greater than 2.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// and array of numbers</span></div><div class="line"><span class="keyword">var</span> a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>];</div><div class="line"> </div><div class="line"><span class="keyword">var</span> b = a.find(<span class="function"><span class="keyword">function</span> (<span class="params">n</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> n &gt; <span class="number">2</span>;</div><div class="line">    &#125;);</div><div class="line"><span class="built_in">console</span>.log(b); <span class="comment">// 3</span></div></pre></td></tr></table></figure>
+<h3 id="1-2-The-arguments-used-in-the-call-back-function"><a href="#1-2-The-arguments-used-in-the-call-back-function" class="headerlink" title="1.2 - The arguments used in the call back function"></a>1.2 - The arguments used in the call back function</h3><p>When writing the call back function that will be passed to the array find method there are a number of arguments that will be available in the body of the call back function. The first argument is the current value of an element in the array, the second is that values index in the array, and the final argument is a reference to the array itself.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// and array of numbers</span></div><div class="line"><span class="keyword">var</span> a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">-4</span>, <span class="number">-2</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>];</div><div class="line"> </div><div class="line"><span class="keyword">var</span> result = &#123;</div><div class="line">    <span class="attr">source</span>: <span class="literal">null</span>,</div><div class="line">    <span class="attr">el</span>: []</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> b = a.find(<span class="function"><span class="keyword">function</span> (<span class="params">n, i, arr</span>) </span>&#123;</div><div class="line">        result.source = arr;</div><div class="line">        <span class="keyword">if</span> (i &gt;= <span class="number">5</span>) &#123;</div><div class="line">            result.el.push(&#123;</div><div class="line">                <span class="attr">index</span>: i,</div><div class="line">                <span class="attr">n</span>: n</div><div class="line">            &#125;);</div><div class="line">            <span class="keyword">return</span> n &gt; <span class="number">2</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">    &#125;);</div><div class="line"><span class="built_in">console</span>.log(result);</div><div class="line"><span class="comment">/*</span></div><div class="line">&#123;</div><div class="line">    source: [1, 2, 3, 4, 0, 0, -4, -2, 0, 2, 4, 6, 8],</div><div class="line">    el: [</div><div class="line">        &#123; index: 5, n: 0&#125;,</div><div class="line">        &#123; index: 6, n: -4&#125;,</div><div class="line">        &#123; index: 7, n: -2&#125;,</div><div class="line">        &#123; index: 8, n: 0&#125;,</div><div class="line">        &#123; index: 9, n: 2&#125;,</div><div class="line">        &#123; index: 10, n: 4&#125;</div><div class="line">    ]</div><div class="line">&#125;</div><div class="line"> </div><div class="line">*/</div><div class="line"><span class="built_in">console</span>.log(b); <span class="comment">// 4</span></div></pre></td></tr></table></figure>
+<h2 id="2-Some-alternative-methods-and-javaScript-features-that-can-be-used-to-help-find-something"><a href="#2-Some-alternative-methods-and-javaScript-features-that-can-be-used-to-help-find-something" class="headerlink" title="2 - Some alternative methods, and javaScript features, that can be used to help find something"></a>2 - Some alternative methods, and javaScript features, that can be used to help find something</h2><p>So now that I covered the basics of the array find prototype method it now might be a good idea to look into some alternative ways to go about finding something in an array in native javaScript. The array find method will work okay for what it is intended for, but it does have its limitations. For example some times I might not just want to find the element that will meet a condition from left to right in an array, some times I might want to do the same but from the right to the left. Also often I might not just want to find one element, but all elements that meet a given condition. Also there may be times where I will not just want to get an element, or a collection of elements, but sort an array by way of a condition. That way the first element in the array would be the best fit, followed by the second runner up, and so forth.</p>
+<h3 id="2-1-The-array-filter-method"><a href="#2-1-The-array-filter-method" class="headerlink" title="2.1 - The array filter method"></a>2.1 - The array filter method</h3><p>If I want to get not just one element, but all elements that meet a condition I can use the <a href="/2020/10/03/js-array-filter/">array filter</a> method. This will create and return a new array where each element is an element that meets the conditon that was given with a callback rather than just the first match.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// and array of numbers</span></div><div class="line"><span class="keyword">var</span> a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>];</div><div class="line"> </div><div class="line"><span class="keyword">var</span> cb = <span class="function"><span class="keyword">function</span> (<span class="params">n</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> n &gt; <span class="number">2</span> &amp;&amp; n &lt; <span class="number">6</span>;</div><div class="line">&#125;;</div><div class="line"><span class="comment">// find will just give the first result moving from left to right</span></div><div class="line"><span class="keyword">var</span> b = a.find(cb);</div><div class="line"><span class="built_in">console</span>.log(b); <span class="comment">// 3</span></div><div class="line"> </div><div class="line"><span class="comment">// so filter can be used also</span></div><div class="line"><span class="keyword">var</span> c = a.filter(cb);</div><div class="line"><span class="comment">// the first index will hen be the same result</span></div><div class="line"><span class="built_in">console</span>.log(c[<span class="number">0</span>]); <span class="comment">// 3</span></div><div class="line"><span class="comment">// however I can also get the full collection of elements that meet</span></div><div class="line"><span class="comment">// the conditions of the expression used in the callback</span></div><div class="line"><span class="built_in">console</span>.log(c); <span class="comment">// [3, 4, 5]</span></div></pre></td></tr></table></figure>
+<h3 id="2-2-Using-array-reverse-to-change-the-direction-from-which-to-find-something"><a href="#2-2-Using-array-reverse-to-change-the-direction-from-which-to-find-something" class="headerlink" title="2.2 - Using array reverse to change the direction from which to find something"></a>2.2 - Using array reverse to change the direction from which to find something</h3><p>Say I want to use the array find method as it will work just fine, but I just want to reverse the order in which the array find method works. For this the array reverse method can reverse the order of all the elements, and then it will get the first element that will meet the condition from what was the end of the array before hand.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> cb = <span class="function"><span class="keyword">function</span> (<span class="params">n</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> n &gt; <span class="number">2</span> &amp;&amp; n &lt; <span class="number">6</span>;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// and array of numbers</span></div><div class="line"><span class="keyword">var</span> a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>];</div><div class="line"> </div><div class="line"><span class="comment">// the array reverse method would be one way</span></div><div class="line"><span class="keyword">var</span> b = a.reverse().find(cb);</div><div class="line"><span class="built_in">console</span>.log(b); <span class="comment">// 5</span></div></pre></td></tr></table></figure>
+<h3 id="2-3-Find-the-biggest-and-smallest-numbers-with-Math-min-and-max-methods-combined-Function-apply"><a href="#2-3-Find-the-biggest-and-smallest-numbers-with-Math-min-and-max-methods-combined-Function-apply" class="headerlink" title="2.3 - Find the biggest and smallest numbers with Math min and max methods combined Function.apply"></a>2.3 - Find the biggest and smallest numbers with Math min and max methods combined Function.apply</h3><p>The <a href="/2020/01/22/js-math-max-min/">Math.max and Math.min methods</a> of the Math object can be used as a way to go about finding the largest, or smallest number in an array when using with the <a href="/2017/09/21/js-call-apply-and-bind/">apply function prototype method</a>. To do this I just need to pas something like null as the value for the value of this when calling the apply method off of the Math.max, or Math.min method, and then the array as the second argument for the apply method.</p>
+<p>When it comes to finding the smallest value for an array of objects I will want to do something to create an array of numbers that I can then pass to one of these math methods. Doing something with the <a href="/2020/06/16/js-array-map/">array map</a> method can be done to furnish such an array from an array of objects.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// and array of numbers</span></div><div class="line"><span class="keyword">var</span> a = [<span class="number">3</span>, <span class="number">3</span>, <span class="number">0</span>, <span class="number">12</span>, <span class="number">0</span>, <span class="number">-7</span>, <span class="number">37</span>, <span class="number">2</span>];</div><div class="line"><span class="keyword">var</span> max = <span class="built_in">Math</span>.max.apply(<span class="literal">null</span>, a),</div><div class="line">min = <span class="built_in">Math</span>.min.apply(<span class="literal">null</span>, a);</div><div class="line"><span class="built_in">console</span>.log(max); <span class="comment">// 37</span></div><div class="line"><span class="built_in">console</span>.log(min); <span class="comment">// -7</span></div><div class="line"> </div><div class="line"><span class="comment">// an array of objects</span></div><div class="line"><span class="keyword">var</span> objs = [</div><div class="line">    &#123;<span class="attr">x</span>: <span class="number">0</span>, <span class="attr">y</span>: <span class="number">1</span>&#125;,</div><div class="line">    &#123;<span class="attr">x</span>: <span class="number">23</span>, <span class="attr">y</span>: <span class="number">3</span>&#125;,</div><div class="line">    &#123;<span class="attr">x</span>: <span class="number">-3</span>, <span class="attr">y</span>: <span class="number">2</span>&#125;,</div><div class="line">    &#123;<span class="attr">x</span>: <span class="number">7</span>, <span class="attr">y</span>: <span class="number">4</span>&#125;</div><div class="line">];</div><div class="line"><span class="keyword">var</span> findMaxMinProp = <span class="function"><span class="keyword">function</span>(<span class="params">objs, prop, maxMin</span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Math</span>[maxMin].apply( <span class="literal">null</span>, objs.map(<span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> obj[prop];</div><div class="line">    &#125;));</div><div class="line">&#125;;</div><div class="line"><span class="built_in">console</span>.log( findMaxMinProp(objs, <span class="string">'x'</span>, <span class="string">'min'</span>) ); <span class="comment">// -3</span></div><div class="line"><span class="built_in">console</span>.log( findMaxMinProp(objs, <span class="string">'x'</span>, <span class="string">'max'</span>) ); <span class="comment">// 23</span></div><div class="line"><span class="built_in">console</span>.log( findMaxMinProp(objs, <span class="string">'y'</span>, <span class="string">'min'</span>) ); <span class="comment">// 1</span></div><div class="line"><span class="built_in">console</span>.log( findMaxMinProp(objs, <span class="string">'y'</span>, <span class="string">'max'</span>) ); <span class="comment">// 4</span></div></pre></td></tr></table></figure>
+<h3 id="2-4-The-array-sort-method-to-change-the-order-of-the-whole-array-where-the-first-element-is-the-best-match"><a href="#2-4-The-array-sort-method-to-change-the-order-of-the-whole-array-where-the-first-element-is-the-best-match" class="headerlink" title="2.4 - The array sort method to change the order of the whole array where the first element is the best match"></a>2.4 - The array sort method to change the order of the whole array where the first element is the best match</h3><p>I covered the array filter method as a way to go about creating a new array that is a collection of elements that meet the condition given rather than just the first match like the array find method does. However there is also sorting an array in place so that the first element of the array is the best match when it comes to finding something, and then the nest is the next best match, and so on. In vanilla javaScript there is learning how to do about using the <a href="/2019/12/02/js-array-sort/">array sort</a> method when it comes to doing this sort of thing.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> sorter = <span class="function"><span class="keyword">function</span> (<span class="params">a, b</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (a &gt; b) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">-1</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (a &lt; b) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// and array of numbers</span></div><div class="line"><span class="keyword">var</span> a = [<span class="number">3</span>, <span class="number">3</span>, <span class="number">0</span>, <span class="number">12</span>, <span class="number">0</span>, <span class="number">-7</span>, <span class="number">37</span>, <span class="number">2</span>];</div><div class="line"> </div><div class="line"><span class="comment">// if I want to find the greatest number</span></div><div class="line"><span class="keyword">var</span> b = a.sort(sorter);</div><div class="line"><span class="built_in">console</span>.log(b[<span class="number">0</span>]); <span class="comment">// 37</span></div><div class="line"><span class="comment">// sort will also mutate the array in place and make each elements</span></div><div class="line"><span class="comment">// be in order based on the conditions in the sorter function</span></div><div class="line"><span class="built_in">console</span>.log(a); <span class="comment">// [ 37, 12, 3, 3, 2, 0, 0, -7 ]</span></div></pre></td></tr></table></figure>
+<p>This way I am sorting the whole array so that it is in order with respect to the condition in which I want to find something, rather than just getting the first match from left to right which would be the case when just using the array find method by itself.</p>
+<h2 id="3-Conclusion"><a href="#3-Conclusion" class="headerlink" title="3 - Conclusion"></a>3 - Conclusion</h2><p>The array fine method is then one way to go about finding one element in an array that will match a given condition in the from of an expression in a call back function. However there are many other methods and features that can also be used to get the first element, as well as all the elements that meet a condition. There are also ways of going about creating a whole new array from a source array, creating values that will be used as a kind of score, and then sorting the new array by that score or index value.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2021/07/19/js-array-find/" data-id="ckrrzry4100k1s4v1ka4vqsl9" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2021/07/19/js-array-find/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/07/20/js-array-splice/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          The array splice method for removing an injecting elements in an array
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/07/16/js-javascript-example-idle-game-simple-mine/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Simple mine idle game javaScript examples</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2021/07/19/js-array-find/index.html';
+    this.page.identifier = '913';
+    this.page.title = 'The array find method and alternatives in vanilla javaScript';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.38px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.48px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.33px;">angular</a> <a href="/tags/animation/" style="font-size: 11.9px;">animation</a> <a href="/tags/automation/" style="font-size: 11.9px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.38px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.76px;">blog</a> <a href="/tags/canvas/" style="font-size: 19.05px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.86px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.95px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.43px;">ejs</a> <a href="/tags/express/" style="font-size: 16.19px;">express</a> <a href="/tags/games/" style="font-size: 16.67px;">games</a> <a href="/tags/git/" style="font-size: 12.86px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.76px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.9px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.29px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.48px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.43px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 17.14px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.1px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.29px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.52px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.62px;">phaser</a> <a href="/tags/python/" style="font-size: 15.24px;">python</a> <a href="/tags/statistics/" style="font-size: 13.81px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 18.57px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.71px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/07/30/js-function-one-to-one/">One to one functions in javaScript</a>
+          </li>
+        
+          <li>
+            <a href="/2021/07/29/js-function-many-to-one/">Many to one functions in javaScript</a>
+          </li>
+        
+          <li>
+            <a href="/2021/07/28/js-function-diminishing-returns/">Diminishing returns functions in javaScript</a>
+          </li>
+        
+          <li>
+            <a href="/2021/07/27/js-function-domain/">The domain of a function in javaScript</a>
+          </li>
+        
+          <li>
+            <a href="/2021/07/26/js-function-monotonic/">Writing monotonic functions in JavaScript</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2021/07/19/js-array-find/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

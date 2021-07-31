@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
+  
+  <title>Writing monotonic functions in JavaScript | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2021/07/26/js-function-monotonic/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="I have been learning more about writing functions in javascript as of late, not so much when it comes to what the options are when it comes to functions themselves in javaScript, but different styles">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Writing monotonic functions in JavaScript">
+<meta property="og:url" content="https://dustinpfister.github.io/2021/07/26/js-function-monotonic/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="I have been learning more about writing functions in javascript as of late, not so much when it comes to what the options are when it comes to functions themselves in javaScript, but different styles">
+<meta property="og:updated_time" content="2021-07-27T17:39:20.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Writing monotonic functions in JavaScript">
+<meta name="twitter:description" content="I have been learning more about writing functions in javascript as of late, not so much when it comes to what the options are when it comes to functions themselves in javaScript, but different styles">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-js-function-monotonic" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/07/26/js-function-monotonic/" class="article-date"> Published:
+  <time datetime="2021-07-26T13:14:00.000Z" itemprop="datePublished">2021-07-26</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2021/07/26/js-function-monotonic/" class="article-date"> Modified:
+  <time datetime="2021-07-27T17:39:20.000Z" itemprop="dateModified">2021-07-27</time>
+</a>
+
+    <span class="article-date">V1.8</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/js/">js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Writing monotonic functions in JavaScript
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>I have been learning more about writing <a href="/2019/12/26/js-function/">functions in javascript</a> as of late, not so much when it comes to what the options are when it comes to functions themselves in javaScript, but different styles of functions that have more to do with math in general. That is that I have a fairly solid grasp on what a function expression is compared to a function declaration, and why arrow functions are not a drop in replacement for all kinds of functions in source code. I also know a thing or two about the function prototype object and how to use methods in the function prototype like call or apply to get a function of one prototype to work with an object of another prototype. However this post is not on any of that, it is on the topic of what a <a href="https://en.wikipedia.org/wiki/Monotonic_function" target="_blank" rel="external">monotonic function</a> is compared to other kinds of functions that are not monotonic.</p>
+<a id="more"></a>
+<h2 id="1-Some-basic-monotonic-function-examples"><a href="#1-Some-basic-monotonic-function-examples" class="headerlink" title="1 - Some basic monotonic function examples"></a>1 - Some basic monotonic function examples</h2><p>In this section I will be starting out with just a few basic examples of writing a monotonic function in javaScript. The basic things to keep in mind is that with any set of arguments, the same output value should never repeat compared to any other set of arguments. On top of that the output value should also go up, but not down, at least when it comes to making a function that can be called monotonically strictly increasing function which seems to be the kinds of monotonic functions that I am most interested in making.<br>There are many other definitions that allow for deviations from these rules though, some definitions allow for the same output value to repeat, but only in the sense that it stays the same, but not goes back down. There are some kinds of functions that are just not monotonic at all, one example might be the Math.sin function that will go up, but back down again as the given value for x in radians goes up. So the Math.sin function may be a good example of what a monotonic function is not.</p>
+<h3 id="1-1-A-monotonically-strictly-increasing-function-using-Math-pow"><a href="#1-1-A-monotonically-strictly-increasing-function-using-Math-pow" class="headerlink" title="1.1 - A monotonically strictly increasing function using Math.pow"></a>1.1 - A monotonically strictly increasing function using Math.pow</h3><p>A good basic example of a monotonic function may be to start out with something that just returns a value for y based off of given x argument using the Math.pow method. That is having a function that will just return the result of a call of Math.pow with a fixed value for base, and passing the x value as the value for the exponent. When it comes out testing a function argument domian with say that values 0 to 4, y will go up, and only up for each value of x as it goes up. So then this is the basic idea of what is meant by a strictly increasing form of a monotonic function.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> pow = <span class="function"><span class="keyword">function</span> (<span class="params">x</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Math</span>.pow(<span class="number">2</span>, x);</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> x = <span class="number">0</span>,</div><div class="line">len = <span class="number">5</span>,</div><div class="line">results = [];</div><div class="line"><span class="keyword">while</span> (x &lt; len) &#123;</div><div class="line">    results.push(&#123;</div><div class="line">        <span class="attr">x</span>: x,</div><div class="line">        <span class="attr">y</span>: pow(x)</div><div class="line">    &#125;);</div><div class="line">    x += <span class="number">1</span>;</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(results));</div><div class="line"><span class="comment">//[&#123;"x":0,"y":1&#125;,&#123;"x":1,"y":2&#125;,&#123;"x":2,"y":4&#125;,&#123;"x":3,"y":8&#125;,&#123;"x":4,"y":16&#125;]</span></div></pre></td></tr></table></figure>
+<p>There is playing around with the other domains though, when it comes to having a higher range with larger numbers there is no problem, as the values will still just go up even higher. There is also no problem when it comes to pulling negative numbers into the domain also as the starting point will just be a value below that of 1. I might only run into problems when it comes to having a base argument for this pow function which might result in the same value for two different sets of arguments, but then it would only be possible for a different base, not a different value for x.</p>
+<h3 id="1-2-Using-a-function-that-makes-use-of-two-or-more-arguments-to-create-a-monotonic-function"><a href="#1-2-Using-a-function-that-makes-use-of-two-or-more-arguments-to-create-a-monotonic-function" class="headerlink" title="1.2 - Using a function that makes use of two or more arguments to create a monotonic function"></a>1.2 - Using a function that makes use of two or more arguments to create a monotonic function</h3><p>Say I have a function that can be used in a monotonic way, but only if the domain of arguments that are used are restricted in such as way that the return values will only go up for values of x that go up from zero forward. One way to go about making sure that this will be the case is to create a monotonic function that will define what the arguments will be for the other function that makes use of more than on argument that will be called in the monotonic function. In other words I create what my monotonic function will be that will just take an x value, and the domain of x goes from 0 upward. In the body of this monotonic function I create arguments based off of the given x value. There is going this like using the modulo operator, as well as flooring values that are the results of division.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// a function that uses three arguments, that can be used</span></div><div class="line"><span class="comment">// in a monotonic way, or not, depending on the argument domain</span></div><div class="line"><span class="keyword">var</span> threeArguments = <span class="function"><span class="keyword">function</span> (<span class="params">x, min, max</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> min + (max - min) * (<span class="number">1</span> - (<span class="number">1</span> / (<span class="number">1</span> + x)));</div><div class="line">&#125;;</div><div class="line"><span class="comment">// monotonic function that makes use of the three arguments function</span></div><div class="line"><span class="comment">// and uses it in a way that is strictly increasing, by making sure that</span></div><div class="line"><span class="comment">// proper values are used for the min and max arguments that will result in the</span></div><div class="line"><span class="comment">// return value only going up for all values of x </span></div><div class="line"><span class="keyword">var</span> monotonic = <span class="function"><span class="keyword">function</span> (<span class="params">x</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> a = x % <span class="number">4</span>,</div><div class="line">    b = <span class="built_in">Math</span>.floor(x / <span class="number">4</span>) * <span class="number">5</span>,</div><div class="line">    c = b + <span class="number">5</span>;</div><div class="line">    <span class="keyword">return</span> threeArguments(a, b, c);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> x = <span class="number">0</span>,</div><div class="line">len = <span class="number">12</span>,</div><div class="line">results = [];</div><div class="line"><span class="keyword">while</span> (x &lt; len) &#123;</div><div class="line">    results.push(&#123;</div><div class="line">        <span class="attr">x</span>: x,</div><div class="line">        <span class="attr">y</span>: <span class="built_in">parseFloat</span>(monotonic(x).toFixed(<span class="number">2</span>))</div><div class="line">    &#125;);</div><div class="line">    x += <span class="number">1</span>;</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(results.map(<span class="function">(<span class="params">obj</span>) =&gt;</span> &#123;</div><div class="line">        <span class="keyword">return</span> obj.y</div><div class="line">    &#125;));</div></pre></td></tr></table></figure>
+<p>Another way to go about doing something like this would be to just have a set collection of values for the other arguments.</p>
+<h2 id="2-Conclusion"><a href="#2-Conclusion" class="headerlink" title="2 - Conclusion"></a>2 - Conclusion</h2><p>So then that will be it for now when it comes to monotonic functions in javaScript. There is getting into maybe making some additional examples for this sort of thing, but in order to do that I think I will want to work more on one or more projects in which I am actually making use of these kinds of functions. So far the main kind of project that comes to mind is coming up with some kind of experience point system type project. I have made one such project those far in the past, but I am not happy with it. I will then want to make at least a few more such systems until I have something that I like, and part of the process of making such a system, they way that I would like it will have to involve making some functions that will be monotonic in nature.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2021/07/26/js-function-monotonic/" data-id="ckrrzrycq00nss4v1quwagkf9" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2021/07/26/js-function-monotonic/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/07/27/js-function-domain/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          The domain of a function in javaScript
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/07/23/js-function-inverse/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">javaScript inverse functions</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2021/07/26/js-function-monotonic/index.html';
+    this.page.identifier = '918';
+    this.page.title = 'Writing monotonic functions in JavaScript';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.38px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.48px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.33px;">angular</a> <a href="/tags/animation/" style="font-size: 11.9px;">animation</a> <a href="/tags/automation/" style="font-size: 11.9px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.38px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.76px;">blog</a> <a href="/tags/canvas/" style="font-size: 19.05px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.86px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.95px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.43px;">ejs</a> <a href="/tags/express/" style="font-size: 16.19px;">express</a> <a href="/tags/games/" style="font-size: 16.67px;">games</a> <a href="/tags/git/" style="font-size: 12.86px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.76px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.9px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.29px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.48px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.43px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 17.14px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.1px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.29px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.52px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.62px;">phaser</a> <a href="/tags/python/" style="font-size: 15.24px;">python</a> <a href="/tags/statistics/" style="font-size: 13.81px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 18.57px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.71px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/07/30/js-function-one-to-one/">One to one functions in javaScript</a>
+          </li>
+        
+          <li>
+            <a href="/2021/07/29/js-function-many-to-one/">Many to one functions in javaScript</a>
+          </li>
+        
+          <li>
+            <a href="/2021/07/28/js-function-diminishing-returns/">Diminishing returns functions in javaScript</a>
+          </li>
+        
+          <li>
+            <a href="/2021/07/27/js-function-domain/">The domain of a function in javaScript</a>
+          </li>
+        
+          <li>
+            <a href="/2021/07/26/js-function-monotonic/">Writing monotonic functions in JavaScript</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2021/07/26/js-function-monotonic/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
