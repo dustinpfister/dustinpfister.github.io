@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
+  
+  <title>Making a Simple build tool in nodejs | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2021/09/17/nodejs-simple-build-tool/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="This week I put together a quick simple build tool solution that I might used in one or more of my nodejs projects. There are of course many popular projects that are this kind of tool that I could ju">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Making a Simple build tool in nodejs">
+<meta property="og:url" content="https://dustinpfister.github.io/2021/09/17/nodejs-simple-build-tool/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="This week I put together a quick simple build tool solution that I might used in one or more of my nodejs projects. There are of course many popular projects that are this kind of tool that I could ju">
+<meta property="og:updated_time" content="2021-09-17T20:58:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Making a Simple build tool in nodejs">
+<meta name="twitter:description" content="This week I put together a quick simple build tool solution that I might used in one or more of my nodejs projects. There are of course many popular projects that are this kind of tool that I could ju">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-nodejs-simple-build-tool" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/09/17/nodejs-simple-build-tool/" class="article-date"> Published:
+  <time datetime="2021-09-17T12:45:00.000Z" itemprop="datePublished">2021-09-17</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2021/09/17/nodejs-simple-build-tool/" class="article-date"> Modified:
+  <time datetime="2021-09-17T20:58:53.000Z" itemprop="dateModified">2021-09-17</time>
+</a>
+
+    <span class="article-date">V1.26</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node-js/">node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Making a Simple build tool in nodejs
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>This week I put together a quick simple build tool solution that I might used in one or more of my nodejs projects. There are of course many popular projects that are this kind of tool that I could just use and move on with, but some times I do just like to make my own solutions for things. </p>
+<p>There are at least two general features that I think a build tool should do when making some kind of javaScript project. One feature is to just simply concatenate two or more source code files into a single string value and write that string file to a development form of a final package of the project. The other major feature is to do more or less the same as the first feature only to produce a minified version of the development form of the file. The first major feature is simple enough, all I have to do is loop over an array of relative paths to source code files to create a single string and then write that file. However the second feature is a little not so simple and will require some kind of library for minifying javaScript code.</p>
+<p>Although I do tend to try to avoid using external user space projects when it comes to this series of nodejs examples, I have not got around to making my own simple javaScript tokenizer, let alone any kind of project that will minify javaScript code. At some point in the future I might get around to making my own project for that sort of thing, and try to keep it simple but for now I think I am going to have to just go with some kind of user space option. </p>
+<p>A few years back I wrote a post on a user space package for this sort of thing called <a href="/2017/08/18/nodejs-jsmin/">jsmin</a>, which is a tired yet true solution for minifying javaScript. It looks as though this project is not being maintained though as nothing has changed with the source code for over ten years. I am the kind of person that understands that that is not always such a bad thing, some times you have a project that is pretty darn solid, and still works great for a certain kind of task. However I decided to go with another popular well known option for this <a href="https://www.npmjs.com/package/uglify-js" target="_blank" rel="external">called uglify.js</a>.</p>
+<a id="more"></a>
+<h2 id="1-Making-a-build-tool-in-nodejs-and-what-to-know-first"><a href="#1-Making-a-build-tool-in-nodejs-and-what-to-know-first" class="headerlink" title="1 - Making a build tool in nodejs, and what to know first"></a>1 - Making a build tool in nodejs, and what to know first</h2><p>This is a post on making a simple nodejs build tool that will create a development and minified form of finished javaScript library from a collection of smaller jaavScript source code files. The goal is to keep things simple here by not going to nuts with features and just making something that will just work for what is most important for this kind of project. However there are still a lot of things to know before hand when it comes to making even a simple nodejs project. If you are still fairly new to nodejs and javaScript I have posts on <a href="/2017/04/05/nodejs-helloworld/">getting started with nodejs</a>, as well as a few on <a href="/2018/11/27/js-getting-started/">javaScript in general</a>.</p>
+<h2 id="1-1-The-full-source-code-that-I-am-writing-about-here-is-on-my-github"><a href="#1-1-The-full-source-code-that-I-am-writing-about-here-is-on-my-github" class="headerlink" title="1.1 - The full source code that I am writing about here is on my github"></a>1.1 - The full source code that I am writing about here is on my github</h2><p>The full and up to date source code of <a href="https://github.com/dustinpfister/nodejs-simple-build-tool" target="_blank" rel="external">this build tool can be found on my github account</a>. I do get around to editing my content on this site now and then, but I have a whole lot of other posts that need to be edited outside of this one. Still the source code there might in some cases be a little better refined compared to what I am writing about here. Also it might be the best way to make use of this rather than copying and pasting source code from this post.</p>
+<p>One way to quickly get this up and running then would be to do something like this</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ git clone --depth 1 https://github.com/dustinpfister/nodejs-simple-build-tool</div><div class="line">$ cd nodejs-simple-build-tool</div><div class="line">$ npm install</div></pre></td></tr></table></figure>
+<p>At which point I can then call the main index file with node to build the demo project folder, or use the build-tool.js file in another script. If I want to make this part of a larger project I will just need to make sure that I make uglify.js part of the dependencies in the package.json file.</p>
+<h2 id="2-The-build-tool-js-library"><a href="#2-The-build-tool-js-library" class="headerlink" title="2 - The build-tool.js library"></a>2 - The build-tool.js library</h2><p>So there is starting out by going over the main library of interest when it comes to this build tool thus far then maybe writ a thing or two about supporting files beyond that of the single dependency of this tool. The basic process that I have in mind here is that there should be a build-conf.json file located at a root folder of a project folder. This build-conf.json file is where I can then set what the root path is as far as the build tool is concerted, and then all kinds of other relevant paths that are relative to that set root path. This json file will also contain an array of relative paths to each source code file that is to be combined into the various forms of files javaScript files in the dist folder. So then there is having a kind of read conf public method that is used to load this file and create an options object that can then be used with additional methods to create a dist object, and to write that dist object to a dist folder.</p>
+<p>The create source public method is a way to go about creating the first raw state of the source code to create files with. What this method needs to do is to just use the root path, and array of source code paths to read each source code file, and concatenate each of them into a single javaScript string. This is achieved by making use of the <a href="/2019/06/24/js-promise-all/">promise all method</a>, and the <a href="/2020/06/16/js-array-map/">array map</a> prototype method, along with array join. The promise all method will return a promise that will only resolve once all the values that are given in an array will resolve or reject that are promises. So I give the promise all method the result of calling the array map method off of the array of relative paths creating a readFile promise for each path. The end result is then an array fo strings where each string is the javaScript text of each javaScript file. The last step then is to just simply join this array of strings together into a single string.</p>
+<p>Once I have a source code string I can then create an options object that can be used to create a dist object. This will be the last kind of options object to make that can then be passed to a method that will use off of this to create the dist folder. Speaking of that last method that would be the write dist method that takes this dist objects object and uses that to write both a developer form and minified form of the files in a dist folder relative to the root path.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> UglifyJS = <span class="built_in">require</span>(<span class="string">"uglify-js"</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>),</div><div class="line">fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line">promisify = <span class="built_in">require</span>(<span class="string">'util'</span>).promisify,</div><div class="line">readFile = promisify(fs.readFile),</div><div class="line">writeFile = promisify(fs.writeFile),</div><div class="line">mkdirp = <span class="built_in">require</span>( path.join(__dirname, <span class="string">'mkdirp.js'</span>) );</div><div class="line"> </div><div class="line"><span class="keyword">const</span> api = &#123;&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// read a build-conf.json file to produce an opt object for buildTool.createSource</span></div><div class="line">api.readConf = <span class="function">(<span class="params">uri</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">let</span> opt = &#123;&#125;;</div><div class="line">    <span class="keyword">return</span> readFile(uri, <span class="string">'utf8'</span>)</div><div class="line">    .then(<span class="function">(<span class="params">text</span>) =&gt;</span> &#123;</div><div class="line">        <span class="keyword">let</span> conf = &#123;&#125;;</div><div class="line">        <span class="comment">// try to parse JSON</span></div><div class="line">        <span class="keyword">try</span>&#123;</div><div class="line">            conf = <span class="built_in">JSON</span>.parse(text);</div><div class="line">        &#125;<span class="keyword">catch</span>(e)&#123;&#125;</div><div class="line">        <span class="comment">// set up opt with what is in JSON or hard coded default</span></div><div class="line">        <span class="comment">// RESOLVE opt.dir_root TO AN ABSOLUTE PATH from the location of the conf.json file</span></div><div class="line">        opt.dir_root = path.resolve( path.join( path.dirname(uri), conf.dir_root)) || process.cwd();</div><div class="line">        <span class="comment">// RESOLVE opt.dir_target TO AN ABSOLUTE PATH from opt.dir_root</span></div><div class="line">        opt.dir_target = path.resolve( path.join( opt.dir_root, conf.dir_target || <span class="string">'./dist'</span>) );</div><div class="line">        opt.fileName = conf.fileName || <span class="string">'file'</span>;</div><div class="line">        opt.version = conf.version === <span class="literal">undefined</span> ? <span class="string">''</span> : conf.version;</div><div class="line">        opt.sourceFiles = conf.sourceFiles || [];</div><div class="line">        <span class="comment">// top and bottom strings</span></div><div class="line">        opt.top = conf.top || <span class="string">''</span>;</div><div class="line">        opt.bottom = conf.bottom || <span class="string">''</span>;</div><div class="line">        <span class="keyword">return</span> readFile( path.join(opt.dir_root, <span class="string">'package.json'</span>) );</div><div class="line">    &#125;)</div><div class="line">    .then(<span class="function">(<span class="params">packageText</span>)=&gt;</span>&#123;</div><div class="line">        <span class="keyword">let</span> pkg = &#123;&#125;;</div><div class="line">        <span class="comment">// try to parse JSON</span></div><div class="line">        <span class="keyword">try</span>&#123;</div><div class="line">            pkg = <span class="built_in">JSON</span>.parse(packageText);</div><div class="line">        &#125;<span class="keyword">catch</span>(e)&#123;&#125;</div><div class="line">        opt.version = pkg.version || opt.version;</div><div class="line">        opt.author = pkg.author || <span class="string">''</span>;</div><div class="line">        <span class="comment">// append version folder to dir_target</span></div><div class="line">        <span class="keyword">if</span>(opt.version)&#123;</div><div class="line">            opt.dir_target = path.join(opt.dir_target, opt.version);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> opt;</div><div class="line">    &#125;).</div><div class="line">    catch(<span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</div><div class="line">        <span class="keyword">return</span> opt;</div><div class="line">    &#125;);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// return a promise that will resolve to an object with code and error properties</span></div><div class="line"><span class="comment">// using an options object created directly or with buildTool.readConf. The options</span></div><div class="line"><span class="comment">// object should have at least a dir_root, and sourceFiles array</span></div><div class="line">api.createSource = <span class="function">(<span class="params">opt</span>) =&gt;</span> &#123;</div><div class="line">    opt = opt || &#123;&#125;;</div><div class="line">    <span class="comment">// dir_root should be whatever is given. The buildTool.readConf method should resolve this</span></div><div class="line">    <span class="comment">// to an absolute path. When using this method directly you should have the freedom to set this</span></div><div class="line">    <span class="comment">// to any path value.</span></div><div class="line">    opt.dir_root = opt.dir_root || process.cwd();</div><div class="line">    <span class="comment">// there should be a sourceFiles array that is an array of relative paths</span></div><div class="line">    <span class="comment">// from opt.dir_root to each source code file</span></div><div class="line">    <span class="keyword">return</span> <span class="built_in">Promise</span>.all(opt.sourceFiles.map(<span class="function">(<span class="params">uri_source</span>)=&gt;</span>&#123;</div><div class="line">        <span class="keyword">return</span> readFile( path.join(opt.dir_root, uri_source), <span class="string">'utf8'</span> );</div><div class="line">    &#125;))</div><div class="line">    .then(<span class="function">(<span class="params">codeArray</span>) =&gt;</span> &#123;</div><div class="line">        <span class="keyword">return</span> &#123;</div><div class="line">            <span class="attr">error</span>: <span class="literal">null</span>,</div><div class="line">            <span class="attr">code</span>: codeArray.join(<span class="string">''</span>)</div><div class="line">        &#125;;</div><div class="line">    &#125;).catch(<span class="function">(<span class="params">e</span>)=&gt;</span>&#123;</div><div class="line">        <span class="keyword">return</span> &#123;</div><div class="line">            <span class="attr">error</span>: e,</div><div class="line">            <span class="attr">code</span>: <span class="string">''</span></div><div class="line">        &#125;;</div><div class="line">    &#125;);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// create a dist object</span></div><div class="line">api.createDistObj = <span class="function">(<span class="params">opt</span>) =&gt;</span> &#123;</div><div class="line">    opt = opt || &#123;&#125;;</div><div class="line">    <span class="comment">// the starting dist object</span></div><div class="line">    <span class="keyword">let</span> dist = &#123;</div><div class="line">        <span class="attr">fileName</span> : opt.fileName || <span class="string">'file'</span>,</div><div class="line">        <span class="attr">dir_root</span>: opt.dir_root || process.cwd(),</div><div class="line">        <span class="comment">// dist.dir_target should be a realtive path from opt.dir_root</span></div><div class="line">        dir_target: opt.dir_target, <span class="comment">//path.join(opt.dir_root, opt.dir_target || 'dist'),</span></div><div class="line">        sourceCode : opt.sourceCode || <span class="string">''</span>,</div><div class="line">        <span class="attr">minCode</span> : <span class="string">''</span>,</div><div class="line">        <span class="attr">top</span>: opt.top || <span class="string">''</span>,</div><div class="line">        <span class="attr">bottom</span>: opt.bottom || <span class="string">''</span>,</div><div class="line">        <span class="attr">error</span>: <span class="literal">null</span></div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// try to use uglify.js and set dist.minCode or dist.error</span></div><div class="line">    <span class="keyword">let</span> ugly = UglifyJS.minify(dist.sourceCode);</div><div class="line">    <span class="keyword">if</span>(ugly.error)&#123;</div><div class="line">        dist.error = ugly.error;</div><div class="line">    &#125;<span class="keyword">else</span>&#123;</div><div class="line">        dist.minCode = ugly.code;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// return the dist object</span></div><div class="line">    <span class="keyword">return</span> dist;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// write th given dist object to the dist.dir_target path</span></div><div class="line">api.writeDist = <span class="function">(<span class="params">dist</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">let</span> dir_target = path.join( dist.dir_target );</div><div class="line">    <span class="comment">// first make sure the target folder is there</span></div><div class="line">    <span class="keyword">return</span> mkdirp.promise(dir_target)</div><div class="line">    <span class="comment">// write the dev version</span></div><div class="line">    .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">        <span class="keyword">let</span> text = dist.top + dist.sourceCode + dist.bottom;</div><div class="line">        <span class="keyword">return</span> writeFile( path.join( dir_target, dist.fileName + <span class="string">'.js'</span> ), text, <span class="string">'utf8'</span> );</div><div class="line">    &#125;)</div><div class="line">    <span class="comment">// write the min version</span></div><div class="line">    .then(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</div><div class="line">        <span class="keyword">let</span> text = dist.top + dist.minCode + dist.bottom;</div><div class="line">        <span class="keyword">return</span> writeFile( path.join( dir_target, dist.fileName + <span class="string">'.min.js'</span> ), text, <span class="string">'utf8'</span> );</div><div class="line">    &#125;).</div><div class="line">    then(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</div><div class="line">        <span class="keyword">return</span> dist;</div><div class="line">    &#125;);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// build by passing a uri to conf</span></div><div class="line">api.build = <span class="function"><span class="keyword">function</span>(<span class="params">uri_build_conf</span>)</span>&#123;</div><div class="line">    <span class="keyword">let</span> opt = &#123;&#125;;</div><div class="line">    <span class="comment">// start by reading the json file</span></div><div class="line">    <span class="keyword">return</span> api.readConf(uri_build_conf)</div><div class="line">    <span class="comment">// append build-conf.json values to opt and create source</span></div><div class="line">    .then(<span class="function">(<span class="params">conf</span>)=&gt;</span>&#123;</div><div class="line">        opt = <span class="built_in">Object</span>.assign(opt, conf);</div><div class="line">        <span class="keyword">return</span> api.createSource(opt);</div><div class="line">    &#125;)</div><div class="line">    <span class="comment">// append opt.sourceCode and create dist options by calling createDist</span></div><div class="line">    <span class="comment">// then write dist</span></div><div class="line">    .then(<span class="function">(<span class="params">source</span>)=&gt;</span>&#123;</div><div class="line">        opt.sourceCode = source.code;</div><div class="line">        <span class="keyword">let</span> dist = api.createDistObj(opt);</div><div class="line">        <span class="keyword">return</span> api.writeDist(dist);</div><div class="line">    &#125;);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="built_in">module</span>.exports = api;</div></pre></td></tr></table></figure>
+<p>However when it comes to just calling one method to do everything and be done with it that would be the one at the very bottom. I have a buildTool.build method to which I can pass the uri to the build-conf.json file that I want to use, and if all goes well that should be the end of it when it comes to creating a build.</p>
+<h2 id="3-The-mkdirp-js-library"><a href="#3-The-mkdirp-js-library" class="headerlink" title="3 - The mkdirp.js library"></a>3 - The mkdirp.js library</h2><p>When it comes to making the dist folder I will need a way to make sure that the dist folder is created in the event that it is not there. In late versions of nodejs there may now be a native way of doing an mkdirp kind of creating of a path. However often whenI make these kinds of projects I like to push legacy support back more or less as far as I can. Even then going this sort of thing might not really be called for anymore as a recursive option is available for the native mkdir file system method for versions of node as old as 10.x.</p>
+<p>Still I went with having a library for this just for the hell of it, and also to get the script to run on old versions of node.I have <a href="/2017/11/14/nodejs-mkdirp/">wrote a post on mkdirp</a> that is on this old npm package that was used for this sort of thing in which I get into this topic in detail. </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),</div><div class="line">path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"> </div><div class="line"><span class="keyword">const</span> mkdirp = &#123;&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// mkdirp.cb(dir) : old cb style method by itself</span></div><div class="line">mkdirp.cb = <span class="function">(<span class="params">p, cb</span>) =&gt;</span> &#123;</div><div class="line">    cb = cb || <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125; ;</div><div class="line">    p = path.resolve(p);</div><div class="line">    fs.mkdir(p, (e) =&gt; &#123;</div><div class="line">        <span class="keyword">if</span> (!e) &#123;</div><div class="line">            cb(<span class="literal">null</span>);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">if</span> (e.code === <span class="string">'ENOENT'</span>) &#123;</div><div class="line">                <span class="comment">// if 'ENOENT' code error call mkdirp</span></div><div class="line">                <span class="comment">// again with the dirname of current dir</span></div><div class="line">                mkdirp.cb(path.dirname(p), (e) =&gt; &#123;</div><div class="line">                    <span class="keyword">if</span> (e) &#123;</div><div class="line">                        cb(e);</div><div class="line">                    &#125; <span class="keyword">else</span> &#123;</div><div class="line">                        mkdirp.cb(p, cb);</div><div class="line">                    &#125;</div><div class="line">                &#125;);</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="comment">// if the folder is there, then we are good</span></div><div class="line">                <span class="keyword">if</span>(e.code === <span class="string">'EEXIST'</span>)&#123;</div><div class="line">                    cb(<span class="literal">null</span>);</div><div class="line">                &#125;<span class="keyword">else</span>&#123;</div><div class="line">                    <span class="comment">// else some other error happed</span></div><div class="line">                    cb(e);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// mkdirp.promise(dir) return a promise</span></div><div class="line">mkdirp.promise = <span class="function">(<span class="params">p</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>)=&gt;</span>&#123;</div><div class="line">        mkdirp.cb(p, (e) =&gt; &#123;</div><div class="line">            <span class="keyword">if</span>(e)&#123;</div><div class="line">                reject(e);</div><div class="line">            &#125;<span class="keyword">else</span>&#123;</div><div class="line">                resolve();</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="built_in">module</span>.exports = mkdirp;</div></pre></td></tr></table></figure>
+<h2 id="4-The-index-js-file-at-root"><a href="#4-The-index-js-file-at-root" class="headerlink" title="4 - The index.js file at root"></a>4 - The index.js file at root</h2><p>I then have a main index javaScript file at the root of the project folder. As one might expect this is the file that should be called when it comes to using the build tool as a command line tool, rather than that of a support library for another script.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>),</div><div class="line">buildTool = <span class="built_in">require</span>( path.join(__dirname, <span class="string">'lib/build-tool.js'</span>) );</div><div class="line"><span class="comment">// the uri of the file</span></div><div class="line"><span class="keyword">let</span> uri_build_conf = process.argv[<span class="number">2</span>] ||  path.join(process.cwd(), <span class="string">'build-conf.json'</span>);</div><div class="line"><span class="comment">// build</span></div><div class="line">buildTool.build(uri_build_conf)</div><div class="line">.then(<span class="function">(<span class="params">dist</span>) =&gt;</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'dist folder created : '</span>);</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'path: '</span> + dist.dir_target);</div><div class="line">&#125;)</div><div class="line">.catch(<span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(e);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="5-A-demo-folder"><a href="#5-A-demo-folder" class="headerlink" title="5 - A demo folder"></a>5 - A demo folder</h2><p>Now to go over a quick demo folder for the sake of just testing out if this works or not. The demo that I made for the project just consists of two javaScript files on of which is a crude game module, and the older is a main loop that makes use of it.</p>
+<h3 id="5-1-the-build-conf-json-file"><a href="#5-1-the-build-conf-json-file" class="headerlink" title="5.1 the build-conf.json file"></a>5.1 the build-conf.json file</h3><p>Here then is the build-conf.json file thatI made for this demo.</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"fileName"</span>: <span class="string">"test_script"</span>,</div><div class="line">  <span class="attr">"dir_root"</span>: <span class="string">"./"</span>,</div><div class="line">  <span class="attr">"dir_target"</span>: <span class="string">"./dist"</span>,</div><div class="line">  <span class="attr">"topString"</span>: <span class="string">""</span>,</div><div class="line">  <span class="attr">"bottomString"</span>: <span class="string">""</span>,</div><div class="line">  <span class="attr">"sourceFiles"</span>: [</div><div class="line">     <span class="string">"./src/game.js"</span>, <span class="string">"./src/main.js"</span></div><div class="line">  ],</div><div class="line">  <span class="attr">"top"</span>: <span class="string">"(function()&#123;\n\n"</span>,</div><div class="line">  <span class="attr">"bottom"</span>: <span class="string">"\n&#125;());"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="5-2-The-src-game-js-and-src-main-js-files"><a href="#5-2-The-src-game-js-and-src-main-js-files" class="headerlink" title="5.2 - The /src/game.js and /src/main.js files"></a>5.2 - The /src/game.js and /src/main.js files</h3><p>The game.js and main.js source code files are then as follows.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> gameMod = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">// public API</span></div><div class="line">    <span class="keyword">var</span> api = &#123;&#125;;</div><div class="line">    <span class="comment">// a pubic API method</span></div><div class="line">    api.create = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> &#123; <span class="attr">count</span>: <span class="number">1</span> &#125;;</div><div class="line">    &#125;;</div><div class="line">    api.update = <span class="function"><span class="keyword">function</span>(<span class="params">game</span>)</span>&#123;</div><div class="line">        game.count += <span class="number">1</span>;</div><div class="line">    &#125;;</div><div class="line">    <span class="comment">// return the public api</span></div><div class="line">    <span class="keyword">return</span> api;</div><div class="line">&#125;</div><div class="line">    ())</div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// create game state</span></div><div class="line"><span class="keyword">var</span> game = gameMod.create();</div><div class="line"><span class="comment">// main app loop</span></div><div class="line"><span class="keyword">var</span> loop = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    setTimeout(loop, <span class="number">1000</span>);</div><div class="line">    gameMod.update(game);</div><div class="line">    <span class="built_in">console</span>.log(game.count);</div><div class="line">&#125;;</div><div class="line">loop();</div></pre></td></tr></table></figure>
+<h3 id="5-3-The-output"><a href="#5-3-The-output" class="headerlink" title="5.3 - The output"></a>5.3 - The output</h3><p>When I then run the index.js file in root and give the location of the build-conf.json file as the first and only argument then result is then a dist folder with the following output files.</p>
+<p>test_script.js</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> gameMod = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">// public API</span></div><div class="line">    <span class="keyword">var</span> api = &#123;&#125;;</div><div class="line">    <span class="comment">// a pubic API method</span></div><div class="line">    api.create = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> &#123; <span class="attr">count</span>: <span class="number">1</span> &#125;;</div><div class="line">    &#125;;</div><div class="line">    api.update = <span class="function"><span class="keyword">function</span>(<span class="params">game</span>)</span>&#123;</div><div class="line">        game.count += <span class="number">1</span>;</div><div class="line">    &#125;;</div><div class="line">    <span class="comment">// return the public api</span></div><div class="line">    <span class="keyword">return</span> api;</div><div class="line">&#125;</div><div class="line">    ())</div><div class="line"><span class="comment">// create game state</span></div><div class="line"><span class="keyword">var</span> game = gameMod.create();</div><div class="line"><span class="comment">// main app loop</span></div><div class="line"><span class="keyword">var</span> loop = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    setTimeout(loop, <span class="number">1000</span>);</div><div class="line">    gameMod.update(game);</div><div class="line">    <span class="built_in">console</span>.log(game.count);</div><div class="line">&#125;;</div><div class="line">loop();</div><div class="line"> </div><div class="line">&#125;());</div></pre></td></tr></table></figure>
+<p>test_script.min.js</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line"></div><div class="line"><span class="keyword">var</span> gameMod=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="keyword">var</span> o=&#123;<span class="attr">create</span>:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="keyword">return</span>&#123;<span class="attr">count</span>:<span class="number">1</span>&#125;&#125;,<span class="attr">update</span>:<span class="function"><span class="keyword">function</span>(<span class="params">o</span>)</span>&#123;o.count+=<span class="number">1</span>&#125;&#125;;<span class="keyword">return</span> o&#125;(),game=gameMod.create(),loop=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;setTimeout(loop,<span class="number">1e3</span>),gameMod.update(game),<span class="built_in">console</span>.log(game.count)&#125;;loop();</div><div class="line">&#125;());</div></pre></td></tr></table></figure>
+<p>So thenso far so good it would seem that this built tool is working more or less as expected.</p>
+<h2 id="6-Conclusion"><a href="#6-Conclusion" class="headerlink" title="6 - Conclusion"></a>6 - Conclusion</h2><p>That is it for now when it comes to this simple build tool, that is until I come around to edit and expand this post a bit more at some point in the future. Thus far the tool is all ready working for what I want and need this sort of thing for, and the rest of the work to do has more to do with further refining the features in place rather than adding additional features.</p>
+<p>One major project that I might use this with is this <a href="https://github.com/dustinpfister/game-framework-clucker" target="_blank" rel="external">game framework that I have been working on lately</a>. As of this writing I have not yet added some kind of build script to create a dist folder for the project folder, however that is the plan when it comes to this sort of thing. When I use this project with that I will likely make a copy of the source code in the node folder of that repository, and when I do so it is possible that I will add some additional features as needed. I then might add some of those future features that may or may not happen to the state of this project. However I would like to not go nuts with features with this one, as it is a node simple series project.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2021/09/17/nodejs-simple-build-tool/" data-id="cku76q3af01lmy8v1l0nmxkoi" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2021/09/17/nodejs-simple-build-tool/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/09/24/linux-raspberry-pi-os-nodejs-setup/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          More than one version of nodejs in Raspberry PI OS
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/09/10/nodejs-simple-http-request-get-post-system/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">A Simple nodejs example of a server that responds to post requests</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2021/09/17/nodejs-simple-build-tool/index.html';
+    this.page.identifier = '929';
+    this.page.title = 'Making a Simple build tool in nodejs';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.27px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.45px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.18px;">angular</a> <a href="/tags/animation/" style="font-size: 11.82px;">animation</a> <a href="/tags/automation/" style="font-size: 11.82px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.27px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.55px;">blog</a> <a href="/tags/canvas/" style="font-size: 19.09px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.73px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.91px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.36px;">ejs</a> <a href="/tags/express/" style="font-size: 16.36px;">express</a> <a href="/tags/games/" style="font-size: 16.82px;">games</a> <a href="/tags/git/" style="font-size: 12.73px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.82px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.09px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.45px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.36px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 17.27px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.18px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.09px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.55px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.73px;">phaser</a> <a href="/tags/python/" style="font-size: 15.45px;">python</a> <a href="/tags/statistics/" style="font-size: 13.64px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 18.64px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.91px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">September 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/09/24/linux-raspberry-pi-os-nodejs-setup/">More than one version of nodejs in Raspberry PI OS</a>
+          </li>
+        
+          <li>
+            <a href="/2021/09/17/nodejs-simple-build-tool/">Making a Simple build tool in nodejs</a>
+          </li>
+        
+          <li>
+            <a href="/2021/09/10/nodejs-simple-http-request-get-post-system/">A Simple nodejs example of a server that responds to post requests</a>
+          </li>
+        
+          <li>
+            <a href="/2021/09/03/js-javascript-example-game-framework/">A game framework JavaScript example</a>
+          </li>
+        
+          <li>
+            <a href="/2021/08/27/js-javascript-example-canvas-module/">Canvas Module JavaScript example</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2021/09/17/nodejs-simple-build-tool/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
