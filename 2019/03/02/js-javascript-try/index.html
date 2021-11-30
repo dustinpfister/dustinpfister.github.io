@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2019/03/02/js-javascript-try/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="The try catch statement in javaScript is one way to go about preforming error handling when developing some javaScript code. The use of a try catch involves placing one or more statements of javaScrip">
-<meta property="og:updated_time" content="2021-09-16T17:55:55.000Z">
+<meta property="og:updated_time" content="2021-11-21T23:06:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The javaScript try statement and other Error handing related topics">
 <meta name="twitter:description" content="The try catch statement in javaScript is one way to go about preforming error handling when developing some javaScript code. The use of a try catch involves placing one or more statements of javaScrip">
@@ -127,10 +127,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2019/03/02/js-javascript-try/" class="article-date"> Modified:
-  <time datetime="2021-09-16T17:55:55.000Z" itemprop="dateModified">2021-09-16</time>
+  <time datetime="2021-11-21T23:06:37.000Z" itemprop="dateModified">2021-11-21</time>
 </a>
 
-    <span class="article-date">V1.4</span>
+    <span class="article-date">V1.41</span>
 
     
   <div class="article-category">
@@ -170,7 +170,7 @@ ga('send', 'pageview');
 <h3 id="2-1-A-try-statement-can-be-followed-with-just-a-finally-statement-and-without-a-catch"><a href="#2-1-A-try-statement-can-be-followed-with-just-a-finally-statement-and-without-a-catch" class="headerlink" title="2.1 - A try statement can be followed with just a finally statement and without a catch."></a>2.1 - A try statement can be followed with just a finally statement and without a catch.</h3><p>A try catch statement must be followed by a catch or finally statement or else it will result in an Error when used just by itself. So it is possible to define a try statement without a catch but just a finally, and that will work as one might expect.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'My custom Error'</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">finally</span> &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'finally'</span>);</div><div class="line">    &#125;</div><div class="line">&#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">    <span class="built_in">console</span>.log(e.message);</div><div class="line">&#125;</div><div class="line"><span class="comment">// 'finally'</span></div><div class="line"><span class="comment">// 'My custom Error'</span></div></pre></td></tr></table></figure>
 <p>I can not say I ever get into situations in which I need to define a javaScript try statement this way, but it is one of those weird things about javaScript that can be done, and it works without issue.</p>
-<h3 id="2-2-Using-return-with-a-try-catch"><a href="#2-2-Using-return-with-a-try-catch" class="headerlink" title="2.2 - Using return with a try catch"></a>2.2 - Using return with a try catch</h3><p>When using the <a href="/2019/03/01/">return keyword</a> in the body of a try catch block, any return statement used in the finally block will supersede any additional return statements that may exist in the try, or catch blocks. This might not always be what one might expect, but it just seems to be the way that things work out.</p>
+<h3 id="2-2-Using-return-with-a-try-catch"><a href="#2-2-Using-return-with-a-try-catch" class="headerlink" title="2.2 - Using return with a try catch"></a>2.2 - Using return with a try catch</h3><p>When using the <a href="/2019/03/01/js-javascript-return/">return keyword</a> in the body of a try catch block, any return statement used in the finally block will supersede any additional return statements that may exist in the try, or catch blocks. This might not always be what one might expect, but it just seems to be the way that things work out.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> valJSON = <span class="function"><span class="keyword">function</span> (<span class="params">str</span>) </span>&#123;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="built_in">JSON</span>.parse(str);</div><div class="line">        <span class="keyword">return</span> <span class="string">'foo'</span>;</div><div class="line">    &#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">'bar'</span>; <span class="comment">// Unexpected end of JSON input</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">finally</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">'baz'</span>;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(valJSON(<span class="string">'&#123;\"n\":\"foo\"'</span>)); <span class="comment">// 'baz'</span></div></pre></td></tr></table></figure>
 <h2 id="3-Catch-id-or-error-object-and-throw-statement"><a href="#3-Catch-id-or-error-object-and-throw-statement" class="headerlink" title="3 - Catch id or error object and throw statement"></a>3 - Catch id or error object and throw statement</h2><p>The catch block of a try catch statement will have a reference to the error object or catch id of the error that occurred in the try block. This can be used to set custom error handling conditions for specific errors.</p>
 <p>For example say I have a method that will check a value that is given, and will throw an error, using the <a href="/2019/03/15/js-javascript-throw/">throw keyword</a> if the value is not a Number type at all, is a Number but has a <a href="/2017/09/23/js-nan/">value of NaN</a>, or is a value that is out of a set range. This is a situation in which there is more than one thing that can go wrong, and say that I want to handle the out of range error differently from the others. In such situations a property of the Error Object such as the message, or Error code can be used as a way to preform a different way of resolving the Error.</p>
@@ -188,7 +188,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2019/03/02/js-javascript-try/" data-id="ckvtxp92600tzzcv1mkv513pf" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2019/03/02/js-javascript-try/" data-id="ckwme76jv00vot4v1pstfbrno" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2019/03/02/js-javascript-try/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -294,23 +294,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2021/11/05/js-webworker/">Webworker in client side javaScript</a>
+            <a href="/2021/11/26/linux-tar/">The Linux tar command for compressions files and folders</a>
           </li>
         
           <li>
-            <a href="/2021/10/29/js-document/">JavaScript document object</a>
+            <a href="/2021/11/23/linux-tree/">The Linux tree command</a>
           </li>
         
           <li>
-            <a href="/2021/10/22/js-promise/">JavaScript Promise general overview</a>
+            <a href="/2021/11/19/linux-xxd/">The Linux xxd command for dumping hex to the standard output rather than text</a>
           </li>
         
           <li>
-            <a href="/2021/10/15/linux-bash-script-control-operators/">Control Operators in bash</a>
+            <a href="/2021/11/17/linux-folders-dev/">The Linux Dev Folder</a>
           </li>
         
           <li>
-            <a href="/2021/10/08/linux-test/">The Linux test bash built in command</a>
+            <a href="/2021/11/15/linux-folders-bin/">The Linux Bin Folder</a>
           </li>
         
       </ul>

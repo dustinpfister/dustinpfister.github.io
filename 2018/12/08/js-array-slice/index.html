@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2018/12/08/js-array-slice/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="In javaScript the Array.slice prototype method comes up a whole lot in many code examples. The method is one way to go about getting a new array that is a range of element from a source array. It work">
-<meta property="og:updated_time" content="2021-09-06T19:50:18.000Z">
+<meta property="og:updated_time" content="2021-11-20T13:51:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Array Slice in javaScript and related topics">
 <meta name="twitter:description" content="In javaScript the Array.slice prototype method comes up a whole lot in many code examples. The method is one way to go about getting a new array that is a range of element from a source array. It work">
@@ -127,10 +127,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2018/12/08/js-array-slice/" class="article-date"> Modified:
-  <time datetime="2021-09-06T19:50:18.000Z" itemprop="dateModified">2021-09-06</time>
+  <time datetime="2021-11-20T13:51:22.000Z" itemprop="dateModified">2021-11-20</time>
 </a>
 
-    <span class="article-date">V1.46</span>
+    <span class="article-date">V1.47</span>
 
     
   <div class="article-category">
@@ -168,7 +168,7 @@ ga('send', 'pageview');
 <p>However there are yet event more ways of getting the last element in an array, but some of them will mutate the source array. Still if I just want to get the last element of an array, maybe it would be best to just use something like this and move on. This is not the kind of rabbit hole that I care to get stuck on, and I can always make these kinds of simple changes later on when maintaining a project of it comes to that.</p>
 <h2 id="3-javaScript-Array-slice-can-be-used-to-clone-or-copy-if-you-prefer-an-array-but-it-is-a-shallow-clone"><a href="#3-javaScript-Array-slice-can-be-used-to-clone-or-copy-if-you-prefer-an-array-but-it-is-a-shallow-clone" class="headerlink" title="3 - javaScript Array slice can be used to clone (or copy if you prefer) an array but it is a shallow clone"></a>3 - javaScript Array slice can be used to clone (or copy if you prefer) an array but it is a shallow clone</h2><p>So because Array.slice returns a new Array rather than mutating one, it can in some cases be used as a way to clone an array assuming it is an array of primitive values. What I mean by that is that the use of Array.slice as a way to copy and array by itself will result in a shallow clone of the source array. So if the source array contains one or more objects as elements then those elements in the resulting array will be the same references to the same objects in memory. For this reason it is necessary to look into options for deep cloning an object then.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> a1 = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>],</div><div class="line">a2 = a1.slice();</div><div class="line"> </div><div class="line">a1[<span class="number">1</span>] += <span class="number">5</span>;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(a1); <span class="comment">// [1,7,3,4]</span></div><div class="line"><span class="built_in">console</span>.log(a2); <span class="comment">// [1,2,3,4]</span></div></pre></td></tr></table></figure>
-<p>This works because I am working with an array of primitives, objects however are copied by reference. So in these situations using just array slice might not be enough. When I am in these situations somehow I will need to preform what is often called a deep clone of the array. By doing so I would then return something that is separate from the source array that can not end up being mangled elsewhere in a body of code. However getting into stuff like that is beyond the scope of this post, if you want to read more about this then you might want to check out my post on <a href="/2020/09/03/js-array-copy/">copying arrays in javaScript</a>, and maybe also my posts on <a href="/2017/10/02/lodash_clone/">lodash clone</a>, and <a href="/2017/11/03/lodash_clonedeep/">lodash deep clone</a>.</p>
+<p>This works because I am working with an array of primitives, objects however are copied by reference. So in these situations using just array slice might not be enough. When I am in these situations somehow I will need to preform what is often called a deep clone of the array. By doing so I would then return something that is separate from the source array that can not end up being mangled elsewhere in a body of code. However getting into stuff like that is beyond the scope of this post, if you want to read more about this then you might want to check out my post on <a href="/2020/09/03/js-array-copy/">copying arrays in javaScript</a>, and maybe also my posts on <a href="/2017/10/02/lodash_clone/">lodash clone</a>, and <a href="/2017/11/13/lodash_clonedeep/">lodash deep clone</a>.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> points = [</div><div class="line">    &#123;</div><div class="line">        <span class="attr">x</span>: <span class="number">5</span>,</div><div class="line">        <span class="attr">y</span>: <span class="number">42</span></div><div class="line">    &#125;, &#123;</div><div class="line">        <span class="attr">x</span>: <span class="number">27</span>,</div><div class="line">        <span class="attr">y</span>: <span class="number">-15</span></div><div class="line">    &#125;</div><div class="line">];</div><div class="line"> </div><div class="line"><span class="keyword">var</span> p = points.slice();</div><div class="line"> </div><div class="line">points[<span class="number">0</span>].x = <span class="number">0</span>;</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(points[<span class="number">0</span>].x); <span class="comment">// 0</span></div><div class="line"><span class="built_in">console</span>.log(p[<span class="number">0</span>].x); <span class="comment">// 0</span></div></pre></td></tr></table></figure>
 <h2 id="4-Some-use-case-examples-of-array-slice"><a href="#4-Some-use-case-examples-of-array-slice" class="headerlink" title="4 - Some use case examples of array slice"></a>4 - Some use case examples of array slice</h2><p>In this section I will be going over at least a few <a href="https://www.javascripttutorial.net/javascript-array-slice/" target="_blank" rel="external">use case example of the array slice method</a> that might help to show how this method can be useful in some situations. Many of these examples might make use of the array slice method as part of the process of doing so, but there are a lot of other tools in the tool box when it comes to working with native javaScript. On top of using the array slice method I will also take the time to cover some other prototype methods and native javaScript features when going over these examples of the array slice method</p>
 <h3 id="4-1-Convert-an-array-like-object-to-an-array"><a href="#4-1-Convert-an-array-like-object-to-an-array" class="headerlink" title="4.1 - Convert an array like object to an array"></a>4.1 - Convert an array like object to an array</h3><p>Often I might end up with something that is an array like object, in other words it is an object that is formated like an array, but it is not an array. The format of an array like object is that it has numbed key named for values, and a length property that reflects the number of these numbered keys, however the prototype of the object is something other than the of the array prototype. One way to go about converting one of these array like objects would be to have a helper method that uses the array slice method with call to force the method to work with an array like object, and because the properties of the object are like that of the array it should work</p>
@@ -188,7 +188,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2018/12/08/js-array-slice/" data-id="ckvtxp8hc00kmzcv18tjr3pq4" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2018/12/08/js-array-slice/" data-id="ckwme75up00kkt4v1yv6y9ami" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2018/12/08/js-array-slice/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -205,7 +205,7 @@ ga('send', 'pageview');
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          javaScript Arrays a general overview
+          javaScript Arrays a general overview of what to be aware of
         
       </div>
     </a>
@@ -294,23 +294,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2021/11/05/js-webworker/">Webworker in client side javaScript</a>
+            <a href="/2021/11/26/linux-tar/">The Linux tar command for compressions files and folders</a>
           </li>
         
           <li>
-            <a href="/2021/10/29/js-document/">JavaScript document object</a>
+            <a href="/2021/11/23/linux-tree/">The Linux tree command</a>
           </li>
         
           <li>
-            <a href="/2021/10/22/js-promise/">JavaScript Promise general overview</a>
+            <a href="/2021/11/19/linux-xxd/">The Linux xxd command for dumping hex to the standard output rather than text</a>
           </li>
         
           <li>
-            <a href="/2021/10/15/linux-bash-script-control-operators/">Control Operators in bash</a>
+            <a href="/2021/11/17/linux-folders-dev/">The Linux Dev Folder</a>
           </li>
         
           <li>
-            <a href="/2021/10/08/linux-test/">The Linux test bash built in command</a>
+            <a href="/2021/11/15/linux-folders-bin/">The Linux Bin Folder</a>
           </li>
         
       </ul>

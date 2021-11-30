@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2019/09/09/js-eval/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="In javaScript there is the eval function that can be used to execute a string representation of some javaScript code. It is generally something to be avoided for various reasons, and it it really must">
-<meta property="og:updated_time" content="2021-11-02T15:56:47.000Z">
+<meta property="og:updated_time" content="2021-11-21T22:40:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="js eval function for executing a string representation of javaScript">
 <meta name="twitter:description" content="In javaScript there is the eval function that can be used to execute a string representation of some javaScript code. It is generally something to be avoided for various reasons, and it it really must">
@@ -127,10 +127,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2019/09/09/js-eval/" class="article-date"> Modified:
-  <time datetime="2021-11-02T15:56:47.000Z" itemprop="dateModified">2021-11-02</time>
+  <time datetime="2021-11-21T22:40:07.000Z" itemprop="dateModified">2021-11-21</time>
 </a>
 
-    <span class="article-date">V1.25</span>
+    <span class="article-date">V1.27</span>
 
     
   <div class="article-category">
@@ -153,11 +153,11 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>In javaScript there is the <a href="https://en.wikipedia.org/wiki/Eval" target="_blank" rel="external">eval function</a> that can be used to execute a string representation of some javaScript code. It is generally something to be avoided for various reasons, and it it really must be used should be used with care. In projects where the string value is passed from user input there is the risk of introducing security problems if the input is not sanitized. In general if you can find a way to do what you want to do with eval by some othre means do that instead.</p>
+        <p>In javaScript there is the <a href="https://en.wikipedia.org/wiki/Eval" target="_blank" rel="external">eval function</a> that can be used to execute a string representation of some javaScript code. It is generally something to be avoided for various reasons, and it it really must be used should be used with care. In projects where the string value is passed from user input there is the risk of introducing security problems if the input is not sanitized. In general if you can find a way to do what you want to do with eval by some other means do that instead.</p>
 <p>There are other ways of evaluating javaScript code that involve other aspects of native javaScript such as the function constructor, as well as user space modules like jsdom. There is also ways or making parsers that will act as a way to make my own domain specific language rather than using eval to run javaScript code in string format. However that is a matter for a whole other post on something other than js eval.</p>
 <p>The eval function should not be used if it can be avoided, the use of the eval function can slow things down, and can also open up some security concerns. I can not say that I use eval often, and even when I am in a situation in which I seems like I need to use it I do what I can to look for other options. Still this is a post on js eval, so then this will be a post on some of the ins and outs of the js <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval" target="_blank" rel="external">eval function</a> for what it is worth.</p>
 <a id="more"></a>
-<h2 id="1-Basics-of-js-eval"><a href="#1-Basics-of-js-eval" class="headerlink" title="1 - Basics of js eval"></a>1 - Basics of js eval</h2><p>In this section I will be starting out with just a few basic examples of eval in core javaScript as such these examples should work in just about all javaScript environments. Although I will be keeping these examples fairly simple I assume that you have at least some background with <a href="/2018/11/27/js-getting-started/">javaScript when it comes to getting started</a>. There is more than one way of getting started of course beyond just the way that you might have started with javaScript. For example I have started by writing html files with embedded script tags and <a href="/2020/09/21/js-getting-strated-file-protocol/">opening them up in a web browser using the file protocol</a>. However it is also possible to get started in the <a href="/2019/07/29/js-getting-started-javascript-console/">javaScript console of a web browser</a>, or use <a href="/2017/04/05/nodejs-helloworld/">nodejs</a> and just write sever side scripts outside of a web browser.</p>
+<h2 id="1-Basics-of-js-eval"><a href="#1-Basics-of-js-eval" class="headerlink" title="1 - Basics of js eval"></a>1 - Basics of js eval</h2><p>In this section I will be starting out with just a few basic examples of eval in core javaScript as such these examples should work in just about all javaScript environments. Although I will be keeping these examples fairly simple I assume that you have at least some background with <a href="/2018/11/27/js-getting-started/">javaScript when it comes to getting started</a>. There is more than one way of getting started of course beyond just the way that you might have started with javaScript. For example I have started by writing html files with embedded script tags and <a href="/2020/09/21/js-getting-started-file-protocol/">opening them up in a web browser using the file protocol</a>. However it is also possible to get started in the <a href="/2019/07/29/js-getting-started-javascript-console/">javaScript console of a web browser</a>, or use <a href="/2017/04/05/nodejs-helloworld/">nodejs</a> and just write sever side scripts outside of a web browser.</p>
 <h3 id="Source-is-up-on-github"><a href="#Source-is-up-on-github" class="headerlink" title="- Source is up on github"></a>- Source is up on github</h3><p>As with all <a href="/categories/js/">my other posts on vanilla javaScript</a>, the source code examples here can be found in my <a href="https://github.com/dustinpfister/test_vjs/tree/master/for_post/js-eval" target="_blank" rel="external">test vjs repository</a> on Github. I do get around to editing and expanding my content on subjects such as eval and much more, and this repository would be where to make a pull request of you are on Github. There is also the comments section of this post that can be used as a way to bring something up, I have a lot of other things to do, but I will end up coming around to it sooner or later.</p>
 <h3 id="1-1-js-eval-basic-example"><a href="#1-1-js-eval-basic-example" class="headerlink" title="1.1 - js eval basic example"></a>1.1 - js eval basic example</h3><p>For a basic example of the js eval function I just stared out with a string of a very simple javaScript expression and passed that to the eval function. After doing so the result of that expression is returned to which I then just logged to the console.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">'2+2'</span>;</div><div class="line"><span class="built_in">console</span>.log(str);</div><div class="line"><span class="comment">// '2+2'</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">eval</span>(str));</div><div class="line"><span class="comment">// 4</span></div></pre></td></tr></table></figure>
@@ -175,7 +175,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2019/09/09/js-eval/" data-id="ckvtxp8lp00mkzcv141c0rbu6" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2019/09/09/js-eval/" data-id="ckwme75zw00mxt4v1b9unthfj" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2019/09/09/js-eval/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -281,23 +281,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2021/11/05/js-webworker/">Webworker in client side javaScript</a>
+            <a href="/2021/11/26/linux-tar/">The Linux tar command for compressions files and folders</a>
           </li>
         
           <li>
-            <a href="/2021/10/29/js-document/">JavaScript document object</a>
+            <a href="/2021/11/23/linux-tree/">The Linux tree command</a>
           </li>
         
           <li>
-            <a href="/2021/10/22/js-promise/">JavaScript Promise general overview</a>
+            <a href="/2021/11/19/linux-xxd/">The Linux xxd command for dumping hex to the standard output rather than text</a>
           </li>
         
           <li>
-            <a href="/2021/10/15/linux-bash-script-control-operators/">Control Operators in bash</a>
+            <a href="/2021/11/17/linux-folders-dev/">The Linux Dev Folder</a>
           </li>
         
           <li>
-            <a href="/2021/10/08/linux-test/">The Linux test bash built in command</a>
+            <a href="/2021/11/15/linux-folders-bin/">The Linux Bin Folder</a>
           </li>
         
       </ul>

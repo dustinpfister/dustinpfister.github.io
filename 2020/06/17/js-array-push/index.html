@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2020/06/17/js-array-push/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="So in javaScript there is the array push prototype method that is typically what is used as a way to push new elements to the end of a javaScript array. There are many other ways of going about adding">
-<meta property="og:updated_time" content="2021-09-30T11:41:49.000Z">
+<meta property="og:updated_time" content="2021-11-20T13:44:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JS Array push and other ways of adding elements to an array">
 <meta name="twitter:description" content="So in javaScript there is the array push prototype method that is typically what is used as a way to push new elements to the end of a javaScript array. There are many other ways of going about adding">
@@ -127,10 +127,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2020/06/17/js-array-push/" class="article-date"> Modified:
-  <time datetime="2021-09-30T11:41:49.000Z" itemprop="dateModified">2021-09-30</time>
+  <time datetime="2021-11-20T13:44:17.000Z" itemprop="dateModified">2021-11-20</time>
 </a>
 
-    <span class="article-date">V1.36</span>
+    <span class="article-date">V1.37</span>
 
     
   <div class="article-category">
@@ -173,7 +173,7 @@ ga('send', 'pageview');
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>];</div><div class="line"> </div><div class="line">array[array.length] = <span class="number">7</span>;</div><div class="line">array = [<span class="number">3</span>].concat(array);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(array.join(<span class="string">'-'</span>)); <span class="comment">// 3-4-5-6-7</span></div></pre></td></tr></table></figure>
 <h3 id="3-2-The-concat-method-will-flatten-arrays-that-are-given-but-only-by-one-level"><a href="#3-2-The-concat-method-will-flatten-arrays-that-are-given-but-only-by-one-level" class="headerlink" title="3.2 - The concat method will flatten arrays that are given, but only by one level"></a>3.2 - The concat method will flatten arrays that are given, but only by one level</h3><p>The concat method will flatten an array of values given to it, but only by one level. What I mean by this is that if I just give primitive values at arguments to array concat they will just be added on as new elements, if I give an array of elements that will result in the same effect. However if I give an array of arrays any and all nested arrays after one level will be arrays rather that primitives. If you are still confused by what I am saying take a look at this code example.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</div><div class="line">array = array.concat([<span class="number">4</span>, <span class="number">5</span>, [<span class="number">6</span>, <span class="number">7</span>]]);</div><div class="line"><span class="built_in">console</span>.log(array); <span class="comment">// [ 1, 2, 3, 4, 5, [ 6, 7 ] ]</span></div></pre></td></tr></table></figure>
-<h2 id="4-Array-splice-method-can-also-be-used-to-mutate-in-place-and-inject-at-any-index"><a href="#4-Array-splice-method-can-also-be-used-to-mutate-in-place-and-inject-at-any-index" class="headerlink" title="4 - Array splice method can also be used to mutate in place, and inject at any index"></a>4 - Array splice method can also be used to mutate in place, and inject at any index</h2><p>Yet another option for injecting new elements to the end of an array would be the <a href="/2021/07/20/ja-array-splice/">array splice method</a>. This method will mutate an array in place, and is also often used to remove one or more elements at a given element index. However when it comes to removing elements one does have the option of setting zero for the value, on top of that the splice method can also be used to inject new elements as this element index location.</p>
+<h2 id="4-Array-splice-method-can-also-be-used-to-mutate-in-place-and-inject-at-any-index"><a href="#4-Array-splice-method-can-also-be-used-to-mutate-in-place-and-inject-at-any-index" class="headerlink" title="4 - Array splice method can also be used to mutate in place, and inject at any index"></a>4 - Array splice method can also be used to mutate in place, and inject at any index</h2><p>Yet another option for injecting new elements to the end of an array would be the <a href="/2021/07/20/js-array-splice/">array splice method</a>. This method will mutate an array in place, and is also often used to remove one or more elements at a given element index. However when it comes to removing elements one does have the option of setting zero for the value, on top of that the splice method can also be used to inject new elements as this element index location.</p>
 <h3 id="4-1-Array-splice-basic-example"><a href="#4-1-Array-splice-basic-example" class="headerlink" title="4.1 - Array splice basic example"></a>4.1 - Array splice basic example</h3><p>So then the basic idea here is to call the array slice method off of an array that I want to inject elements into. I then given the element index location of the array where I want to inject, and then I give a value of zero for the amount of elements to remove at that location. I can then inject one or more elements at that index by way of one or more additional arguments after that.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="number">1</span>, <span class="number">3</span>];</div><div class="line">array.splice(<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>);</div><div class="line"><span class="built_in">console</span>.log(array.join(<span class="string">'-'</span>)); <span class="comment">// 1-2-3</span></div></pre></td></tr></table></figure>
 <h3 id="4-2-An-insert-at-method-along-with-push-and-unshift-methods"><a href="#4-2-An-insert-at-method-along-with-push-and-unshift-methods" class="headerlink" title="4.2 - An insert at method along with push and unshift methods"></a>4.2 - An insert at method along with push and unshift methods</h3><p>It is then possible to create an insert at method by using the array splice method along with the apply function prototype method, and the array concat method. This insert at method can take the array I want to insert elements into as the first argument, and then an index as to where to insert at, followed by an array of values to insert there. I can then create a new array and call the splice method off of that new array with the function apply prototype method. Sense I am calling apply off of the splice function I can given the array argument as the value of this for apply and then I need to given an array of arguments. For this I can create an array where the first element will be the index to insert at, followed by the number of elements to remove which is zero. After that I can call the array concat method of this array of arguments and pass the array of values to insert.</p>
@@ -186,7 +186,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2020/06/17/js-array-push/" data-id="ckvtxp8hc00kpzcv1ofrw947d" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2020/06/17/js-array-push/" data-id="ckwme75u900kit4v1fbe6zvd5" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2020/06/17/js-array-push/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -292,23 +292,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2021/11/05/js-webworker/">Webworker in client side javaScript</a>
+            <a href="/2021/11/26/linux-tar/">The Linux tar command for compressions files and folders</a>
           </li>
         
           <li>
-            <a href="/2021/10/29/js-document/">JavaScript document object</a>
+            <a href="/2021/11/23/linux-tree/">The Linux tree command</a>
           </li>
         
           <li>
-            <a href="/2021/10/22/js-promise/">JavaScript Promise general overview</a>
+            <a href="/2021/11/19/linux-xxd/">The Linux xxd command for dumping hex to the standard output rather than text</a>
           </li>
         
           <li>
-            <a href="/2021/10/15/linux-bash-script-control-operators/">Control Operators in bash</a>
+            <a href="/2021/11/17/linux-folders-dev/">The Linux Dev Folder</a>
           </li>
         
           <li>
-            <a href="/2021/10/08/linux-test/">The Linux test bash built in command</a>
+            <a href="/2021/11/15/linux-folders-bin/">The Linux Bin Folder</a>
           </li>
         
       </ul>

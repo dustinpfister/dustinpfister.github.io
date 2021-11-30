@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2020/03/24/js-filereader/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="Typically when dealing with files in javaScript I am actually dealing with a file that is stored on a server, I then use XMLHttpRequest or some other means as a way to retrieve all or part of that dat">
-<meta property="og:updated_time" content="2021-11-06T17:40:01.000Z">
+<meta property="og:updated_time" content="2021-11-21T22:44:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="How to read a client side file with javaScript">
 <meta name="twitter:description" content="Typically when dealing with files in javaScript I am actually dealing with a file that is stored on a server, I then use XMLHttpRequest or some other means as a way to retrieve all or part of that dat">
@@ -127,10 +127,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2020/03/24/js-filereader/" class="article-date"> Modified:
-  <time datetime="2021-11-06T17:40:01.000Z" itemprop="dateModified">2021-11-06</time>
+  <time datetime="2021-11-21T22:44:15.000Z" itemprop="dateModified">2021-11-21</time>
 </a>
 
-    <span class="article-date">V1.32</span>
+    <span class="article-date">V1.34</span>
 
     
   <div class="article-category">
@@ -158,8 +158,8 @@ ga('send', 'pageview');
 <p>Creating and loading files on the users local file system will involve the use of the <a href="https://developer.mozilla.org/en-US/docs/Web/API/FileReader" target="_blank" rel="external">FileReader constructor</a> in conjunction with <a href="https://developer.mozilla.org/en-US/docs/Web/API/File" target="_blank" rel="external">file objects</a> and a <a href="https://developer.mozilla.org/en-US/docs/Web/API/FileList" target="_blank" rel="external">file list input tag</a>. In this post I will be going over a few basic examples of how to use this as a means of local storage of state.</p>
 <a id="more"></a>
 <h2 id="1-A-basic-js-file-reader-example"><a href="#1-A-basic-js-file-reader-example" class="headerlink" title="1 - A basic js file reader example"></a>1 - A basic js file reader example</h2><p>So for now in this section I will be making a very basic use case example of the FileReader constructor that will just load a json file, and display the values in a div element. The JSON file will just be some very basic object that just contains a few number primitives. In a read project this might be some kind of game state file that will be far more complex, or exist as some kind of binary format outside that of JSON. However for just a basic example this should work just file.</p>
-<p>In this section I also often add in some additional details when it comes to anything else you should know about when it comes to continuing to read the rest of this post. For example I assume that you have at least some background with html and javaScript, if not you might want to start out with some <a href="/2018/11/27/js-getting-strated/">getting started type posts on javaScript</a>. With that said there are all kinds of little details that I am not going to be getting into detail here such as <a href="/2019/02/27/js-javascript-constructor/">what a constructor function is</a>, and that is the kind of function the File Reader constructor is.</p>
-<h3 id="The-source-code-examples-in-this-post-are-on-github"><a href="#The-source-code-examples-in-this-post-are-on-github" class="headerlink" title="- The source code examples in this post are on github"></a>- The source code examples in this post are on github</h3><p>The source code examples in this post can be found on <a href="https://github.com/dustinpfister/test_vjs/tree/master/for_post/js-filereader" target="_blank" rel="external">Github in my test vjs repository</a>, along with all my other vanilla javaScript examples that I write posts about. I still have a lot more planed out for this post when it comes to additional examples, as well as code examples that have to do with alternatives to using File Reader. As such the Github repository may have more up to date source code examples compared to what I have here thus far, this content like many other posts is still very much a work in progress.</p>
+<p>In this section I also often add in some additional details when it comes to anything else you should know about when it comes to continuing to read the rest of this post. For example I assume that you have at least some background with html and javaScript, if not you might want to start out with some <a href="/2018/11/27/js-getting-started/">getting started type posts on javaScript</a>. With that said there are all kinds of little details that I am not going to be getting into detail here such as <a href="/2019/02/27/js-javascript-constructor/">what a constructor function is</a>, and that is the kind of function the File Reader constructor is.</p>
+<h3 id="The-source-code-examples-in-this-post-are-on-github"><a href="#The-source-code-examples-in-this-post-are-on-github" class="headerlink" title="The source code examples in this post are on github"></a>The source code examples in this post are on github</h3><p>The source code examples in this post can be found on <a href="https://github.com/dustinpfister/test_vjs/tree/master/for_post/js-filereader" target="_blank" rel="external">Github in my test vjs repository</a>, along with all my other vanilla javaScript examples that I <a href="/categories/js/">write posts about</a>. I still have a lot more planed out for this post when it comes to additional examples, as well as code examples that have to do with alternatives to using File Reader. As such the Github repository may have more up to date source code examples compared to what I have here thus far, this content like many other posts is still very much a work in progress.</p>
 <h3 id="1-1-The-json"><a href="#1-1-The-json" class="headerlink" title="1.1 - The json"></a>1.1 - The json</h3><p>So I will want a json file stored somewhere on the local client system, it does not matter where as long as it is a typical place to store files that contain data for something such as the home folder in Linux systems, or the My Documents folder in Windows. For this example the contents of the json file will just contain and x and y property value that will be used by the simple example that uses the File Reader Constructor.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">   <span class="string">"x"</span>: <span class="number">42</span>,</div><div class="line">   <span class="string">"y"</span>: <span class="number">5</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="1-2-The-basic-html-file"><a href="#1-2-The-basic-html-file" class="headerlink" title="1.2 - The basic.html file"></a>1.2 - The basic.html file</h3><p>In my html I will want an input tag with the type attribute set to file, as well as a div element that will be used to display data once it is loaded. In my script tag I will want to get a reference to the input tag and add a on change event in which I will be using the FileReader constructor by passing a reference to the file object in the event object of the event hander for the on change event.</p>
@@ -183,7 +183,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2020/03/24/js-filereader/" data-id="ckvtxp8m400mqzcv1lnfbhgaw" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2020/03/24/js-filereader/" data-id="ckwme761700ndt4v1ulbaaf2i" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2020/03/24/js-filereader/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -289,23 +289,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2021/11/05/js-webworker/">Webworker in client side javaScript</a>
+            <a href="/2021/11/26/linux-tar/">The Linux tar command for compressions files and folders</a>
           </li>
         
           <li>
-            <a href="/2021/10/29/js-document/">JavaScript document object</a>
+            <a href="/2021/11/23/linux-tree/">The Linux tree command</a>
           </li>
         
           <li>
-            <a href="/2021/10/22/js-promise/">JavaScript Promise general overview</a>
+            <a href="/2021/11/19/linux-xxd/">The Linux xxd command for dumping hex to the standard output rather than text</a>
           </li>
         
           <li>
-            <a href="/2021/10/15/linux-bash-script-control-operators/">Control Operators in bash</a>
+            <a href="/2021/11/17/linux-folders-dev/">The Linux Dev Folder</a>
           </li>
         
           <li>
-            <a href="/2021/10/08/linux-test/">The Linux test bash built in command</a>
+            <a href="/2021/11/15/linux-folders-bin/">The Linux Bin Folder</a>
           </li>
         
       </ul>

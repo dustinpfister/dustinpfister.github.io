@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2019/09/06/js-bigint/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="So the regular number type in javaScript has some limitations when it comes to working with very large numbers beyond that of the max safe integer. Beyond that when it comes to adding a low number suc">
-<meta property="og:updated_time" content="2021-04-02T14:34:50.000Z">
+<meta property="og:updated_time" content="2021-11-24T11:15:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BigInt basics in javaScript for numbers beyond max safe int">
 <meta name="twitter:description" content="So the regular number type in javaScript has some limitations when it comes to working with very large numbers beyond that of the max safe integer. Beyond that when it comes to adding a low number suc">
@@ -127,10 +127,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2019/09/06/js-bigint/" class="article-date"> Modified:
-  <time datetime="2021-04-02T14:34:50.000Z" itemprop="dateModified">2021-04-02</time>
+  <time datetime="2021-11-24T11:15:24.000Z" itemprop="dateModified">2021-11-24</time>
 </a>
 
-    <span class="article-date">V1.17</span>
+    <span class="article-date">V1.2</span>
 
     
   <div class="article-category">
@@ -157,9 +157,10 @@ ga('send', 'pageview');
 <p>To get around this limitation with javaScript numbers in the past, a library would have to be used that involves representing a number with a string, and then have custom method that is part of this library for preforming operations with these types of objects was a way to work with big numbers in a project. For a long time the use of an external library was required when it comes to working with large numbers beyond max safe integer, and preserving high precision when preforming operations. These modules still work just fine, and often might still prove to be a better choice over a native solution, but as of late yes there is a native solution for this now.</p>
 <p>So with that said in modern browsers, and node 10.4.x+ there is now the BigInt Object that now provides high precision math functionality in native javaScript by itself without the introduction of an external module. As of this writing the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt" target="_blank" rel="external">BigInt</a> object is still not well supported so you might still want to use a library for that reason, but in time such libraries will no longer be needed for this because of this native support. So lets look at a few quick examples of the native bigInt object and what is has to provided in platforms that support it.</p>
 <a id="more"></a>
-<h2 id="1-The-basics-of-JavaScript-BigInt-Numbers"><a href="#1-The-basics-of-JavaScript-BigInt-Numbers" class="headerlink" title="1 - The basics of JavaScript BigInt Numbers"></a>1 - The basics of JavaScript BigInt Numbers</h2><p>As of this writing BigInts are still a fairly new addition to native core javaScript itself. If the nature of the project consists of front end code BigInts might not be the best option because of poor browser support, unless of course some additional code is added to help function as a fallback in the event that it is not there. </p>
-<p>In addition if it is a nodejs project then it might still not be a good idea to use BigInts unless you are confident that the project will always be used in later versions of node that are version 10.4.x or later. Even if you go with BigInt there are still some drawbacks that might not make a library solution outdated just yet, BigInt numbers can not be used with native javaScript Math Object methods such as Math.pow for example.</p>
-<p>Still in this section I will be going over some simple examples of BigInt to serve as a way to get started with this javaScript feature.</p>
+<h2 id="1-The-basics-of-JavaScript-BigInt-Numbers"><a href="#1-The-basics-of-JavaScript-BigInt-Numbers" class="headerlink" title="1 - The basics of JavaScript BigInt Numbers"></a>1 - The basics of JavaScript BigInt Numbers</h2><p>As of this writing BigInts are still a fairly new addition to native core javaScript itself. If the nature of the project consists of front end code BigInts might not be the best option because of poor browser support, unless of course some additional code is added to help function as a fall back in the event that it is not there, also often known as a pollyFill.</p>
+<p>In addition if it is a nodejs project then it might still not be a good idea to use BigInts unless you are confident that the project will always be used in versions of node that are version 10.4.x or later. Even if you go with BigInt there are still some drawbacks that might not make a library solution outdated just yet. ANoher draw back with BigInt numbers is that they can not be used with native javaScript Math Object methods such as <a href="/2019/12/10/js-math-pow/">Math.pow</a> for example at least not without converting to a regular <a href="/2019/01/24/js-javascript-number/">javaScript number</a> and thus end up losing precision.</p>
+<p>Still in this section I will be going over some simple examples of BigInt to serve as a way to get started with this javaScript feature. Although I will be keeping these examples very simple this is still not a <a href="/2018/11/27/js-getting-started/">getting started type post on javaScript</a> in general So I trust you have at least enough experience to make something of what is in this section.</p>
+<h3 id="Source-code-is-on-Github"><a href="#Source-code-is-on-Github" class="headerlink" title="Source code is on Github"></a>Source code is on Github</h3><p>The source code examples in this post can be found in my <a href="https://github.com/dustinpfister/test_vjs/tree/master/for_post/js-bigint" target="_blank" rel="external">test vjs repository</a> along with the source for my <a href="/categories/js">many other posts on javaScript</a>.</p>
 <h3 id="1-2-The-deal-with-MAX-SAFE-INTEGER"><a href="#1-2-The-deal-with-MAX-SAFE-INTEGER" class="headerlink" title="1.2 - The deal with MAX SAFE INTEGER"></a>1.2 - The deal with MAX SAFE INTEGER</h3><p>Tired yet true javaScript numbers work just fine in most situations, but they do have there limits. I could get into detail about the data type behind javaScript numbers, but one major taking point that will come now and then is the deal with Number.MAX_SAFE_INTEGER. If I have a value that goes beyond Max Safe Integer and add another number to it I will start to loose precession. This is one reason why I would want to use some kind of library that will give me higher precession numbers to work with in the form of an object class, and special methods to work with such objects. However now with bigint there is a native solution that can be used.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// a is MAX_SAFE_INTEGER + 1</span></div><div class="line"><span class="keyword">var</span> a = <span class="built_in">Number</span>.MAX_SAFE_INTEGER + <span class="number">1</span>;</div><div class="line"> </div><div class="line"><span class="comment">// b is now MSI+1 + 1</span></div><div class="line"><span class="keyword">var</span> b = a + <span class="number">1</span>;</div><div class="line"> </div><div class="line"><span class="comment">// If I compare a === b one might</span></div><div class="line"><span class="comment">// expect a false value, but this is not the</span></div><div class="line"><span class="comment">// case, thus the name MAX_SAFE_INTEGER</span></div><div class="line"><span class="built_in">console</span>.log(a === b); <span class="comment">// true</span></div><div class="line"> </div><div class="line"><span class="comment">// however with bigint values I can not go beyond</span></div><div class="line"><span class="comment">// max safe integer and retain precession</span></div><div class="line"><span class="keyword">var</span> a = BigInt(<span class="built_in">Number</span>.MAX_SAFE_INTEGER) + BigInt(<span class="number">1</span>);</div><div class="line"><span class="keyword">var</span> b = a + BigInt(<span class="number">1</span>);</div><div class="line"><span class="built_in">console</span>.log(a === b); <span class="comment">// false</span></div></pre></td></tr></table></figure>
 <h3 id="1-1-BigInt-basics-creating-them"><a href="#1-1-BigInt-basics-creating-them" class="headerlink" title="1.1 - BigInt basics creating them"></a>1.1 - BigInt basics creating them</h3><p>So If you are confident that the use of native javaScript BigInt numbers will work for your project rather than a user space library solution for this sort of thing then getting started with them is fairly simple. The BigInt Object can be used as a way to create an instance of BigInt from a number or a string of a number that I want the value of the BigInt to be. There is also a literal syntax that can be used by just appending an n after a number value.</p>
@@ -178,7 +179,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2019/09/06/js-bigint/" data-id="ckvtxp8lp00mnzcv1u5icwjbz" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2019/09/06/js-bigint/" data-id="ckwme75wv00ljt4v1c2fdwl3m" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2019/09/06/js-bigint/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -284,23 +285,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2021/11/05/js-webworker/">Webworker in client side javaScript</a>
+            <a href="/2021/11/26/linux-tar/">The Linux tar command for compressions files and folders</a>
           </li>
         
           <li>
-            <a href="/2021/10/29/js-document/">JavaScript document object</a>
+            <a href="/2021/11/23/linux-tree/">The Linux tree command</a>
           </li>
         
           <li>
-            <a href="/2021/10/22/js-promise/">JavaScript Promise general overview</a>
+            <a href="/2021/11/19/linux-xxd/">The Linux xxd command for dumping hex to the standard output rather than text</a>
           </li>
         
           <li>
-            <a href="/2021/10/15/linux-bash-script-control-operators/">Control Operators in bash</a>
+            <a href="/2021/11/17/linux-folders-dev/">The Linux Dev Folder</a>
           </li>
         
           <li>
-            <a href="/2021/10/08/linux-test/">The Linux test bash built in command</a>
+            <a href="/2021/11/15/linux-folders-bin/">The Linux Bin Folder</a>
           </li>
         
       </ul>
