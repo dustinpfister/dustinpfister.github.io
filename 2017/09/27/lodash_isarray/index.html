@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2017/09/27/lodash_isarray/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="Detecting if an Object is an Array is a trivial matter, or at least it is if you do not care a whole lot about backward compatibility. If you do want to march backward compatibility back to say IE 8 (">
-<meta property="og:updated_time" content="2020-06-03T14:53:17.000Z">
+<meta property="og:updated_time" content="2022-01-20T21:01:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The history of the lodash is array method and it's relevance today">
 <meta name="twitter:description" content="Detecting if an Object is an Array is a trivial matter, or at least it is if you do not care a whole lot about backward compatibility. If you do want to march backward compatibility back to say IE 8 (">
@@ -127,10 +127,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2017/09/27/lodash_isarray/" class="article-date"> Modified:
-  <time datetime="2020-06-03T14:53:17.000Z" itemprop="dateModified">2020-06-03</time>
+  <time datetime="2022-01-20T21:01:35.000Z" itemprop="dateModified">2022-01-20</time>
 </a>
 
-    <span class="article-date">V1.8</span>
+    <span class="article-date">V1.17</span>
 
     
   <div class="article-category">
@@ -160,16 +160,21 @@ ga('send', 'pageview');
 <p>So then this is whats going on with it now.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> isArray = <span class="built_in">Array</span>.isArray;</div></pre></td></tr></table></figure>
 <p>So yes it’s one of those methods in lodash now, where there is more or less no point. Many of us are scratching out heads wondering if we should even bother with lodash any more because of things like this. Of course lodash has much more to offer than just this one little method, but sometimes it seems like it is just a handful of methods like _.merge.</p>
-<h2 id="2-So-whats-the-point-of-isArray-in-lodash"><a href="#2-So-whats-the-point-of-isArray-in-lodash" class="headerlink" title="2- So whats the point of _.isArray in lodash?"></a>2- So whats the point of _.isArray in lodash?</h2><p>Today there is no point, however in the past there was a point, so now it is there just for the sake of keeping old code written with lodash from breaking. If you are writing new code the whole point of _.isArray is lost in late versions of lodash, unless you patch it, making your own lodash hack job, and thus make it the way it was in older versions of lodash.</p>
-<h2 id="3-isArray-in-lodash-3-10-1"><a href="#3-isArray-in-lodash-3-10-1" class="headerlink" title="3 - _.isArray in lodash 3.10.1"></a>3 - _.isArray in lodash 3.10.1</h2><p>In lodash 3.10.1 (4.17.4 is the latest as of the writing) _.isArray existed in a manner that you would expect if greater backward compatibility is desired. It was a polyfill that looked like this:</p>
+<h3 id="So-whats-the-point-of-isArray-in-lodash"><a href="#So-whats-the-point-of-isArray-in-lodash" class="headerlink" title="So whats the point of _.isArray in lodash?"></a>So whats the point of _.isArray in lodash?</h3><p>Today there is no point, however in the past there was a point, so now it is there just for the sake of keeping old code written with lodash from breaking. If you are writing new code the whole point of _.isArray is lost in late versions of lodash, unless you patch it, making your own lodash hack job, and thus make it the way it was in older versions of lodash.</p>
+<h3 id="isArray-in-lodash-3-10-1"><a href="#isArray-in-lodash-3-10-1" class="headerlink" title="_.isArray in lodash 3.10.1"></a>_.isArray in lodash 3.10.1</h3><p>In lodash 3.10.1 (4.17.4 is the latest as of the writing) _.isArray existed in a manner that you would expect if greater backward compatibility is desired. It was a polyfill that looked like this:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> isArray = nativeIsArray || <span class="function"><span class="keyword">function</span>(<span class="params">value</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> isObjectLike(value) &amp;&amp; isLength(value.length) &amp;&amp; objToString.call(value) == arrayTag;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
 <p>So yes if a native is array method exists just use that, else use what I am writing here that should work.</p>
-<h2 id="4-Conclusion"><a href="#4-Conclusion" class="headerlink" title="4 - Conclusion"></a>4 - Conclusion</h2><p>So then the lodash _.isArray method might have had a purpose in the past, and maybe still does if you care a great deal about browser support. Otherwise this is just yet another method in lodash that is starting to show its age.</p>
+<h3 id="1-1-Basic-example-of-lodash-is-array"><a href="#1-1-Basic-example-of-lodash-is-array" class="headerlink" title="1.1 - Basic example of lodash is array"></a>1.1 - Basic example of lodash is array</h3><p>For a basic example of the lodash is array method there is just creating an array with say the array bracket syntax and then assigning that to a variable. When I pass that variable that contains a reference to the array as one would expect the return ed result of the is array method is true.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log( _.isArray(a) ); <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<h3 id="1-2-The-lodash-is-array-like-method"><a href="#1-2-The-lodash-is-array-like-method" class="headerlink" title="1.2 - The lodash is array like method"></a>1.2 - The lodash is array like method</h3><p>There is the  also the <a href="/2020/08/01/lodash_isarraylike">lodash is array like method</a> that will not just return true of arrays, but also any object that is formated like an array in terms of the own properties of the object. For example I can just create an object with the object literal syntax and then just start adding public keys that are numbers rather than names. I will then want to add a length property to this object that is the value that will be used to set the max number of elements for the array, or array like object rather. For this I can use the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" target="_blank" rel="external">Object define property method</a> to make it so the length property will not be enumerable, and I can use the <a href="/2018/12/15/js-object-keys/">object keys method</a> to get a count of the number of public keys when setting the value for this length property.</p>
+<p>When I pass a reference to this kind of array like object to the lodash is array method the result is false, but when I pass it to the lodash is array like method as one would expect the result is true.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> a = &#123;</div><div class="line">    <span class="number">0</span>: <span class="number">1</span>,</div><div class="line">    <span class="number">1</span>: <span class="number">2</span>,</div><div class="line">    <span class="number">2</span>: <span class="number">3</span></div><div class="line">&#125;;</div><div class="line"><span class="built_in">Object</span>.defineProperty(a, <span class="string">'length'</span>, &#123;<span class="attr">value</span>: <span class="built_in">Object</span>.keys(a).length&#125;);</div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log( _.isArray(a) ); <span class="comment">// false</span></div><div class="line"><span class="built_in">console</span>.log( _.isArrayLike(a) ); <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<h2 id="2-Conclusion"><a href="#2-Conclusion" class="headerlink" title="2 - Conclusion"></a>2 - Conclusion</h2><p>So then the lodash _.isArray method might have had a purpose in the past, and maybe still does if you care a great deal about browser support. Otherwise this is just yet another method in lodash that is starting to show its age. There are of course a lot of other <a href="/2019/02/14/lodash_array/">array methods in lodash</a> that are also worth checking out real quick, many of them do preform useful tasks with arrays where there is no native array prototype counter part yet. If you think that you got something of value out of reading this and would like to read more on lodash I have a lot of <a href="/categories/lodash/">other posts on lodash</a>, including a kind of <a href="/2019/02/15/lodash/">main post on the topic of lodash</a> that I get around to editing more often than the others.</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2017/09/27/lodash_isarray/" data-id="ckyhkbmiv019tukv1h228ga1c" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2017/09/27/lodash_isarray/" data-id="ckz35t7gm01902ov1wq81s23g" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2017/09/27/lodash_isarray/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -275,23 +280,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2022/01/14/lodash_collection/">lodash collection methods, and working with collection in general with javaScript</a>
+            <a href="/2022/01/31/js-javascript-example-tool-source-layer-2d/">Source Layer javaScript tool example</a>
           </li>
         
           <li>
-            <a href="/2022/01/10/js-javascript-example-digital-art-unsteady-stars/">Unsteady Stars Digital Art javaScript example</a>
+            <a href="/2022/01/28/lodash_string/">Lodash String methods</a>
           </li>
         
           <li>
-            <a href="/2022/01/07/lodash_tap/">Tap off of a chain in lodash with the lodash tap method</a>
+            <a href="/2022/01/24/js-javascript-example-pool-normalized/">New Object Pool library javaScript example</a>
           </li>
         
           <li>
-            <a href="/2022/01/03/blog-post-plan-for-2022/">The 2022 blog plan</a>
+            <a href="/2022/01/21/lodash_thru/">Chains and the lodash thru method</a>
           </li>
         
           <li>
-            <a href="/2021/12/31/js-javascript-example-digital-art-reduce-pool/">Pool reduction digital art javaScript example</a>
+            <a href="/2022/01/17/js-javascript-example-digital-art-invaders/">Invaders Digital Art javaScript example</a>
           </li>
         
       </ul>

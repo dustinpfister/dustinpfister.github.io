@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2019/01/13/js-innerhtml/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="With client side javaScript projects the innerHtml property of an element reference can be used as a way to create and append additional HTML with just a string representation of the desired markup. T">
-<meta property="og:updated_time" content="2021-12-17T15:44:11.000Z">
+<meta property="og:updated_time" content="2022-01-18T18:35:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="innerhtml and alternatives for creating and appending html with javaScript">
 <meta name="twitter:description" content="With client side javaScript projects the innerHtml property of an element reference can be used as a way to create and append additional HTML with just a string representation of the desired markup. T">
@@ -127,10 +127,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2019/01/13/js-innerhtml/" class="article-date"> Modified:
-  <time datetime="2021-12-17T15:44:11.000Z" itemprop="dateModified">2021-12-17</time>
+  <time datetime="2022-01-18T18:35:30.000Z" itemprop="dateModified">2022-01-18</time>
 </a>
 
-    <span class="article-date">V1.68</span>
+    <span class="article-date">V1.71</span>
 
     
   <div class="article-category">
@@ -183,6 +183,11 @@ ga('send', 'pageview');
 <h3 id="2-4-The-document-write-method"><a href="#2-4-The-document-write-method" class="headerlink" title="2.4 - The document write method"></a>2.4 - The document write method</h3><p>One other alliterative to innerhtml might be the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/write" target="_blank" rel="external">document write method</a>, or at least maybe it will be in some very rare situations in which using it is truly justified. The only extending circumstances in which I would consider using it would be if for some reason I want to write some javaScritp code that will work in really old web browsers. However even with that I would often still prefer to use more modern alternatives because by very old browsers I mean going all the way back to the 1990s actually. It is not like innerHTML and the create element methods where introduced yesterday.</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>innerHTML alternative<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line"><span class="built_in">document</span>.write(<span class="string">'Hello World'</span>);</div><div class="line">        <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
 <p>Another draw back of using this method, and this is a big one, is that it will also clear the document. Now maybe in some cases that is what I might want to happen, say I just want clear out everything on the page and write some kind of error message, however I still like for the to be an option rather than a requirement. Still I guess that I have to write about this method here when it comes to outlining everything in the toolbox when it comes to alternatives to the inner html property. There are still a lot of old source code examples on the open web that might use this method so it is something to be aware of for sure.</p>
+<h3 id="2-5-Using-a-canvas-element-to-display-data"><a href="#2-5-Using-a-canvas-element-to-display-data" class="headerlink" title="2.5 - Using a canvas element to display data"></a>2.5 - Using a canvas element to display data</h3><p>There is not just using HTML as a way to display data, but also using some additional drawing context within an element, or some other standard to render something. If you really need to create HTML then maybe you have to stick to a certain set of options like the create element option, or template elements. However if the end result here is to just display some kind of info to a user then yet another option would be to use canvas elements.</p>
+<p>It might be best to start out with some kind of <a href="/2017/05/17/canvas-getting-started/">getting started with canvas</a> type post first, but a basic canvas element hello world example might look something like this.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>innerHTML alternative<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">canvas</span> <span class="attr">id</span>=<span class="string">"out_canvas"</span> <span class="attr">width</span>=<span class="string">"640"</span> <span class="attr">height</span>=<span class="string">"480"</span>&gt;</span><span class="tag">&lt;/<span class="name">canvas</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line"><span class="keyword">var</span> canvas = <span class="built_in">document</span>.querySelector(<span class="string">'#out_canvas'</span>),</div><div class="line">ctx = canvas.getContext(<span class="string">'2d'</span>);</div><div class="line">ctx.fillStyle = <span class="string">'black'</span>;</div><div class="line">ctx.fillRect(<span class="number">-1</span>, <span class="number">-1</span>, canvas.width + <span class="number">2</span>, canvas.height + <span class="number">2</span>);</div><div class="line">ctx.fillStyle = <span class="string">'white'</span>;</div><div class="line">ctx.textBaseline = <span class="string">'middle'</span>;</div><div class="line">ctx.textAlign = <span class="string">'center'</span>;</div><div class="line">ctx.font = <span class="string">'40pt courier'</span>;</div><div class="line">ctx.fillText(<span class="string">'Hello World'</span>, canvas.width / <span class="number">2</span>, canvas.height / <span class="number">2</span>)</div><div class="line">        <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>The first step is to get a reference to a hard coded canvas element, or create and append one with the create element method that I covered earlier in this section of this post. In any case once a reference to a canvas element is obtained there is then just getting a reference to a drawing context such as the 2d drawing context. In this 2d drawing context there is then the fill text method that can be used to draw some text in the canvas element.</p>
+<p>There is a great deal more to write about when it comes to canvas elements and how these can be used as an alternative option to html only as a way to display data to a user. However getting into every little detail on them is of course outside the scope of this post. I all ready mentioned my getting started post on canvas elements, and on top of that I have an every growing collection of canvas projects examples also that might be worth checking out as an tool for learning more about everything that branches off from using canvas elements.</p>
 <h2 id="3-Getting-script-tags-added-by-innerHTML-to-run-and-other-options-for-this-sort-of-thing"><a href="#3-Getting-script-tags-added-by-innerHTML-to-run-and-other-options-for-this-sort-of-thing" class="headerlink" title="3 - Getting script tags added by innerHTML to run and other options for this sort of thing"></a>3 - Getting script tags added by innerHTML to run and other options for this sort of thing</h2><p>One major topic that might come up with innerHTML is how to go about getting script tags to run that are injected by way of innerHTML. Often they will not work, and there is a good reason as to what that is when it comes to the topic of html injection attacks. However that is a more advanced topic for another section in this post, or maybe even a whole other post completely. If I really need to get script tags that are added by way of innerHTML to run there are ways of doing so that involve adding additional javaScript code to a page that will do so. I am not sure if there is a way to get them to run just by that of innerHTML alone, and if so that might actually be a kind of security vulnerability actually.</p>
 <p>However I will not be getting into the security related topics of inerHTML at least not here in this section. Doing so in a way that will truly do it justice would be a little involved and would have to include some sever side code with intentional pore sanitation. I will however be going over some ways of getting script tags added by way of innerhTML to run though, and also some related topics when it comes to running a javaScript string for starters. However I will not be getting into why doing so might be a pad idea or not.</p>
 <h3 id="3-1-Getting-script-tags-to-run-added-by-innerHTML"><a href="#3-1-Getting-script-tags-to-run-added-by-innerHTML" class="headerlink" title="3.1 - Getting script tags to run added by innerHTML"></a>3.1 - Getting script tags to run added by innerHTML</h3><p>When it comes to adding script tags by way of innerHTML more often than one then will not run. I would say that adding script tags by way of innerHTML is something that should not be done if doing so can be avoided to begin with actually. However if for one reason or another I really do need to get them to run then there are <a href="https://stackoverflow.com/questions/1197575/can-scripts-be-inserted-with-innerhtml" target="_blank" rel="external">some ways to do about doing so</a>. Most of the ways of doing so involve doing what it is that should be done in the first place when it comes to the proper way of adding script tags by way of javaScript code which is using the create element method. The next step beyond that is just setting the text value of a new script tag to the inner html of the source script tag, and the replacing the node.</p>
@@ -202,7 +207,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2019/01/13/js-innerhtml/" data-id="ckyhkbl2s00oxukv1373z8jmr" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2019/01/13/js-innerhtml/" data-id="ckz35t61u00p82ov11w9cm3kd" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2019/01/13/js-innerhtml/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -308,23 +313,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2022/01/14/lodash_collection/">lodash collection methods, and working with collection in general with javaScript</a>
+            <a href="/2022/01/31/js-javascript-example-tool-source-layer-2d/">Source Layer javaScript tool example</a>
           </li>
         
           <li>
-            <a href="/2022/01/10/js-javascript-example-digital-art-unsteady-stars/">Unsteady Stars Digital Art javaScript example</a>
+            <a href="/2022/01/28/lodash_string/">Lodash String methods</a>
           </li>
         
           <li>
-            <a href="/2022/01/07/lodash_tap/">Tap off of a chain in lodash with the lodash tap method</a>
+            <a href="/2022/01/24/js-javascript-example-pool-normalized/">New Object Pool library javaScript example</a>
           </li>
         
           <li>
-            <a href="/2022/01/03/blog-post-plan-for-2022/">The 2022 blog plan</a>
+            <a href="/2022/01/21/lodash_thru/">Chains and the lodash thru method</a>
           </li>
         
           <li>
-            <a href="/2021/12/31/js-javascript-example-digital-art-reduce-pool/">Pool reduction digital art javaScript example</a>
+            <a href="/2022/01/17/js-javascript-example-digital-art-invaders/">Invaders Digital Art javaScript example</a>
           </li>
         
       </ul>
