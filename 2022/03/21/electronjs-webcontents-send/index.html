@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
+  
+  <title>Send data from main.js of electronjs app to the client system with the send method of webContents | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2022/03/21/electronjs-webcontents-send/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="For todays post on electronjs I will be going over a quick example of the send method of the webContents object of a browser window object instance. The reason why I am writing a post on this is becau">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Send data from main.js of electronjs app to the client system with the send method of webContents">
+<meta property="og:url" content="https://dustinpfister.github.io/2022/03/21/electronjs-webcontents-send/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="For todays post on electronjs I will be going over a quick example of the send method of the webContents object of a browser window object instance. The reason why I am writing a post on this is becau">
+<meta property="og:updated_time" content="2022-03-22T16:52:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Send data from main.js of electronjs app to the client system with the send method of webContents">
+<meta name="twitter:description" content="For todays post on electronjs I will be going over a quick example of the send method of the webContents object of a browser window object instance. The reason why I am writing a post on this is becau">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-electronjs-webcontents-send" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/03/21/electronjs-webcontents-send/" class="article-date"> Published:
+  <time datetime="2022-03-21T18:55:00.000Z" itemprop="datePublished">2022-03-21</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2022/03/21/electronjs-webcontents-send/" class="article-date"> Modified:
+  <time datetime="2022-03-22T16:52:43.000Z" itemprop="dateModified">2022-03-22</time>
+</a>
+
+    <span class="article-date">V1.14</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/electronjs/">electronjs</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Send data from main.js of electronjs app to the client system with the send method of webContents
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>For todays post on electronjs I will be going over a quick example of the <a href="https://www.electronjs.org/docs/latest/api/web-contents#contentssendchannel-args" target="_blank" rel="external">send method of the webContents object</a> of a <a href="/2022/02/14/electronjs-browser-window/">browser window object</a> instance. The reason why I am writing a post on this is because even though I have only wrote a <a href="/categories/electronjs/">few example of electronjs thus far</a> I can all ready see that this will be a feature that I will be using with a lot of future projects.</p>
+<p>The general idea here is that the send method is a way to go about emitting an event for a render process, and so my attaching an event hander for a method that I define in my preload script, it can be used as a way to replay to a custom menu option in the browser window. Speaking of preload scripts, and custom menus, this example will also be a good starting point for these things, however this is still not a <a href="/2022/02/07/electronjs-hello-world/">getting started with electron type post</a> as I have wrote that one all ready.</p>
+<a id="more"></a>
+<h2 id="The-send-method-of-the-webContents-object-and-what-to-know-first"><a href="#The-send-method-of-the-webContents-object-and-what-to-know-first" class="headerlink" title="The send method of the webContents object and what to know first"></a>The send method of the webContents object and what to know first</h2><p>In this post I am going over the source code of a simple electronjs application in which I am using the send method of a webContents object to emit and event that is fired when a custom option is selected in a custom menu. I intend to keep the example in this post fairly simple, but I am still operating under the assumption that you have at least some basic working knowledge of javaScript, both client side and ever side along with various other skills that are required before hand.</p>
+<p>If you are still fairly new to javaScript you might want to take a step back and read a <a href="/2018/11/27/js-getting-started/">getting started with javaScript in general</a> post. There is also learning how to work with <a href="/2017/04/05/nodejs-helloworld/">nodejs by itself</a> also outside of electronjs which is also something that should be done at least a little to gain a better understand of what there is to work with in nodejs alone.</p>
+<h3 id="The-source-code-example-here-is-on-Github"><a href="#The-source-code-example-here-is-on-Github" class="headerlink" title="The source code example here is on Github"></a>The source code example here is on Github</h3><p>The <a href="https://github.com/dustinpfister/examples-electronjs/tree/master/for_post/electronjs-webcontents-send" target="_blank" rel="external">source code example that I am writing about here is on Github</a> along with any additional assets that I might be using for this example. I also have all the source code examples for my various other posts on electronjs thus far located in the same repository.</p>
+<h2 id="1-The-main-javaScript-file"><a href="#1-The-main-javaScript-file" class="headerlink" title="1 - The main javaScript file"></a>1 - The main javaScript file</h2><p>So then in the root location of the project folder I have a main.js file, as with just about any other electronjs project. It is in this main javaScript file that I will be calling the send method of the webContents object of the main browser window object. With that said I am doing so with two events one of which is a infoPkg event that will be an event that involve setting info from the package.json file of this example, and the other is a infoOS event that will send some very basic info about the hose os that this example is running on.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// load app and BrowserWindow</span></div><div class="line"><span class="keyword">const</span> &#123; app, Menu, BrowserWindow &#125; = <span class="built_in">require</span>(<span class="string">'electron'</span>);</div><div class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"> </div><div class="line"><span class="comment">// Custom Menu</span></div><div class="line"><span class="keyword">const</span> isMac = process.platform === <span class="string">'darwin'</span></div><div class="line"><span class="keyword">const</span> MenuTemplate = [</div><div class="line">    &#123;</div><div class="line">        <span class="attr">label</span>: <span class="string">'Info'</span>,</div><div class="line">        <span class="attr">submenu</span>: [</div><div class="line">            &#123;</div><div class="line">                <span class="attr">label</span>: <span class="string">'Package Info'</span>,</div><div class="line">                <span class="attr">click</span>: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">                    <span class="comment">// get ref to browser window one way or another</span></div><div class="line">                    <span class="keyword">const</span> mainWindow = BrowserWindow.fromId(<span class="number">1</span>);</div><div class="line">                    </div><div class="line">                    <span class="comment">// send for event</span></div><div class="line">                    mainWindow.webContents.send(<span class="string">'infoPkg'</span>);</div><div class="line">                    </div><div class="line">                &#125;</div><div class="line">            &#125;,</div><div class="line">            &#123;</div><div class="line">                <span class="attr">label</span>: <span class="string">'OS Info'</span>,</div><div class="line">                <span class="attr">click</span>: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">                    <span class="comment">// get ref to browser window one way or another</span></div><div class="line">                    <span class="keyword">const</span> mainWindow = BrowserWindow.fromId(<span class="number">1</span>);</div><div class="line">                    </div><div class="line">                    <span class="comment">// send for event</span></div><div class="line">                    mainWindow.webContents.send(<span class="string">'infoOS'</span>);</div><div class="line">                    </div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        ]</div><div class="line">    &#125;</div><div class="line">]</div><div class="line"><span class="keyword">const</span> menu = Menu.buildFromTemplate(MenuTemplate)</div><div class="line">Menu.setApplicationMenu(menu)</div><div class="line"> </div><div class="line"><span class="comment">// Create the browser window.</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">createWindow</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">const</span> mainWindow = <span class="keyword">new</span> BrowserWindow(&#123;</div><div class="line">    <span class="attr">width</span>: <span class="number">800</span>,</div><div class="line">    <span class="attr">height</span>: <span class="number">600</span>,</div><div class="line">    <span class="attr">webPreferences</span>: &#123;</div><div class="line">        <span class="attr">contextIsolation</span>: <span class="literal">true</span>,</div><div class="line">        <span class="attr">preload</span>: path.resolve( __dirname, <span class="string">'preload.js'</span>)</div><div class="line">    &#125;</div><div class="line">  &#125;);</div><div class="line">  <span class="comment">// and load the index.html of the app.</span></div><div class="line">  mainWindow.loadFile(<span class="string">'index.html'</span>)</div><div class="line">  <span class="comment">// Open the DevTools for debugging</span></div><div class="line">  mainWindow.webContents.openDevTools()</div><div class="line"> </div><div class="line">  <span class="keyword">const</span> menu = Menu.buildFromTemplate(MainMenuTemplate);</div><div class="line">  mainWindow.setMenu(menu)</div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="comment">// the 'ready' event</span></div><div class="line">app.whenReady().then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">  createWindow();</div><div class="line">  app.on(<span class="string">'activate'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (BrowserWindow.getAllWindows().length === <span class="number">0</span>) createWindow()</div><div class="line">  &#125;)</div><div class="line">&#125;);</div><div class="line"> </div><div class="line"><span class="comment">// the 'window-all-closed' is also a kind of on quit event</span></div><div class="line">app.on(<span class="string">'window-all-closed'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (process.platform !== <span class="string">'darwin'</span>) app.quit()</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="2-The-preload-javaScript-file"><a href="#2-The-preload-javaScript-file" class="headerlink" title="2 - The preload javaScript file"></a>2 - The preload javaScript file</h2><p>Here I then have the preload script in which I am defining what to do when the infoPkg or infoOS events are emitted in the main javaScript file. If you are still somewhat new to electronjs this preload file is a way to go about defining some methods to use in the client side javaScript code of the over all application. So for this example I am creating an API called just simply API that you will see me using later on in the index html file later in this post.</p>
+<p>When it comes to just having a simple demo of the send method I just want to have an API.on method to give myself a way to attach some event handers that will fire for when the user selects one of the options from the custom menu that I defined in the main javaScript file. When writing my front end code I just need to call this API.on method and give a event type string, in this case infroPKG, and infoOS, and then also pass a <a href="/2019/03/25/js-javascript-callback/">callback function</a> that will be called when this even happens.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> &#123; contextBridge, ipcRenderer&#125; = <span class="built_in">require</span>(<span class="string">'electron'</span>);</div><div class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"><span class="keyword">const</span> os = <span class="built_in">require</span>(<span class="string">'os'</span>);</div><div class="line"><span class="keyword">const</span> API = &#123;&#125;;</div><div class="line"><span class="keyword">const</span> EVENT = &#123;&#125;;</div><div class="line"> </div><div class="line">EVENT.infoPkg = <span class="function"><span class="keyword">function</span>(<span class="params">callback</span>)</span>&#123;</div><div class="line">    ipcRenderer.on(<span class="string">'infoPkg'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">evnt</span>) </span>&#123;</div><div class="line">        <span class="keyword">let</span> pkgObj = <span class="built_in">require</span>(path.join(__dirname, <span class="string">'package.json'</span>));</div><div class="line">        callback(evnt, pkgObj);</div><div class="line">    &#125;);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line">EVENT.infoOS = <span class="function"><span class="keyword">function</span>(<span class="params">callback</span>)</span>&#123;</div><div class="line">    ipcRenderer.on(<span class="string">'infoOS'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">evnt</span>) </span>&#123;</div><div class="line">        <span class="keyword">let</span> osInfo = &#123;</div><div class="line">            <span class="attr">platform</span>: process.platform,</div><div class="line">            <span class="attr">dir_home</span>: os.homedir(),</div><div class="line">            <span class="attr">dir_app_root</span>: __dirname</div><div class="line">        &#125;;</div><div class="line">        callback(evnt, osInfo);</div><div class="line">    &#125;);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line">API.on = <span class="function"><span class="keyword">function</span>(<span class="params">eventType, callback</span>)</span>&#123;</div><div class="line">   EVENT[eventType](callback);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// create an api for window objects in web pages</span></div><div class="line">contextBridge.exposeInMainWorld(<span class="string">'API'</span>, API);</div></pre></td></tr></table></figure>
+<h2 id="3-The-index-html-file"><a href="#3-The-index-html-file" class="headerlink" title="3 - The index html file"></a>3 - The index html file</h2><p>Now for that main index html file that I am loading in the main javaScript file when creating the main browser window instance of the application example. For this example I am doing everything in a single html file, I am doing this for the sake of trying to keep things more easy to follow, but in a real project you might and to break things down more, and also not use in-line scripting.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>WebContents send method example<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css"></span></div><div class="line"><span class="selector-tag">body</span>&#123;</div><div class="line">  <span class="attribute">background</span>: <span class="number">#afafaf</span>;</div><div class="line">  <span class="attribute">color</span>: <span class="number">#2a2a2a</span>;</div><div class="line">  <span class="attribute">margin</span>: <span class="number">0px</span>;</div><div class="line">  <span class="attribute">padding</span>: <span class="number">0px</span>;</div><div class="line">&#125;</div><div class="line"><span class="selector-tag">h1</span>&#123;</div><div class="line">   <span class="attribute">font-size</span>: <span class="number">40pt</span>;</div><div class="line">   <span class="attribute">font-family</span>: arial;</div><div class="line">&#125;</div><div class="line"><span class="selector-id">#wrap_main</span>&#123;</div><div class="line">&#125;</div><div class="line"><span class="selector-id">#wrap_main</span> <span class="selector-tag">h1</span> &#123;</div><div class="line">&#125;</div><div class="line">    <span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"wrap_main"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Send Demo<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>use info menu wot get info using send method of webContents<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">textarea</span> <span class="attr">cols</span>=<span class="string">"65"</span> <span class="attr">rows</span>=<span class="string">"20"</span>&gt;</span><span class="tag">&lt;/<span class="name">textarea</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line"><span class="keyword">let</span> textArea = <span class="built_in">document</span>.querySelector(<span class="string">'textarea'</span>)</div><div class="line">API.on(<span class="string">'infoPkg'</span>, (event, pkgObj) =&gt; &#123;</div><div class="line">    textArea.value = <span class="built_in">JSON</span>.stringify(pkgObj, <span class="literal">null</span>, <span class="number">2</span>)</div><div class="line">&#125;);</div><div class="line">API.on(<span class="string">'infoOS'</span>, (event, osObj) =&gt; &#123;</div><div class="line">    textArea.value = <span class="built_in">JSON</span>.stringify(osObj, <span class="literal">null</span>, <span class="number">2</span>)</div><div class="line">&#125;);</div><div class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>With the hard coded html the main element of interest is just the text area element that I am just using as a way to dump the results that are obtained when selecting one of the options in the info menu of the browser window. After that I have just a single script tag in which I have some javaScript code in which I am attaching for those events that I have mentioned in the preload javaScript file. With that said each time one of them fire the content of the text area element will update with the value of the object that is returned that I can use in the body of the callback functions given when attaching for the events. I can then use the json stringify method to convert the objects to a string format of them for the text content of the textarea element.</p>
+<h2 id="4-Conclusion"><a href="#4-Conclusion" class="headerlink" title="4 - Conclusion"></a>4 - Conclusion</h2><p>I just wanted to make a quick example of the send method of the web contents object, for the sake of my own reference for the most part. When it comes to some actually project examples I have a few ideas on the drawing board at least, but I still think that I need to work out a few more basic examples like this just for the sake of learning the basics of electronjs thus far.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2022/03/21/electronjs-webcontents-send/" data-id="cl12h4uk500cow4v1p6io3d6r" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2022/03/21/electronjs-webcontents-send/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/electronjs/">electronjs</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2022/03/18/linux-realpath/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Resolve to an absolute path with the Linux realpath command as well as a few others</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2022/03/21/electronjs-webcontents-send/index.html';
+    this.page.identifier = '970';
+    this.page.title = 'Send data from main.js of electronjs app to the client system with the send method of webContents';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/electronjs/">electronjs</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/electronjs/">electronjs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.38px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.48px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.33px;">angular</a> <a href="/tags/animation/" style="font-size: 11.9px;">animation</a> <a href="/tags/automation/" style="font-size: 11.9px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.38px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.76px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.57px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.86px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.95px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.43px;">ejs</a> <a href="/tags/electronjs/" style="font-size: 12.38px;">electronjs</a> <a href="/tags/express/" style="font-size: 16.19px;">express</a> <a href="/tags/games/" style="font-size: 16.67px;">games</a> <a href="/tags/git/" style="font-size: 12.86px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.76px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.9px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.29px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.48px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.43px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 17.14px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.1px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.29px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.52px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.62px;">phaser</a> <a href="/tags/python/" style="font-size: 15.24px;">python</a> <a href="/tags/statistics/" style="font-size: 13.81px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 19.05px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.71px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">September 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/03/21/electronjs-webcontents-send/">Send data from main.js of electronjs app to the client system with the send method of webContents</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/18/linux-realpath/">Resolve to an absolute path with the Linux realpath command as well as a few others</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/15/electronjs-clipboard/">Getting started with the clipboard class in Election.js</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/11/linux-tr/">Transform and delete standard input text in bash with the Linux tr command</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/10/electronjs-example-videoground/">Electronjs application example that I am using to make videos</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2022/03/21/electronjs-webcontents-send/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
