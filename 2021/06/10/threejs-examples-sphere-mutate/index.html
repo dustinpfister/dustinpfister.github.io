@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2021/06/10/threejs-examples-sphere-mutate/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="This week I was learning more about how to work with a buffer geometry in threejs when it comes to the various attributes that make up such a feature in threejs. There is the position attribute in the">
-<meta property="og:updated_time" content="2021-06-10T19:45:53.000Z">
+<meta property="og:updated_time" content="2022-04-20T14:02:10.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mutating a point in a sphere with threejs">
 <meta name="twitter:description" content="This week I was learning more about how to work with a buffer geometry in threejs when it comes to the various attributes that make up such a feature in threejs. There is the position attribute in the">
@@ -98,6 +98,8 @@ ga('send', 'pageview');
         
           <a class="main-nav-link" href="/archives">Archives</a>
         
+          <a class="main-nav-link" href="/2021/02/19/threejs-examples/">ThreeJS-Examples</a>
+        
           <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
         
           <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
@@ -127,10 +129,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2021/06/10/threejs-examples-sphere-mutate/" class="article-date"> Modified:
-  <time datetime="2021-06-10T19:45:53.000Z" itemprop="dateModified">2021-06-10</time>
+  <time datetime="2022-04-20T14:02:10.000Z" itemprop="dateModified">2022-04-20</time>
 </a>
 
-    <span class="article-date">V1.16</span>
+    <span class="article-date">V1.17</span>
 
     
   <div class="article-category">
@@ -153,11 +155,12 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>This week I was learning more about how to work with a <a href="https://threejs.org/docs/#api/en/core/BufferGeometry" target="_blank" rel="external">buffer geometry</a> in <a href="https://threejs.org/docs/#manual/en/introduction/Creating-a-scene" target="_blank" rel="external">threejs</a> when it comes to the various attributes that make up such a feature in threejs. There is the position attribute in the geometry which is the attribute that holds the current positions of all the points in the geometry for example. So I think it might be a good idea to wrap this week up with a few simple <a href="/2021/02/19/threejs-examples/">threejs project examples</a> that have to do with mutating the position attributes of built in geometry constructors. one such constructor to work with when it comes to this is the sphere geometry constructor which is just one of many kinds of built in geometry constructors where it might prove to be an interesting learning experience to work out some methods that have to do with changing the geometry a little.</p>
+        <p>This week I was learning more about how to work with a <a href="https://threejs.org/docs/#api/en/core/BufferGeometry" target="_blank" rel="external">buffer geometry</a> in <a href="https://threejs.org/docs/#manual/en/introduction/Creating-a-scene" target="_blank" rel="external">threejs</a> when it comes to the various attributes that make up such a feature in threejs. There is the <a href="/2021/06/07/threejs-buffer-geometry-attributes-position/">position attribute</a> in the geometry which is the attribute that holds the current positions of all the points in the geometry for example. </p>
+<p>So I think it might be a good idea to wrap this week up with a few simple <a href="/2021/02/19/threejs-examples/">threejs project examples</a> that have to do with mutating the position attributes of built in geometry constructors. One such constructor to work with when it comes to this is the sphere geometry constructor which is just one of many kinds of built in geometry constructors where it might prove to be an interesting learning experience to work out some methods that have to do with changing the geometry a little.</p>
 <p>In this post then I will be going over my first quick example that has to do with a helper method that changes the position of a point on a sphere. The process of doing so is not always so easy as there is not just one point that needs to move but all points of all triangles at that point in space actually. So this might prove to be the kind of example that I might come back to now and then in order to find new ways to go about doing this.</p>
 <a id="more"></a>
-<h2 id="1-Mutating-sphere-geometry-and-what-to-know-first"><a href="#1-Mutating-sphere-geometry-and-what-to-know-first" class="headerlink" title="1 - Mutating sphere geometry and what to know first"></a>1 - Mutating sphere geometry and what to know first</h2><p>This is a post on a threejs example where I am mutating the geometry of a sphere made with the THREE.SphereGeometry constructor in the library. It should do without saying that this post is not intended for people that are new to threejs, and javaScript in general as the topic might prove to be a bit to advanced. So it might be best to start out with a getting started type post with threejs, even if you have some experience with these topics there are still a few things you might want to read up on more first.</p>
-<h3 id="1-1-Might-want-to-read-up-more-on-the-buffer-geometry-class-in-general"><a href="#1-1-Might-want-to-read-up-more-on-the-buffer-geometry-class-in-general" class="headerlink" title="1.1 - Might want to read up more on the buffer geometry class in general"></a>1.1 - Might want to read up more on the buffer geometry class in general</h3><p>It might be a good idea to read up more on the buffer geometry class in general, as there are a great number of properties and methods in an instance of buffer geometry that you should be aware of before getting into an example like this. The main feature of interest when it comes to changing the points in a geometry would be the position attribute of a geometry created with one of the built in geometry constructor methods.</p>
+<h2 id="1-Mutating-sphere-geometry-and-what-to-know-first"><a href="#1-Mutating-sphere-geometry-and-what-to-know-first" class="headerlink" title="1 - Mutating sphere geometry and what to know first"></a>1 - Mutating sphere geometry and what to know first</h2><p>This is a post on a threejs example where I am mutating the geometry of a sphere made with the <a href="/2021/05/26/threejs-sphere/">THREE.SphereGeometry constructor</a> in the library. It should do without saying that this post is not intended for people that are new to threejs, and javaScript in general as the topic might prove to be a bit to advanced. So it might be best to start out with a <a href="/2018/04/04/threejs-getting-started/">getting started type post with threejs</a>, even if you have some experience with these topics there are still a few things you might want to read up on more first.</p>
+<h3 id="1-1-Might-want-to-read-up-more-on-the-buffer-geometry-class-in-general"><a href="#1-1-Might-want-to-read-up-more-on-the-buffer-geometry-class-in-general" class="headerlink" title="1.1 - Might want to read up more on the buffer geometry class in general"></a>1.1 - Might want to read up more on the buffer geometry class in general</h3><p>It might be a good idea to read up more on the <a href="/2021/04/22/threejs-buffer-geometry/">buffer geometry class in general</a>, as there are a great number of properties and methods in an instance of buffer geometry that you should be aware of before getting into an example like this. The main feature of interest when it comes to changing the points in a geometry would be the position attribute of a geometry created with one of the built in geometry constructor methods.</p>
 <h3 id="1-2-version-numbers-matter"><a href="#1-2-version-numbers-matter" class="headerlink" title="1.2 - version numbers matter"></a>1.2 - version numbers matter</h3><p>When I wrote this post I was using threejs version r127.</p>
 <h2 id="2-The-mutation-of-sphere-example"><a href="#2-The-mutation-of-sphere-example" class="headerlink" title="2 - The mutation of sphere example"></a>2 - The mutation of sphere example</h2><p>So now for the source code of this threejs example where I am changing the position of a point at the top of a sphere. In this example I started out with by set vertex helper method that I worked out in a previous example this week that had to do with the position attribute in general. This helper makes use of the geometry.index property as a way to help change the right position data in the position attribute of a given geometry.</p>
 <p>I then have my update sphere top point helper method where I just pass a sphere geometry as the first argument, and then the y value for the top point of the sphere. So in other words this is a method where I can pull the top point of a sphere up or down along the y axis. Inside this helper method I get a reference to the position attribute of the sphere geometry, and then I also create a new position object that will be used for all points of all triangles that are at that point. I then use the set vertex helper to set the position of all of these points in the body of a while loop. When it comes to setting up a condition for getting out of the while loop I have found that I can use the width segments parameter as a way to create a value that seems to work well with just about any sphere that I pass to it.</p>
@@ -170,7 +173,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2021/06/10/threejs-examples-sphere-mutate/" data-id="cl1tb113e027eikv1492iogd1" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2021/06/10/threejs-examples-sphere-mutate/" data-id="cl2gf4jsg02bh6kv1hhoyu090" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2021/06/10/threejs-examples-sphere-mutate/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -187,7 +190,7 @@ ga('send', 'pageview');
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          Mutating a point in a plane with threejs
+          Mutating a point in the geometry created with the plane geometry constrictor with threejs
         
       </div>
     </a>
@@ -276,23 +279,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2022/04/08/threejs-object3d-rotation/">Setting the rotation of objects in threejs</a>
+            <a href="/2022/04/25/threejs-examples-weird-walk-two/">Weird walk guy two threejs example</a>
           </li>
         
           <li>
-            <a href="/2022/04/04/threejs-object3d-position/">Setting the position of objects in threejs</a>
+            <a href="/2022/04/22/threejs-buffer-geometry-compute-vertex-normals/">Compute Vertex Normals for Buffer Geometry in threejs</a>
           </li>
         
           <li>
-            <a href="/2022/04/01/threejs-object3d-type/">The type property of Objects in threejs</a>
+            <a href="/2022/04/18/threejs-examples-weird-walk-one/">Weird walk threejs example</a>
           </li>
         
           <li>
-            <a href="/2022/03/28/electronjs-browser-window-get-all-windows/">Get all windows in electronjs</a>
+            <a href="/2022/04/15/threejs-data-texture/">Creating textures with raw data in threejs</a>
           </li>
         
           <li>
-            <a href="/2022/03/25/linux-bash-script-example-raspberry-pi-os-setup/">Raspberry PI OS setup bash script example</a>
+            <a href="/2022/04/11/threejs-math-utils/">The Math Utils in threejs</a>
           </li>
         
       </ul>
@@ -320,6 +323,8 @@ s.setAttribute('data-timestamp', +new Date());
     <a href="/" class="mobile-nav-link">Home</a>
   
     <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2021/02/19/threejs-examples/" class="mobile-nav-link">ThreeJS-Examples</a>
   
     <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
   

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
+  
+  <title>Compute Vertex Normals for Buffer Geometry in threejs | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2022/04/22/threejs-buffer-geometry-compute-vertex-normals/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="The process of creating a custom buffer geometry, or mutating a built in geometry in threejs might be a little involved, but still there is only so much to be aware of to get started. The first step m">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Compute Vertex Normals for Buffer Geometry in threejs">
+<meta property="og:url" content="https://dustinpfister.github.io/2022/04/22/threejs-buffer-geometry-compute-vertex-normals/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="The process of creating a custom buffer geometry, or mutating a built in geometry in threejs might be a little involved, but still there is only so much to be aware of to get started. The first step m">
+<meta property="og:updated_time" content="2022-04-22T15:47:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Compute Vertex Normals for Buffer Geometry in threejs">
+<meta name="twitter:description" content="The process of creating a custom buffer geometry, or mutating a built in geometry in threejs might be a little involved, but still there is only so much to be aware of to get started. The first step m">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2021/02/19/threejs-examples/">ThreeJS-Examples</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-threejs-buffer-geometry-compute-vertex-normals" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/04/22/threejs-buffer-geometry-compute-vertex-normals/" class="article-date"> Published:
+  <time datetime="2022-04-22T14:22:00.000Z" itemprop="datePublished">2022-04-22</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2022/04/22/threejs-buffer-geometry-compute-vertex-normals/" class="article-date"> Modified:
+  <time datetime="2022-04-22T15:47:16.000Z" itemprop="dateModified">2022-04-22</time>
+</a>
+
+    <span class="article-date">V1.14</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Compute Vertex Normals for Buffer Geometry in threejs
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>The process of creating a <a href="/2021/04/22/threejs-buffer-geometry/">custom buffer geometry</a>, or mutating a built in geometry in <a href="https://threejs.org/docs/#manual/en/introduction/Creating-a-scene" target="_blank" rel="external">threejs</a> might be a little involved, but still there is only so much to be aware of to get started. The first step might be to work out the <a href="/2021/06/07/threejs-buffer-geometry-attributes-position/">positions attribute</a> which is the values for the actual points in space. However after that when it is also a good idea to work out what the deal should be with the <a href="/2021/06/08/threejs-buffer-geometry-attributes-normals/">normals attribute</a>. In some cases I might have to work this out manually, however in most cases just calling the compute vertex normals method will work just fine, which is what this post is about today.</p>
+<a id="more"></a>
+<h2 id="The-compute-vertex-normals-method-and-what-to-know-first"><a href="#The-compute-vertex-normals-method-and-what-to-know-first" class="headerlink" title="The compute vertex normals method and what to know first"></a>The compute vertex normals method and what to know first</h2><p>This is a post centered around a single method of the <a href="https://threejs.org/docs/#api/en/core/BufferGeometry" target="_blank" rel="external">buffer geometry class</a> in the popular javaScript library known as three.js. This is not a post that is a general overview of the buffer geometry class in general, or a <a href="/2018/04/04/threejs-getting-started/">getting started type post with threejs</a>, javaScript and any other additional skills that are needed before hand. So I assume that you have at least a little background when it comes to the core set of skills that are needed in order to gain something of value from reading this.</p>
+<h3 id="The-source-code-examples-in-this-post-are-on-Github"><a href="#The-source-code-examples-in-this-post-are-on-Github" class="headerlink" title="The source code examples in this post are on Github"></a>The source code examples in this post are on Github</h3><p>The source code examples that I write about here in this post can be found in the for post folder of my <a href="https://github.com/dustinpfister/test_threejs/tree/master/views/forpost/threejs-buffer-geometry-compute-vertex-normals" target="_blank" rel="external">test threejs repository on Github</a>. This is also where I am parking the source code for my many other post on threejs, as well as many more draft demos that I also have parked there.</p>
+<h3 id="Version-numbers-matter-with-threejs"><a href="#Version-numbers-matter-with-threejs" class="headerlink" title="Version numbers matter with threejs"></a>Version numbers matter with threejs</h3><p>The version of threejs that I was using when I first wrote this post was r135. I have got myself into the habit of also making sire I write down what version of threejs that I am uisng when writing a post on a threejs example or two. Code breaking changes are made to the library often.</p>
+<h2 id="1-Basic-compute-vertex-normals-method-example"><a href="#1-Basic-compute-vertex-normals-method-example" class="headerlink" title="1 - Basic compute vertex normals method example"></a>1 - Basic compute vertex normals method example</h2><p>When working with one of the built in geometry constructors the normals are worked out for me as that is part of making a comprehensive geometry constructor function. However when making a custom geometry from the ground up I will of course have to make attribute one way or another. For this basic example of the compute vertex normals method I am then just making a very simple geometry of a single triangle, and then calling the compute vertex normals method of the buffer geometry as a way to go about creating the normals attribute.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">     <span class="comment">// SCENE, CAMERA, RENDERER, and LIGHT</span></div><div class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">50</span>, <span class="number">4</span> / <span class="number">3</span>, <span class="number">0.5</span>, <span class="number">1000</span>);</div><div class="line">    camera.position.set(<span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>);</div><div class="line">    camera.lookAt(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>);</div><div class="line">    <span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">    renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line">    <span class="keyword">var</span> dl = <span class="keyword">new</span> THREE.DirectionalLight(<span class="number">0xffffff</span>, <span class="number">1</span>);</div><div class="line">    dl.position.set(<span class="number">3</span>, <span class="number">0</span>, <span class="number">3</span>);</div><div class="line">    scene.add(dl);</div><div class="line">    scene.add(<span class="keyword">new</span> THREE.AmbientLight(<span class="number">0xffffff</span>, <span class="number">0.1</span>));</div><div class="line">    <span class="comment">// GEOMETRY</span></div><div class="line">    <span class="keyword">var</span> geometry = <span class="keyword">new</span> THREE.BufferGeometry();</div><div class="line">    <span class="keyword">var</span> vertices = <span class="keyword">new</span> <span class="built_in">Float32Array</span>([</div><div class="line">                <span class="number">-1.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>,</div><div class="line">                <span class="number">1.5</span>, <span class="number">0.0</span>, <span class="number">0.0</span>,</div><div class="line">                <span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span></div><div class="line">            ]);</div><div class="line">    <span class="comment">// create position property</span></div><div class="line">    geometry.setAttribute(<span class="string">'position'</span>, <span class="keyword">new</span> THREE.BufferAttribute(vertices, <span class="number">3</span>));</div><div class="line">    <span class="comment">// COMPUTE VERTEX NORMALS FOR THE GEMOERTY</span></div><div class="line">    geometry.computeVertexNormals();</div><div class="line">    <span class="comment">// MESH with GEOMETRY, and STANDARD MATERIAL</span></div><div class="line">    <span class="keyword">var</span> custom = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">            geometry,</div><div class="line">            <span class="keyword">new</span> THREE.MeshStandardMaterial(&#123;</div><div class="line">                <span class="attr">color</span>: <span class="number">0xff0000</span>,</div><div class="line">                <span class="attr">side</span>: THREE.DoubleSide</div><div class="line">            &#125;));</div><div class="line">    scene.add(custom);</div><div class="line">    <span class="comment">// RENDER</span></div><div class="line">    renderer.render(scene, camera);</div><div class="line">&#125;</div><div class="line">    ());</div></pre></td></tr></table></figure>
+<p>So now that I have a normals attribute with this geometry I can now use a <a href="/2022/02/25/threejs-light/">light source</a> and see the material when using a material like that of the <a href="/2021/04/27/threejs-standard-material/">standard material</a> with a light source. Although that might be the case there is still one additional attribute that I will need to add to the geometry in order for this to be a done deal in terms of the core set of attributes that are needed which would be the uv attribute. However for the sake of this post I think I should first cover a few more examples that focus more so on the state of this normals attribute and how to know what the state of it is.</p>
+<h2 id="2-The-THREE-VertexNormalsHelper"><a href="#2-The-THREE-VertexNormalsHelper" class="headerlink" title="2 - The THREE.VertexNormalsHelper"></a>2 - The THREE.VertexNormalsHelper</h2><p>In order to really get an idea of what is going on with the state of the normals array of a geometry it might be best to make use of the THREE.VertexNormalsHelper that can be added to an example by way of one additional javaScript file that can be found in the threejs repository. There is a whole lot to work with when it comes to the core of the threejs library alone, but there are also a number of additional files in to form of helpers, loaders and controls. For this example I am not just making use of the vertex normals helper, but also the <a href="/2018/04/13/threejs-orbit-controls/">orbit controls</a> that can also be added by way of an additional javaScript file as well.</p>
+<p>Here I have two plane geometries both of what I am mutating over time in the same way, but with one I am calling the compute vertex normals method and with the other I am not. On top of that I am also using the vertex normals helper to show what the deal is with the state of the normals for each geometry. It is also possible to see that there is indeed a clear differences with the textures.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// SCENE, LIGHT, CAMERA, RENDERER, and CONTROLS</span></div><div class="line"><span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"><span class="keyword">var</span> light = <span class="keyword">new</span> THREE.PointLight(<span class="number">0xffffff</span>, <span class="number">1</span>);</div><div class="line">light.position.set(<span class="number">7</span>, <span class="number">3</span>, <span class="number">0</span>);</div><div class="line">scene.add(light);</div><div class="line"><span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">60</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.1</span>, <span class="number">100</span>);</div><div class="line">camera.position.set(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">camera.add(light);</div><div class="line">scene.add(camera);</div><div class="line"><span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"><span class="keyword">var</span> controls = <span class="keyword">new</span> THREE.OrbitControls(camera, renderer.domElement);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"><span class="comment">// ADJUST PLANE POINT HELPER</span></div><div class="line"><span class="keyword">var</span> adjustPlanePoint = <span class="function"><span class="keyword">function</span> (<span class="params">geo, vertIndex, yAdjust</span>) </span>&#123;</div><div class="line">    <span class="comment">// get position and normal</span></div><div class="line">    <span class="keyword">var</span> position = geo.getAttribute(<span class="string">'position'</span>);</div><div class="line">    <span class="keyword">var</span> normal = geo.getAttribute(<span class="string">'normal'</span>);</div><div class="line">    <span class="keyword">var</span> i = vertIndex * <span class="number">3</span>;</div><div class="line">    <span class="comment">// ADJUSTING POSITION ( Y Only for now )</span></div><div class="line">    position.array[i + <span class="number">1</span>] = yAdjust;</div><div class="line">    position.needsUpdate = <span class="literal">true</span>;</div><div class="line">&#125;;</div><div class="line"><span class="comment">// update a geo</span></div><div class="line"><span class="keyword">var</span> updatePlaneGeo = <span class="function"><span class="keyword">function</span>(<span class="params">geo, bias, computeNormals</span>)</span>&#123;</div><div class="line">    computeNormals = computeNormals || <span class="literal">false</span>;</div><div class="line">    adjustPlanePoint(geo, <span class="number">0</span>, <span class="number">0</span> + <span class="number">0.75</span> * bias);</div><div class="line">    adjustPlanePoint(geo, <span class="number">1</span>, <span class="number">0.75</span> - <span class="number">1.00</span> * bias);</div><div class="line">    adjustPlanePoint(geo, <span class="number">2</span>, <span class="number">0.1</span>);</div><div class="line">    adjustPlanePoint(geo, <span class="number">8</span>, <span class="number">-0.4</span> * bias);</div><div class="line">    <span class="comment">// ADJUSTING NORMALS USING computeVertexNormals method</span></div><div class="line">    <span class="keyword">if</span>(computeNormals)&#123;</div><div class="line">        geo.computeVertexNormals();</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"><span class="comment">// create a data texture</span></div><div class="line"><span class="keyword">var</span> createDataTexture = <span class="function"><span class="keyword">function</span> (<span class="params">pr, pg, pb</span>) </span>&#123;</div><div class="line">    <span class="comment">// USING THREE DATA TEXTURE To CREATE A RAW DATA TEXTURE</span></div><div class="line">    <span class="comment">// Using the seeded random method of the MathUtils object</span></div><div class="line">    <span class="keyword">var</span> width = <span class="number">16</span>,</div><div class="line">    height = <span class="number">16</span>;</div><div class="line">    <span class="keyword">var</span> size = width * height;</div><div class="line">    <span class="keyword">var</span> data = <span class="keyword">new</span> <span class="built_in">Uint8Array</span>(<span class="number">4</span> * size);</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</div><div class="line">        <span class="keyword">var</span> stride = i * <span class="number">4</span>;</div><div class="line">        <span class="keyword">var</span> v = <span class="built_in">Math</span>.floor(THREE.MathUtils.seededRandom() * <span class="number">255</span>);</div><div class="line">        data[stride] = v * pr;</div><div class="line">        data[stride + <span class="number">1</span>] = v * pg;</div><div class="line">        data[stride + <span class="number">2</span>] = v * pb;</div><div class="line">        data[stride + <span class="number">3</span>] = <span class="number">255</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">var</span> texture = <span class="keyword">new</span> THREE.DataTexture(data, width, height);</div><div class="line">    texture.needsUpdate = <span class="literal">true</span>;</div><div class="line">    <span class="keyword">return</span> texture;</div><div class="line">&#125;;</div><div class="line"><span class="comment">// MESH</span></div><div class="line"><span class="keyword">var</span> geo1 = <span class="keyword">new</span> THREE.PlaneGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>);</div><div class="line">geo1.rotateX(<span class="built_in">Math</span>.PI * <span class="number">1.5</span>);</div><div class="line"><span class="keyword">var</span> plane1 = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        geo1,</div><div class="line">        <span class="keyword">new</span> THREE.MeshStandardMaterial(&#123;</div><div class="line">            <span class="attr">color</span>: <span class="number">0xffffff</span>,</div><div class="line">            <span class="attr">map</span>: createDataTexture(<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>),</div><div class="line">            <span class="attr">side</span>: THREE.DoubleSide</div><div class="line">        &#125;));</div><div class="line">scene.add(plane1);</div><div class="line"><span class="keyword">var</span> geo2 = <span class="keyword">new</span> THREE.PlaneGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>);</div><div class="line">geo2.rotateX(<span class="built_in">Math</span>.PI * <span class="number">1.5</span>);</div><div class="line"><span class="keyword">var</span> plane2 = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        geo2,</div><div class="line">        <span class="keyword">new</span> THREE.MeshStandardMaterial(&#123;</div><div class="line">            <span class="attr">color</span>: <span class="number">0xffffff</span>,</div><div class="line">            <span class="attr">map</span>: createDataTexture(<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>),</div><div class="line">            <span class="attr">side</span>: THREE.DoubleSide</div><div class="line">        &#125;));</div><div class="line">plane2.position.x = <span class="number">-1.1</span>;</div><div class="line">scene.add(plane2);</div><div class="line"><span class="comment">// USING THE THREE.VertexNormalsHelper method</span></div><div class="line"><span class="keyword">const</span> helper1 = <span class="keyword">new</span> THREE.VertexNormalsHelper(plane1, <span class="number">2</span>, <span class="number">0x00ff00</span>, <span class="number">1</span>);</div><div class="line">scene.add(helper1);</div><div class="line"><span class="keyword">const</span> helper2 = <span class="keyword">new</span> THREE.VertexNormalsHelper(plane2, <span class="number">2</span>, <span class="number">0x00ffff</span>, <span class="number">1</span>);</div><div class="line">scene.add(helper2);</div><div class="line"><span class="comment">// LOOP</span></div><div class="line"><span class="keyword">var</span> lt = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">state = &#123;</div><div class="line">    <span class="attr">frame</span>: <span class="number">0</span>,</div><div class="line">    <span class="attr">maxFrame</span>: <span class="number">90</span>,</div><div class="line">    <span class="attr">per</span>: <span class="number">0</span>,</div><div class="line">    <span class="attr">bias</span>: <span class="number">0</span></div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> update = <span class="function"><span class="keyword">function</span> (<span class="params">secs, per, bias, state</span>) </span>&#123;</div><div class="line">    updatePlaneGeo(geo1, bias, <span class="literal">true</span>);</div><div class="line">    updatePlaneGeo(geo2, bias, <span class="literal">false</span>);</div><div class="line">    helper1.update();</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> loop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> now = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">    secs = (now - lt) / <span class="number">1000</span>;</div><div class="line">    requestAnimationFrame(loop);</div><div class="line">    state.per = state.frame / state.maxFrame;</div><div class="line">    state.bias = <span class="number">1</span> - <span class="built_in">Math</span>.abs(state.per - <span class="number">0.5</span>) / <span class="number">0.5</span>;</div><div class="line">    update(secs, state.per, state.bias, state);</div><div class="line">    renderer.render(scene, camera);</div><div class="line">    state.frame += <span class="number">4</span> * secs;</div><div class="line">    state.frame %= state.maxFrame;</div><div class="line">    lt = now;</div><div class="line">&#125;;</div><div class="line">loop();</div></pre></td></tr></table></figure>
+<p>This is a hacked over source code example of what I worked out for my <a href="/2021/06/11/threejs-examples-plane-mutate/">threejs example on mutation of plane geometry</a> that I will likely comes back to at some point again. There are a lot of other threejs features as well as client side javaScript features that I am making use of in this example that I should also write about for a sec here as well. When it comes to creating a quick texture with javaScript code I am making use of a <a href="/2022/04/15/threejs-data-texture/">data texture</a> to do so, which is one of several options for doing so on top of other options like making use of <a href="/2018/04/17/threejs-canvas-texture/">canvas textures</a>.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>The compute vertex normals method will work just fine for most cases as a way to create, or update the normals attribute of a buffer geometry instance. However there are some cases in which I might need to manually edit these values also, so I can not just call this method and be done with it all the time.</p>
+<p>The general though process that I have when making a geometry is that first I need to just work out the positions attribute, then I need to get the normals attribute working as it should. However there is then the question of what the next step is after the positions and normals attribute are looking good. With that said I would say that the next thing I would want to figure out would be the <a href="/2021/06/09/threejs-buffer-geometry-attributes-uv/">uv attribute</a> which is important when it comes to working out what the offsets of textures should be. There are some additional things after that as well though such as what the deal should be when it comes to <a href="/2018/05/14/threejs-mesh-material-index/">groups, and material index values</a> when using an array of materials to skin a mesh object rather than juts one.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2022/04/22/threejs-buffer-geometry-compute-vertex-normals/" data-id="cl2gf4k2v02dn6kv1z08vqymy" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2022/04/22/threejs-buffer-geometry-compute-vertex-normals/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2022/04/25/threejs-examples-weird-walk-two/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Weird walk guy two threejs example
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/04/18/threejs-examples-weird-walk-one/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Weird walk threejs example</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2022/04/22/threejs-buffer-geometry-compute-vertex-normals/index.html';
+    this.page.identifier = '980';
+    this.page.title = 'Compute Vertex Normals for Buffer Geometry in threejs';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/electronjs/">electronjs</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/electronjs/">electronjs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.38px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.48px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.33px;">angular</a> <a href="/tags/animation/" style="font-size: 11.9px;">animation</a> <a href="/tags/automation/" style="font-size: 11.9px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.38px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.76px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.57px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.86px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.95px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.43px;">ejs</a> <a href="/tags/electronjs/" style="font-size: 12.86px;">electronjs</a> <a href="/tags/express/" style="font-size: 16.19px;">express</a> <a href="/tags/games/" style="font-size: 16.67px;">games</a> <a href="/tags/git/" style="font-size: 12.86px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.76px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.9px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.29px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.48px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.43px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 17.14px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.1px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.29px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.52px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.62px;">phaser</a> <a href="/tags/python/" style="font-size: 15.24px;">python</a> <a href="/tags/statistics/" style="font-size: 13.81px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 19.05px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.71px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">September 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/04/25/threejs-examples-weird-walk-two/">Weird walk guy two threejs example</a>
+          </li>
+        
+          <li>
+            <a href="/2022/04/22/threejs-buffer-geometry-compute-vertex-normals/">Compute Vertex Normals for Buffer Geometry in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2022/04/18/threejs-examples-weird-walk-one/">Weird walk threejs example</a>
+          </li>
+        
+          <li>
+            <a href="/2022/04/15/threejs-data-texture/">Creating textures with raw data in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2022/04/11/threejs-math-utils/">The Math Utils in threejs</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2021/02/19/threejs-examples/" class="mobile-nav-link">ThreeJS-Examples</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2022/04/22/threejs-buffer-geometry-compute-vertex-normals/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

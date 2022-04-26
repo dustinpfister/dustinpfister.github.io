@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2021/06/03/threejs-object3d-traverse/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="If for some reason I want to loop over all objects in a threejs scene, or all the objects attached to any single object I can use the object3d traverse method. The way this works is I just call the tr">
-<meta property="og:updated_time" content="2022-02-10T12:09:32.000Z">
+<meta property="og:updated_time" content="2022-04-20T13:36:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Loop over all objects in a threejs scene with the Object3d traverse method">
 <meta name="twitter:description" content="If for some reason I want to loop over all objects in a threejs scene, or all the objects attached to any single object I can use the object3d traverse method. The way this works is I just call the tr">
@@ -98,6 +98,8 @@ ga('send', 'pageview');
         
           <a class="main-nav-link" href="/archives">Archives</a>
         
+          <a class="main-nav-link" href="/2021/02/19/threejs-examples/">ThreeJS-Examples</a>
+        
           <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
         
           <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
@@ -127,10 +129,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2021/06/03/threejs-object3d-traverse/" class="article-date"> Modified:
-  <time datetime="2022-02-10T12:09:32.000Z" itemprop="dateModified">2022-02-10</time>
+  <time datetime="2022-04-20T13:36:17.000Z" itemprop="dateModified">2022-04-20</time>
 </a>
 
-    <span class="article-date">V1.19</span>
+    <span class="article-date">V1.2</span>
 
     
   <div class="article-category">
@@ -153,10 +155,10 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>If for some reason I want to <a href="https://discourse.threejs.org/t/to-get-array-of-all-meshes/17458/2" target="_blank" rel="external">loop over all objects</a> in a <a href="https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene" target="_blank" rel="external">threejs</a> scene, or all the objects attached to any single object I can use the <a href="https://threejs.org/docs/index.html#api/en/core/Object3D.traverse" target="_blank" rel="external">object3d traverse</a> method. The way this works is I just call the traverse method off of the scene object, or any object based off the object3c class for that matter, and pass a callback function as the first argument. This call back function will then be called for every nested child attached to the object that I call traverse, including the object itself. A reference to the current object will be passed as the first argument of the given callback function and it is then in the body of this function that I can preform whatever action I want to happen for all objects.</p>
-<p>So then in this post I will be going over the use of the traverse method of the object3d class. In the process of doing so I will also be touching base on a wide range of other topics of interest that will branch off from the use of this method. There are things like the type property of the object3d class that come to mind when it comes to checking out what kind of object it is that I am dealing with for example.</p>
+        <p>If for some reason I want to <a href="https://discourse.threejs.org/t/to-get-array-of-all-meshes/17458/2" target="_blank" rel="external">loop over all objects</a> in a <a href="https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene" target="_blank" rel="external">threejs</a> scene, or all the objects attached to any single object I can use the <a href="https://threejs.org/docs/index.html#api/en/core/Object3D.traverse" target="_blank" rel="external">object3d traverse</a> method. The way this works is I just call the traverse method off of the <a href="/2018/05/03/threejs-scene/">scene object</a>, or any object based off the object3d class for that matter, and pass a <a href="/2019/02/27/js-javascript-constructor/">callback function</a> as the first argument. This call back function will then be called for every nested child attached of the object that I call traverse, including the object itself. A reference to the current object will be passed as the first argument of the given callback function and it is then in the body of this function that I can preform whatever action I want to happen for all objects.</p>
+<p>So then in this post I will be going over the use of the traverse method of the object3d class. In the process of doing so I will also be touching base on a wide range of other topics of interest that will branch off from the use of this method. There are things like the <a href="/2022/04/01/threejs-object3d-type/">type property</a> of the object3d class that come to mind when it comes to checking out what kind of object it is that I am dealing with for example.</p>
 <a id="more"></a>
-<h2 id="1-Looping-over-all-objects-using-Object3d-traverse-and-what-to-know-first"><a href="#1-Looping-over-all-objects-using-Object3d-traverse-and-what-to-know-first" class="headerlink" title="1 - Looping over all objects using Object3d traverse and what to know first"></a>1 - Looping over all objects using Object3d traverse and what to know first</h2><p>This is a post centered on using just one little method in the object3d class in the javaScript library known as threejs, as well as a whole bunch of other little things that might branch off from this method. This is then not a getting started type post on threejs so I assume that you have the basic of the library out of the way so far. However in any case in this section I will be going over some things that you might want to get solid before continuing to read the rest of this post.</p>
+<h2 id="1-Looping-over-all-objects-using-Object3d-traverse-and-what-to-know-first"><a href="#1-Looping-over-all-objects-using-Object3d-traverse-and-what-to-know-first" class="headerlink" title="1 - Looping over all objects using Object3d traverse and what to know first"></a>1 - Looping over all objects using Object3d traverse and what to know first</h2><p>This is a post centered on using just one little method in the object3d class in the javaScript library known as threejs, as well as a whole bunch of other little things that might branch off from this method. This is then not a <a href="/2018/04/04/threejs-getting-started/">getting started type post on threejs</a> so I assume that you have the basic of the library out of the way so far. However in any case in this section I will be going over some things that you might want to get solid before continuing to read the rest of this post.</p>
 <h3 id="1-1-Take-a-look-at-the-object3d-class-in-general"><a href="#1-1-Take-a-look-at-the-object3d-class-in-general" class="headerlink" title="1.1 - Take a look at the object3d class in general"></a>1.1 - Take a look at the object3d class in general</h3><p>There is a lot to write about when it comes to the object3d class, and the traverse method is just one little item of interest. So it would be a good idea to maybe check out <a href="/2018/04/23/threejs-object3d/">my post on the object3d class in general</a> if you have some time to get into the thick of this class. Doing so is called for sooner or later when it comes to gaining a solid understanding of the library as the object3d class is a base class that apples to a lot of objects in the library such as Mesh objects, Groups, and even the main scene object.</p>
 <h3 id="1-2-Check-the-version-numbers-always"><a href="#1-2-Check-the-version-numbers-always" class="headerlink" title="1.2 - Check the version numbers, always"></a>1.2 - Check the version numbers, always</h3><p>This is something that I think that I just need to mentioning in ever post I write on threejs now, which is that I was using threejs version r127 when I made these code examples here. Threejs is a library that as of this writing is still moving very fast when it comes to development, and code breaking changes are made to the library often.</p>
 <h2 id="2-Loop-Over-all-objects-in-a-scene"><a href="#2-Loop-Over-all-objects-in-a-scene" class="headerlink" title="2 - Loop Over all objects in a scene"></a>2 - Loop Over all objects in a scene</h2><p>So first off this will be just a basic example of the object3d traverse method just for the sake of getting started with this method. In this example I am creating a main scene object and then I am adding some grid helpers objects to the scene. These grid helper objects are based off of the object3d class so they will show up in the traverse call that I will be using later in the source code. On top of the helpers I am also adding a group, and this group will have a whole bunch of children, each of which will be an instance of a Mesh. After that I am also adding a camera to the scene when it comes to setting up the camera, and the renderer that I will be suing.</p>
@@ -172,7 +174,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2021/06/03/threejs-object3d-traverse/" data-id="cl1tb11kb02aeikv1gvcruibi" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2021/06/03/threejs-object3d-traverse/" data-id="cl2gf4k8x02ew6kv1m67auj6n" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2021/06/03/threejs-object3d-traverse/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -278,23 +280,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2022/04/08/threejs-object3d-rotation/">Setting the rotation of objects in threejs</a>
+            <a href="/2022/04/25/threejs-examples-weird-walk-two/">Weird walk guy two threejs example</a>
           </li>
         
           <li>
-            <a href="/2022/04/04/threejs-object3d-position/">Setting the position of objects in threejs</a>
+            <a href="/2022/04/22/threejs-buffer-geometry-compute-vertex-normals/">Compute Vertex Normals for Buffer Geometry in threejs</a>
           </li>
         
           <li>
-            <a href="/2022/04/01/threejs-object3d-type/">The type property of Objects in threejs</a>
+            <a href="/2022/04/18/threejs-examples-weird-walk-one/">Weird walk threejs example</a>
           </li>
         
           <li>
-            <a href="/2022/03/28/electronjs-browser-window-get-all-windows/">Get all windows in electronjs</a>
+            <a href="/2022/04/15/threejs-data-texture/">Creating textures with raw data in threejs</a>
           </li>
         
           <li>
-            <a href="/2022/03/25/linux-bash-script-example-raspberry-pi-os-setup/">Raspberry PI OS setup bash script example</a>
+            <a href="/2022/04/11/threejs-math-utils/">The Math Utils in threejs</a>
           </li>
         
       </ul>
@@ -322,6 +324,8 @@ s.setAttribute('data-timestamp', +new Date());
     <a href="/" class="mobile-nav-link">Home</a>
   
     <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2021/02/19/threejs-examples/" class="mobile-nav-link">ThreeJS-Examples</a>
   
     <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
   

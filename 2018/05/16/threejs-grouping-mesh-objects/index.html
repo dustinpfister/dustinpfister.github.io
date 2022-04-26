@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2018/05/16/threejs-grouping-mesh-objects/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="After writing a lot of demos in three.js I have arrived at a point where it is time to start getting into some more advanced topics in three.js, or at least something new beyond just the very basics o">
-<meta property="og:updated_time" content="2022-04-07T18:58:42.000Z">
+<meta property="og:updated_time" content="2022-04-20T18:42:53.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Grouping two or more Mesh Objects together in three.js">
 <meta name="twitter:description" content="After writing a lot of demos in three.js I have arrived at a point where it is time to start getting into some more advanced topics in three.js, or at least something new beyond just the very basics o">
@@ -98,6 +98,8 @@ ga('send', 'pageview');
         
           <a class="main-nav-link" href="/archives">Archives</a>
         
+          <a class="main-nav-link" href="/2021/02/19/threejs-examples/">ThreeJS-Examples</a>
+        
           <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
         
           <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
@@ -127,10 +129,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2018/05/16/threejs-grouping-mesh-objects/" class="article-date"> Modified:
-  <time datetime="2022-04-07T18:58:42.000Z" itemprop="dateModified">2022-04-07</time>
+  <time datetime="2022-04-20T18:42:53.000Z" itemprop="dateModified">2022-04-20</time>
 </a>
 
-    <span class="article-date">V1.31</span>
+    <span class="article-date">V1.32</span>
 
     
   <div class="article-category">
@@ -157,7 +159,7 @@ ga('send', 'pageview');
 <p>Also for one reason or another it is often a good idea to have a way to group two or more objects in general and not just mesh objects. For example I might want to add a light to a camera and then add the camera to a scene object. So this post today will be about the three.js <a href="https://threejs.org/docs/index.html#api/objects/Group" target="_blank" rel="external">Group</a> constructor, but a whole lot of what a group is about is also a feature of the <a href="https://threejs.org/docs/#api/en/core/Object3D" target="_blank" rel="external">object3d class</a> in general. So here I will be going over some of the basics when it comes to this sort of thing, but also I will likely touch base on many other related topics what will come up when creating groups of objects that have to do with rotating a geometry just once, and the difference between world space, and space that is relative to a group.</p>
 <a id="more"></a>
 <h2 id="Groups-in-threejs-and-what-else-to-know"><a href="#Groups-in-threejs-and-what-else-to-know" class="headerlink" title="Groups in threejs and what else to know"></a>Groups in threejs and what else to know</h2><p>This is not a post on three.js for beginners, I have a post for that, and if you are still fairly to threejs you might want to <a href="/2018/04/04/threejs-getting-started/">start by reading some kind of getting started post on threejs first</a>. The main focus in this post has to do with creating a group of two or more or more <a href="/2018/05/04/threejs-mesh/">Mesh Object</a> instances to create a single Group that can then be worked with by itself in a scene. These groups of objects can from complex shapes composed of many mesh objects using a collection of built in geometry constructors and materials. So then I assume that you have at least a basic working knowledge of three.js, and of course javaScript in general. </p>
-<iframe width="320" height="180" src="https://www.youtube.com/embed/3JW--vfkxPg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe class="youtube_video" src="https://www.youtube.com/embed/3JW--vfkxPg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 <h3 id="THREE-Object3D-vs-THREE-Group"><a href="#THREE-Object3D-vs-THREE-Group" class="headerlink" title="THREE.Object3D vs THREE.Group"></a>THREE.Object3D vs THREE.Group</h3><p>When it comes to grouping two ore more Mesh Objects together it may be preferable to use the Group constructor in place of just using Object3D by itself. However as far as I can tell there is not much of any difference other than it makes the readability of your code more clear as to what the object is. The fat of the matter is that when it comes to grouping things together such a task can be done with any object that is based off the Object3d class. This includes Groups, Mesh objects, Cameras, various helpers, and even a whole Scene object.</p>
 <h3 id="Version-numbers-matter"><a href="#Version-numbers-matter" class="headerlink" title="Version numbers matter"></a>Version numbers matter</h3><p>I also often try to mention that three.js is a project where the version number matters a great deal, when I first wrote this post I was using <a href="https://github.com/mrdoob/three.js/releases/tag/r91" target="_blank" rel="external">three.js r91</a>. The last time I came around to doing a little editing of this post I was able to still get all these examples to work okay with <a href="https://github.com/mrdoob/three.js/releases/tag/r135" target="_blank" rel="external">r135 as well</a>.</p>
@@ -188,7 +190,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2018/05/16/threejs-grouping-mesh-objects/" data-id="cl1tb11ar028nikv1v0axedfs" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2018/05/16/threejs-grouping-mesh-objects/" data-id="cl2gf4k0902d56kv10imauuhz" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2018/05/16/threejs-grouping-mesh-objects/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -294,23 +296,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2022/04/08/threejs-object3d-rotation/">Setting the rotation of objects in threejs</a>
+            <a href="/2022/04/25/threejs-examples-weird-walk-two/">Weird walk guy two threejs example</a>
           </li>
         
           <li>
-            <a href="/2022/04/04/threejs-object3d-position/">Setting the position of objects in threejs</a>
+            <a href="/2022/04/22/threejs-buffer-geometry-compute-vertex-normals/">Compute Vertex Normals for Buffer Geometry in threejs</a>
           </li>
         
           <li>
-            <a href="/2022/04/01/threejs-object3d-type/">The type property of Objects in threejs</a>
+            <a href="/2022/04/18/threejs-examples-weird-walk-one/">Weird walk threejs example</a>
           </li>
         
           <li>
-            <a href="/2022/03/28/electronjs-browser-window-get-all-windows/">Get all windows in electronjs</a>
+            <a href="/2022/04/15/threejs-data-texture/">Creating textures with raw data in threejs</a>
           </li>
         
           <li>
-            <a href="/2022/03/25/linux-bash-script-example-raspberry-pi-os-setup/">Raspberry PI OS setup bash script example</a>
+            <a href="/2022/04/11/threejs-math-utils/">The Math Utils in threejs</a>
           </li>
         
       </ul>
@@ -338,6 +340,8 @@ s.setAttribute('data-timestamp', +new Date());
     <a href="/" class="mobile-nav-link">Home</a>
   
     <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2021/02/19/threejs-examples/" class="mobile-nav-link">ThreeJS-Examples</a>
   
     <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
   
