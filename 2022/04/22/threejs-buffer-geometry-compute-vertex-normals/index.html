@@ -13,16 +13,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2022/04/22/threejs-buffer-geometry-compute-vertex-normals/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="The process of creating a custom buffer geometry, or mutating a built in geometry in threejs might be a little involved, but still there is only so much to be aware of to get started. The first step m">
+  <meta name="description" content="The process of creating a custom buffer geometry, or mutating a built in geometry in threejs might be a little involved, but still there is only so much to be aware of to get started at least when it">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Compute Vertex Normals for Buffer Geometry in threejs">
 <meta property="og:url" content="https://dustinpfister.github.io/2022/04/22/threejs-buffer-geometry-compute-vertex-normals/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="The process of creating a custom buffer geometry, or mutating a built in geometry in threejs might be a little involved, but still there is only so much to be aware of to get started. The first step m">
-<meta property="og:updated_time" content="2022-04-22T15:47:16.000Z">
+<meta property="og:description" content="The process of creating a custom buffer geometry, or mutating a built in geometry in threejs might be a little involved, but still there is only so much to be aware of to get started at least when it">
+<meta property="og:updated_time" content="2022-05-22T16:33:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Compute Vertex Normals for Buffer Geometry in threejs">
-<meta name="twitter:description" content="The process of creating a custom buffer geometry, or mutating a built in geometry in threejs might be a little involved, but still there is only so much to be aware of to get started. The first step m">
+<meta name="twitter:description" content="The process of creating a custom buffer geometry, or mutating a built in geometry in threejs might be a little involved, but still there is only so much to be aware of to get started at least when it">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -129,10 +129,10 @@ ga('send', 'pageview');
 
     <!-- other info (dustin) -->
     <a href="/2022/04/22/threejs-buffer-geometry-compute-vertex-normals/" class="article-date"> Modified:
-  <time datetime="2022-04-22T15:47:16.000Z" itemprop="dateModified">2022-04-22</time>
+  <time datetime="2022-05-22T16:33:11.000Z" itemprop="dateModified">2022-05-22</time>
 </a>
 
-    <span class="article-date">V1.14</span>
+    <span class="article-date">V1.16</span>
 
     
   <div class="article-category">
@@ -155,9 +155,12 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="text">
       
-        <p>The process of creating a <a href="/2021/04/22/threejs-buffer-geometry/">custom buffer geometry</a>, or mutating a built in geometry in <a href="https://threejs.org/docs/#manual/en/introduction/Creating-a-scene" target="_blank" rel="external">threejs</a> might be a little involved, but still there is only so much to be aware of to get started. The first step might be to work out the <a href="/2021/06/07/threejs-buffer-geometry-attributes-position/">positions attribute</a> which is the values for the actual points in space. However after that when it is also a good idea to work out what the deal should be with the <a href="/2021/06/08/threejs-buffer-geometry-attributes-normals/">normals attribute</a>. In some cases I might have to work this out manually, however in most cases just calling the compute vertex normals method will work just fine, which is what this post is about today.</p>
+        <p>The process of creating a <a href="/2021/04/22/threejs-buffer-geometry/">custom buffer geometry</a>, or mutating a built in geometry in <a href="https://threejs.org/docs/#manual/en/introduction/Creating-a-scene" target="_blank" rel="external">threejs</a> might be a little involved, but still there is only so much to be aware of to get started at least when it comes to this. The first step might be to work out the <a href="/2021/06/07/threejs-buffer-geometry-attributes-position/">positions attribute</a> which is the values for the actual points in space. However after the position array is in a good state it is also a good idea to work out what the deal should be with the <a href="/2021/06/08/threejs-buffer-geometry-attributes-normals/">normals attribute</a>. </p>
+<p>In some cases I might have to work this out manually it would seem, however in most cases just calling the compute vertex normals method of the buffer geometry class will work just fine, which is what this post is about today.</p>
 <a id="more"></a>
 <h2 id="The-compute-vertex-normals-method-and-what-to-know-first"><a href="#The-compute-vertex-normals-method-and-what-to-know-first" class="headerlink" title="The compute vertex normals method and what to know first"></a>The compute vertex normals method and what to know first</h2><p>This is a post centered around a single method of the <a href="https://threejs.org/docs/#api/en/core/BufferGeometry" target="_blank" rel="external">buffer geometry class</a> in the popular javaScript library known as three.js. This is not a post that is a general overview of the buffer geometry class in general, or a <a href="/2018/04/04/threejs-getting-started/">getting started type post with threejs</a>, javaScript and any other additional skills that are needed before hand. So I assume that you have at least a little background when it comes to the core set of skills that are needed in order to gain something of value from reading this.</p>
+<iframe class="youtube_video" src="https://www.youtube.com/embed/yApc9lnw53o" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 <h3 id="The-source-code-examples-in-this-post-are-on-Github"><a href="#The-source-code-examples-in-this-post-are-on-Github" class="headerlink" title="The source code examples in this post are on Github"></a>The source code examples in this post are on Github</h3><p>The source code examples that I write about here in this post can be found in the for post folder of my <a href="https://github.com/dustinpfister/test_threejs/tree/master/views/forpost/threejs-buffer-geometry-compute-vertex-normals" target="_blank" rel="external">test threejs repository on Github</a>. This is also where I am parking the source code for my many other post on threejs, as well as many more draft demos that I also have parked there.</p>
 <h3 id="Version-numbers-matter-with-threejs"><a href="#Version-numbers-matter-with-threejs" class="headerlink" title="Version numbers matter with threejs"></a>Version numbers matter with threejs</h3><p>The version of threejs that I was using when I first wrote this post was r135. I have got myself into the habit of also making sire I write down what version of threejs that I am uisng when writing a post on a threejs example or two. Code breaking changes are made to the library often.</p>
 <h2 id="1-Basic-compute-vertex-normals-method-example"><a href="#1-Basic-compute-vertex-normals-method-example" class="headerlink" title="1 - Basic compute vertex normals method example"></a>1 - Basic compute vertex normals method example</h2><p>When working with one of the built in geometry constructors the normals are worked out for me as that is part of making a comprehensive geometry constructor function. However when making a custom geometry from the ground up I will of course have to make attribute one way or another. For this basic example of the compute vertex normals method I am then just making a very simple geometry of a single triangle, and then calling the compute vertex normals method of the buffer geometry as a way to go about creating the normals attribute.</p>
@@ -173,7 +176,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2022/04/22/threejs-buffer-geometry-compute-vertex-normals/" data-id="cl38y25n30290mwv1oj567du0" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2022/04/22/threejs-buffer-geometry-compute-vertex-normals/" data-id="cl3hiy64h028ov8v1ncfot418" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2022/04/22/threejs-buffer-geometry-compute-vertex-normals/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -257,7 +260,7 @@ s.setAttribute('data-timestamp', +new Date());
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/JSON/" style="font-size: 12.38px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.48px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.33px;">angular</a> <a href="/tags/animation/" style="font-size: 11.9px;">animation</a> <a href="/tags/automation/" style="font-size: 11.9px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.38px;">backbone</a> <a href="/tags/blog/" style="font-size: 14.76px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.57px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.86px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.95px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.43px;">ejs</a> <a href="/tags/electronjs/" style="font-size: 12.86px;">electronjs</a> <a href="/tags/express/" style="font-size: 16.19px;">express</a> <a href="/tags/games/" style="font-size: 16.67px;">games</a> <a href="/tags/git/" style="font-size: 12.86px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 14.76px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.9px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.29px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.48px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.43px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 17.14px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.1px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.29px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.52px;">node.js</a> <a href="/tags/phaser/" style="font-size: 17.62px;">phaser</a> <a href="/tags/python/" style="font-size: 15.24px;">python</a> <a href="/tags/statistics/" style="font-size: 13.81px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 19.05px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 15.71px;">vuejs</a>
+      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.5px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.5px;">angular</a> <a href="/tags/animation/" style="font-size: 12px;">animation</a> <a href="/tags/automation/" style="font-size: 12px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.5px;">backbone</a> <a href="/tags/blog/" style="font-size: 15px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.5px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.5px;">ejs</a> <a href="/tags/electronjs/" style="font-size: 13px;">electronjs</a> <a href="/tags/express/" style="font-size: 16.5px;">express</a> <a href="/tags/games/" style="font-size: 17px;">games</a> <a href="/tags/git/" style="font-size: 13px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 12px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.5px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.5px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.5px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 17.5px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.5px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.5px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.5px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18px;">phaser</a> <a href="/tags/python/" style="font-size: 15.5px;">python</a> <a href="/tags/statistics/" style="font-size: 14px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 19px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16px;">vuejs</a>
     </div>
   </div>
 
@@ -279,6 +282,14 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
+            <a href="/2022/05/20/threejs-examples-object-grid-wrap/">Object grid wrap threejs javaScript module example</a>
+          </li>
+        
+          <li>
+            <a href="/2022/05/17/threejs-vector3-lerp/">Linear lerping with the Vector3 lerp method</a>
+          </li>
+        
+          <li>
             <a href="/2022/05/12/threejs-examples-sequence-hooks/">threejs example using a sequence module with hooks</a>
           </li>
         
@@ -288,14 +299,6 @@ s.setAttribute('data-timestamp', +new Date());
         
           <li>
             <a href="/2022/05/06/threejs-examples-lookat-with-apply-euler/">Object3d lookAt and Vector3 apply Euler methods threejs example</a>
-          </li>
-        
-          <li>
-            <a href="/2022/05/02/threejs-examples-cube-stack-grid/">threejs cube stack grid example</a>
-          </li>
-        
-          <li>
-            <a href="/2022/04/29/threejs-examples-cube-stack/">threejs cube stack example</a>
           </li>
         
       </ul>
