@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
+  
+  <title>The Curve class and tube geometry in threejs | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2022/06/17/threejs-curve/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="The curve class in threejs is a way to go about creating a curve with a little javaScript logic that can then be used with the tube geometry constructor as the first argument for the function. This ge">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Curve class and tube geometry in threejs">
+<meta property="og:url" content="https://dustinpfister.github.io/2022/06/17/threejs-curve/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="The curve class in threejs is a way to go about creating a curve with a little javaScript logic that can then be used with the tube geometry constructor as the first argument for the function. This ge">
+<meta property="og:updated_time" content="2022-06-30T19:09:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The Curve class and tube geometry in threejs">
+<meta name="twitter:description" content="The curve class in threejs is a way to go about creating a curve with a little javaScript logic that can then be used with the tube geometry constructor as the first argument for the function. This ge">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Google Analytics -->
+
+<!-- old UA property using (analytics.js) -->
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-83195184-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y8XLNG6JRW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y8XLNG6JRW');
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2021/02/19/threejs-examples/">ThreeJS-Examples</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas-Examples</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-threejs-curve" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/06/17/threejs-curve/" class="article-date"> Published:
+  <time datetime="2022-06-17T18:06:00.000Z" itemprop="datePublished">2022-06-17</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2022/06/17/threejs-curve/" class="article-date"> Modified:
+  <time datetime="2022-06-30T19:09:54.000Z" itemprop="dateModified">2022-06-30</time>
+</a>
+
+    <span class="article-date">V1.27</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      The Curve class and tube geometry in threejs
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>The <a href="https://threejs.org/docs/#api/en/extras/core/Curve" target="_blank" rel="external">curve class in threejs</a> is a way to go about creating a curve with a little javaScript logic that can then be used with the <a href="https://threejs.org/docs/#api/en/geometries/TubeGeometry" target="_blank" rel="external">tube geometry constructor</a> as the first argument for the function. This geometry can then be use with a mesh object which allows for making line like structures but because it is with mesh object rather than lines objects I can use mesh materials like the basic or phong materials.</p>
+<p>The curve class is a base class for making an object composed of methods that are used to define the points in 3d space that define the curve. This curve class and any additional class3s based off if it is then a little different from the idea of having a collection of Vector3 class instances that re crated by way of some logic, or just exists as some form of data that is hard coded into javaScript or in some kind of additional asset like a JSON file. This might then be one of the limitations of the curve class and also the closely corresponding tube geometry constructor when it comes to the idea of having data rather than a means of generating data. </p>
+<p>However there might be ways of getting around that limitation, or just making use of some kind of alternative to the curve class and tube geometry. A long time ago I <a href="/2018/11/07/threejs-line-fat-width/">wrote a post on the subject of so called fat lines</a> that where a kind of additional line constructor that can be added to threejs by way of an additional javaScript file. However I am sure there are many other ways of getting a desired outcome when it comes to do things sort of thing such as using capsule geometry with a collection of vector3 class instances.</p>
+<a id="more"></a>
+<h2 id="The-curve-class-and-what-to-know-first"><a href="#The-curve-class-and-what-to-know-first" class="headerlink" title="The curve class and what to know first."></a>The curve class and what to know first.</h2><p>The main focus of this post is on the curve class in threejs, and using the objects cerated with this class and other classes based off of it with the tube geometry constructor. There is a whole lot of ground to cover when it comes to this class, and also an awful lot more to cover when it comes to all kinds of various things that you should be aware of before hand. I will not be getting into detail about every little thing that comes up with the <a href="/2018/04/04/threejs-getting-started/">basics of threejs</a> as well as the core javaScript itself. However I do still use this first section to quickly go over some things that you might want to read up more on.</p>
+<iframe class="youtube_video" src="https://www.youtube.com/embed/mXbSwt-06lk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<h3 id="There-is-looking-into-lines-first-maybe"><a href="#There-is-looking-into-lines-first-maybe" class="headerlink" title="There is looking into lines first, maybe"></a>There is looking into lines first, maybe</h3><p>Getting into the use of the curve class and the typically corresponding tube geometry constructor seems like the next step from <a href="/2018/04/19/threejs-line/">creating lines</a>. One nice thing about lines is that I am create them by making an array of <a href="/2018/04/15/threejs-vector3/">vector3 class</a> instances by making use of the set from points method of the buffer geometry class. However there are limitations with lines compared to what there is work with when it comes to mesh objects, so that leads one to look into the curve class and tube geometry.</p>
+<h2 id="1-Basic-THREE-Curve-and-THREE-TubeGeometry-example"><a href="#1-Basic-THREE-Curve-and-THREE-TubeGeometry-example" class="headerlink" title="1 - Basic THREE.Curve and THREE.TubeGeometry example"></a>1 - Basic THREE.Curve and THREE.TubeGeometry example</h2><p>When it comes to the curve and tube geometry constructors in threejs one has to start somewhere, so for this example I will be doing just that with the THREE.Curve constructor and the tube geometry constructor. For this example I am starting out with the usual features when it comes to things like setting up a scene object, camera, and renderer. In additional the the usual features I am also adding a <a href="/2022/02/25/threejs-light/">light source</a> as I will be going with the <a href="/2021/04/27/threejs-standard-material/">standard material</a> for this example when setting  up the mesh object that will use the tube geometry later.</p>
+<p>When it comes to using the curve base class I will want to extend the base class and define a constructor as well as a get point method. It is in this get point method that I will be defining the logic that is used to create the curve. For this basic example I am just making as simple curve using the Math.pow method for the y values for each point, alone with just simple linear stepping for x values, and for now just leaving z values at zero.</p>
+<p>Once I have a new class created by extending the base curve class I can then use this class to create a new curve object. This curve object can then be passed to the tube geometry constructor as the first argument for that constructor. The resulting geometry from calling the tube geometry class constructor can then in turn be used with a mesh object just like that with the various other built in geometry constructor functions.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="comment">// SCENE, CAMERA, RENDERER</span></div><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="keyword">let</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line">scene.background = <span class="keyword">new</span> THREE.Color(<span class="string">'#000000'</span>);</div><div class="line">scene.add( <span class="keyword">new</span> THREE.GridHelper(<span class="number">10</span>, <span class="number">10</span>, <span class="number">0x00ff00</span>, <span class="number">0x4a4a4a</span>) )</div><div class="line"><span class="keyword">let</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">60</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">0</span>, <span class="number">5</span>, <span class="number">10</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">3</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">let</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="comment">// LIGHT</span></div><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="keyword">let</span> dl = <span class="keyword">new</span> THREE.DirectionalLight(<span class="number">0xffffff</span>, <span class="number">1</span>);</div><div class="line">dl.position.set(<span class="number">3</span>, <span class="number">10</span>, <span class="number">1</span>).normalize();</div><div class="line">scene.add(dl);</div><div class="line">scene.add( <span class="keyword">new</span> THREE.AmbientLight(<span class="number">0xffffff</span>, <span class="number">0.05</span>) )</div><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="comment">// CURVE, TubeGeometry, Mesh</span></div><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="comment">// basic curve class extending three curve</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">BasicCurve</span> <span class="keyword">extends</span> <span class="title">THREE</span>.<span class="title">Curve</span> </span>&#123;</div><div class="line">    <span class="keyword">constructor</span>() &#123;</div><div class="line">        <span class="keyword">super</span>();</div><div class="line">    &#125;</div><div class="line">    getPoint( t, optionalTarget = <span class="keyword">new</span> THREE.Vector3() ) &#123;</div><div class="line">        <span class="keyword">var</span> tx = <span class="number">-2</span> + <span class="number">4</span> * t,</div><div class="line">        ty = <span class="built_in">Math</span>.pow(<span class="number">2</span>, <span class="number">5</span> * t) / <span class="built_in">Math</span>.pow(<span class="number">2</span>, <span class="number">5</span>) * <span class="number">7</span>,</div><div class="line">        tz = <span class="number">0</span>;</div><div class="line">        <span class="keyword">return</span> optionalTarget.set( tx, ty, tz );</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"><span class="comment">// creating a tube geometry with path and additional arguments using basic curve</span></div><div class="line"><span class="keyword">let</span> path = <span class="keyword">new</span> BasicCurve(),</div><div class="line">tubularSegments = <span class="number">800</span>,</div><div class="line">radius = <span class="number">0.25</span>,</div><div class="line">radialSegments = <span class="number">20</span>;</div><div class="line"><span class="keyword">let</span> mesh = <span class="keyword">new</span> THREE.Mesh( </div><div class="line">    <span class="keyword">new</span> THREE.TubeGeometry( path, tubularSegments, radius, radialSegments, <span class="literal">false</span> ), </div><div class="line">    <span class="keyword">new</span> THREE.MeshStandardMaterial( &#123; <span class="attr">color</span>: <span class="number">0xff0000</span>, <span class="attr">side</span>: THREE.DoubleSide &#125;)</div><div class="line">);</div><div class="line">scene.add( mesh );</div><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="comment">// RENDER</span></div><div class="line"><span class="comment">//******** **********</span></div><div class="line">renderer.render(scene, camera);</div></pre></td></tr></table></figure>
+<h2 id="2-spiral-example"><a href="#2-spiral-example" class="headerlink" title="2 - spiral example"></a>2 - spiral example</h2><p>So now that I have a basic example out of the way that involves creating a custom curve class by extending the base curve class out of the way I think I will want to have at least one more example that involves something like a spiral of sorts. This example is then very similar to the basic example I have starting out with, but now I am using sin and cos math methods for the expressions in the get point method.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="comment">// SCENE, CAMERA, RENDERER</span></div><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="keyword">let</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line">scene.background = <span class="keyword">new</span> THREE.Color(<span class="string">'#000000'</span>);</div><div class="line">scene.add( <span class="keyword">new</span> THREE.GridHelper(<span class="number">10</span>, <span class="number">10</span>, <span class="number">0x00ff00</span>, <span class="number">0x4a4a4a</span>) )</div><div class="line"><span class="keyword">let</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">60</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">10</span>, <span class="number">10</span>, <span class="number">10</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">let</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="comment">// LIGHT</span></div><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="keyword">let</span> dl = <span class="keyword">new</span> THREE.DirectionalLight(<span class="number">0xffffff</span>, <span class="number">1</span>);</div><div class="line">dl.position.set(<span class="number">3</span>, <span class="number">10</span>, <span class="number">1</span>).normalize();</div><div class="line">scene.add(dl);</div><div class="line"> </div><div class="line">scene.add( <span class="keyword">new</span> THREE.AmbientLight(<span class="number">0xffffff</span>, <span class="number">0.05</span>) )</div><div class="line"> </div><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="comment">// CURVE, TubeGeometry, Mesh</span></div><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">CustomSinCurve</span> <span class="keyword">extends</span> <span class="title">THREE</span>.<span class="title">Curve</span> </span>&#123;</div><div class="line">    <span class="keyword">constructor</span>( scale = 1 ) &#123;</div><div class="line">        <span class="keyword">super</span>();</div><div class="line">        <span class="keyword">this</span>.scale = scale;</div><div class="line">    &#125;</div><div class="line">    getPoint( t, optionalTarget = <span class="keyword">new</span> THREE.Vector3() ) &#123;</div><div class="line">        <span class="keyword">let</span> tx = t * <span class="number">3</span> - <span class="number">1.5</span>,</div><div class="line">        ty = <span class="built_in">Math</span>.sin( <span class="number">24</span> * <span class="built_in">Math</span>.PI * t ) * <span class="number">0.5</span>,</div><div class="line">        tz = <span class="built_in">Math</span>.cos( <span class="number">24</span> * <span class="built_in">Math</span>.PI * t ) * <span class="number">0.25</span>;</div><div class="line">        <span class="keyword">return</span> optionalTarget.set( tx, ty, tz ).multiplyScalar( <span class="keyword">this</span>.scale );</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">let</span> path = <span class="keyword">new</span> CustomSinCurve( <span class="number">5</span> ),</div><div class="line">tubularSegments = <span class="number">800</span>,</div><div class="line">radius = <span class="number">0.25</span>,</div><div class="line">radialSegments = <span class="number">20</span>;</div><div class="line"><span class="comment">// creating a tube geometry with path and additional arguments</span></div><div class="line"><span class="keyword">let</span> mesh = <span class="keyword">new</span> THREE.Mesh( </div><div class="line">    <span class="keyword">new</span> THREE.TubeGeometry( path, tubularSegments, radius, radialSegments, <span class="literal">false</span> ), </div><div class="line">    <span class="keyword">new</span> THREE.MeshStandardMaterial( &#123; <span class="attr">color</span>: <span class="number">0xff0000</span>, <span class="attr">side</span>: THREE.DoubleSide &#125;)</div><div class="line">);</div><div class="line">scene.add( mesh );</div><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="comment">// RENDER</span></div><div class="line"><span class="comment">//******** **********</span></div><div class="line">renderer.render(scene, camera);</div></pre></td></tr></table></figure>
+<h2 id="3-The-buffer-geometry-copy-method-an-a-basic-animation-example-using-a-curve"><a href="#3-The-buffer-geometry-copy-method-an-a-basic-animation-example-using-a-curve" class="headerlink" title="3 - The buffer geometry copy method an a basic animation example using a curve"></a>3 - The buffer geometry copy method an a basic animation example using a curve</h2><p>Thus far I just have some static scene examples of this curve class out of the way, so then I should have at least one example that involves an animation loop then. One way to go about doing this might involve creating a new curve object with update arguments in the body of the loop that I can then use to make an updated geometry. In can then make use of the copy method of the buffer geometry instance in the mesh object to copy this update geometry to the geometry object instance of the mesh objects as a way to update the geometry.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="comment">// SCENE, CAMERA, RENDERER</span></div><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="keyword">let</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line">scene.background = <span class="keyword">new</span> THREE.Color(<span class="string">'#000000'</span>);</div><div class="line">scene.add( <span class="keyword">new</span> THREE.GridHelper(<span class="number">10</span>, <span class="number">10</span>, <span class="number">0x00ff00</span>, <span class="number">0x4a4a4a</span>) )</div><div class="line"><span class="keyword">let</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">60</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">10</span>, <span class="number">10</span>, <span class="number">10</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">let</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="comment">// LIGHT</span></div><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="keyword">let</span> dl = <span class="keyword">new</span> THREE.DirectionalLight(<span class="number">0xffffff</span>, <span class="number">1</span>);</div><div class="line">dl.position.set(<span class="number">3</span>, <span class="number">10</span>, <span class="number">1</span>).normalize();</div><div class="line">scene.add(dl);</div><div class="line">scene.add( <span class="keyword">new</span> THREE.AmbientLight(<span class="number">0xffffff</span>, <span class="number">0.05</span>) )</div><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="comment">// CURVE CLASS</span></div><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">CustomSinCurve</span> <span class="keyword">extends</span> <span class="title">THREE</span>.<span class="title">Curve</span> </span>&#123;</div><div class="line">    <span class="keyword">constructor</span>( a = 0.5, b = 0.25, scale = 1 ) &#123;</div><div class="line">        <span class="keyword">super</span>();</div><div class="line">        <span class="keyword">this</span>.scale = scale;</div><div class="line">        <span class="keyword">this</span>.a = a;</div><div class="line">        <span class="keyword">this</span>.b = b;</div><div class="line">    &#125;</div><div class="line">    getPoint( t, optionalTarget = <span class="keyword">new</span> THREE.Vector3() ) &#123;</div><div class="line">        <span class="keyword">let</span> tx = t * <span class="number">3</span> - <span class="number">1.5</span>,</div><div class="line">        ty = <span class="built_in">Math</span>.sin( <span class="number">20</span> * <span class="built_in">Math</span>.PI * t ) * (<span class="keyword">this</span>.a * t),</div><div class="line">        tz = <span class="built_in">Math</span>.cos( <span class="number">20</span> * <span class="built_in">Math</span>.PI * t ) * (<span class="keyword">this</span>.b * t);</div><div class="line">        <span class="keyword">return</span> optionalTarget.set( tx, ty, tz ).multiplyScalar( <span class="keyword">this</span>.scale );</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="comment">// MESH</span></div><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="keyword">let</span> path = <span class="keyword">new</span> CustomSinCurve( <span class="number">5</span> ),</div><div class="line">tubularSegments = <span class="number">800</span>,</div><div class="line">radius = <span class="number">0.25</span>,</div><div class="line">radialSegments = <span class="number">20</span>;</div><div class="line"><span class="comment">// creating a tube geometry with path and additional arguments</span></div><div class="line"><span class="keyword">let</span> mesh = <span class="keyword">new</span> THREE.Mesh( </div><div class="line">    <span class="keyword">new</span> THREE.TubeGeometry( path, tubularSegments, radius, radialSegments, <span class="literal">false</span> ), </div><div class="line">    <span class="keyword">new</span> THREE.MeshStandardMaterial( &#123; <span class="attr">color</span>: <span class="number">0xff0000</span>, <span class="attr">side</span>: THREE.DoubleSide &#125;)</div><div class="line">);</div><div class="line">scene.add( mesh );</div><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="comment">// LOOP</span></div><div class="line"><span class="comment">//******** **********</span></div><div class="line"><span class="keyword">let</span> controls = <span class="keyword">new</span> THREE.OrbitControls(camera, renderer.domElement);</div><div class="line"><span class="keyword">let</span> fps = <span class="number">30</span>,</div><div class="line">frame = <span class="number">0</span>,</div><div class="line">frameMax = <span class="number">90</span>,</div><div class="line">lt = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"><span class="keyword">let</span> loop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">let</span> now = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">    secs = (now - lt) / <span class="number">1000</span>,</div><div class="line">    per = frame / frameMax,</div><div class="line">    bias = <span class="number">1</span> - <span class="built_in">Math</span>.abs(<span class="number">0.5</span> - per) / <span class="number">0.5</span>;</div><div class="line">    requestAnimationFrame(loop);</div><div class="line">    <span class="keyword">if</span>(secs &gt; <span class="number">1</span> / fps)&#123;</div><div class="line">        <span class="keyword">let</span> path = <span class="keyword">new</span> CustomSinCurve( <span class="number">0.25</span> + <span class="number">0.75</span> * bias, <span class="number">0.25</span>, <span class="number">5</span> );</div><div class="line">        <span class="keyword">let</span> geo = <span class="keyword">new</span> THREE.TubeGeometry( path, tubularSegments, radius, radialSegments, <span class="literal">false</span> );</div><div class="line">        mesh.geometry.copy(geo);</div><div class="line">        renderer.render(scene, camera);      </div><div class="line">        lt = now;</div><div class="line">        frame += <span class="built_in">Math</span>.floor( fps * secs );</div><div class="line">        frame %= frameMax;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line">loop();</div></pre></td></tr></table></figure>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>The curve geometry and tube geometry in threejs is then yet another option on tip of using lines and points when it comes to adding content to a scene object. For the most part using curves and tubes will work okay for various demo projects, but one major drawback is that I need to always generate curves with javaScript code rather than a data source of one kind or another. There may be ways of addressing this, and I do have some draft demos in the works that seem to work somewhat okay when it comes to this sort of thing, but I think they might need a little more work before writing about them here. Also there might be better ways of doing the source of things I world like to do with mesh objects rather than lines, such as some kind of system involving capsule geometry.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2022/06/17/threejs-curve/" data-id="cl51f0nfm023z04v17yhvsakj" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2022/06/17/threejs-curve/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2022/06/10/threejs-examples-lines-deterministic/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Deterministic Lines threejs example</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2022/06/17/threejs-curve/index.html';
+    this.page.identifier = '993';
+    this.page.title = 'The Curve class and tube geometry in threejs';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/electronjs/">electronjs</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/electronjs/">electronjs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.5px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.5px;">angular</a> <a href="/tags/animation/" style="font-size: 12px;">animation</a> <a href="/tags/automation/" style="font-size: 12px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.5px;">backbone</a> <a href="/tags/blog/" style="font-size: 15px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.5px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.5px;">ejs</a> <a href="/tags/electronjs/" style="font-size: 13px;">electronjs</a> <a href="/tags/express/" style="font-size: 16.5px;">express</a> <a href="/tags/games/" style="font-size: 17px;">games</a> <a href="/tags/git/" style="font-size: 13px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 12px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.5px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.5px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.5px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 17.5px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.5px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.5px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.5px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18px;">phaser</a> <a href="/tags/python/" style="font-size: 15.5px;">python</a> <a href="/tags/statistics/" style="font-size: 14px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 19px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">September 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/06/17/threejs-curve/">The Curve class and tube geometry in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2022/06/10/threejs-examples-lines-deterministic/">Deterministic Lines threejs example</a>
+          </li>
+        
+          <li>
+            <a href="/2022/06/03/threejs-examples-lines-sphere-circles/">Sphere circles Lines threejs example</a>
+          </li>
+        
+          <li>
+            <a href="/2022/05/31/threejs-examples-dae-tools-sphere-normals-invert/">Inverting the normals of a sphere threejs example</a>
+          </li>
+        
+          <li>
+            <a href="/2022/05/24/threejs-examples-weird-walk-three/">Weird walk three threejs example</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2021/02/19/threejs-examples/" class="mobile-nav-link">ThreeJS-Examples</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas-Examples</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2022/06/17/threejs-curve/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
