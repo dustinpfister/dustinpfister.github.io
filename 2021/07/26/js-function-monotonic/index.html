@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2021/07/26/js-function-monotonic/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="I have been learning more about writing functions in javascript as of late, not so much when it comes to what the options are when it comes to functions themselves in javaScript, but different styles">
-<meta property="og:updated_time" content="2021-07-27T17:39:20.000Z">
+<meta property="og:updated_time" content="2022-07-29T17:54:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Writing monotonic functions in JavaScript">
 <meta name="twitter:description" content="I have been learning more about writing functions in javascript as of late, not so much when it comes to what the options are when it comes to functions themselves in javaScript, but different styles">
@@ -128,10 +128,10 @@
 
     <!-- other info (dustin) -->
     <a href="/2021/07/26/js-function-monotonic/" class="article-date"> Modified:
-  <time datetime="2021-07-27T17:39:20.000Z" itemprop="dateModified">2021-07-27</time>
+  <time datetime="2022-07-29T17:54:17.000Z" itemprop="dateModified">2022-07-29</time>
 </a>
 
-    <span class="article-date">V1.8</span>
+    <span class="article-date">V1.1</span>
 
     
   <div class="article-category">
@@ -163,12 +163,14 @@
 <h3 id="1-2-Using-a-function-that-makes-use-of-two-or-more-arguments-to-create-a-monotonic-function"><a href="#1-2-Using-a-function-that-makes-use-of-two-or-more-arguments-to-create-a-monotonic-function" class="headerlink" title="1.2 - Using a function that makes use of two or more arguments to create a monotonic function"></a>1.2 - Using a function that makes use of two or more arguments to create a monotonic function</h3><p>Say I have a function that can be used in a monotonic way, but only if the domain of arguments that are used are restricted in such as way that the return values will only go up for values of x that go up from zero forward. One way to go about making sure that this will be the case is to create a monotonic function that will define what the arguments will be for the other function that makes use of more than on argument that will be called in the monotonic function. In other words I create what my monotonic function will be that will just take an x value, and the domain of x goes from 0 upward. In the body of this monotonic function I create arguments based off of the given x value. There is going this like using the modulo operator, as well as flooring values that are the results of division.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// a function that uses three arguments, that can be used</span></div><div class="line"><span class="comment">// in a monotonic way, or not, depending on the argument domain</span></div><div class="line"><span class="keyword">var</span> threeArguments = <span class="function"><span class="keyword">function</span> (<span class="params">x, min, max</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> min + (max - min) * (<span class="number">1</span> - (<span class="number">1</span> / (<span class="number">1</span> + x)));</div><div class="line">&#125;;</div><div class="line"><span class="comment">// monotonic function that makes use of the three arguments function</span></div><div class="line"><span class="comment">// and uses it in a way that is strictly increasing, by making sure that</span></div><div class="line"><span class="comment">// proper values are used for the min and max arguments that will result in the</span></div><div class="line"><span class="comment">// return value only going up for all values of x </span></div><div class="line"><span class="keyword">var</span> monotonic = <span class="function"><span class="keyword">function</span> (<span class="params">x</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> a = x % <span class="number">4</span>,</div><div class="line">    b = <span class="built_in">Math</span>.floor(x / <span class="number">4</span>) * <span class="number">5</span>,</div><div class="line">    c = b + <span class="number">5</span>;</div><div class="line">    <span class="keyword">return</span> threeArguments(a, b, c);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> x = <span class="number">0</span>,</div><div class="line">len = <span class="number">12</span>,</div><div class="line">results = [];</div><div class="line"><span class="keyword">while</span> (x &lt; len) &#123;</div><div class="line">    results.push(&#123;</div><div class="line">        <span class="attr">x</span>: x,</div><div class="line">        <span class="attr">y</span>: <span class="built_in">parseFloat</span>(monotonic(x).toFixed(<span class="number">2</span>))</div><div class="line">    &#125;);</div><div class="line">    x += <span class="number">1</span>;</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(results.map(<span class="function">(<span class="params">obj</span>) =&gt;</span> &#123;</div><div class="line">        <span class="keyword">return</span> obj.y</div><div class="line">    &#125;));</div></pre></td></tr></table></figure>
 <p>Another way to go about doing something like this would be to just have a set collection of values for the other arguments.</p>
-<h2 id="2-Conclusion"><a href="#2-Conclusion" class="headerlink" title="2 - Conclusion"></a>2 - Conclusion</h2><p>So then that will be it for now when it comes to monotonic functions in javaScript. There is getting into maybe making some additional examples for this sort of thing, but in order to do that I think I will want to work more on one or more projects in which I am actually making use of these kinds of functions. So far the main kind of project that comes to mind is coming up with some kind of experience point system type project. I have made one such project those far in the past, but I am not happy with it. I will then want to make at least a few more such systems until I have something that I like, and part of the process of making such a system, they way that I would like it will have to involve making some functions that will be monotonic in nature.</p>
+<h2 id="2-Conclusion"><a href="#2-Conclusion" class="headerlink" title="2 - Conclusion"></a>2 - Conclusion</h2><p>So then that will be it for now when it comes to monotonic functions in javaScript. There is getting into maybe making some additional examples for this sort of thing, but in order to do that I think I will want to work more on one or more projects in which I am actually making use of these kinds of functions. </p>
+<p>So far the main kind of project that comes to mind is coming up with some kind of <a href="/2020/04/27/js-javascript-example-exp-system/">experience point system type project</a>. I have made one such project those far in the past, but I am not happy with it. I will then want to make at least a few more such systems until I have something that I like, and part of the process of making such a system, they way that I would like it will have to involve making some functions that will be monotonic in nature.</p>
+<p>When it comes to working with the library known as threejs another thing that came up that makes use of these kinds of functions are the get alpha functions that I write for my <a href="/2022/07/29/threejs-examples-aplerp">advanced lerping module threejs example</a>.</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2021/07/26/js-function-monotonic/" data-id="cl5y3xfo700oxj8v1eu4jgxx2" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2021/07/26/js-function-monotonic/" data-id="cl66scz7600y3hsv1udto01y0" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2021/07/26/js-function-monotonic/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -274,6 +276,10 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
+            <a href="/2022/07/29/threejs-examples-aplerp/">An advanced Lerping module threejs example</a>
+          </li>
+        
+          <li>
             <a href="/2022/07/22/threejs-capsule-geometry/">Capsule geometry in threejs</a>
           </li>
         
@@ -287,10 +293,6 @@ s.setAttribute('data-timestamp', +new Date());
         
           <li>
             <a href="/2022/07/01/threejs-examples-lerp-geo/">Lerping the points of a geometry from one to another</a>
-          </li>
-        
-          <li>
-            <a href="/2022/06/17/threejs-curve/">The Curve class and tube geometry in threejs</a>
           </li>
         
       </ul>

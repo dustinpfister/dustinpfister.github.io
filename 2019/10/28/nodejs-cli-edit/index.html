@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2019/10/28/nodejs-cli-edit/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="So when it comes to developing a node cli tool that is a text editor of sorts there are two general ideas that come to mind. One idea is a text editor that is terminal based in which I am using ansi e">
-<meta property="og:updated_time" content="2019-11-01T00:47:35.000Z">
+<meta property="og:updated_time" content="2022-07-29T18:09:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="A node cli tools text editor project">
 <meta name="twitter:description" content="So when it comes to developing a node cli tool that is a text editor of sorts there are two general ideas that come to mind. One idea is a text editor that is terminal based in which I am using ansi e">
@@ -128,10 +128,10 @@
 
     <!-- other info (dustin) -->
     <a href="/2019/10/28/nodejs-cli-edit/" class="article-date"> Modified:
-  <time datetime="2019-11-01T00:47:35.000Z" itemprop="dateModified">2019-10-31</time>
+  <time datetime="2022-07-29T18:09:49.000Z" itemprop="dateModified">2022-07-29</time>
 </a>
 
-    <span class="article-date">V1.13</span>
+    <span class="article-date">V1.14</span>
 
     
   <div class="article-category">
@@ -154,9 +154,9 @@
     
     <div class="article-entry" itemprop="text">
       
-        <p>So when it comes to <a href="/2019/10/23/node-cli/">developing a node cli tool</a> that is a text editor of sorts there are two general ideas that come to mind. One idea is a text editor that is terminal based in which I am using <a href="/2019/09/19/nodejs-ansi-escpe-codes">ansi escape codes</a> to make a text editor like that of nano or vim. The other idea is a text editor that works in a browser window, and I am using nodejs as a way to serve a client system that is that editor, and also have some back end code that is used to save the file I am working on.</p>
+        <p>So when it comes to <a href="/2019/10/23/nodejs-cli/">developing a node cli tool</a> that is a text editor of sorts there are two general ideas that come to mind. One idea is a text editor that is terminal based in which I am using <a href="/2019/09/19/nodejs-ansi-escape-codes">ansi escape codes</a> to make a text editor like that of nano or vim. The other idea is a text editor that works in a browser window, and I am using nodejs as a way to serve a client system that is that editor, and also have some back end code that is used to save the file I am working on.</p>
 <a id="more"></a>
-<h2 id="1-This-is-not-a-getting-started-post-on-node-cli-tools"><a href="#1-This-is-not-a-getting-started-post-on-node-cli-tools" class="headerlink" title="1 - This is not a getting started post on node cli tools"></a>1 - This is not a getting started post on node cli tools</h2><p>This post is on a text editor i made for my <a href="https://github.com/dustinpfister/node_cli_tools" target="_blank" rel="external">node_cli_tools project</a>. The editor that I am writing about here makes use of many resources that are part of the core repository of the project. So it might be a good idea to start with <a href="/2019/10/23/node-cli">my post on the node_cli_tools project in general</a>. If not you might have a hard time trying to reproduce what I am writing about here.</p>
+<h2 id="1-This-is-not-a-getting-started-post-on-node-cli-tools"><a href="#1-This-is-not-a-getting-started-post-on-node-cli-tools" class="headerlink" title="1 - This is not a getting started post on node cli tools"></a>1 - This is not a getting started post on node cli tools</h2><p>This post is on a text editor i made for my <a href="https://github.com/dustinpfister/node_cli_tools" target="_blank" rel="external">node_cli_tools project</a>. The editor that I am writing about here makes use of many resources that are part of the core repository of the project. So it might be a good idea to start with <a href="/2019/10/23/nodejs-cli">my post on the node_cli_tools project in general</a>. If not you might have a hard time trying to reproduce what I am writing about here.</p>
 <h2 id="2-The-edit-index-and-edit-command-default-script-of-the-nc-edit-node-cli-tool"><a href="#2-The-edit-index-and-edit-command-default-script-of-the-nc-edit-node-cli-tool" class="headerlink" title="2 - The edit/index and edit/command/default script of the nc-edit node cli tool"></a>2 - The edit/index and edit/command/default script of the nc-edit node cli tool</h2><p>So in the main root directory of my node_cli_tools project I have a bin folder, and in this bin folder I have the edit folder that composes everything that is my nc-edit command. At the root of the edit folder is an index.js file that is what will be called within the project when i call the nc-edit command in the command line interface. One of the resources that I am uses is called <a href="/2018/07/24/nodejs-yargs">yargs</a> which is an option parser which is used in the main index.js file, to which I then load one or more commands for the nc-edit command in the commands folder that is also in the edit folder. In this section I will be quickly going over the index.js file and the default.js file in the commands folder.</p>
 <h3 id="2-1-edit-index-js-and-package-json-of-node-cli-tools"><a href="#2-1-edit-index-js-and-package-json-of-node-cli-tools" class="headerlink" title="2.1 - edit/index.js and package.json of node_cli_tools"></a>2.1 - edit/index.js and package.json of node_cli_tools</h3><p>The index.js file is where I am using yargs for option parsing, and I am just loading in one default command for the nc-edit command as of this writing. The logic for the default command is in the default.js file in the command folder, a common folder for all commands in this project.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env node</span></div><div class="line"><span class="comment">// main index.js for nc-edit</span></div><div class="line"><span class="comment">// using yargs for option parsing sub commands in a ./commands folder</span></div><div class="line"><span class="built_in">require</span>(<span class="string">'yargs'</span>)</div><div class="line">.command(<span class="built_in">require</span>(<span class="string">'./commands/default.js'</span>))</div><div class="line">.argv;</div></pre></td></tr></table></figure>
@@ -183,7 +183,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2019/10/28/nodejs-cli-edit/" data-id="cl5y3xhwx01hkj8v1gjupxgc1" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2019/10/28/nodejs-cli-edit/" data-id="cl66sd1kz01qfhsv1zheyqj61" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2019/10/28/nodejs-cli-edit/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -289,6 +289,10 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
+            <a href="/2022/07/29/threejs-examples-aplerp/">An advanced Lerping module threejs example</a>
+          </li>
+        
+          <li>
             <a href="/2022/07/22/threejs-capsule-geometry/">Capsule geometry in threejs</a>
           </li>
         
@@ -302,10 +306,6 @@ s.setAttribute('data-timestamp', +new Date());
         
           <li>
             <a href="/2022/07/01/threejs-examples-lerp-geo/">Lerping the points of a geometry from one to another</a>
-          </li>
-        
-          <li>
-            <a href="/2022/06/17/threejs-curve/">The Curve class and tube geometry in threejs</a>
           </li>
         
       </ul>
