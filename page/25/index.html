@@ -113,6 +113,125 @@
       <div class="outer">
         <section id="main">
   
+    <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-object3d-layers" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/06/04/threejs-object3d-layers/" class="article-date"> Published:
+  <time datetime="2021-06-04T14:21:00.000Z" itemprop="datePublished">2021-06-04</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2021/06/04/threejs-object3d-layers/" class="article-date"> Modified:
+  <time datetime="2022-04-20T10:52:07.000Z" itemprop="dateModified">2022-04-20</time>
+</a>
+
+    <span class="article-date">V1.21</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/06/04/threejs-object3d-layers/">Layers in threejs</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>There are a number of ways to have control over visibility in <a href="https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene">threejs</a> such as with this <a href="https://threejs.org/docs/#api/en/core/Object3D.visible">visible property of the obejct3d class</a> or just simple not adding an object to a scene object, or having more than one scene object, so forth and so on. This post however will be on making use of the <a href="https://threejs.org/docs/index.html#api/en/core/Object3D.layers">layers property of an object3d instance</a> which contains an instance of the <a href="https://threejs.org/docs/index.html#api/en/core/Layers">Layers class</a> that can be used as a way to go about setting objects to different layers. </p>
+<p>It is then possible to <a href="https://stackoverflow.com/questions/34099808/how-to-make-objects-visible-to-only-one-camera-in-a-three-js-scene">set what layers a camera should draw</a> which is then a way to go about having control over the visibility of objects.</p>
+<p>Any object in threejs that is based on the <a href="/2018/04/23/threejs-object3d/">object3d class</a> such as a <a href="/2018/05/04/threejs-mesh/">Mesh</a>, <a href="/2018/05/16/threejs-grouping-mesh-objects/">Group</a>, or <a href="/2018/04/06/threejs-camera/">Camera</a> has a layers property that by default is set to just layer 0. When using the render function of a renderer such as the <a href="/2018/11/24/threejs-webglrenderer/">web gl renderer</a> as <a href="/2018/05/03/threejs-scene/">scene object</a> is passed as the first argument followed by a reference to a camera to use to render a view of the scene. When doing so the camera used will only render objects that are enabled for one or more of the layer index values enabled for the camera.</p>
+        
+          <p class="article-more-link">
+            <a href="/2021/06/04/threejs-object3d-layers/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2021/06/04/threejs-object3d-layers/" data-id="cl7awl62502fykcv1faszm7p6" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2021/06/04/threejs-object3d-layers/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-object3d-traverse" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/06/03/threejs-object3d-traverse/" class="article-date"> Published:
+  <time datetime="2021-06-03T16:17:00.000Z" itemprop="datePublished">2021-06-03</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2021/06/03/threejs-object3d-traverse/" class="article-date"> Modified:
+  <time datetime="2022-04-30T17:47:30.000Z" itemprop="dateModified">2022-04-30</time>
+</a>
+
+    <span class="article-date">V1.22</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/06/03/threejs-object3d-traverse/">Loop over all objects in a threejs scene with the Object3d traverse method</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>If for some reason I want to <a href="https://discourse.threejs.org/t/to-get-array-of-all-meshes/17458/2">loop over all objects</a> in a <a href="https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene">threejs</a> scene, or all the objects attached to any single object I can use the <a href="https://threejs.org/docs/index.html#api/en/core/Object3D.traverse">object3d traverse</a> method. The way this works is I just call the traverse method off of the <a href="/2018/05/03/threejs-scene/">scene object</a>, or any object based off the object3d class for that matter, and pass a <a href="/2019/02/27/js-javascript-constructor/">callback function</a> as the first argument. This call back function will then be called for every nested child attached of the object that I call traverse, including the object itself. A reference to the current object will be passed as the first argument of the given callback function and it is then in the body of this function that I can preform whatever action I want to happen for all objects.</p>
+<p>So then in this post I will be going over the use of the traverse method of the object3d class. In the process of doing so I will also be touching base on a wide range of other topics of interest that will branch off from the use of this method. There are things like the <a href="/2022/04/01/threejs-object3d-type/">type property</a> of the object3d class that come to mind when it comes to checking out what kind of object it is that I am dealing with for example.</p>
+        
+          <p class="article-more-link">
+            <a href="/2021/06/03/threejs-object3d-traverse/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2021/06/03/threejs-object3d-traverse/" data-id="cl7awl64402gakcv1rzq5m91p" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2021/06/03/threejs-object3d-traverse/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-object3d-parent" class="article article-type-post" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2021/06/02/threejs-object3d-parent/" class="article-date"> Published:
@@ -158,7 +277,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2021/06/02/threejs-object3d-parent/" data-id="cl6s6d564029btgv10zazdbqq" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2021/06/02/threejs-object3d-parent/" data-id="cl7awl62k02g1kcv1k1pfhncz" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2021/06/02/threejs-object3d-parent/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -216,7 +335,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2021/06/01/threejs-shape/" data-id="cl6s6d59l029ztgv1r9svnudt" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2021/06/01/threejs-shape/" data-id="cl7awl6fr02i7kcv15ttmz8un" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2021/06/01/threejs-shape/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -276,126 +395,9 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2021/05/31/threejs-edges-geometry/" data-id="cl6s6d4es0238tgv1lirkpcbn" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2021/05/31/threejs-edges-geometry/" data-id="cl7awl57202adkcv1x78vihy6" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2021/05/31/threejs-edges-geometry/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-clock" class="article article-type-post" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2021/05/28/threejs-clock/" class="article-date"> Published:
-  <time datetime="2021-05-28T14:33:00.000Z" itemprop="datePublished">2021-05-28</time>
-</a>
-
-    <!-- other info (dustin) -->
-    <a href="/2021/05/28/threejs-clock/" class="article-date"> Modified:
-  <time datetime="2022-04-19T14:18:32.000Z" itemprop="dateModified">2022-04-19</time>
-</a>
-
-    <span class="article-date">V1.21</span>
-
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/three-js/">three.js</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/05/28/threejs-clock/">The Clock constructor in threejs</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="text">
-      
-        <p>When it comes to making an animation loop in <a href="https://threejs.org/docs/#manual/en/introduction/Creating-a-scene">three.js</a> I have been using the built in <a href="/2019/02/14/js-javascript-date/">JavaScript Date class</a> along with the <a href="https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame">request animation frame method</a>. However thus far I can not say that I have been making use of the built in <a href="https://threejs.org/docs/#api/en/core/Clock">THREE.Clock</a> constructor. Turns out that there are still a whole lot of basic features that I have not got around to looking into with three.js when it comes to things like this Clock constructor and why it might be a good idea to go with this in place of what I have been making animation loops with thus far. </p>
-<p>So in this post I will be looking into the THREE.Clock constructor and also touching base on some client side javaScript features that are closely related to the class such as the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Performance">performance global</a>, and mainly the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Performance/now">now method</a> of that object.</p>
-        
-          <p class="article-more-link">
-            <a href="/2021/05/28/threejs-clock/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2021/05/28/threejs-clock/" data-id="cl6s6d4bb022htgv1j5znxzc7" class="article-share-link">Share</a>
-      
-        <a href="https://dustinpfister.github.io/2021/05/28/threejs-clock/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-torus" class="article article-type-post" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2021/05/27/threejs-torus/" class="article-date"> Published:
-  <time datetime="2021-05-27T15:33:00.000Z" itemprop="datePublished">2021-05-27</time>
-</a>
-
-    <!-- other info (dustin) -->
-    <a href="/2021/05/27/threejs-torus/" class="article-date"> Modified:
-  <time datetime="2022-04-18T15:21:35.000Z" itemprop="dateModified">2022-04-18</time>
-</a>
-
-    <span class="article-date">V1.2</span>
-
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/three-js/">three.js</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/05/27/threejs-torus/">Torus Geometry in threejs</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="text">
-      
-        <p>Today I thought I world write another post on a built in geometry constructor in <a href="https://threejs.org/docs/#manual/en/introduction/Creating-a-scene">three.js</a>, this time the <a href="https://threejs.org/docs/#api/en/geometries/TorusGeometry">Torus Geometry Constructor</a> which results in a donut like shape. There are many interesting things about the <a href="https://en.wikipedia.org/wiki/Torus">geometry of a torus in general</a> that are worth looking into in detail. It is a shape that is composed of a collection of circles where each circle is positioned and rotated around a point that results in the formation of a tube that in turn is a kind of 3d circle. So then there are two general arguments of concern that come up with this when it comes to the number of sides of each circle, and the number of circles, as one might expect these values can be tweaked when calling the geometry constructor.</p>
-        
-          <p class="article-more-link">
-            <a href="/2021/05/27/threejs-torus/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2021/05/27/threejs-torus/" data-id="cl6s6d5cn02antgv1zu9nxpca" class="article-share-link">Share</a>
-      
-        <a href="https://dustinpfister.github.io/2021/05/27/threejs-torus/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
@@ -441,7 +443,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.5px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.5px;">angular</a> <a href="/tags/animation/" style="font-size: 12px;">animation</a> <a href="/tags/automation/" style="font-size: 12px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.5px;">backbone</a> <a href="/tags/blog/" style="font-size: 15px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.5px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.5px;">ejs</a> <a href="/tags/electronjs/" style="font-size: 13px;">electronjs</a> <a href="/tags/express/" style="font-size: 16.5px;">express</a> <a href="/tags/games/" style="font-size: 17px;">games</a> <a href="/tags/git/" style="font-size: 13px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 12px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.5px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.5px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.5px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 17.5px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.5px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.5px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.5px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18px;">phaser</a> <a href="/tags/python/" style="font-size: 15.5px;">python</a> <a href="/tags/statistics/" style="font-size: 14px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 19px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16px;">vuejs</a>
+      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.5px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.5px;">angular</a> <a href="/tags/animation/" style="font-size: 12px;">animation</a> <a href="/tags/automation/" style="font-size: 12px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.5px;">backbone</a> <a href="/tags/blog/" style="font-size: 15px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.5px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.5px;">ejs</a> <a href="/tags/electronjs/" style="font-size: 13.5px;">electronjs</a> <a href="/tags/express/" style="font-size: 16.5px;">express</a> <a href="/tags/games/" style="font-size: 17px;">games</a> <a href="/tags/git/" style="font-size: 13px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 12px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.5px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.5px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.5px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 17.5px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.5px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.5px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.5px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18px;">phaser</a> <a href="/tags/python/" style="font-size: 15.5px;">python</a> <a href="/tags/statistics/" style="font-size: 14px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 19px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16px;">vuejs</a>
     </div>
   </div>
 
@@ -463,6 +465,14 @@
       <ul>
         
           <li>
+            <a href="/2022/08/26/threejs-examples-many-object-tweening/">Tweening many objects at once threejs example</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/19/electronjs-example-user-data-file/">User Data File Electronjs application example</a>
+          </li>
+        
+          <li>
             <a href="/2022/08/12/threejs-cylinder-geometry/">Cylinder Geometry threejs example</a>
           </li>
         
@@ -472,14 +482,6 @@
         
           <li>
             <a href="/2022/07/29/threejs-examples-aplerp/">An advanced Lerping module threejs example</a>
-          </li>
-        
-          <li>
-            <a href="/2022/07/22/threejs-capsule-geometry/">Capsule geometry in threejs</a>
-          </li>
-        
-          <li>
-            <a href="/2022/07/15/threejs-examples-object-grid-wrap-land/">THREEJS Looping land animation using the Object grid wrap module</a>
           </li>
         
       </ul>

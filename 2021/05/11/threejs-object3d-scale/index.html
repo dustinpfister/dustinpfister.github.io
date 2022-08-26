@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2021/05/11/threejs-object3d-scale/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="When it comes to three.js I am trying to think in terms of what the long term plan is, but I have also found that I still need to write a post or two here and there on the basics also. When it comes t">
-<meta property="og:updated_time" content="2022-04-20T18:42:55.000Z">
+<meta property="og:updated_time" content="2022-08-23T12:39:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Scale Mesh Objects, Groups, and so forth in threejs">
 <meta name="twitter:description" content="When it comes to three.js I am trying to think in terms of what the long term plan is, but I have also found that I still need to write a post or two here and there on the basics also. When it comes t">
@@ -128,10 +128,10 @@
 
     <!-- other info (dustin) -->
     <a href="/2021/05/11/threejs-object3d-scale/" class="article-date"> Modified:
-  <time datetime="2022-04-20T18:42:55.000Z" itemprop="dateModified">2022-04-20</time>
+  <time datetime="2022-08-23T12:39:07.000Z" itemprop="dateModified">2022-08-23</time>
 </a>
 
-    <span class="article-date">V1.29</span>
+    <span class="article-date">V1.31</span>
 
     
   <div class="article-category">
@@ -161,7 +161,9 @@
 <h2 id="The-Object3d-scale-property-and-what-to-know-first"><a href="#The-Object3d-scale-property-and-what-to-know-first" class="headerlink" title="The Object3d scale property and what to know first"></a>The Object3d scale property and what to know first</h2><p>I trust that you have covered the basics at least when it comes to <a href="/2018/04/04/threejs-getting-started/">getting up and running with three.js</a> and javaScript, as i will not be getting into detail with that here. This post is intended for people that have at least some background with javaScript, and have worked out at least a few simple examples of three.js for starters. I will be keeping the examples here fairly simple, at least at the top of the post, but there are still some basic things you should know about before continuing to read this.</p>
 <iframe class="youtube_video" src="https://www.youtube.com/embed/jpcjC3jedrQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-<h3 id="Version-Numbers-matter-with-three-js"><a href="#Version-Numbers-matter-with-three-js" class="headerlink" title="Version Numbers matter with three.js"></a>Version Numbers matter with three.js</h3><p>When I wrote this post I was using revision 127 of three.js which was release in April of 20201. It would seem that much has not changes with the Object3d scale property and the Vercor3 class to which the scale property is an instance of. However it is still possible that the code examples here might break with future versions of three.js.</p>
+
+<h3 id="Source-code-is-on-Github"><a href="#Source-code-is-on-Github" class="headerlink" title="Source code is on Github"></a>Source code is on Github</h3><p>The examples in this post and my many other posts on threejs can be <a href="https://github.com/dustinpfister/test_threejs/tree/master/views/forpost/threejs-object3d-scale" target="_blank" rel="external">found on Github</a>.</p>
+<h3 id="Version-Numbers-matter-with-three-js"><a href="#Version-Numbers-matter-with-three-js" class="headerlink" title="Version Numbers matter with three.js"></a>Version Numbers matter with three.js</h3><p>When I wrote this post for the first time I was using revision 127 of three.js which was release in April of 20201, and the last time I came around to doing a little editing I was using r140. It would seem that much has not changes with the Object3d scale property and the Vercor3 class to which the scale property is an instance of. However it is still possible that the code examples here might break with future versions of three.js.</p>
 <h3 id="Read-up-more-on-Object3d-in-general-if-you-have-not-done-so"><a href="#Read-up-more-on-Object3d-in-general-if-you-have-not-done-so" class="headerlink" title="Read up more on Object3d in general if you have not done so"></a>Read up more on Object3d in general if you have not done so</h3><p>If you are still relatively new to threejs, and have not done so before hand, it would be a good idea to <a href="/2018/04/23/threejs-object3d/">learn more about the object3d class in detail</a> beyond just that of the scale property. In this post I am just going to be focusing on a few examples that just have to do with this one little property of this base class, but there is much more to know about it in general. The Object3d class is a base class for Mesh objects in three.js, but it is also a base class for many other major classes in he library also such as Camera, Group, and even Scene.</p>
 <h2 id="1-Basic-Object3d-Scale-example-with-a-Mesh-and-the-Mesh-copy-method"><a href="#1-Basic-Object3d-Scale-example-with-a-Mesh-and-the-Mesh-copy-method" class="headerlink" title="1 - Basic Object3d Scale example with a Mesh and the Mesh copy method"></a>1 - Basic Object3d Scale example with a Mesh and the Mesh copy method</h2><p>First off a very basic example of the scale property of the Object3d class that involves a Mesh object. In this example I am creating just a single Mesh object with the Mesh Constructor that uses the BoxGeometry and the Normal Material. I am then using the copy method of that mesh object instance to create to copies on this mesh object. I can then change the scale of these copies with the scale property of them and that will change the scale of these copies without effecting the original. The copy method will not fully deep clone the mesh object though when it comes to things like the geometry and material of the mesh object though, however for this example, and the scale property alone things work as expected.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> box = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</div><div class="line">        <span class="keyword">new</span> THREE.MeshNormalMaterial());</div><div class="line">box.position.set(<span class="number">0</span>, <span class="number">0</span>, <span class="number">-2</span>);</div><div class="line"> </div><div class="line"><span class="keyword">var</span> copy1 = box.clone();</div><div class="line">copy1.scale.set(<span class="number">0.5</span>, <span class="number">0.5</span>, <span class="number">0.5</span>);</div><div class="line">copy1.position.set(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">var</span> copy2 = box.clone();</div><div class="line">copy2.scale.set(<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>);</div><div class="line">copy2.position.set(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1.25</span>);</div><div class="line"> </div><div class="line"><span class="comment">// scene</span></div><div class="line"><span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line">scene.add(box);</div><div class="line">scene.add(copy1);</div><div class="line">scene.add(copy2);</div><div class="line"><span class="comment">// camera and renderer</span></div><div class="line"><span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">60</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">3</span>, <span class="number">3</span>, <span class="number">3</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line">renderer.render(scene, camera);</div></pre></td></tr></table></figure>
@@ -182,7 +184,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2021/05/11/threejs-object3d-scale/" data-id="cl6s6d5590292tgv1tibgz8a2" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2021/05/11/threejs-object3d-scale/" data-id="cl7awl65002ggkcv1oanjgznf" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2021/05/11/threejs-object3d-scale/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -266,7 +268,7 @@ s.setAttribute('data-timestamp', +new Date());
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.5px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.5px;">angular</a> <a href="/tags/animation/" style="font-size: 12px;">animation</a> <a href="/tags/automation/" style="font-size: 12px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.5px;">backbone</a> <a href="/tags/blog/" style="font-size: 15px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.5px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.5px;">ejs</a> <a href="/tags/electronjs/" style="font-size: 13px;">electronjs</a> <a href="/tags/express/" style="font-size: 16.5px;">express</a> <a href="/tags/games/" style="font-size: 17px;">games</a> <a href="/tags/git/" style="font-size: 13px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 12px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.5px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.5px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.5px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 17.5px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.5px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.5px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.5px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18px;">phaser</a> <a href="/tags/python/" style="font-size: 15.5px;">python</a> <a href="/tags/statistics/" style="font-size: 14px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 19px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16px;">vuejs</a>
+      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.5px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.5px;">angular</a> <a href="/tags/animation/" style="font-size: 12px;">animation</a> <a href="/tags/automation/" style="font-size: 12px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.5px;">backbone</a> <a href="/tags/blog/" style="font-size: 15px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.5px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.5px;">ejs</a> <a href="/tags/electronjs/" style="font-size: 13.5px;">electronjs</a> <a href="/tags/express/" style="font-size: 16.5px;">express</a> <a href="/tags/games/" style="font-size: 17px;">games</a> <a href="/tags/git/" style="font-size: 13px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 12px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.5px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.5px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.5px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 17.5px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.5px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.5px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.5px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18px;">phaser</a> <a href="/tags/python/" style="font-size: 15.5px;">python</a> <a href="/tags/statistics/" style="font-size: 14px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 19px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16px;">vuejs</a>
     </div>
   </div>
 
@@ -288,6 +290,14 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
+            <a href="/2022/08/26/threejs-examples-many-object-tweening/">Tweening many objects at once threejs example</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/19/electronjs-example-user-data-file/">User Data File Electronjs application example</a>
+          </li>
+        
+          <li>
             <a href="/2022/08/12/threejs-cylinder-geometry/">Cylinder Geometry threejs example</a>
           </li>
         
@@ -297,14 +307,6 @@ s.setAttribute('data-timestamp', +new Date());
         
           <li>
             <a href="/2022/07/29/threejs-examples-aplerp/">An advanced Lerping module threejs example</a>
-          </li>
-        
-          <li>
-            <a href="/2022/07/22/threejs-capsule-geometry/">Capsule geometry in threejs</a>
-          </li>
-        
-          <li>
-            <a href="/2022/07/15/threejs-examples-object-grid-wrap-land/">THREEJS Looping land animation using the Object grid wrap module</a>
           </li>
         
       </ul>
