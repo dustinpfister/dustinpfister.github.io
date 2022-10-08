@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
+  
+  <title>Computing Bounding Box for buffer geometries in threejs | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2022/10/07/threejs-buffer-geometry-compute-bounding-box/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="With the buffer geometry class in threejs there is a bounding box property that stores an instance of the Box3 class, and the compute bounding box method of the buffer geometry class is what can be us">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Computing Bounding Box for buffer geometries in threejs">
+<meta property="og:url" content="https://dustinpfister.github.io/2022/10/07/threejs-buffer-geometry-compute-bounding-box/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="With the buffer geometry class in threejs there is a bounding box property that stores an instance of the Box3 class, and the compute bounding box method of the buffer geometry class is what can be us">
+<meta property="og:updated_time" content="2022-10-07T16:31:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Computing Bounding Box for buffer geometries in threejs">
+<meta name="twitter:description" content="With the buffer geometry class in threejs there is a bounding box property that stores an instance of the Box3 class, and the compute bounding box method of the buffer geometry class is what can be us">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Google Analytics -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y8XLNG6JRW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y8XLNG6JRW');
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image-->
+        <div class="selfimage"></div>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2021/02/19/threejs-examples/">ThreeJS</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas</a>
+        
+          <a class="main-nav-link" href="https://www.youtube.com/user/javaweaver">Youtube</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- adding my canvas thing ( Dustin ) -->
+<script src="/js/the_matrix.js"></script>
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-threejs-buffer-geometry-compute-bounding-box" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/10/07/threejs-buffer-geometry-compute-bounding-box/" class="article-date"> Published:
+  <time datetime="2022-10-07T12:30:00.000Z" itemprop="datePublished">2022-10-07</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2022/10/07/threejs-buffer-geometry-compute-bounding-box/" class="article-date"> Modified:
+  <time datetime="2022-10-07T16:31:47.000Z" itemprop="dateModified">2022-10-07</time>
+</a>
+
+    <span class="article-date">V1.12</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Computing Bounding Box for buffer geometries in threejs
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>With the buffer geometry class in threejs there is a bounding box property that stores an instance of the Box3 class, and the <a href="https://threejs.org/docs/#api/en/core/BufferGeometry.computeBoundingBox" target="_blank" rel="external">compute bounding box method of the buffer geometry class</a> is what can be used to create or update this instance of Box3. As the name suggests this bounding box property can be used for collision detection, but it can also be used to find out the size of a geometry which can aid in the process of positioning objects.</p>
+<a id="more"></a>
+<iframe class="youtube_video" src="https://www.youtube.com/embed/pvhCG2MczdI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+<h2 id="Compute-Bounding-Box-and-what-to-know-first"><a href="#Compute-Bounding-Box-and-what-to-know-first" class="headerlink" title="Compute Bounding Box, and what to know first"></a>Compute Bounding Box, and what to know first</h2><p>This is a post on the compute bounding box method of the buffer geometry class in the javaScript library called threejs. With that said there is a lot of subjects that you should know a thing or two about before hand that I will not be getting into detail here as I have wrote those kinds of posts on <a href="/2018/04/04/threejs-getting-started/">threejs</a> and <a href="/2018/11/27/js-getting-started/">javaScript</a> a long time ago. However regardless of how much experience you might have at this point I will take a moment to outline a few things you might want to learn or refresh with when it comes to compute bounding box of buffer geometry.</p>
+<h3 id="Buffer-Geometry"><a href="#Buffer-Geometry" class="headerlink" title="Buffer Geometry"></a>Buffer Geometry</h3><p>There is the compute bounding box method alone of the buffer geometry class and then there is <a href="/2021/04/22/threejs-buffer-geometry/">everything else that branches off from an instance of buffer geometry</a>. There is a whole lot of ground to cover when it comes to this class in the library of course when it comes to creating and updating a geometry to begin with.</p>
+<h3 id="The-Box3-class-in-detail"><a href="#The-Box3-class-in-detail" class="headerlink" title="The Box3 class in detail"></a>The Box3 class in detail</h3><p>When I call the compute bounding box method of a buffer geometry class instance <a href="/2022/05/09/threejs-box3/">an instance of the box3 class</a> will be crated and assigned to the bounding box property of the geometry. I will be covering many of the features of this class in this post, but it still might be a good idea to get a better sense of how to work with this class outside of the use of the compute bounding box method of buffer geometry.</p>
+<h3 id="Source-is-on-Github"><a href="#Source-is-on-Github" class="headerlink" title="Source is on Github"></a>Source is on Github</h3><p>The source code examples that I am writing about here can also be <a href="https://github.com/dustinpfister/test_threejs/tree/master/views/forpost/threejs-buffer-geometry-compute-bounding-box" target="_blank" rel="external">found on Github</a></p>
+<h3 id="Version-Numbers"><a href="#Version-Numbers" class="headerlink" title="Version Numbers"></a>Version Numbers</h3><p>When I first wrote this post I was using r140 of threejs.</p>
+<h2 id="1-Basic-Compute-Bounding-Box-examples"><a href="#1-Basic-Compute-Bounding-Box-examples" class="headerlink" title="1 - Basic Compute Bounding Box examples"></a>1 - Basic Compute Bounding Box examples</h2><p>For this first section I will be starting out with a few basic examples of the compute bounding box method just for the sake of gaining a sense of how to use this to preform various typical tasks in which it will become useful.</p>
+<h3 id="1-1-Min-and-Max-Values-of-box3"><a href="#1-1-Min-and-Max-Values-of-box3" class="headerlink" title="1.1 - Min and Max Values of box3"></a>1.1 - Min and Max Values of box3</h3><p>After I call the compute bounding box method there will be an instance of box3 at the bounding box property of the geometry. Two of the core properties of this box3 class are the min and max values that are used to store the lowest and highest corners of the box. In this example I am then using the values of this box3 class to create new mesh objects at the lowest and highest points.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// SCENE, CAMERA, RENDERER</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="keyword">const</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">50</span>, <span class="number">640</span> / <span class="number">480</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">3</span>, <span class="number">5</span>, <span class="number">5</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">-0.75</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">const</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line">(<span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>) || <span class="built_in">document</span>.body).appendChild(renderer.domElement);</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// GEOMETRY</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="keyword">const</span> geo_box = <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">4.5</span>, <span class="number">3</span>, <span class="number">4.5</span>);</div><div class="line"><span class="keyword">const</span> geo_sphere = <span class="keyword">new</span> THREE.SphereGeometry(<span class="number">1.0</span>, <span class="number">30</span>, <span class="number">30</span>);</div><div class="line"><span class="comment">// COMPUTE THE BOUNDING BOX</span></div><div class="line">geo_box.computeBoundingBox();</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// MESH, MATERIAL</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// main mesh object using geo_box</span></div><div class="line"><span class="keyword">const</span> mesh = <span class="keyword">new</span> THREE.Mesh( geo_box, <span class="keyword">new</span> THREE.MeshNormalMaterial(&#123;<span class="attr">wireframe</span>: <span class="literal">true</span>&#125;) );</div><div class="line">scene.add(mesh);</div><div class="line"><span class="comment">// getting a ref to bounding box of geo_box</span></div><div class="line"><span class="comment">// and using that to set the position of other mesh objects</span></div><div class="line"><span class="keyword">const</span> bb = geo_box.boundingBox;</div><div class="line"><span class="keyword">const</span> material = <span class="keyword">new</span> THREE.MeshNormalMaterial(&#123;<span class="attr">transparent</span>: <span class="literal">true</span>, <span class="attr">opacity</span>: <span class="number">0.5</span>&#125;);</div><div class="line"><span class="keyword">const</span> mesh1 = <span class="keyword">new</span> THREE.Mesh( geo_sphere, material );</div><div class="line">scene.add(mesh1);</div><div class="line">mesh1.position.copy(bb.min);</div><div class="line"><span class="keyword">const</span> mesh2 = <span class="keyword">new</span> THREE.Mesh( geo_sphere, material );</div><div class="line">scene.add(mesh2);</div><div class="line">mesh2.position.copy(bb.max);</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">//  RENDER</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line">renderer.render(scene, camera);</div></pre></td></tr></table></figure>
+<p>Although this might help to gain a visual sense of what is going on here to some extent, there is a better way of doing this by making use of a special helper class that works with box3 objects. The main thing here though is that these min and max values are instances of the vector3 class that are the same objects that are used for the position properties of object3d based objects such as mesh objects. So if I want to I can quickly place mesh objects at these locations by making use of the copy method of the Vector3 class.</p>
+<h3 id="1-2-The-Box3-Helper"><a href="#1-2-The-Box3-Helper" class="headerlink" title="1.2 - The Box3 Helper"></a>1.2 - The Box3 Helper</h3><p>The best tool for getting a visual idea of what is going on with a Box3 class such as the one that i crated by calling the compute bounding box method would be to use the <a href="https://threejs.org/docs/#api/en/helpers/Box3Helper" target="_blank" rel="external">box3 helper</a>.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// SCENE, CAMERA, RENDERER</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="keyword">const</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">50</span>, <span class="number">640</span> / <span class="number">480</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">8</span>, <span class="number">8</span>, <span class="number">8</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">-1</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">const</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line">(<span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>) || <span class="built_in">document</span>.body).appendChild(renderer.domElement);</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// GEOMETRY</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="keyword">const</span> geo_sphere = <span class="keyword">new</span> THREE.SphereGeometry(<span class="number">3.25</span>, <span class="number">30</span>, <span class="number">30</span>);</div><div class="line"><span class="comment">// COMPUTE THE BOUNDING BOX</span></div><div class="line">geo_sphere.computeBoundingBox();</div><div class="line"><span class="comment">// ADDING A BOX HELPER</span></div><div class="line"><span class="keyword">const</span> helper = <span class="keyword">new</span> THREE.Box3Helper(geo_sphere.boundingBox);</div><div class="line">helper.material.linewidth = <span class="number">6</span>;</div><div class="line">scene.add(helper)</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// MESH, MATERIAL</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="keyword">const</span> mesh = <span class="keyword">new</span> THREE.Mesh( geo_sphere, <span class="keyword">new</span> THREE.MeshNormalMaterial(&#123;&#125;) );</div><div class="line">scene.add(mesh);</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">//  RENDER</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line">renderer.render(scene, camera);</div></pre></td></tr></table></figure>
+<h3 id="1-3-Size-and-Position"><a href="#1-3-Size-and-Position" class="headerlink" title="1.3 - Size and Position"></a>1.3 - Size and Position</h3><p>The get size method of the box3 class can be used to copy values to an instance of Vector3 that are values that correspond to the size of the geometry. If the origin of the geometry is more or less at the center of box, then this can also be used to easily position a mesh object to a flat surface by just dividing the y value of the vector3 by half and then use that to offset the mesh object when positioning objects in a scene.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// SCENE, CAMERA, RENDERER</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="keyword">const</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line">scene.add( <span class="keyword">new</span> THREE.GridHelper(<span class="number">10</span>, <span class="number">10</span>) );</div><div class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">50</span>, <span class="number">640</span> / <span class="number">480</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">8</span>, <span class="number">8</span>, <span class="number">8</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">-1</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">const</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line">(<span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>) || <span class="built_in">document</span>.body).appendChild(renderer.domElement);</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// HELPERS</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="keyword">const</span> positionMesh = <span class="function">(<span class="params">mesh, x, z</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">const</span> geo = mesh.geometry;</div><div class="line">    <span class="comment">// COMPUTE THE BOUNDING BOX AND GET bb REF TO IT</span></div><div class="line">    geo.computeBoundingBox();</div><div class="line">    <span class="keyword">const</span> bb = geo.boundingBox;</div><div class="line">    <span class="comment">// GET SIZE, and use size to position MESH</span></div><div class="line">    <span class="keyword">const</span> v_size = <span class="keyword">new</span> THREE.Vector3();</div><div class="line">    bb.getSize(v_size);</div><div class="line">    mesh.position.set(x, v_size.y / <span class="number">2</span>, z);</div><div class="line">    <span class="keyword">return</span> mesh;</div><div class="line">&#125;;</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// MESH, MATERIAL</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="keyword">const</span> m = <span class="keyword">new</span> THREE.MeshNormalMaterial();</div><div class="line">scene.add( positionMesh(</div><div class="line">    <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">3.25</span>, <span class="number">3</span>), m),</div><div class="line">        <span class="number">-4.5</span>, <span class="number">-3.5</span>));</div><div class="line">scene.add( positionMesh(</div><div class="line">    <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">5</span>, <span class="number">1</span>), m),</div><div class="line">        <span class="number">3.5</span>, <span class="number">1.5</span>));</div><div class="line">scene.add( positionMesh(</div><div class="line">    <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>), m),</div><div class="line">        <span class="number">-3.0</span>, <span class="number">3.0</span>));</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">//  RENDER</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line">renderer.render(scene, camera);</div></pre></td></tr></table></figure>
+<p>Although this might work well when it comes to thins kind of situation in which I want to position mesh objects with box geometries to a flat surface, often the situation will not be so simple. However when it comes to just simply getting the size of a geometry alone this works great.</p>
+<h2 id="2-Animation-Loop-Examples"><a href="#2-Animation-Loop-Examples" class="headerlink" title="2 - Animation Loop Examples"></a>2 - Animation Loop Examples</h2><p>I like to make at least one if not more videos for most if not all of my blog posts on threejs, so in this section I will be going over the source code that I am using to make the videos for this post. I could go on and on about the basics of animation loops, and so forth here but I assume that you know at least a thing or two about them. The main thig here is that in this section the aim is frame by frame style animation that is good for making a demo video for this subject, but not one or more stochastic type systems that respond to user input and so forth.</p>
+<h3 id="2-1-Size-and-position-animation"><a href="#2-1-Size-and-position-animation" class="headerlink" title="2.1 - Size and position animation"></a>2.1 - Size and position animation</h3><p>This is a quick animation that I made in which I continued to work off of the size and position basic example. I started out by making the code better organized in the form of a number of helper functions. The main helper function of interest of which would be the get mesh ground position helper function that will create and return an instance of the Vector3 class that will be the ground position that is desired. Sense this will just create and return a Vector3 class instance I then also have a set mesh helper function that will call this get mesh ground position method and use the resulting vecotr3 along with a starting vector to set the position of a mesh object by making use of the <a href="/2022/05/17/threejs-vector3-lerp/">Vecotr3 class lerp method</a>.</p>
+<p>Speaking of the set mesh method that takes a mesh object with custom <a href="/2021/02/16/threejs-userdata/">user data object</a> and an alpha value that is used with the lerp method I should take a moment to write about my make mesh and get alpha helper methods that I made for this animation example.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// SCENE, CAMERA, RENDERER</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="keyword">const</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line">scene.add( <span class="keyword">new</span> THREE.GridHelper(<span class="number">10</span>, <span class="number">10</span>) );</div><div class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">50</span>, <span class="number">640</span> / <span class="number">480</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line">camera.position.set(<span class="number">8</span>, <span class="number">8</span>, <span class="number">8</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">-1</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">const</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line">(<span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>) || <span class="built_in">document</span>.body).appendChild(renderer.domElement);</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// HELPERS</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="keyword">const</span> getMeshGroundPosition = <span class="function">(<span class="params">mesh, x, z</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">const</span> geo = mesh.geometry;</div><div class="line">    <span class="comment">// COMPUTE THE BOUNDING BOX AND GET bb REF TO IT</span></div><div class="line">    geo.computeBoundingBox();</div><div class="line">    <span class="keyword">const</span> bb = geo.boundingBox;</div><div class="line">    <span class="comment">// GET SIZE, and return new Vector3</span></div><div class="line">    <span class="keyword">const</span> v_size = <span class="keyword">new</span> THREE.Vector3();</div><div class="line">    bb.getSize(v_size);</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> THREE.Vector3(x, v_size.y / <span class="number">2</span>, z);</div><div class="line">&#125;;</div><div class="line"><span class="comment">// Make Mesh</span></div><div class="line"></div><div class="line"><span class="keyword">const</span> makeMesh = <span class="function">(<span class="params">w, h, d, x, z, sh, p1, p2, m</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">const</span> mesh = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="keyword">new</span> THREE.BoxGeometry(w, h, d), m);</div><div class="line">    mesh.userData.v_start = <span class="keyword">new</span> THREE.Vector3(x, sh, z);</div><div class="line">    mesh.userData.p1 = p1;</div><div class="line">    mesh.userData.p2 = p2;</div><div class="line">    <span class="keyword">return</span> mesh</div><div class="line">&#125;;</div><div class="line"><span class="comment">// set mesh animation state for the given alpha</span></div><div class="line"><span class="keyword">const</span> setMesh = <span class="function">(<span class="params">mesh, alpha</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">let</span> mud = mesh.userData;</div><div class="line">    <span class="keyword">let</span> b = getAlpha(alpha, <span class="number">1</span>, mud.p1, mud.p2);</div><div class="line">    <span class="keyword">let</span> v_start = mud.v_start;</div><div class="line">    <span class="keyword">let</span> v_ground = getMeshGroundPosition(mesh, v_start.x, v_start.z);</div><div class="line">    mesh.position.copy(v_start).lerp(v_ground, b);</div><div class="line">&#125;;</div><div class="line"><span class="comment">// get alpha helper</span></div><div class="line"><span class="keyword">const</span> getAlpha = <span class="function">(<span class="params">n, d, p1, p2</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">let</span> a = n / d;</div><div class="line">    <span class="keyword">let</span> b = <span class="number">0</span>;</div><div class="line">    <span class="keyword">if</span>(a &lt; p1)&#123; b = a * (<span class="number">1</span> / p1);&#125;</div><div class="line">    <span class="keyword">if</span>(a &gt;= p1 &amp;&amp; a &lt; p2)&#123; b = <span class="number">1</span>;&#125;</div><div class="line">    <span class="keyword">if</span>(a &gt;= p2)&#123;</div><div class="line">        b = (<span class="number">1</span> - a) / (<span class="number">1</span> - p2);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> b;</div><div class="line">&#125;;</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// GROUP, MESH, MATERIAL</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="keyword">const</span> material = <span class="keyword">new</span> THREE.MeshNormalMaterial();</div><div class="line"><span class="keyword">let</span> group = <span class="keyword">new</span> THREE.Group();</div><div class="line">[</div><div class="line">    [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0.5</span>, <span class="number">0.5</span>, <span class="number">12</span>, <span class="number">0.65</span>, <span class="number">0.8</span>, material],</div><div class="line">    [<span class="number">1</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">-4.5</span>, <span class="number">-4.5</span>, <span class="number">10</span>, <span class="number">0.75</span>, <span class="number">0.9</span>, material],</div><div class="line">    [<span class="number">1</span>, <span class="number">3.25</span>, <span class="number">3</span>, <span class="number">-4.5</span>, <span class="number">0.5</span>, <span class="number">8</span>, <span class="number">0.25</span>, <span class="number">0.5</span>, material],</div><div class="line">    [<span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">-2</span>, <span class="number">8</span>, <span class="number">0.15</span>, <span class="number">0.4</span>, material]</div><div class="line">].forEach(<span class="function">(<span class="params">argu</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">let</span> mesh = makeMesh.apply(<span class="literal">null</span>, argu);</div><div class="line">    group.add(mesh);</div><div class="line">&#125;);</div><div class="line">scene.add(group);</div><div class="line"></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// ANIMATION LOOP</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> FPS_UPDATE = <span class="number">12</span>, <span class="comment">// fps rate to update ( low fps for low CPU use, but choppy video )</span></div><div class="line">FPS_MOVEMENT = <span class="number">30</span>;     <span class="comment">// fps rate to move object by that is independent of frame update rate</span></div><div class="line">FRAME_MAX = FPS_MOVEMENT * <span class="number">5</span>; <span class="comment">// 5 sec animation</span></div><div class="line"><span class="keyword">let</span> secs = <span class="number">0</span>,</div><div class="line">frame = <span class="number">0</span>,</div><div class="line">lt = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"><span class="comment">// update</span></div><div class="line"><span class="keyword">const</span> update = <span class="function"><span class="keyword">function</span>(<span class="params">frame, frameMax</span>)</span>&#123;</div><div class="line">    group.children.forEach(<span class="function">(<span class="params">mesh</span>)=&gt;</span>&#123;</div><div class="line">        setMesh(mesh, frame / frameMax);</div><div class="line">    &#125;);</div><div class="line">&#125;;</div><div class="line"><span class="comment">// loop</span></div><div class="line"><span class="keyword">const</span> loop = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">const</span> now = <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">    secs = (now - lt) / <span class="number">1000</span>;</div><div class="line">    requestAnimationFrame(loop);</div><div class="line">    <span class="keyword">if</span>(secs &gt; <span class="number">1</span> / FPS_UPDATE)&#123;</div><div class="line">        <span class="comment">// update, render</span></div><div class="line">        update( <span class="built_in">Math</span>.floor(frame), FRAME_MAX);</div><div class="line">        renderer.render(scene, camera);</div><div class="line">        <span class="comment">// step frame</span></div><div class="line">        frame += FPS_MOVEMENT * secs;</div><div class="line">        frame %= FRAME_MAX;</div><div class="line">        lt = now;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line">loop();</div></pre></td></tr></table></figure>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>That will be it for now at least when it comes to the compute bounding box method of buffer geometry and a few quick use case examples of it. I have not yet done this post justice at all when it comes to all the additional use case examples that come up, such as positioning objects to the surface of a torus geometry or other custom geometry created in an external 3D modulating program. There are some more advanced examples that I have just started working on when it comes to editing my <a href="/2021/05/18/threejs-raycaster/">post on the raycaster class</a> that I might in time write about in this post in future edits. Also I would like to wrote more about collision detection and other not so typical use case examples of compute bonding box, but there are only so many hours in a day.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2022/10/07/threejs-buffer-geometry-compute-bounding-box/" data-id="cl9002l95022vw4v1mfmqc4if" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2022/10/07/threejs-buffer-geometry-compute-bounding-box/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2022/09/30/threejs-examples-animation-loop-module/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Animation Loop Framework threejs project example</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2022/10/07/threejs-buffer-geometry-compute-bounding-box/index.html';
+    this.page.identifier = '1008';
+    this.page.title = 'Computing Bounding Box for buffer geometries in threejs';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/electronjs/">electronjs</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/electronjs/">electronjs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.5px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.5px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.5px;">angular</a> <a href="/tags/animation/" style="font-size: 12px;">animation</a> <a href="/tags/automation/" style="font-size: 12px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.5px;">backbone</a> <a href="/tags/blog/" style="font-size: 15px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.5px;">canvas</a> <a href="/tags/corejs/" style="font-size: 13px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 11px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.5px;">ejs</a> <a href="/tags/electronjs/" style="font-size: 13.5px;">electronjs</a> <a href="/tags/express/" style="font-size: 16.5px;">express</a> <a href="/tags/games/" style="font-size: 17px;">games</a> <a href="/tags/git/" style="font-size: 13px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 12px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.5px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.5px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.5px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 17.5px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.5px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.5px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.5px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18px;">phaser</a> <a href="/tags/python/" style="font-size: 15.5px;">python</a> <a href="/tags/statistics/" style="font-size: 14px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 19px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">October 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">September 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">September 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/10/07/threejs-buffer-geometry-compute-bounding-box/">Computing Bounding Box for buffer geometries in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/30/threejs-examples-animation-loop-module/">Animation Loop Framework threejs project example</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/23/threejs-examples-svg-movement/">Using SVG for movement of objects threejs example module</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/16/threejs-svg-loader/">The SVG Loader in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/09/threejs-examples-wrap-module/">threejs wrap module example for wrapping rather than clamping values</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2021/02/19/threejs-examples/" class="mobile-nav-link">ThreeJS</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas</a>
+  
+    <a href="https://www.youtube.com/user/javaweaver" class="mobile-nav-link">Youtube</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2022/10/07/threejs-buffer-geometry-compute-bounding-box/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
