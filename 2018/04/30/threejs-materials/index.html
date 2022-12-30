@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2018/04/30/threejs-materials/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="In three.js there are a few materials to choose from to help skin a mesh object that all share the same Material base class. There are also additional materials for rendering lines, points, shadows, a">
-<meta property="og:updated_time" content="2022-10-05T17:56:23.000Z">
+<meta property="og:updated_time" content="2022-12-29T16:25:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Materials in three.js a general overview of the options">
 <meta name="twitter:description" content="In three.js there are a few materials to choose from to help skin a mesh object that all share the same Material base class. There are also additional materials for rendering lines, points, shadows, a">
@@ -130,10 +130,10 @@
 
     <!-- other info (dustin) -->
     <a href="/2018/04/30/threejs-materials/" class="article-date"> Modified:
-  <time datetime="2022-10-05T17:56:23.000Z" itemprop="dateModified">2022-10-05</time>
+  <time datetime="2022-12-29T16:25:37.000Z" itemprop="dateModified">2022-12-29</time>
 </a>
 
-    <span class="article-date">V1.41</span>
+    <span class="article-date">V1.42</span>
 
     
   <div class="article-category">
@@ -191,7 +191,7 @@
 <p>I will not be getting into normals in detail here as that is a matter for another post. However I will mention that there is a useful helper method o get a sense of what is going on with the vector normals of a geometry.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> helper = <span class="keyword">new</span> THREE.VertexNormalsHelper(cube, <span class="number">2</span>, <span class="number">0x00ff00</span>, <span class="number">1</span>);</div><div class="line">scene.add(helper);</div></pre></td></tr></table></figure>
 <p>That should help give you an idea of what is going on, and how the shape is being colored.</p>
-<h2 id="5-Mesh-Phong-Material"><a href="#5-Mesh-Phong-Material" class="headerlink" title="5 - Mesh Phong Material"></a>5 - Mesh Phong Material</h2><p>The <a href="https://threejs.org/docs/index.html#api/materials/MeshPhongMaterial" target="_blank" rel="external">phong material</a> is another option for a material that will respond to a light source. Unlike the Lambert material this is a better option for specular highlights making it a good choice for any kind of surface that should be shiny like metal or varnished wood.</p>
+<h2 id="5-Mesh-Phong-Material"><a href="#5-Mesh-Phong-Material" class="headerlink" title="5 - Mesh Phong Material"></a>5 - Mesh Phong Material</h2><p>The <a href="/2022/12/29/threejs-phong-material/">phong material</a> is another option for a material that will respond to a light source. Unlike the Lambert material this is a better option for specular highlights making it a good choice for any kind of surface that should be shiny like metal or varnished wood.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">// Scene</span></div><div class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line">    scene.add( <span class="keyword">new</span> THREE.GridHelper(<span class="number">10</span>, <span class="number">10</span>) )</div><div class="line">    scene.background = <span class="keyword">new</span> THREE.Color(<span class="string">'blue'</span>);</div><div class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">45</span>, <span class="number">4</span> / <span class="number">3</span>, <span class="number">0.5</span>, <span class="number">100</span>);</div><div class="line">    camera.position.set(<span class="number">3</span>, <span class="number">3</span>, <span class="number">3</span>);</div><div class="line">    camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">    <span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">    renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line">    <span class="keyword">var</span> controls = <span class="keyword">new</span> THREE.OrbitControls(camera, renderer.domElement);</div><div class="line">    <span class="comment">// I WILL WANT A LIGHT SOURCE</span></div><div class="line">    <span class="keyword">var</span> dl = <span class="keyword">new</span> THREE.DirectionalLight(<span class="number">0xffffff</span>, <span class="number">1.0</span>);</div><div class="line">    dl.position.set(<span class="number">4</span>, <span class="number">2</span>, <span class="number">1</span>);</div><div class="line">    scene.add(dl);</div><div class="line">    <span class="comment">// INSTANCE OF THE PHONG MATERIAL</span></div><div class="line">    <span class="keyword">var</span> material = <span class="keyword">new</span> THREE.MeshPhongMaterial(&#123;</div><div class="line">        <span class="attr">color</span>: <span class="number">0xff0000</span>,</div><div class="line">        <span class="attr">shininess</span>: <span class="number">120</span></div><div class="line">    &#125;);</div><div class="line">    <span class="comment">// MESH with SPJHERE Geometry with the material </span></div><div class="line">    scene.add(<span class="keyword">new</span> THREE.Mesh(</div><div class="line">        <span class="comment">// SPHERE GEOMETRY</span></div><div class="line">        <span class="keyword">new</span> THREE.SphereGeometry(<span class="number">1</span>, <span class="number">30</span>, <span class="number">30</span>),</div><div class="line">        material</div><div class="line">    ));</div><div class="line">    <span class="comment">// LOOP</span></div><div class="line">    <span class="keyword">var</span> loop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        requestAnimationFrame(loop);</div><div class="line">        controls.update();         <span class="comment">// UPDATE CONTROLS</span></div><div class="line">        renderer.render(scene, camera); <span class="comment">// render</span></div><div class="line">    &#125;;</div><div class="line">    loop();</div><div class="line">&#125;</div><div class="line">    ());</div></pre></td></tr></table></figure>
 <p>To get this material working great It might be best to use some kind of directional light source such as a spotlight. The specular property can be used to set the color of the shine, by default it is a very dark gray.</p>
 <h2 id="6-Mesh-Standard-Material"><a href="#6-Mesh-Standard-Material" class="headerlink" title="6 - Mesh Standard Material"></a>6 - Mesh Standard Material</h2><p>The <a href="/2021/04/27/threejs-standard-material/">standard material</a> might be the best option for most surfaces if a more realistic rather than speedy rendering is desired when it comes to doing something with light. The standard material will also work with a wide range of various texture maps, and is somewhat of an industry standard, thus the name standard material. I tend to like to go with this material as it is generally a great all around material that results in a decent look when it comes to working on a final result.</p>
@@ -209,7 +209,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2018/04/30/threejs-materials/" data-id="clbl9ghxz02d878v1kn7kns7u" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2018/04/30/threejs-materials/" data-id="clcamt58802gq84v1stqkealj" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2018/04/30/threejs-materials/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -315,23 +315,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
+            <a href="/2022/12/29/threejs-phong-material/">The Phong material in three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2022/12/23/threejs-examples-count-down/">A Timer video javaScript module threejs example</a>
+          </li>
+        
+          <li>
+            <a href="/2022/12/16/threejs-curve-geometry-from/">Using the curve class to create geometry in threejs</a>
+          </li>
+        
+          <li>
             <a href="/2022/12/09/threejs-buffer-geometry-index/">Indexed Buffer Geometry in threejs</a>
           </li>
         
           <li>
             <a href="/2022/12/02/threejs-tetrahedron/">Pyramid AKA Tetrahedron Geometry in threejs.</a>
-          </li>
-        
-          <li>
-            <a href="/2022/11/25/electronjs-example-file-manager/">File Manager Electronjs application example</a>
-          </li>
-        
-          <li>
-            <a href="/2022/11/18/threejs-examples-curves-module/">Curves Module threejs project example</a>
-          </li>
-        
-          <li>
-            <a href="/2022/11/11/threejs-examples-audio-sample-alphas/">Audio Sample Data Alphas and threejs projects</a>
           </li>
         
       </ul>

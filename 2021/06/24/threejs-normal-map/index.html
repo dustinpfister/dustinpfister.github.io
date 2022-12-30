@@ -13,16 +13,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2021/06/24/threejs-normal-map/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="In threejs there is the normal attribute of a buffer geometry instance which will come into play when it comes to figuring out how light should effect a surface, it is also used to find out what side">
+  <meta name="description" content="In threejs there is the normal attribute of a buffer geometry instance which will come into play when it comes to figuring out how light should effect a surface. The normal attribute is also used for">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Making a normal map in threejs">
 <meta property="og:url" content="https://dustinpfister.github.io/2021/06/24/threejs-normal-map/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="In threejs there is the normal attribute of a buffer geometry instance which will come into play when it comes to figuring out how light should effect a surface, it is also used to find out what side">
-<meta property="og:updated_time" content="2022-04-26T15:19:10.000Z">
+<meta property="og:description" content="In threejs there is the normal attribute of a buffer geometry instance which will come into play when it comes to figuring out how light should effect a surface. The normal attribute is also used for">
+<meta property="og:updated_time" content="2022-12-27T19:15:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Making a normal map in threejs">
-<meta name="twitter:description" content="In threejs there is the normal attribute of a buffer geometry instance which will come into play when it comes to figuring out how light should effect a surface, it is also used to find out what side">
+<meta name="twitter:description" content="In threejs there is the normal attribute of a buffer geometry instance which will come into play when it comes to figuring out how light should effect a surface. The normal attribute is also used for">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -130,10 +130,10 @@
 
     <!-- other info (dustin) -->
     <a href="/2021/06/24/threejs-normal-map/" class="article-date"> Modified:
-  <time datetime="2022-04-26T15:19:10.000Z" itemprop="dateModified">2022-04-26</time>
+  <time datetime="2022-12-27T19:15:59.000Z" itemprop="dateModified">2022-12-27</time>
 </a>
 
-    <span class="article-date">V1.26</span>
+    <span class="article-date">V1.28</span>
 
     
   <div class="article-category">
@@ -156,15 +156,15 @@
     
     <div class="article-entry" itemprop="text">
       
-        <p>In <a href="https://threejs.org/docs/#manual/en/introduction/Creating-a-scene" target="_blank" rel="external">threejs</a> there is the <a href="/2021/06/08/threejs-buffer-geometry-attributes-normals/">normal attribute of a buffer geometry instance</a> which will come into play when it comes to figuring out how light should effect a surface, it is also used to find out what side of triangle should be the front side as well. So then this normals attribute is an important part of creating a custom geometry which in my view is what I typical think of next after working out the <a href="/2021/06/07/threejs-buffer-geometry-attributes-position/">position attribute of a geometry</a>.</p>
-<p>However in todays post I will be writing about a special kind of texture map that can be added to some materials in threejs that can also be used to adjust lighting called a <a href="https://threejs.org/docs/#api/en/materials/MeshStandardMaterial.normalMap" target="_blank" rel="external">normal map</a>. A normal map is just one of many options to work with when it comes to the various kinds of texture maps such as emissive maps, alpha maps, and just plain old color maps. I can not say that I use normal maps that often thus far, but this is still a topic of interest when it comes to threejs in general so I took a moment to work out some examples and write this post.</p>
+        <p>In <a href="https://threejs.org/docs/#manual/en/introduction/Creating-a-scene" target="_blank" rel="external">threejs</a> there is the <a href="/2021/06/08/threejs-buffer-geometry-attributes-normals/">normal attribute of a buffer geometry instance</a> which will come into play when it comes to figuring out how light should effect a surface. The normal attribute is also used for things like finding out what side of triangle should be the front side. So then this normals attribute is an important part of creating a custom geometry which in my view is what I typical think of next after working out the <a href="/2021/06/07/threejs-buffer-geometry-attributes-position/">position attribute of a geometry</a>. The position attribute as the name suggests is the actually points in space of the geometry. </p>
+<p>So then in todays post I will be writing about a special kind of texture map that can be added to some materials in threejs that can also be used to adjust lighting called a <a href="https://threejs.org/docs/#api/en/materials/MeshStandardMaterial.normalMap" target="_blank" rel="external">normal map</a>. A normal map is just one of many options to work with when it comes to the various kinds of texture maps such as emissive maps, alpha maps, and just plain old color maps. I can not say that I use normal maps that often thus far, but this is still a topic of interest when it comes to threejs in general so I took a moment to work out some examples and write this post.</p>
 <a id="more"></a>
 <h2 id="What-to-know-first-before-getting-into-normal-maps"><a href="#What-to-know-first-before-getting-into-normal-maps" class="headerlink" title="What to know first before getting into normal maps"></a>What to know first before getting into normal maps</h2><p>This is not a <a href="/2018/04/04/threejs-getting-started/">getting started type post on threejs</a>, so I assume that you have at least some background working with threejs, javaScript, and client side web development in general. So I will not be getting into every little detail about the very basics of what you should know at this point. However in this section I will be quickly going over some things that you might want to read up more on as needed. There is the fact that in order to make a normal map you still need to create a texture, so there is learing about what the options are with that for example.</p>
-<h3 id="The-source-code-here-can-be-found-on-github"><a href="#The-source-code-here-can-be-found-on-github" class="headerlink" title="The source code here can be found on github"></a>The source code here can be found on github</h3><p>The source code for these <a href="https://github.com/dustinpfister/test_threejs/tree/master/views/forpost/threejs-normal-map" target="_blank" rel="external">examples can be found in the for post</a> folder of my test threejs repository. If for some reason you want to make a pull request with one or the source code examples here that would be the place to do it. There is also the comments section of this blog post that can also be used as a way to bring something to my attention with this content.</p>
 <h3 id="Look-into-the-texture-loader-canvas-texture-and-data-texture-constructors-to-create-textures"><a href="#Look-into-the-texture-loader-canvas-texture-and-data-texture-constructors-to-create-textures" class="headerlink" title="Look into the texture loader, canvas texture, and data texture constructors to create textures"></a>Look into the texture loader, canvas texture, and data texture constructors to create textures</h3><p>In order to do anything with a normal map, or any kind of texture map for that matter I am going to want a texture to use for the map. One way to go about getting a texture to work with would be to use the <a href="/2021/06/21/threejs-texture-loader/">threejs built in texture loader</a>, and another way would be to load images by some other means and then use the texture constructor to create a texture object to be used in a material. </p>
 <p>However there are ways to go about creating textures with just javaScript code alone without having to bother with external images, and one way would be to use <a href="/2018/04/17/threejs-canvas-texture/">canvas elements, and the THREE.Canvas Texture</a> constructor. This is the way that I am making textures for the examples here in this post. There are some additional options when it comes to making textres by way of javaScript code though, one other favorite option of mine would be the <a href="/2022/04/15/threejs-data-texture/">data texture constructor</a>.</p>
 <h3 id="There-are-many-other-options-for-texture-maps"><a href="#There-are-many-other-options-for-texture-maps" class="headerlink" title="There are many other options for texture maps"></a>There are many other options for texture maps</h3><p>In this post I am looking into normal maps, but there are many other kinds of maps that you should also be aware of. If you are first starting out with this sort of thing I might be better to start out with the usual simple color map, or maybe a <a href="/2021/06/22/threejs-emissive-map/">emissive map</a> when it comes to working with a material that will react to one or more light sources.</p>
 <h3 id="Know-your-options-with-materials"><a href="#Know-your-options-with-materials" class="headerlink" title="Know your options with materials"></a>Know your options with materials</h3><p>The normal map is a kind of map that effects lighting, so it does not make sense to use a normal map when it comes to using a material such as the basic material, or any kind of material that does not support normal maps. In the source code examples here I am sticking to using just the <a href="/2021/04/27/threejs-standard-material/">standard material</a> which is one options that supports the normal map feature, there are some other options to be aware of so be sure to <a href="/2018/04/30/threejs-materials/">read up more on materials in general</a> if you have not done so.</p>
+<h3 id="The-source-code-here-can-be-found-on-github"><a href="#The-source-code-here-can-be-found-on-github" class="headerlink" title="The source code here can be found on github"></a>The source code here can be found on github</h3><p>The source code for these <a href="https://github.com/dustinpfister/test_threejs/tree/master/views/forpost/threejs-normal-map" target="_blank" rel="external">examples can be found in the for post</a> folder of my test threejs repository. If for some reason you want to make a pull request with one or the source code examples here that would be the place to do it. There is also the comments section of this blog post that can also be used as a way to bring something to my attention with this content.</p>
 <h3 id="Be-mindful-of-the-version-numbers-used-with-three-js"><a href="#Be-mindful-of-the-version-numbers-used-with-three-js" class="headerlink" title="Be mindful of the version numbers used with three.js"></a>Be mindful of the version numbers used with three.js</h3><p>When I wrote this post I was using r127 of threejs which was a later version of threejs in early 2021, and the last time I came around to doing a little editing I have found that the examples are still working okay with r135. As time goes by yet even more code breaking changes might be made to the library that will cause the source code examples here to no longer work.</p>
 <h2 id="1-Basic-normal-map-example"><a href="#1-Basic-normal-map-example" class="headerlink" title="1 - Basic normal map example"></a>1 - Basic normal map example</h2><p>In order to make even a basic getting started type example of the use of a normal map, I am first going to need a texture. So then I am going to want to either load an external image file with something like the texture loader, or create a texture with javaScriot code alone using something like canvas elements. When it comes to writing examples for these kinds of threejs features I like to stick to pure javaScript solutions so I will be using a canvas element to create the texture that I will be using for the normal map. So at the top of the source code of this example I have a create canvas texture helper that will create a canvas element, draw to it with a given draw function, and then return a texture using the THREE.CanvasTexture constructor.</p>
 <p>I then have a create normal map helper that will create and return a texture that I want by calling my create canvas texture helper and passing the draw function to use. The next helper function that I worked out just creates and returns a Mesh object that uses the box geometry constructor for the geometry, and the standard materials for a material which of course supports normal maps. When creating the instance of the standard material in this helper I of course call my create normal map helper and just set the resulting texture as the value for the normal map property of the material.</p>
@@ -178,7 +178,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2021/06/24/threejs-normal-map/" data-id="clbl9gi0602dn78v1tj2vbuoq" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2021/06/24/threejs-normal-map/" data-id="clcamt5au02h884v15sakdb0u" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2021/06/24/threejs-normal-map/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -284,23 +284,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
+            <a href="/2022/12/29/threejs-phong-material/">The Phong material in three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2022/12/23/threejs-examples-count-down/">A Timer video javaScript module threejs example</a>
+          </li>
+        
+          <li>
+            <a href="/2022/12/16/threejs-curve-geometry-from/">Using the curve class to create geometry in threejs</a>
+          </li>
+        
+          <li>
             <a href="/2022/12/09/threejs-buffer-geometry-index/">Indexed Buffer Geometry in threejs</a>
           </li>
         
           <li>
             <a href="/2022/12/02/threejs-tetrahedron/">Pyramid AKA Tetrahedron Geometry in threejs.</a>
-          </li>
-        
-          <li>
-            <a href="/2022/11/25/electronjs-example-file-manager/">File Manager Electronjs application example</a>
-          </li>
-        
-          <li>
-            <a href="/2022/11/18/threejs-examples-curves-module/">Curves Module threejs project example</a>
-          </li>
-        
-          <li>
-            <a href="/2022/11/11/threejs-examples-audio-sample-alphas/">Audio Sample Data Alphas and threejs projects</a>
           </li>
         
       </ul>

@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2022/04/29/threejs-examples-cube-stack/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="A long time ago now I made a cube stack module that I used in my post on the orographic camera. As of late I was doing some editing and while doing so fixed up the source code a little for that post,">
-<meta property="og:updated_time" content="2022-05-02T13:58:06.000Z">
+<meta property="og:updated_time" content="2022-12-23T17:44:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="threejs cube stack example">
 <meta name="twitter:description" content="A long time ago now I made a cube stack module that I used in my post on the orographic camera. As of late I was doing some editing and while doing so fixed up the source code a little for that post,">
@@ -130,10 +130,10 @@
 
     <!-- other info (dustin) -->
     <a href="/2022/04/29/threejs-examples-cube-stack/" class="article-date"> Modified:
-  <time datetime="2022-05-02T13:58:06.000Z" itemprop="dateModified">2022-05-02</time>
+  <time datetime="2022-12-23T17:44:18.000Z" itemprop="dateModified">2022-12-23</time>
 </a>
 
-    <span class="article-date">V1.19</span>
+    <span class="article-date">V1.2</span>
 
     
   <div class="article-category">
@@ -156,13 +156,14 @@
     
     <div class="article-entry" itemprop="text">
       
-        <p>A long time ago now I made a cube stack module that I used in my <a href="/2018/05/17/threejs-camera-orthographic/">post on the orographic camera</a>. As of late I was doing some editing and while doing so fixed up the source code a little for that post, but now I am thinking that this cube stack model should be the main event for one of my <a href="/2021/02/19/threejs-examples/">threejs example posts</a>. So I copied over the current state if the cube stack module into a new folder, and started making some chances to it just for the sake of having a little fun, and to lay down a ground work for even more features with this.</p>
+        <p>A long time ago now I made a cube stack module that I used in my <a href="/2018/05/17/threejs-camera-orthographic/">post on the orographic camera</a>. As of late I was doing some editing and while doing so fixed up the source code a little for that post, but now I am thinking that this cube stack model should be the main event for one of my <a href="/2021/02/19/threejs-examples/">threejs example posts</a>. So I copied over the current state if the cube stack module into a new folder, and started making some changes to it just for the sake of having a little fun, and to lay down a ground work for even more features with this.</p>
 <a id="more"></a>
-<h2 id="The-cube-stack-module-threejs-example-and-what-to-know-first"><a href="#The-cube-stack-module-threejs-example-and-what-to-know-first" class="headerlink" title="The cube stack module threejs example, and what to know first"></a>The cube stack module threejs example, and what to know first</h2><p>This is a post on a javaScrip module that created and returns an object that is a group with additional groups and mesh objects attached working on top of the javaScript library known as threejs. I assume that you have at least a fair amount of experience working with threejs, as well as core javaScript and additional client side web development related stuff, if not you might find this post hard to follow. I have <a href="/2018/04/04/threejs-getting-started/">getting started type posts on threejs</a>, as well as <a href="/2018/11/27/js-getting-started/">javaScript in general</a> that you might want to check out if you are still new to this sort of thing, as I will not be covering basics here.</p>
 <iframe class="youtube_video" src="https://www.youtube.com/embed/uxYi8UyITU8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-<h3 id="version-Numbers-matter"><a href="#version-Numbers-matter" class="headerlink" title="version Numbers matter"></a>version Numbers matter</h3><p>I was using r135 when I first started writing this post and the source code example.</p>
+
+<h2 id="The-cube-stack-module-threejs-example-and-what-to-know-first"><a href="#The-cube-stack-module-threejs-example-and-what-to-know-first" class="headerlink" title="The cube stack module threejs example, and what to know first"></a>The cube stack module threejs example, and what to know first</h2><p>This is a post on a JavaScript module that created and returns an object that is a group with additional groups and mesh objects attached working on top of the JavaScript library known as threejs. I assume that you have at least a fair amount of experience working with threejs, as well as core javaScript and additional client side web development related stuff, if not you might find this post hard to follow. I have <a href="/2018/04/04/threejs-getting-started/">getting started type posts on threejs</a>, as well as <a href="/2018/11/27/js-getting-started/">javaScript in general</a> that you might want to check out if you are still new to this sort of thing, as I will not be covering basics here.</p>
 <h3 id="The-source-code-in-this-post-and-many-others-is-no-Github"><a href="#The-source-code-in-this-post-and-many-others-is-no-Github" class="headerlink" title="The source code in this post and many others is no Github"></a>The source code in this post and many others is no Github</h3><p>The soucre code examples in this post and many others is <a href="https://github.com/dustinpfister/test_threejs/tree/master/views/forpost/threejs-examples-cube-stack" target="_blank" rel="external">up on Github</a>.</p>
+<h3 id="version-Numbers-matter"><a href="#version-Numbers-matter" class="headerlink" title="version Numbers matter"></a>version Numbers matter</h3><p>I was using r135 when I first started writing this post and the source code example.</p>
 <h2 id="1-First-state-of-this-cube-Stack-threejs-example"><a href="#1-First-state-of-this-cube-Stack-threejs-example" class="headerlink" title="1 - First state of this cube Stack threejs example"></a>1 - First state of this cube Stack threejs example</h2><p>In this section I will be going over the cube stack example as it was when I first wrote this blog post. Over time I will likely come around to doing a little editing of this post, and when doing so I also often make some changes to the state of the source code of the example as well.</p>
 <p>When I first started this project I just wanted to make a few changes to what I all ready had when it comes to the example for my blog post on the orthographic camera. I wanted to make any needed changes when it comes to things like arguments for the create method of the module, but I also wanted to start an object that will contain effects that can be used to change the state of the cube stacks.</p>
 <h3 id="1-1-The-data-textures-module"><a href="#1-1-The-data-textures-module" class="headerlink" title="1.1 - The data textures module"></a>1.1 - The data textures module</h3><p>For this example I wanted to have a module that I would use to add textures to the cubes with <a href="/2022/04/15/threejs-data-texture/">data textures</a>. This is a module that I have worked out for other projects actually and have been copied it form one project to another, making little changes as needed here and there. The basic idea with this is that I am just creating textures from javaScript code rather than that of making use of an exterior image assets that must be loaded first. Another way of doing this sort of thing would be to make use of <a href="/2018/04/17/threejs-canvas-texture/">canvas textures</a> which is also a way to create textures with javaScript code, only with the 2d drawing context of canvas elements rather than raw color channel data.</p>
@@ -180,7 +181,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2022/04/29/threejs-examples-cube-stack/" data-id="clbl9ghca028w78v1kjsnidih" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2022/04/29/threejs-examples-cube-stack/" data-id="clcamt4nu02cn84v1qyrftu2b" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2022/04/29/threejs-examples-cube-stack/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -286,23 +287,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
+            <a href="/2022/12/29/threejs-phong-material/">The Phong material in three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2022/12/23/threejs-examples-count-down/">A Timer video javaScript module threejs example</a>
+          </li>
+        
+          <li>
+            <a href="/2022/12/16/threejs-curve-geometry-from/">Using the curve class to create geometry in threejs</a>
+          </li>
+        
+          <li>
             <a href="/2022/12/09/threejs-buffer-geometry-index/">Indexed Buffer Geometry in threejs</a>
           </li>
         
           <li>
             <a href="/2022/12/02/threejs-tetrahedron/">Pyramid AKA Tetrahedron Geometry in threejs.</a>
-          </li>
-        
-          <li>
-            <a href="/2022/11/25/electronjs-example-file-manager/">File Manager Electronjs application example</a>
-          </li>
-        
-          <li>
-            <a href="/2022/11/18/threejs-examples-curves-module/">Curves Module threejs project example</a>
-          </li>
-        
-          <li>
-            <a href="/2022/11/11/threejs-examples-audio-sample-alphas/">Audio Sample Data Alphas and threejs projects</a>
           </li>
         
       </ul>

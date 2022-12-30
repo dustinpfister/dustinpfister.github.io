@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2018/04/08/threejs-lambert-material/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="I have been toying around with three.js these days, and may continue doing so until I have a solid collection of posts on it, and even continue beynd that if I really get into this sort of thing. So i">
-<meta property="og:updated_time" content="2022-08-22T15:39:20.000Z">
+<meta property="og:updated_time" content="2022-12-29T16:31:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The Lambert Material in threejs">
 <meta name="twitter:description" content="I have been toying around with three.js these days, and may continue doing so until I have a solid collection of posts on it, and even continue beynd that if I really get into this sort of thing. So i">
@@ -130,10 +130,10 @@
 
     <!-- other info (dustin) -->
     <a href="/2018/04/08/threejs-lambert-material/" class="article-date"> Modified:
-  <time datetime="2022-08-22T15:39:20.000Z" itemprop="dateModified">2022-08-22</time>
+  <time datetime="2022-12-29T16:31:31.000Z" itemprop="dateModified">2022-12-29</time>
 </a>
 
-    <span class="article-date">V1.31</span>
+    <span class="article-date">V1.32</span>
 
     
   <div class="article-category">
@@ -182,14 +182,14 @@
 <p>This will make all the area of the plane that is not effected by the spot light a shade of gray, rather than the default which is black. In addition to being able to set the emissive color, the intensity can also be set from a 0 to one value, it is also possible to define a texture that will modulate with the emissive color using the emmsiveMap property. To set a texture that will function as the regular color map, you will want to use the plain old map property.</p>
 <h2 id="3-The-map-property-and-data-textures"><a href="#3-The-map-property-and-data-textures" class="headerlink" title="3 - The map property and data textures"></a>3 - The map property and data textures</h2><p>Like many other materials in threejs there are a number of options for adding texture to the material, one such option would me the map property which is how to define a texture that will respond to a light source. In order to use one of these properties I will need some kind of texture first and one way to go about creating a texture without having to bother with loading an external image asset first would be to use <a href="/2022/04/15/threejs-data-texture/">data textures</a>.<br>In threejs the THREE.DataTexture constructor is one of several options for creating a texture by way of some javaScript code rather that loading an image first. In order to use if first I need to create an instance of a uint8array, then it is just a matter of creating the color channel data for the array. For this example I just want to make a simple pseudo random gray scale texture so I am just creating a random value between 0 and 255 and setting that for read, green, and blue for each pixel, then always setting 255 for the alpha channel for a pixel. Once I have my data array all set I just need to pass that array as the first argument for the THREE.DataTexture constructor function, along with the width and height arguments. The return value of the constructor is then the texture which I can the use for that map property when creating an instance of the Lambert material.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">// Scene</span></div><div class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">50</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">1</span>, <span class="number">3000</span>);</div><div class="line">    camera.position.set(<span class="number">500</span>, <span class="number">500</span>, <span class="number">500</span>);</div><div class="line">    camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">    <span class="keyword">var</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</div><div class="line">    renderer.setSize(<span class="number">640</span>, <span class="number">480</span>);</div><div class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>).appendChild(renderer.domElement);</div><div class="line">    <span class="comment">// data texture</span></div><div class="line">    <span class="keyword">var</span> width = <span class="number">16</span>,</div><div class="line">    height = <span class="number">16</span>;</div><div class="line">    <span class="keyword">var</span> size = width * height;</div><div class="line">    <span class="keyword">var</span> data = <span class="keyword">new</span> <span class="built_in">Uint8Array</span>(<span class="number">4</span> * size);</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</div><div class="line">        <span class="keyword">var</span> stride = i * <span class="number">4</span>;</div><div class="line">        <span class="keyword">var</span> v = <span class="built_in">Math</span>.floor(THREE.MathUtils.seededRandom() * <span class="number">255</span>);</div><div class="line">        data[stride] = v;</div><div class="line">        data[stride + <span class="number">1</span>] = v;</div><div class="line">        data[stride + <span class="number">2</span>] = v;</div><div class="line">        data[stride + <span class="number">3</span>] = <span class="number">255</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">var</span> texture = <span class="keyword">new</span> THREE.DataTexture(data, width, height);</div><div class="line">    texture.needsUpdate = <span class="literal">true</span>;</div><div class="line">    <span class="comment">// add plane to the scene</span></div><div class="line">    <span class="keyword">var</span> plane = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">            <span class="keyword">new</span> THREE.PlaneGeometry(<span class="number">1500</span>, <span class="number">1500</span>, <span class="number">8</span>, <span class="number">8</span>),</div><div class="line">            <span class="keyword">new</span> THREE.MeshLambertMaterial(&#123;</div><div class="line">                <span class="attr">color</span>: <span class="number">0xffffff</span>,</div><div class="line">                <span class="attr">map</span>: texture,</div><div class="line">                <span class="attr">emissive</span>: <span class="number">0x004a4a</span>,</div><div class="line">                <span class="attr">emissiveIntensity</span>: <span class="number">0.75</span>,</div><div class="line">                <span class="attr">side</span>: THREE.DoubleSide</div><div class="line">            &#125;));</div><div class="line">    plane.rotation.x = <span class="built_in">Math</span>.PI / <span class="number">2</span>;</div><div class="line">    scene.add(plane);</div><div class="line">    scene.add( <span class="keyword">new</span> THREE.AmbientLight(<span class="number">0xffffff</span>, <span class="number">0.05</span>));</div><div class="line">    <span class="comment">// SPOTLIGHT</span></div><div class="line">    <span class="keyword">var</span> spotLight = <span class="keyword">new</span> THREE.SpotLight(<span class="number">0xffffff</span>, <span class="number">1</span>, <span class="number">300</span>, <span class="built_in">Math</span>.PI / <span class="number">180</span> * <span class="number">40</span>, <span class="number">1</span>, <span class="number">0</span>),</div><div class="line">    spotLightHelper = <span class="keyword">new</span> THREE.SpotLightHelper(spotLight);</div><div class="line">    spotLight.add(spotLightHelper);</div><div class="line">    scene.add(spotLight);</div><div class="line">    spotLight.position.set(<span class="number">150</span>, <span class="number">200</span>, <span class="number">-100</span>);</div><div class="line">    spotLightHelper.update();</div><div class="line"> </div><div class="line">    <span class="comment">// render</span></div><div class="line">    renderer.render(scene, camera);</div><div class="line"> </div><div class="line">&#125;</div><div class="line">    ());</div></pre></td></tr></table></figure>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>The Lambert Material is a good first choice for having a material that responds to light, but depending on the project it might not be the best. The good point of it is speed, but not so much accuracy, the <a href="https://threejs.org/docs/index.html#api/materials/MeshStandardMaterial" target="_blank" rel="external">Standard material</a> seems to do a better job in that regard. There are also a number of other options for materials that might prove to be yet even a better choice depending on the end result that is desired such as the Phong Material which will produce a nice shine effect.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>The Lambert Material is a good first choice for having a material that responds to light, but depending on the project it might not be the best. The good point of it is speed, but not so much accuracy, the <a href="https://threejs.org/docs/index.html#api/materials/MeshStandardMaterial" target="_blank" rel="external">Standard material</a> seems to do a better job in that regard. There are also a number of other options for materials that might prove to be yet even a better choice depending on the end result that is desired such as the <a href="/2022/12/29/threejs-phong-material/">Phong Material</a> which will produce a nice shine effect.</p>
 <p>I would not sink to much time into getting into the details about each material though when it comes to taking into account what really matters moving forward with threejs. In the long run what I really want to do is figure out what I really want to do with threejs when it comes to making actual projects. </p>
 <p>As long as I do a decent job of keeping my code easy to read it should not be to hard to switch from Lambert to standard materials and back again. So if you are having a hard time choosing what material to use don’t work about it to much, if you think the Lambert material is a good choice now, but later on switching to another options is often just a matter of using one of the constructor names as long as we are just taking in terms of the Lambert, standard, and prong materials as possible options at least.</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2018/04/08/threejs-lambert-material/" data-id="clbl9ghui02ck78v16oh0c92u" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2018/04/08/threejs-lambert-material/" data-id="clcamt54c02fz84v18g5tvqml" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2018/04/08/threejs-lambert-material/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -295,23 +295,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
+            <a href="/2022/12/29/threejs-phong-material/">The Phong material in three.js</a>
+          </li>
+        
+          <li>
+            <a href="/2022/12/23/threejs-examples-count-down/">A Timer video javaScript module threejs example</a>
+          </li>
+        
+          <li>
+            <a href="/2022/12/16/threejs-curve-geometry-from/">Using the curve class to create geometry in threejs</a>
+          </li>
+        
+          <li>
             <a href="/2022/12/09/threejs-buffer-geometry-index/">Indexed Buffer Geometry in threejs</a>
           </li>
         
           <li>
             <a href="/2022/12/02/threejs-tetrahedron/">Pyramid AKA Tetrahedron Geometry in threejs.</a>
-          </li>
-        
-          <li>
-            <a href="/2022/11/25/electronjs-example-file-manager/">File Manager Electronjs application example</a>
-          </li>
-        
-          <li>
-            <a href="/2022/11/18/threejs-examples-curves-module/">Curves Module threejs project example</a>
-          </li>
-        
-          <li>
-            <a href="/2022/11/11/threejs-examples-audio-sample-alphas/">Audio Sample Data Alphas and threejs projects</a>
           </li>
         
       </ul>
