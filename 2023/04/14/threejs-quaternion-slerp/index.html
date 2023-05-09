@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
+  
+  <title>Quaternion slerp method | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2023/04/14/threejs-quaternion-slerp/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="The slerp method of the quaternion class in threejs is a way to go about transitioning from one quaternion state to another. The method can be called off of an instance of a quaternion object, then an">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Quaternion slerp method">
+<meta property="og:url" content="https://dustinpfister.github.io/2023/04/14/threejs-quaternion-slerp/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="The slerp method of the quaternion class in threejs is a way to go about transitioning from one quaternion state to another. The method can be called off of an instance of a quaternion object, then an">
+<meta property="og:updated_time" content="2023-04-14T14:22:41.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Quaternion slerp method">
+<meta name="twitter:description" content="The slerp method of the quaternion class in threejs is a way to go about transitioning from one quaternion state to another. The method can be called off of an instance of a quaternion object, then an">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Google Analytics -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y8XLNG6JRW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y8XLNG6JRW');
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image, as well as the link to my youtube -->
+        <a href="https://www.youtube.com/user/javaweaver"><div class="selfimage"></div></a>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2021/02/19/threejs-examples/">ThreeJS</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas</a>
+        
+          <a class="main-nav-link" href="https://www.youtube.com/user/javaweaver">Youtube</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-threejs-quaternion-slerp" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/04/14/threejs-quaternion-slerp/" class="article-date"> Published:
+  <time datetime="2023-04-14T12:34:00.000Z" itemprop="datePublished">2023-04-14</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2023/04/14/threejs-quaternion-slerp/" class="article-date"> Modified:
+  <time datetime="2023-04-14T14:22:41.000Z" itemprop="dateModified">2023-04-14</time>
+</a>
+
+    <span class="article-date">V1.6</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Quaternion slerp method
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>The <a href="https://threejs.org/docs/#api/en/math/Quaternion.slerp" target="_blank" rel="external">slerp method of the quaternion class in threejs</a> is a way to go about transitioning from one quaternion state to another. The method can be called off of an instance of a quaternion object, then another quaternion object to transition to can be given as the first argument, followed by an alpha value. The alpha value is then a number between 0 and 1 that is used to transition the quaternion object. This slerp method will mutate in place, however it can be used in conjunction with other methods like copy and clone to address that.</p>
+<a id="more"></a>
+<h2 id="The-slerp-method-of-the-quaternion-class-and-what-to-know-first"><a href="#The-slerp-method-of-the-quaternion-class-and-what-to-know-first" class="headerlink" title="The slerp method of the quaternion class and what to know first"></a>The slerp method of the quaternion class and what to know first</h2><p>In this post I am writing about just one little method of a Quaternion class in the javaScript library known as threejs. There is then a whole lot of things that I assume that you know a thing or two about before hand if not you might want to do some additional reading before reading the rest of this post. I have <a href="/2018/04/04/threejs-getting-started/">getting started posts on threejs</a> and <a href="/2018/11/27/js-getting-started/">javaScript in general</a>, but there is also a lot of other things that I should write about in this first what to know first type section.</p>
+<h3 id="Read-My-main-blog-post-on-the-quaternion-class"><a href="#Read-My-main-blog-post-on-the-quaternion-class" class="headerlink" title="Read My main blog post on the quaternion class"></a>Read My main blog post on the quaternion class</h3><p>I have wrote a <a href="/2023/03/24/threejs-quaternion/">main blog post on the Quaternion class in general</a> that you might want to read if you are new to this kind of class. Getting started with these was a little intense, but there is only so much to be aware of when it comes to getting started with a core set of methods and using these to help with tasks that have to do when setting the orientation of obejcts.</p>
+<h3 id="Start-out-with-Object3d-lookAt-Euler-and-Buffer-Geometry-Rotation-Methods"><a href="#Start-out-with-Object3d-lookAt-Euler-and-Buffer-Geometry-Rotation-Methods" class="headerlink" title="Start out with Object3d.lookAt, Euler, and Buffer Geometry Rotation Methods"></a>Start out with Object3d.lookAt, Euler, and Buffer Geometry Rotation Methods</h3><p>Quaternion objects are a more advanced option for setting the orientation of things in threejs. There are situations that come up where one of these kinds of objects will help, but still there are easier to work with options that one should know about first before getting into these kinds of objects. When it comes to <a href="/2018/04/23/threejs-object3d/">Object3d class based objects</a> there is the <a href="/2021/05/13/threejs-object3d-lookat/">Object3d.lookAt</a> method and the <a href="/2022/04/08/threejs-object3d-rotation/">Object3d.rotation</a> property that stores and instance of the <a href="/2021/04/28/threejs-euler/">Euler class</a> for setting the local rotation of an object. Also when it comes to mesh objects there is also the geometry of the mesh and with that there are a <a href="/2021/05/20/threejs-buffer-geometry-rotation/">number of rotation methods in the buffer geometry class</a> for preforming a rotation on geometry rather than an object3d class based object such as mesh, camera, and so forth.</p>
+<h3 id="Source-code-is-up-on-Github"><a href="#Source-code-is-up-on-Github" class="headerlink" title="Source code is up on Github"></a>Source code is up on Github</h3><p>The source code examples that I am <a href="https://github.com/dustinpfister/test_threejs/tree/master/views/forpost/threejs-quaternion-slerp" target="_blank" rel="external">writing about here can also be found up on github in my test threehs reposatory</a>. This is also where I park the source code examples for my many <a href="/categories/three-js/">other blog posts on threejs</a> that I have wrote thus far.</p>
+<h3 id="Version-Numbers-matter"><a href="#Version-Numbers-matter" class="headerlink" title="Version Numbers matter"></a>Version Numbers matter</h3><p>When I first wrote this blog post I was using r146 of threejs. There is a whole lot that has changed from older revisions of threejs, and also looking forward it would seem that many more code breaking changes will also happen in the future as well. Always be mindful of what the revision number of threejs is being used when looking at source code examples on various resources as this is a very fast moving project still.</p>
+<h2 id="1-Basic-example-of-the-slerp-method"><a href="#1-Basic-example-of-the-slerp-method" class="headerlink" title="1 - Basic example of the slerp method"></a>1 - Basic example of the slerp method</h2><p>For this first basic example of the slerp I create two quatrenion objects and slerp from one to another when setting the quaternion state of a mesh object. To create these quaternion objects I am making use of the set from axis angle method to do so as one way or another I need to set the state of the objects first. Once I have two quaternion objects I can then use them to update the quaternion object of the mesh object by copying the first quaternion to the quaternion of the mesh, after which I can then call the slerp method and pass the second one. I then pass an alpha value as the second argument for the slerp method of 0.5 which should result in the state of the mesh object being between the two quaternions and it is.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// SCENE, CAMERA, RENDERER</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">50</span>, <span class="number">32</span> / <span class="number">24</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line"><span class="keyword">const</span> renderer = <span class="keyword">new</span> THREE.WebGL1Renderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>, <span class="literal">false</span>);</div><div class="line">(<span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>) || <span class="built_in">document</span>.body).appendChild(renderer.domElement);</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// OBJECTS</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line">scene.add(<span class="keyword">new</span> THREE.GridHelper(<span class="number">10</span>, <span class="number">10</span>));</div><div class="line"><span class="keyword">const</span> material = <span class="keyword">new</span> THREE.MeshNormalMaterial(&#123;<span class="attr">wireframe</span>: <span class="literal">true</span>, <span class="attr">wireframeLinewidth</span>: <span class="number">2</span> &#125;);</div><div class="line"><span class="keyword">const</span> mesh = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">    <span class="keyword">new</span> THREE.SphereGeometry(<span class="number">2</span>, <span class="number">20</span>, <span class="number">20</span>),</div><div class="line">    material);</div><div class="line">scene.add(mesh);</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// ROTATE WITH QUATERNIONS</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> axis1 = <span class="keyword">new</span> THREE.Vector3(<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>);</div><div class="line"><span class="keyword">const</span> q1 = <span class="keyword">new</span> THREE.Quaternion().setFromAxisAngle(axis1, <span class="number">0</span>);</div><div class="line"><span class="keyword">const</span> axis2 = <span class="keyword">new</span> THREE.Vector3(<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>);</div><div class="line"><span class="keyword">const</span> q2 = <span class="keyword">new</span> THREE.Quaternion().setFromAxisAngle(axis2, THREE.MathUtils.degToRad(<span class="number">90</span>) );</div><div class="line">mesh.quaternion.copy(q1).slerp(q2, <span class="number">0.5</span>)</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// RENDER</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line">camera.position.set(<span class="number">3</span>,<span class="number">3</span>,<span class="number">3</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>);</div><div class="line">renderer.render(scene, camera);</div></pre></td></tr></table></figure>
+<h2 id="2-loop-demo"><a href="#2-loop-demo" class="headerlink" title="2 - loop demo"></a>2 - loop demo</h2><p>I started a loop demo of this kind of method to gain a better sense of how this can be used to slerp from one to another. I have a very general idea of what I wanted working but I will need to get around to refining this more at some point. The basic idea here is to create an array of quaternion objects and then slerp between a current index, and the next index. In the event that an index goes out of range it wraps back around to the starting index. So then I am using the from array method of the vector3 class along with the map array prototype method as well as the set from unit vectors method of the quatrenion class to create the array of quaternion objects that I want.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// SCENE, CAMERA, RENDERER</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">50</span>, <span class="number">32</span> / <span class="number">24</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line"><span class="keyword">const</span> renderer = <span class="keyword">new</span> THREE.WebGL1Renderer();</div><div class="line">scene.background = <span class="literal">null</span>;</div><div class="line">renderer.setClearColor(<span class="number">0x000000</span>, <span class="number">0</span>)</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>, <span class="literal">false</span>);</div><div class="line"><span class="keyword">const</span> canvas_2d = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>);</div><div class="line"><span class="keyword">const</span> ctx = canvas_2d.getContext(<span class="string">'2d'</span>);</div><div class="line">canvas_2d.width = <span class="number">640</span>;</div><div class="line">canvas_2d.height = <span class="number">480</span>;</div><div class="line"><span class="keyword">const</span> canvas_3d = renderer.domElement;</div><div class="line"><span class="keyword">const</span> container = <span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>) || <span class="built_in">document</span>.body;</div><div class="line">container.appendChild(canvas_2d);</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// OBJECTS</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line">scene.add( <span class="keyword">new</span> THREE.GridHelper( <span class="number">10</span>,<span class="number">10</span> ) );</div><div class="line"><span class="keyword">const</span> mesh = <span class="keyword">new</span> THREE.Mesh(</div><div class="line">    <span class="keyword">new</span> THREE.SphereGeometry(<span class="number">0.5</span>, <span class="number">20</span>, <span class="number">20</span>),</div><div class="line">    <span class="keyword">new</span> THREE.MeshNormalMaterial(&#123; <span class="attr">wireframe</span>: <span class="literal">true</span>&#125;));</div><div class="line">scene.add(mesh);</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// QUATERNION OBJECTS ARRAY</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> q_array = [</div><div class="line">    [ [<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>], [<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>] ],</div><div class="line">    [ [<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>], [<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>] ],</div><div class="line">    [ [<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>], [<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>] ],</div><div class="line">    [ [<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>], [<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>] ]</div><div class="line">].map(<span class="function">(<span class="params"> (data</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">const</span> v1 = <span class="keyword">new</span> THREE.Vector3().fromArray(data[<span class="number">0</span>]).normalize();</div><div class="line">    <span class="keyword">const</span> v2 = <span class="keyword">new</span> THREE.Vector3().fromArray(data[<span class="number">1</span>]).normalize();</div><div class="line">    <span class="keyword">const</span> q = <span class="keyword">new</span> THREE.Quaternion().setFromUnitVectors(v1, v2);</div><div class="line">    <span class="keyword">return</span> q;</div><div class="line">&#125;));</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// UPDATE HELPER</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> rotateWithQarray = <span class="function">(<span class="params">obj3d, q_array, a1</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">const</span> len = q_array.length;</div><div class="line">    <span class="keyword">const</span> i = <span class="built_in">Math</span>.round( ( len - <span class="number">1</span> ) * a1);</div><div class="line">    <span class="keyword">const</span> q1 = q_array[ i ];</div><div class="line">    <span class="keyword">const</span> q2 = q_array[ (i + <span class="number">1</span>) % len];</div><div class="line">    <span class="keyword">let</span> a2 = len * a1 % <span class="number">1</span>;</div><div class="line">    obj3d.quaternion.copy(q1).slerp(q2, a2);</div><div class="line">&#125;;</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// CONTROLS</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">let</span> controls = <span class="literal">null</span>;</div><div class="line"><span class="keyword">if</span>(THREE.OrbitControls)&#123;</div><div class="line">    controls = <span class="keyword">new</span> THREE.OrbitControls(camera, canvas_2d);</div><div class="line">&#125;</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// ANIMATION LOOP</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line">camera.position.set(<span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>);</div><div class="line"><span class="keyword">const</span> sm = &#123;</div><div class="line">   <span class="attr">FPS_UPDATE</span>: <span class="number">12</span>,     <span class="comment">// fps rate to update ( low fps for low CPU use, but choppy video )</span></div><div class="line">   FPS_MOVEMENT: <span class="number">30</span>,  <span class="comment">// fps rate to move object by that is independent of frame update rate</span></div><div class="line">   FRAME_MAX: <span class="number">100</span>,</div><div class="line">   <span class="attr">secs</span>: <span class="number">0</span>,</div><div class="line">   <span class="attr">frame_frac</span>: <span class="number">0</span>,    <span class="comment">// 30.888 / 450</span></div><div class="line">   frame: <span class="number">0</span>,         <span class="comment">// 30 / 450</span></div><div class="line">   tick: <span class="number">0</span>,           <span class="comment">//  1 / 450 ( about 1 FPS then )</span></div><div class="line">   now: <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">   <span class="attr">lt</span>: <span class="keyword">new</span> <span class="built_in">Date</span>()</div><div class="line">&#125;;</div><div class="line"><span class="keyword">const</span> update = <span class="function"><span class="keyword">function</span>(<span class="params">sm</span>)</span>&#123;</div><div class="line">    <span class="keyword">const</span> a1 = sm.frame / sm.FRAME_MAX;</div><div class="line">    rotateWithQarray(mesh, q_array, a1);</div><div class="line">&#125;;</div><div class="line"><span class="keyword">const</span> render2d = <span class="function">(<span class="params">sm</span>) =&gt;</span> &#123;</div><div class="line">    ctx.clearRect(<span class="number">0</span>,<span class="number">0</span>, canvas_2d.width, canvas_2d.height);</div><div class="line">    ctx.fillStyle = <span class="string">'rgba(0,0,0,1)'</span>;</div><div class="line">    ctx.fillRect(<span class="number">0</span>,<span class="number">0</span>, canvas_2d.width, canvas_2d.height);</div><div class="line">    ctx.drawImage(canvas_3d, <span class="number">0</span>, <span class="number">0</span>, canvas_2d.width, canvas_2d.height);</div><div class="line">    ctx.fillStyle = <span class="string">'rgba(0,0,0,0.3)'</span>;</div><div class="line">    ctx.fillRect(<span class="number">0</span>,<span class="number">0</span>, canvas_2d.width, canvas_2d.height);</div><div class="line">    ctx.fillStyle = <span class="string">'white'</span>;</div><div class="line">    ctx.textBaseline = <span class="string">'top'</span>;</div><div class="line">    ctx.font = <span class="string">'10px monospace'</span>;</div><div class="line">    ctx.fillText(<span class="string">'tick              : '</span> + sm.tick, <span class="number">5</span>, <span class="number">5</span>)</div><div class="line">    ctx.fillText(<span class="string">'frame_frac        : '</span> + sm.frame_frac.toFixed(<span class="number">3</span>), <span class="number">5</span>, <span class="number">20</span>);</div><div class="line">    ctx.fillText(<span class="string">'frame / FRAME_MAX : '</span> + sm.frame + <span class="string">'/'</span> + sm.FRAME_MAX, <span class="number">5</span>, <span class="number">35</span>);</div><div class="line">&#125;;</div><div class="line"><span class="keyword">const</span> loop = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    sm.now = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line">    sm.secs = (sm.now - sm.lt) / <span class="number">1000</span>;</div><div class="line">    requestAnimationFrame(loop);</div><div class="line">    <span class="keyword">if</span>(sm.secs &gt; <span class="number">1</span> / sm.FPS_UPDATE)&#123;</div><div class="line">        <span class="comment">// update, render to 3d canvas, and then render to 2d canvas</span></div><div class="line">        update(sm);</div><div class="line">        renderer.render(scene, camera);</div><div class="line">        render2d(sm);</div><div class="line">        <span class="comment">// step frame</span></div><div class="line">        sm.frame_frac += sm.FPS_MOVEMENT * sm.secs;</div><div class="line">        sm.frame_frac %= sm.FRAME_MAX;</div><div class="line">        sm.frame = <span class="built_in">Math</span>.floor(sm.frame_frac);</div><div class="line">        sm.tick = (sm.tick += <span class="number">1</span>) % sm.FRAME_MAX;</div><div class="line">        sm.lt = sm.now;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line">loop();</div></pre></td></tr></table></figure>
+<p>The basic idea of this loop demo is working okay in the sense that the slerp method is indeed slerping between two quaternion objects. There is just maybe a bit more that I would like to do when it comes to setting the starting state of each rotation using the slerp method. One way might just have to involve having two sets of unit vectors, one for a start state and then another to lerp to. However I might also be able to work something out using the premultiply method as that often comes in handy when I am in a situation in which I need to preform a few rotations rather than just one.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>The slerp method then might come in handy often when working with these quaternion objects, and then as such it might prove to be a kind of core set of must know methods with the class. There are a few other methods that are very impotent thought such as the set from axis angle method which is a good option for setting the state of a quarenion in order to have one to slerp to begin with. There are some other options for that though such as the <a href="/2023/04/07/threejs-quaternion-setfromunitvectors/">set from unit vectors method</a> which also works well for setting the state of quaternion objects as well.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2023/04/14/threejs-quaternion-slerp/" data-id="clhgco1kb02g5pwv1cvlzz2wp" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2023/04/14/threejs-quaternion-slerp/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/04/28/electronjs-example-game-mrsun/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Idle Game Electronjs project example - MrSun Idle prototype
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/04/07/threejs-quaternion-setfromunitvectors/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Quaternion set from unit vectors method in threejs</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2023/04/14/threejs-quaternion-slerp/index.html';
+    this.page.identifier = '1036';
+    this.page.title = 'Quaternion slerp method';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/electronjs/">electronjs</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/electronjs/">electronjs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.27px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.45px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.18px;">angular</a> <a href="/tags/animation/" style="font-size: 11.82px;">animation</a> <a href="/tags/automation/" style="font-size: 11.82px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.27px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.45px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.64px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.73px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.91px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.36px;">ejs</a> <a href="/tags/electronjs/" style="font-size: 13.64px;">electronjs</a> <a href="/tags/express/" style="font-size: 16.82px;">express</a> <a href="/tags/games/" style="font-size: 17.27px;">games</a> <a href="/tags/git/" style="font-size: 12.73px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.82px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.55px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.45px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.36px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 17.73px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.64px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.55px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.55px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.18px;">phaser</a> <a href="/tags/python/" style="font-size: 15.91px;">python</a> <a href="/tags/statistics/" style="font-size: 14.09px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 19.09px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16.36px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">February 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">January 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">December 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">November 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">October 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">September 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">September 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/05/05/threejs-examples-timeline/">Timeline module threejs example</a>
+          </li>
+        
+          <li>
+            <a href="/2023/04/28/electronjs-example-game-mrsun/">Idle Game Electronjs project example - MrSun Idle prototype</a>
+          </li>
+        
+          <li>
+            <a href="/2023/04/14/threejs-quaternion-slerp/">Quaternion slerp method</a>
+          </li>
+        
+          <li>
+            <a href="/2023/04/07/threejs-quaternion-setfromunitvectors/">Quaternion set from unit vectors method in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/03/31/threejs-quaternion-premultiply/">Quaternion premultiply method in threejs</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2021/02/19/threejs-examples/" class="mobile-nav-link">ThreeJS</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas</a>
+  
+    <a href="https://www.youtube.com/user/javaweaver" class="mobile-nav-link">Youtube</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2023/04/14/threejs-quaternion-slerp/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
