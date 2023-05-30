@@ -13,16 +13,16 @@
   <link rel="canonical" href="https://dustinpfister.github.io/2017/03/24/git-hooks/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Git hooks are scripts that I can place in the hooks folder that resides in the hidden .git folder of a project working tree. Because I use git as my system of source control this is an option that I">
+  <meta name="description" content="Git hooks are scripts that I can place in the hooks folder that resides in the hidden git folder of a project working tree. Because I use git as my system of source control this is an option that I ca">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Git hooks.">
 <meta property="og:url" content="https://dustinpfister.github.io/2017/03/24/git-hooks/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
-<meta property="og:description" content="Git hooks are scripts that I can place in the hooks folder that resides in the hidden .git folder of a project working tree. Because I use git as my system of source control this is an option that I">
-<meta property="og:updated_time" content="2017-04-04T12:23:55.000Z">
+<meta property="og:description" content="Git hooks are scripts that I can place in the hooks folder that resides in the hidden git folder of a project working tree. Because I use git as my system of source control this is an option that I ca">
+<meta property="og:updated_time" content="2023-05-18T20:08:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git hooks.">
-<meta name="twitter:description" content="Git hooks are scripts that I can place in the hooks folder that resides in the hidden .git folder of a project working tree. Because I use git as my system of source control this is an option that I">
+<meta name="twitter:description" content="Git hooks are scripts that I can place in the hooks folder that resides in the hidden git folder of a project working tree. Because I use git as my system of source control this is an option that I ca">
   
     <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
   
@@ -128,10 +128,10 @@
 
     <!-- other info (dustin) -->
     <a href="/2017/03/24/git-hooks/" class="article-date"> Modified:
-  <time datetime="2017-04-04T12:23:55.000Z" itemprop="dateModified">2017-04-04</time>
+  <time datetime="2023-05-18T20:08:35.000Z" itemprop="dateModified">2023-05-18</time>
 </a>
 
-    <span class="article-date">V1</span>
+    <span class="article-date">V1.1</span>
 
     
   <div class="article-category">
@@ -154,26 +154,24 @@
     
     <div class="article-entry" itemprop="text">
       
-        
-<meta itemprop="keywords" content="js,web,development,git,git&#32;hooks,hooks,source&#32;control">
-
-<p><a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks" target="_blank" rel="external">Git hooks</a> are scripts that I can place in the hooks folder that resides in the hidden .git folder of a project working tree. Because I use git as my system of source control this is an option that I can use to help automate tasks. However there are other options for task automation that I prefer, so for the most part I see hooks as a way to enforce compliance with certain standards before being allowed to make a commit to a git folder.</p>
+        <p><a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks" target="_blank" rel="external">Git hooks</a> are scripts that I can place in the hooks folder that resides in the hidden git folder of a project working tree. Because I use git as my system of source control this is an option that I can use to help automate tasks. However there are other options for task automation that I prefer, such as npm scripts. So for the most part I see hooks as a way to enforce compliance with certain standards before being allowed to make a commit to a git folder.</p>
 <a id="more"></a>
 <p>So a simple little hello world “pre-commit” node.js hook might look something like this.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env node</span></div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(<span class="string">'Hey a commit was made.'</span>);</div></pre></td></tr></table></figure>
-<p>I will want to use the node.js shebang at the top of my script to make it clear that the environment i am using is node. In addition I will want to name the file “pre-commit” in the hooks folder if I want a script to run every time I make a commit.</p>
+<p>I will want to use the <a href="/2017/03/26/linux_shebang/">nodejs shebang</a> at the top of my script to make it clear that the environment i am using is node. In addition I will want to name the file “pre-commit” in the hooks folder if I want a script to run every time I make a commit.</p>
 <p>When it comes to writing a more useful pre-commit hook, I could write something that will check if everything is up to snuff before allowing a commit to be made. The basic idea here is to call a process.exit(1) if something does not look good, therefore keeping me from making a commit until it is resolved.</p>
 <p>For an example of this say I want a simple little script that will check if a setting in a JSON file is set to a value that it should be set to every time I make a commit. Say it is a value that I would change while developing, but would want it to always be set to a certain other value every time I make a commit that will be merged into the master branch.</p>
 <p>So the first thing I would want to do is check if my settings.json is even there at all. Yeah that would all ready be a pretty good reason the throw an error and stop the commit if this where a real project.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env node</span></div><div class="line"> </div><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"> </div><div class="line">fs.readFile(<span class="string">'settings.json'</span>, <span class="string">'utf8'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (err) &#123;</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'Error reading settings.json'</span>);</div><div class="line">        <span class="built_in">console</span>.log(err);</div><div class="line">        process.exit(<span class="number">1</span>);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p>So far I have a script that is somewhat useful in that it will not allow for a commit to be made if my settings.json file is not present at all. To make it even more useful I just need to add more functionality to the script such as attempting to read the data in settings.json and throwing an error if there is a problem parsing the data.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env node</span></div><div class="line"> </div><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"> </div><div class="line">fs.readFile(<span class="string">'settings.json'</span>, <span class="string">'utf8'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> settings;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (err) &#123;</div><div class="line"> </div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'Error: Problem reading settings.json'</span>);</div><div class="line">        <span class="built_in">console</span>.log(err);</div><div class="line">        process.exit(<span class="number">1</span>);</div><div class="line"> </div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line"> </div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line"> </div><div class="line">            settings = <span class="built_in">JSON</span>.parse(data);</div><div class="line"> 			</div><div class="line">			<span class="keyword">if</span>(settings.mode)&#123;</div><div class="line"> 				</div><div class="line">				<span class="keyword">if</span>(settings.mode === <span class="string">'production'</span>)&#123;</div><div class="line"> 					</div><div class="line">					<span class="built_in">console</span>.log(<span class="string">'Settings mode is production, looking good.'</span>);</div><div class="line">					process.exit(<span class="number">0</span>);</div><div class="line"> </div><div class="line">				&#125;<span class="keyword">else</span>&#123;</div><div class="line">					</div><div class="line">					<span class="built_in">console</span>.log(<span class="string">'Error: the settings mode is not set to production.'</span>);</div><div class="line">					process.exit(<span class="number">1</span>);</div><div class="line"> </div><div class="line">				&#125;				</div><div class="line"> 				</div><div class="line">			&#125;<span class="keyword">else</span>&#123;</div><div class="line"> 				</div><div class="line">				<span class="built_in">console</span>.log(<span class="string">'Error: No mode property in settings!'</span>);</div><div class="line">				process.exit(<span class="number">1</span>);</div><div class="line"> 				</div><div class="line">			&#125;</div><div class="line"> </div><div class="line">        &#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line"> </div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'Error: Parsing JSON data'</span>);</div><div class="line">            process.exit(<span class="number">1</span>);</div><div class="line"> </div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>This script will only allow a commit if there is a settings.json file, that will parse without issue, and has a mode property that has a value of production. So now you should get the idea, these kinds of scripts are useful for enforcing certain kinds of rules that must be met before a commit can be made. They could also be used to set things up for the next commit as well, saving some time. </p>
+<p>This script will only allow a commit if there is a settings.json file, that will parse without issue, and has a mode property that has a value of production. So now you should get the idea, these kinds of scripts are useful for enforcing certain kinds of rules that must be met before a commit can be made. They could also be used to set things up for the next commit as well, saving some time.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>For the most part I can not say that I ever use client side hooks in git projects. That may change at some point in the future, or it might not. Things like this will of course change from one project to the next, and there is often more that one way to do the same thing. As long as I am working with javaScript for many reasons I like to use Npm scripts as a way to automate tasks.</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2017/03/24/git-hooks/" data-id="clhgcnufe00lkpwv1ifuntx14" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2017/03/24/git-hooks/" data-id="cliahay3h00gi3ov1ws28zi8z" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2017/03/24/git-hooks/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -257,7 +255,7 @@ s.setAttribute('data-timestamp', +new Date());
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/JSON/" style="font-size: 12.27px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.45px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.18px;">angular</a> <a href="/tags/animation/" style="font-size: 11.82px;">animation</a> <a href="/tags/automation/" style="font-size: 11.82px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.27px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.45px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.64px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.73px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.91px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.36px;">ejs</a> <a href="/tags/electronjs/" style="font-size: 13.64px;">electronjs</a> <a href="/tags/express/" style="font-size: 16.82px;">express</a> <a href="/tags/games/" style="font-size: 17.27px;">games</a> <a href="/tags/git/" style="font-size: 12.73px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.82px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.55px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.45px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.36px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 17.73px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.64px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.55px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.55px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.18px;">phaser</a> <a href="/tags/python/" style="font-size: 15.91px;">python</a> <a href="/tags/statistics/" style="font-size: 14.09px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 19.09px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16.36px;">vuejs</a>
+      <a href="/tags/JSON/" style="font-size: 12.27px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.45px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.18px;">angular</a> <a href="/tags/animation/" style="font-size: 11.82px;">animation</a> <a href="/tags/automation/" style="font-size: 11.82px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.27px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.45px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.64px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.73px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.91px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.36px;">ejs</a> <a href="/tags/electronjs/" style="font-size: 13.64px;">electronjs</a> <a href="/tags/express/" style="font-size: 16.82px;">express</a> <a href="/tags/games/" style="font-size: 17.27px;">games</a> <a href="/tags/git/" style="font-size: 13.64px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.82px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.55px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.45px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.36px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 17.73px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.64px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.55px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.55px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.18px;">phaser</a> <a href="/tags/python/" style="font-size: 15.91px;">python</a> <a href="/tags/statistics/" style="font-size: 14.09px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 19.09px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16.36px;">vuejs</a>
     </div>
   </div>
 
@@ -279,23 +277,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2023/05/05/threejs-examples-timeline/">Timeline module threejs example</a>
+            <a href="/2023/05/25/threejs-curve-quadratic-bezier-curve/">2D Quadratic Bezier Curves in threejs</a>
           </li>
         
           <li>
-            <a href="/2023/04/28/electronjs-example-game-mrsun/">Idle Game Electronjs project example - MrSun Idle prototype</a>
+            <a href="/2023/05/24/git-push/">Git Push command</a>
           </li>
         
           <li>
-            <a href="/2023/04/14/threejs-quaternion-slerp/">Quaternion slerp method</a>
+            <a href="/2023/05/19/threejs-lod/">Level Of Detail Objects in threejs</a>
           </li>
         
           <li>
-            <a href="/2023/04/07/threejs-quaternion-setfromunitvectors/">Quaternion set from unit vectors method in threejs</a>
+            <a href="/2023/05/18/git-pull/">Git Pull sub command</a>
           </li>
         
           <li>
-            <a href="/2023/03/31/threejs-quaternion-premultiply/">Quaternion premultiply method in threejs</a>
+            <a href="/2023/05/12/threejs-buffer-geometry-set-draw-range/">The set draw range method of the buffer geometry class in threejs</a>
           </li>
         
       </ul>

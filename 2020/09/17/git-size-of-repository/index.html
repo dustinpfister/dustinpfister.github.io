@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2020/09/17/git-size-of-repository/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="I have some repositories that keep growing in size, so far this has not presented a problem for me, but I can not help but thing that at some point in the future it will sooner or later. So for now I">
-<meta property="og:updated_time" content="2020-09-19T18:04:52.000Z">
+<meta property="og:updated_time" content="2023-05-26T18:09:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git size of repository">
 <meta name="twitter:description" content="I have some repositories that keep growing in size, so far this has not presented a problem for me, but I can not help but thing that at some point in the future it will sooner or later. So for now I">
@@ -128,10 +128,10 @@
 
     <!-- other info (dustin) -->
     <a href="/2020/09/17/git-size-of-repository/" class="article-date"> Modified:
-  <time datetime="2020-09-19T18:04:52.000Z" itemprop="dateModified">2020-09-19</time>
+  <time datetime="2023-05-26T18:09:02.000Z" itemprop="dateModified">2023-05-26</time>
 </a>
 
-    <span class="article-date">V1.7</span>
+    <span class="article-date">V1.11</span>
 
     
   <div class="article-category">
@@ -158,9 +158,9 @@
 <p>In late versions of git there is the <a href="https://git-scm.com/docs/git-count-objects" target="_blank" rel="external">git count-objects</a> command that can be used to know how many objects there are and there disk consumption. So this might be the best way to know how much space a git folder is taking up assuming that I will always be using a late version of git that will support this.</p>
 <a id="more"></a>
 <h2 id="1-Creating-a-test-repo-and-using-git-count-objects"><a href="#1-Creating-a-test-repo-and-using-git-count-objects" class="headerlink" title="1 - Creating a test repo and using git count-objects"></a>1 - Creating a test repo and using git count-objects</h2><p>I often find that it might be best to start over with a test repository rather than a clone of a repository that I might end up accidentally pushing changes to.  So in this section I will be creating a whole new repository with git, and then use the git count-objects command to track the size of the repository.</p>
-<h3 id="1-1-create-the-test-repo"><a href="#1-1-create-the-test-repo" class="headerlink" title="1.1 - create the test repo"></a>1.1 - create the test repo</h3><p>First off I create a new repository with the git init command in a new folder.</p>
+<h3 id="1-1-create-the-test-repo"><a href="#1-1-create-the-test-repo" class="headerlink" title="1.1 - create the test repo"></a>1.1 - create the test repo</h3><p>First off I create a new repository with the <a href="/2019/07/05/git-init">git init</a> command in a new folder.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ mkdir git_test</div><div class="line">$ cd git_test</div><div class="line">$ git init</div></pre></td></tr></table></figure>
-<h3 id="1-2-Add-something-to-it-and-create-a-first-commit"><a href="#1-2-Add-something-to-it-and-create-a-first-commit" class="headerlink" title="1.2 - Add something to it and create a first commit"></a>1.2 - Add something to it and create a first commit</h3><p>I will then want to add something to it such as a dummy README file.</p>
+<h3 id="1-2-Add-something-to-it-and-create-a-first-commit"><a href="#1-2-Add-something-to-it-and-create-a-first-commit" class="headerlink" title="1.2 - Add something to it and create a first commit"></a>1.2 - Add something to it and create a first commit</h3><p>I will then want to add something to it such as a dummy README file. Anything will do for this example at least just so that I add some content of some kind or another.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ nano README.md</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">## git-test</div><div class="line"> </div><div class="line">This is only a test</div></pre></td></tr></table></figure>
 <p>And a first commit.</p>
@@ -169,11 +169,14 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ git count-objects</div><div class="line">3 objects, 0 kilobytes</div></pre></td></tr></table></figure>
 <p>However there are some options that can result in a more detailed output of what is going on so far in this test repository. By passing the v option I get a more verbose output. On top of that there is also the uppercase H option that will give the output in a more Human readable form.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">$ git count-objects -vH</div><div class="line">git count-objects -vH</div><div class="line">count: 3</div><div class="line">size: 225 bytes</div><div class="line">in-pack: 0</div><div class="line">packs: 0</div><div class="line">size-pack: 0 bytes</div><div class="line">prune-packable: 0</div><div class="line">garbage: 0</div><div class="line">size-garbage: 0 bytes</div></pre></td></tr></table></figure>
+<h2 id="2-Using-the-github-API-to-gain-a-sense-as-to-how-large-a-full-repo-is"><a href="#2-Using-the-github-API-to-gain-a-sense-as-to-how-large-a-full-repo-is" class="headerlink" title="2 - Using the github API to gain a sense as to how large a full repo is"></a>2 - Using the github API to gain a sense as to how large a full repo is</h2><p>Anoher way to get an idea of how large a repo is there is the github API if it is a public repo. The <a href="/2020/09/25/linux-curl">linux curl</a> command can be used to pull down the JSON data of a repo, and then <a href="/2020/10/02/linux-redirection/">redireciton</a> can be used push status info to dev\/null. Then end reult of the JSON data can then be piped to <a href="/2020/09/14/linux-grep/">grep</a> to get just the size key of the JSON.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ curl https://api.github.com/repos/mrdoob/three.js 2&gt; /dev/null | grep size</div><div class="line">  &quot;size&quot;: 1273732,</div></pre></td></tr></table></figure>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>That will be it for now when it comes to the size of a git folder. There might be a great deal more to write about with this one when I get around to expanding on this subject a bit more when more things come up. There is just keeping in mind that I can not just cd into the root folder and do a <a href="https://man7.org/linux/man-pages/man1/du.1.html" target="_blank" rel="external">linux du</a> command to get an idea of the size. There is the question if the local repo is a deep clone or not, and there are just a lot of factors at play here when it comes to knowing what the actaul size is.</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2020/09/17/git-size-of-repository/" data-id="clhgcnufu00lrpwv1ghz8dk5p" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2020/09/17/git-size-of-repository/" data-id="cliahay4c00h13ov1ba6laxuq" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2020/09/17/git-size-of-repository/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -257,7 +260,7 @@ s.setAttribute('data-timestamp', +new Date());
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/JSON/" style="font-size: 12.27px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.45px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.18px;">angular</a> <a href="/tags/animation/" style="font-size: 11.82px;">animation</a> <a href="/tags/automation/" style="font-size: 11.82px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.27px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.45px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.64px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.73px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.91px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.36px;">ejs</a> <a href="/tags/electronjs/" style="font-size: 13.64px;">electronjs</a> <a href="/tags/express/" style="font-size: 16.82px;">express</a> <a href="/tags/games/" style="font-size: 17.27px;">games</a> <a href="/tags/git/" style="font-size: 12.73px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.82px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.55px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.45px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.36px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 17.73px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.64px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.55px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.55px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.18px;">phaser</a> <a href="/tags/python/" style="font-size: 15.91px;">python</a> <a href="/tags/statistics/" style="font-size: 14.09px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 19.09px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16.36px;">vuejs</a>
+      <a href="/tags/JSON/" style="font-size: 12.27px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.45px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.18px;">angular</a> <a href="/tags/animation/" style="font-size: 11.82px;">animation</a> <a href="/tags/automation/" style="font-size: 11.82px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.27px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.45px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.64px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.73px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.91px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.36px;">ejs</a> <a href="/tags/electronjs/" style="font-size: 13.64px;">electronjs</a> <a href="/tags/express/" style="font-size: 16.82px;">express</a> <a href="/tags/games/" style="font-size: 17.27px;">games</a> <a href="/tags/git/" style="font-size: 13.64px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.82px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.55px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.45px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.36px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 17.73px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.64px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.55px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.55px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.18px;">phaser</a> <a href="/tags/python/" style="font-size: 15.91px;">python</a> <a href="/tags/statistics/" style="font-size: 14.09px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 19.09px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16.36px;">vuejs</a>
     </div>
   </div>
 
@@ -279,23 +282,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
-            <a href="/2023/05/05/threejs-examples-timeline/">Timeline module threejs example</a>
+            <a href="/2023/05/25/threejs-curve-quadratic-bezier-curve/">2D Quadratic Bezier Curves in threejs</a>
           </li>
         
           <li>
-            <a href="/2023/04/28/electronjs-example-game-mrsun/">Idle Game Electronjs project example - MrSun Idle prototype</a>
+            <a href="/2023/05/24/git-push/">Git Push command</a>
           </li>
         
           <li>
-            <a href="/2023/04/14/threejs-quaternion-slerp/">Quaternion slerp method</a>
+            <a href="/2023/05/19/threejs-lod/">Level Of Detail Objects in threejs</a>
           </li>
         
           <li>
-            <a href="/2023/04/07/threejs-quaternion-setfromunitvectors/">Quaternion set from unit vectors method in threejs</a>
+            <a href="/2023/05/18/git-pull/">Git Pull sub command</a>
           </li>
         
           <li>
-            <a href="/2023/03/31/threejs-quaternion-premultiply/">Quaternion premultiply method in threejs</a>
+            <a href="/2023/05/12/threejs-buffer-geometry-set-draw-range/">The set draw range method of the buffer geometry class in threejs</a>
           </li>
         
       </ul>
