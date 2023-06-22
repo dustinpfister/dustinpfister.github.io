@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
+  
+  <title>Buffer Attributes in threejs | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2023/06/22/threejs-buffer-attribute/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="In threejs buffer geometry objects are composed of at least one, but typically many instances of the Buffer Attribute class. Each of the buffer attributes are used in the process of creating, and upda">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Buffer Attributes in threejs">
+<meta property="og:url" content="https://dustinpfister.github.io/2023/06/22/threejs-buffer-attribute/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="In threejs buffer geometry objects are composed of at least one, but typically many instances of the Buffer Attribute class. Each of the buffer attributes are used in the process of creating, and upda">
+<meta property="og:updated_time" content="2023-06-22T15:07:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Buffer Attributes in threejs">
+<meta name="twitter:description" content="In threejs buffer geometry objects are composed of at least one, but typically many instances of the Buffer Attribute class. Each of the buffer attributes are used in the process of creating, and upda">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Google Analytics -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y8XLNG6JRW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y8XLNG6JRW');
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image, as well as the link to my youtube -->
+        <a href="https://www.youtube.com/user/javaweaver"><div class="selfimage"></div></a>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2021/02/19/threejs-examples/">ThreeJS</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas</a>
+        
+          <a class="main-nav-link" href="https://www.youtube.com/user/javaweaver">Youtube</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-threejs-buffer-attribute" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/06/22/threejs-buffer-attribute/" class="article-date"> Published:
+  <time datetime="2023-06-22T13:02:00.000Z" itemprop="datePublished">2023-06-22</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2023/06/22/threejs-buffer-attribute/" class="article-date"> Modified:
+  <time datetime="2023-06-22T15:07:54.000Z" itemprop="dateModified">2023-06-22</time>
+</a>
+
+    <span class="article-date">V1.8</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Buffer Attributes in threejs
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>In threejs buffer geometry objects are composed of at least one, but typically many instances of the <a href="https://threejs.org/docs/#api/en/core/BufferAttribute" target="_blank" rel="external">Buffer Attribute class</a>. Each of the buffer attributes are used in the process of creating, and updating the <a href="/2021/06/07/threejs-buffer-geometry-attributes-position/">position of vertices</a> in space, an <a href="/2022/12/09/threejs-buffer-geometry-index/">index to reuse such vertices</a>, <a href="/2021/06/08/threejs-buffer-geometry-attributes-normals/">vertex normals</a>, <a href="/2021/06/09/threejs-buffer-geometry-attributes-uv/">uv mapping values</a>, and much more actually. With that said having a solid grasp on what there is to work with, and be aware of in the buffer attribute class is necessary in order to create custom geometry, as well as update or extend, or debug problems with existing geometry.</p>
+<a id="more"></a>
+<h2 id="Buffer-attribute-objects-and-what-to-know-first"><a href="#Buffer-attribute-objects-and-what-to-know-first" class="headerlink" title="Buffer attribute objects and what to know first"></a>Buffer attribute objects and what to know first</h2><p>This is a blog post on the subject of buffer attribute objects which is one of the kind of nested objects that one will find in an instance of buffer geometry when working with the javaScript library known as threejs. This is then not a post for people that are new to threejs, or client side javaScript in general. I will then not be getting into every little detail that you should know before hand in this post, however I do use these opening sections of my posts to write about a few closely related topics that you might want to read more about.</p>
+<h3 id="Buffer-Geometry-Objects"><a href="#Buffer-Geometry-Objects" class="headerlink" title="Buffer Geometry Objects"></a>Buffer Geometry Objects</h3><p>As I have mentioned a few times now at this point, buffer attribute objects can be found in buffer geometry objects. These buffer attributes objects store the state of a geometry in the form of arrays of data for things like the points in space to begin with, and also just about everything else. Although I will be writing about a lot of examples that have to do with geometry here, this is still not a post that serves as an over all review of <a href="/2021/04/22/threejs-buffer-geometry/">buffer geometry in general as I have all ready wrote a blog post</a> when it comes to that.</p>
+<h3 id="Source-code-is-up-on-Github"><a href="#Source-code-is-up-on-Github" class="headerlink" title="Source code is up on Github"></a>Source code is up on Github</h3><p>The source code examples that I write about in this blog post can also be <a href="https://github.com/dustinpfister/test_threejs/tree/master/views/forpost/threejs-buffer-attribute" target="_blank" rel="external">found in my test threejs repository</a> on Github. This is also the location where I place all the source code examples for the many other <a href="/categories/three-js/">blog posts that I have wrote on threejs</a> as well.</p>
+<h3 id="Be-Aware-of-Version-Numbers"><a href="#Be-Aware-of-Version-Numbers" class="headerlink" title="Be Aware of Version Numbers"></a>Be Aware of Version Numbers</h3><p>When I first wrote this blog post I was using <a href="https://github.com/dustinpfister/test_threejs/blob/master/views/demos/r152/README.md" target="_blank" rel="external">r152 of threejs</a>. This means that I am using javaScript module type script tags, and an import map for these demos as I am starting to get up to speed with certain future changes that are happening with the library when it comes to using this revision. Still it should not be to hard to make the changes needed to get these demos to work okay with older revisions and code styles.</p>
+<h2 id="1-Basic-Examples-of-Buffer-Attribute-Objects"><a href="#1-Basic-Examples-of-Buffer-Attribute-Objects" class="headerlink" title="1 - Basic Examples of Buffer Attribute Objects."></a>1 - Basic Examples of Buffer Attribute Objects.</h2><p>For this first section of the post I will be starting out with just some basic examples of the buffer Attribute class. There are two general was of getting started with this kind of class, creating a custom geometry from the ground up, and mutation of a geometry that exists before hand. Sense this is very much a basic section custom geometries here will be very primitive and just contain a single attribute for the most part, mainly the position attribute. Other examples will involve working with buffer attributes that are contained in a buffer geometry object created with one of the many options when it comes to built in constructor functions such as the Sphere geometry constructor.</p>
+<h3 id="1-1-Create-custom-geometry-with-just-a-position-attribute-and-THREE-Points"><a href="#1-1-Create-custom-geometry-with-just-a-position-attribute-and-THREE-Points" class="headerlink" title="1.1 - Create custom geometry with just a position attribute and THREE.Points"></a>1.1 - Create custom geometry with just a position attribute and THREE.Points</h3><p>When it comes to just creating a blank buffer geometry object by calling THREE.BufferGeomety buffer attributes must be crated from the ground up and then added to the geometry by making use of the set attribute method of the buffer geometry class. In order to use the set attribute method I first need to know what kind of attribute I want to add to the geometry, and then I also need a buffer attribute object.</p>
+<p>For this demo I will just be creating a non indexed position attribute for a blank buffer geometry. When it comes to this kind of geometry it will not work so well with mesh objects, but it will work just fine with <a href="/2023/02/23/threejs-points/">THREE.Points</a>. In order to get a geometry to work well with a mesh object I will need more than just a position attribute.</p>
+<p>Anyway in order to create this buffer attribute I will first need an array of points in space. There are a whole lot of ways to go about creating this kind of array, but for this basic example I will just be punching in a few values into a plain old javaScript array literal. However when it comes to passing data to the THREE.BufferAttribute constructor I can not just pass a plain old javaScript array, but rather a typed array. The kind of typed array to use might differ from one kind of attribute to another, but for the most part a Float32Array array will work just fine.</p>
+<p>Once I have the array that I want to use together I can now call THREE.BufferAttribite, pass the array as the first argument, and then the item size of the attribute as the second argument. Sense this is a position attribute that I am creating I will want to pass the number 3 for the item size ( x,y,z ).</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// IMPORT - threejs and any addons I want to use</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> THREE <span class="keyword">from</span> <span class="string">'three'</span>;</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// SCENE, CAMERA, RENDERER</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">50</span>, <span class="number">32</span> / <span class="number">24</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line"><span class="keyword">const</span> renderer = <span class="keyword">new</span> THREE.WebGL1Renderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>, <span class="literal">false</span>);</div><div class="line">(<span class="built_in">document</span>.querySelector(<span class="string">'#demo'</span>) || <span class="built_in">document</span>.body).appendChild(renderer.domElement);</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// BUFFER ATTRIBUTE</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> data_pos = [ <span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,  <span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,  <span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span> ];</div><div class="line"><span class="keyword">const</span> array = <span class="keyword">new</span> <span class="built_in">Float32Array</span>( data_pos );</div><div class="line"><span class="keyword">const</span> item_size = <span class="number">3</span>;</div><div class="line"><span class="keyword">const</span> att_pos = <span class="keyword">new</span> THREE.BufferAttribute( array, item_size );</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// GEOMETRY</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> geometry = <span class="keyword">new</span> THREE.BufferGeometry();</div><div class="line">geometry.setAttribute(<span class="string">'position'</span>, att_pos);</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// SCENE CHILD OBJECTS</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line">scene.add( <span class="keyword">new</span> THREE.GridHelper(<span class="number">10</span>, <span class="number">10</span>) );</div><div class="line"><span class="keyword">const</span> points1 = <span class="keyword">new</span> THREE.Points( geometry, <span class="keyword">new</span> THREE.PointsMaterial(&#123; <span class="attr">size</span>: <span class="number">0.25</span>, <span class="attr">color</span>: <span class="number">0x00ff00</span> &#125;));</div><div class="line">scene.add(points1);</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// RENDER</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line">camera.position.set( <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span> );</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">renderer.render(scene, camera);</div></pre></td></tr></table></figure>
+<h3 id="1-2-The-Vector3-from-attribute-method"><a href="#1-2-The-Vector3-from-attribute-method" class="headerlink" title="1.2 - The Vector3 from attribute method"></a>1.2 - The Vector3 from attribute method</h3><p>There are a number of methods of various classes in threejs that will allow one to set the values of an instance of such an object bu passing a buffer attribute object and an item index of the attribute. For example say that I want to create a Vector3 object that has the values of the first vertex of a position attribute. To do so I can call the from buffer attribute method off of an instance of the Vector3 class, then pass the position attribute, and then the number zero which should be the first point in the attribute. The end result will the be a  vector3 object with the x, y, and z values having the sample values as that first point in the position attribute of the geometry.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// IMPORT - threejs and any addons I want to use</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> THREE <span class="keyword">from</span> <span class="string">'three'</span>;</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// SCENE, CAMERA, RENDERER</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">50</span>, <span class="number">32</span> / <span class="number">24</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line"><span class="keyword">const</span> renderer = <span class="keyword">new</span> THREE.WebGL1Renderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>, <span class="literal">false</span>);</div><div class="line">(<span class="built_in">document</span>.querySelector(<span class="string">'#demo'</span>) || <span class="built_in">document</span>.body).appendChild(renderer.domElement);</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// GEOMETRY</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> geometry = <span class="keyword">new</span> THREE.SphereGeometry(<span class="number">0.25</span>, <span class="number">30</span>, <span class="number">30</span>);</div><div class="line"><span class="keyword">const</span> att_pos = geometry.getAttribute(<span class="string">'position'</span>);</div><div class="line"><span class="keyword">let</span> i = <span class="number">0</span>;</div><div class="line"><span class="keyword">while</span>(i &lt; att_pos.count)&#123;</div><div class="line">    <span class="keyword">const</span> v = <span class="keyword">new</span> THREE.Vector3().fromBufferAttribute( att_pos, i );</div><div class="line">    v.normalize().multiplyScalar( <span class="number">0.25</span> + <span class="number">0.75</span> * <span class="built_in">Math</span>.random() );</div><div class="line">    att_pos.setXYZ(i,  v.x, v.y, v.z );</div><div class="line">    i += <span class="number">1</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// SCENE CHILD OBJECTS</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line">scene.add( <span class="keyword">new</span> THREE.GridHelper(<span class="number">10</span>, <span class="number">10</span>) );</div><div class="line"><span class="keyword">const</span> points1 = <span class="keyword">new</span> THREE.Points( geometry, <span class="keyword">new</span> THREE.PointsMaterial(&#123; <span class="attr">size</span>: <span class="number">0.1</span>, <span class="attr">color</span>: <span class="number">0x00ff00</span> &#125;));</div><div class="line">scene.add(points1);</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// RENDER</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line">camera.position.set( <span class="number">1.5</span>, <span class="number">1</span>, <span class="number">1.7</span> );</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">renderer.render(scene, camera);</div></pre></td></tr></table></figure>
+<h3 id="1-3-The-needs-update-boolean-of-buffer-attributes"><a href="#1-3-The-needs-update-boolean-of-buffer-attributes" class="headerlink" title="1.3 - The needs update boolean of buffer attributes"></a>1.3 - The needs update boolean of buffer attributes</h3><p>The needs update boolean is what I will want to set to true when it comes to any kind of situation in which I am updating the state of an attribute and thus it will need to be resent to the GPU. So then this example is like the other example in this section in which I am adjusting the vector unit length of all the points in the position attribute. However now I am doing so in an animation loop, and thus I am making sure that I set the needs update boolen to true each time that I do so.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// IMPORT - threejs and any addons I want to use</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> THREE <span class="keyword">from</span> <span class="string">'three'</span>;</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// SCENE, CAMERA, RENDERER</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">50</span>, <span class="number">32</span> / <span class="number">24</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line"><span class="keyword">const</span> renderer = <span class="keyword">new</span> THREE.WebGL1Renderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>, <span class="literal">false</span>);</div><div class="line">(<span class="built_in">document</span>.querySelector(<span class="string">'#demo'</span>) || <span class="built_in">document</span>.body).appendChild(renderer.domElement);</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// GEOMETRY</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> geometry = <span class="keyword">new</span> THREE.BoxGeometry(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">4</span>);</div><div class="line"><span class="keyword">const</span> att_pos = geometry.getAttribute(<span class="string">'position'</span>);</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// SCENE CHILD OBJECTS</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line">scene.add( <span class="keyword">new</span> THREE.GridHelper(<span class="number">10</span>, <span class="number">10</span>) );</div><div class="line"><span class="keyword">const</span> points1 = <span class="keyword">new</span> THREE.Points( geometry, <span class="keyword">new</span> THREE.PointsMaterial(&#123; <span class="attr">size</span>: <span class="number">0.1</span>, <span class="attr">color</span>: <span class="number">0x00ff00</span> &#125;));</div><div class="line">scene.add(points1);</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// LOOP</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line">camera.position.set( <span class="number">1.5</span>, <span class="number">1</span>, <span class="number">1.7</span> );</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">const</span> update = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">let</span> i = <span class="number">0</span>;</div><div class="line">    <span class="keyword">while</span>(i &lt; att_pos.count)&#123;</div><div class="line">        <span class="keyword">const</span> v = <span class="keyword">new</span> THREE.Vector3().fromBufferAttribute( att_pos, i );</div><div class="line">        v.normalize().multiplyScalar( <span class="number">0.25</span> + <span class="number">0.75</span> * <span class="built_in">Math</span>.random() );</div><div class="line">        att_pos.setXYZ(i,  v.x, v.y, v.z );</div><div class="line">        att_pos.needsUpdate = <span class="literal">true</span>;</div><div class="line">        i += <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">const</span> FPS = <span class="number">4</span>;</div><div class="line"><span class="keyword">let</span> lt = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"><span class="keyword">const</span> loop = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">const</span> now = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line">    <span class="keyword">const</span> secs = (now - lt) / <span class="number">1000</span>;</div><div class="line">    requestAnimationFrame(loop);</div><div class="line">    <span class="keyword">if</span>(secs &gt;= <span class="number">1</span> / FPS)&#123;</div><div class="line">        update();</div><div class="line">        renderer.render(scene, camera);</div><div class="line">        lt = now;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line">loop();</div></pre></td></tr></table></figure>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>The Buffer attribute class is then how to go about creating, or updating the data of a buffer geometry object. There are a wide range of different types of attributes that are responsible for different aspects of an over all geometry. There is not just simply the points in space, but rather how many points and are they being reused or now when it comes to the use of an index. An index for a buffer geometry by the way is indeed a kind of buffer attribute as well. There is also the state of the normal attribute that is used to define an additional direction for each point in space that is used to find out what side of a triangle is the front side. There is then also the uv attribute that is used in the process of mapping a 2d texture to the 3d object of the geometry, vertex color attributes, morph attributes and so forth. Also there is getting into making custom attributes as well now and then when doing so is called for in some cases.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2023/06/22/threejs-buffer-attribute/" data-id="clj7de3xx02li5ov129kzu28r" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2023/06/22/threejs-buffer-attribute/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2023/06/21/linux-du/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">File Space usage with Linux du command</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2023/06/22/threejs-buffer-attribute/index.html';
+    this.page.identifier = '1054';
+    this.page.title = 'Buffer Attributes in threejs';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/electronjs/">electronjs</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/electronjs/">electronjs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.27px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.45px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.18px;">angular</a> <a href="/tags/animation/" style="font-size: 11.82px;">animation</a> <a href="/tags/automation/" style="font-size: 11.82px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.27px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.45px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.64px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.73px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.91px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.36px;">ejs</a> <a href="/tags/electronjs/" style="font-size: 13.64px;">electronjs</a> <a href="/tags/express/" style="font-size: 16.82px;">express</a> <a href="/tags/games/" style="font-size: 17.27px;">games</a> <a href="/tags/git/" style="font-size: 13.64px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.82px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.55px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.45px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.36px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 17.73px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.64px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.55px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.55px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.18px;">phaser</a> <a href="/tags/python/" style="font-size: 15.91px;">python</a> <a href="/tags/statistics/" style="font-size: 14.09px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 19.09px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16.36px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">June 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">February 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">January 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">December 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">November 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">October 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">September 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">September 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/06/22/threejs-buffer-attribute/">Buffer Attributes in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/21/linux-du/">File Space usage with Linux du command</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/15/linux-aplay/">Linux aplay command and ALSA</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/13/threejs-extrude-geometry/">Extrude Geometry in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/09/threejs-vector2/">The Vector2 class for 2D curves, mouse pointers, ect</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2021/02/19/threejs-examples/" class="mobile-nav-link">ThreeJS</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas</a>
+  
+    <a href="https://www.youtube.com/user/javaweaver" class="mobile-nav-link">Youtube</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2023/06/22/threejs-buffer-attribute/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

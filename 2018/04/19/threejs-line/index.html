@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2018/04/19/threejs-line/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="When it comes to making a threejs project it is typically the mesh object class that is used to create and add objects to a scene. However there are a few other options that can be used as a way to ad">
-<meta property="og:updated_time" content="2023-01-03T14:31:38.000Z">
+<meta property="og:updated_time" content="2023-06-14T14:39:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Working with lines in three.js">
 <meta name="twitter:description" content="When it comes to making a threejs project it is typically the mesh object class that is used to create and add objects to a scene. However there are a few other options that can be used as a way to ad">
@@ -128,10 +128,10 @@
 
     <!-- other info (dustin) -->
     <a href="/2018/04/19/threejs-line/" class="article-date"> Modified:
-  <time datetime="2023-01-03T14:31:38.000Z" itemprop="dateModified">2023-01-03</time>
+  <time datetime="2023-06-14T14:39:12.000Z" itemprop="dateModified">2023-06-14</time>
 </a>
 
-    <span class="article-date">V1.31</span>
+    <span class="article-date">V1.32</span>
 
     
   <div class="article-category">
@@ -156,13 +156,14 @@
       
         <p>When it comes to making a <a href="https://threejs.org/" target="_blank" rel="external">threejs</a> project it is typically the mesh object class that is used to create and add objects to a scene. However there are a few other options that can be used as a way to add content to a scene such as Points which can be used to just simply show the location of the points of a position attribute of buffer geometry, and then Lines. For this post I will be focusing more so on using Lines then as an alternative to using mesh objects as I have another post in which the main focus is on <a href="/2018/05/12/threejs-points-material/">points</a>.</p>
 <a id="more"></a>
-<p>There is only so much to write about with the <a href="https://threejs.org/docs/#api/en/objects/Line" target="_blank" rel="external">Line</a>, and <a href="https://threejs.org/docs/#api/en/objects/LineSegments" target="_blank" rel="external">LineSegments</a> constructors in threejs, so to help keep this post from being to thin I will also be writing about other closly realted topucs such as how to come up with the points in the first place, and the Materials that can be used with Lines. With lines I can not use any of the mesh object materials as such I must stick with the <a href="https://threejs.org/docs/index.html#api/materials/LineBasicMaterial" target="_blank" rel="external">LineBasicMatreial</a> and <a href="https://threejs.org/docs/index.html#api/en/materials/LineDashedMaterial" target="_blank" rel="external">LineDashedMaterial</a>. </p>
+<p>There is only so much to write about with the <a href="https://threejs.org/docs/#api/en/objects/Line" target="_blank" rel="external">Line</a>, and <a href="https://threejs.org/docs/#api/en/objects/LineSegments" target="_blank" rel="external">LineSegments</a> constructors in threejs, so to help keep this post from being too thin I will also be writing about other closly realted topics such as how to come up with the points in the first place, and the Materials that can be used with Lines. With lines I can not use any of the mesh object materials as such I must stick with the <a href="https://threejs.org/docs/index.html#api/materials/LineBasicMaterial" target="_blank" rel="external">LineBasicMatreial</a> and <a href="https://threejs.org/docs/index.html#api/en/materials/LineDashedMaterial" target="_blank" rel="external">LineDashedMaterial</a>. Also there is a lot of ground to cover when it comes to the subject of how to create a v3array, or a curve to create such an array from, so forth and so on.</p>
 <iframe class="youtube_video" src="https://www.youtube.com/embed/Cs5QXW0xldQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
 <h2 id="What-you-should-know-before-hand"><a href="#What-you-should-know-before-hand" class="headerlink" title="What you should know before hand"></a>What you should know before hand</h2><p>This is a post on just one little aspect of threejs which is a javaScript project that allows for doing things involving solid geometry. It is not a <a href="/2018/04/04/threejs-getting-started/">getting started post on three.js</a>, or any additional aspects of <a href="/2018/11/27/js-getting-started/">javaScript in general</a> that are required in order to work with the library. So then I will not be covering any basic things that one should know before reading the rest of this post, however I do often use the opening sections of these posts to write about some things that are closely related to the main over all topic of the post.</p>
+<h3 id="There-is-also-Tube-Geometry"><a href="#There-is-also-Tube-Geometry" class="headerlink" title="There is also Tube Geometry"></a>There is also Tube Geometry</h3><p>Lines are great, but they still do have there limitations that will cause one to want to create lines that are actually tubes. These tube line geometries will then contain not just a position attribute, but also normal, uvs, and index, and so forth that will allow them to work well with THREE.Mesh, and thus also Mesh Materials and thus all the features of such materials. For this kind of geometry there is looking into the <a href="/2023/06/02/threejs-tube-geometry">THREE.TubeGeometry</a> class, and with that also the <a href="/2022/06/17/threejs-curve/">THREE.Curve</a> base class to learn how to get started with that sort of thing.</p>
 <h3 id="Vector3-and-buffer-geometry-position-attributes"><a href="#Vector3-and-buffer-geometry-position-attributes" class="headerlink" title="Vector3 and buffer geometry position attributes"></a>Vector3 and buffer geometry position attributes</h3><p>You will want to know about the <a href="/2018/04/15/threejs-vector3/">Vector3 constructor</a> as that is what is used to define points in 3d space in threejs to begin with often. However when it really comes down to it what one will really want to learn about is the <a href="/2021/06/07/threejs-buffer-geometry-attributes-position/">position attribute of buffer geometry objects</a> as this is what is used to define the paths of lines. </p>
-<h3 id="A-word-On-Materials-when-working-with-lines"><a href="#A-word-On-Materials-when-working-with-lines" class="headerlink" title="A word On Materials when working with lines."></a>A word On Materials when working with lines.</h3><p>If you are just making lines, and nothing that will compose a solid object or face, then it does not make sense to use a material that is designed to be used with something that is just a string of points in space. So if you aim to just draw some lines, and not something that will compose a solid object there are two special materials in threejs that are intended to be used with just lines. There materials are the LineBasicMaterial, and the LineDashedMaterial materials.</p>
+<h3 id="A-word-On-Materials-when-working-with-lines"><a href="#A-word-On-Materials-when-working-with-lines" class="headerlink" title="A word On Materials when working with lines."></a>A word On Materials when working with lines.</h3><p>If you are just making lines, and nothing that will compose a solid object or face, then it does not make sense to use a material that is designed to be used with something that is just a string of points in space. So if you aim to just draw some lines, and not something that will compose a solid object there are two special materials in threejs that are intended to be used with just lines. The materials are the LineBasicMaterial, and the LineDashedMaterial materials. Apart from that most features in the <a href="https://threejs.org/docs/#api/en/materials/Material" target="_blank" rel="external">base material class</a> will still apply. So if you want to do something with vertex color attributes, transparency, or anything that involves the use of a feature in the base material class that should still work just fine.</p>
 <h3 id="Using-the-Dashed-Line-material"><a href="#Using-the-Dashed-Line-material" class="headerlink" title="Using the Dashed Line material"></a>Using the Dashed Line material</h3><p>If you are trying to use the dashed line material rather than the basic material, but are scratching your head wondering why it is that it is not dashed, then changes are you have not called a</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> line = <span class="keyword">new</span> THREE.Line(geometry, <span class="keyword">new</span> THREE.LineDashedMaterial(&#123;</div><div class="line">    <span class="attr">color</span>: <span class="number">0x0000ff</span>,</div><div class="line">    <span class="attr">linewidth</span>: <span class="number">3</span>,</div><div class="line">    <span class="attr">scale</span>: <span class="number">.1</span>,</div><div class="line">    <span class="attr">dashSize</span>: <span class="number">.3</span>,</div><div class="line">    <span class="attr">gapSize</span>: <span class="number">.1</span></div><div class="line">&#125;));</div><div class="line">line.computeLineDistances();</div><div class="line">scene.add(line);</div></pre></td></tr></table></figure>
 <p>Certain properties such as the line width might not work as expected on all platforms, as such it might be best to always expect a width of only 1, or at least be happy with how it looks when it is just 1.</p>
@@ -171,8 +172,8 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> points = [];</div><div class="line">points.push(</div><div class="line">    <span class="keyword">new</span> THREE.Vector3(<span class="number">-10</span>, <span class="number">-10</span>, <span class="number">0</span>),</div><div class="line">    <span class="keyword">new</span> THREE.Vector3(<span class="number">10</span>, <span class="number">0</span>, <span class="number">0</span>),</div><div class="line">    <span class="keyword">new</span> THREE.Vector3(<span class="number">-10</span>, <span class="number">10</span>, <span class="number">0</span>));</div><div class="line"><span class="keyword">var</span> geometry = <span class="keyword">new</span> THREE.BufferGeometry().setFromPoints( points );</div><div class="line"><span class="comment">// CREATE THE LINE</span></div><div class="line"><span class="keyword">var</span> line = <span class="keyword">new</span> THREE.Line(</div><div class="line">        geometry,</div><div class="line">        <span class="keyword">new</span> THREE.LineBasicMaterial(&#123;</div><div class="line">            <span class="attr">color</span>: <span class="number">0x0000ff</span></div><div class="line">        &#125;));</div></pre></td></tr></table></figure>
 <h4 id="Using-the-Geometry-Constructor-removed-as-of-r125"><a href="#Using-the-Geometry-Constructor-removed-as-of-r125" class="headerlink" title="Using the Geometry Constructor ( removed as of r125+ )"></a>Using the Geometry Constructor ( removed as of r125+ )</h4><p>When I first wrote this post I was using r91 of threejs, back then I could make likes by using the geometry constructor. I guess I can still level these examples up but I will of course have to just make it clear that code like this will break on recent versions of threejs unless you can bring back the geometry constructor by some kind of means involving additional external files.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> geometry = <span class="keyword">new</span> THREE.Geometry();</div><div class="line">geometry.vertices.push(</div><div class="line">    <span class="keyword">new</span> THREE.Vector3(<span class="number">0</span>, <span class="number">-10</span>, <span class="number">0</span>),</div><div class="line">    <span class="keyword">new</span> THREE.Vector3(<span class="number">10</span>, <span class="number">0</span>, <span class="number">0</span>),</div><div class="line">    <span class="keyword">new</span> THREE.Vector3(<span class="number">0</span>, <span class="number">10</span>, <span class="number">0</span>));</div><div class="line"> </div><div class="line">scene.add(<span class="keyword">new</span> THREE.Line(geometry, <span class="keyword">new</span> THREE.LineBasicMaterial(&#123;</div><div class="line">    <span class="attr">color</span>: <span class="number">0x0000ff</span></div><div class="line">&#125;)));</div></pre></td></tr></table></figure>
-<h3 id="Source-code-examples-are-up-on-Github"><a href="#Source-code-examples-are-up-on-Github" class="headerlink" title="Source code examples are up on Github"></a>Source code examples are up on Github</h3><p>The source code examples that I am written about in this post can be found in my <a href="https://github.com/dustinpfister/test_threejs/tree/master/views/forpost/threejs-line" target="_blank" rel="external">test threejs repository</a>.</p>
-<h3 id="Version-Numbers-matter"><a href="#Version-Numbers-matter" class="headerlink" title="Version Numbers matter"></a>Version Numbers matter</h3><p>As I say in every post of mine on threejs, the library is a project in which the version number matters big time. When I first wrote this post I was using <a href="https://github.com/mrdoob/three.js/tree/r91" target="_blank" rel="external">threejs r91</a>, and the last time I edited the post I was using r135. Sense then many code breaking changes have happened in threejs with all sorts of things. One major change is that when it comes to lines, and anything that works with geometry from that matter, the geometry now has to be an instance of Buffer Geometry.</p>
+<h3 id="Source-code-examples-are-up-on-Github"><a href="#Source-code-examples-are-up-on-Github" class="headerlink" title="Source code examples are up on Github"></a>Source code examples are up on Github</h3><p>The source code examples that I am writing about in this post can be found in my <a href="https://github.com/dustinpfister/test_threejs/tree/master/views/forpost/threejs-line" target="_blank" rel="external">test threejs repository</a>. This is also where I place the <a href="/categories/three-js/">threejs source code examples for the many other blog posts</a> that I ahve wrote over the years.</p>
+<h3 id="Version-Numbers-matter"><a href="#Version-Numbers-matter" class="headerlink" title="Version Numbers matter"></a>Version Numbers matter</h3><p>As I say in every post of mine on threejs, the library is a project in which the version number matters big time. When I first wrote this post I was using <a href="https://github.com/mrdoob/three.js/tree/r91" target="_blank" rel="external">threejs r91</a>, and the last time I edited the post I was using r146. Sense then many code breaking changes have happened in threejs with all sorts of things. One major change is that when it comes to lines, and anything that works with geometry from that matter, the geometry now has to be an instance of Buffer Geometry.</p>
 <h2 id="1-Full-basic-line-demo-examples"><a href="#1-Full-basic-line-demo-examples" class="headerlink" title="1 - Full basic line demo examples"></a>1 - Full basic line demo examples</h2><p>As with any threejs example that is fully complete there must be a scene, camera, and renderer on top of the use of the Line constructor, geometry, and line materials. In this section I will be going over a few basic hello world style example that are full working examples that take everything into account. </p>
 <h3 id="1-1-First-off-a-new-threejs-r127-example-using-BufferGemoetry"><a href="#1-1-First-off-a-new-threejs-r127-example-using-BufferGemoetry" class="headerlink" title="1.1 - First off a new threejs r127 example using BufferGemoetry"></a>1.1 - First off a new threejs r127 example using BufferGemoetry</h3><p>If I am using a late version of threejs that is r125 or higher I have to use the Buffer Geometry Constructor for the geometry of the line as the old Geometry constructor has been removed from that point forward. So then the first thing I need to do is create an array and then use the vecor3 class to create the points that I want for the line. After that I can use the setFromPoints method of a Buffer Geometry instance to create an instance of buffer geometry with this array of points. The resulting geometry can then be used with the THREE.Line constructor by passing the geometry as the first argument followed by the kine of line material that I want to use.</p>
 <p>Once I have my instance of THREE.line I can then add it to a scene, then create a camera, and a renderer and use the scene and camera with the render just like any other example.</p>
@@ -196,7 +197,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2018/04/19/threejs-line/" data-id="cliqch1m302myiov1wi02hk59" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2018/04/19/threejs-line/" data-id="clj7de5vs02ud5ov1u4ys4gtu" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2018/04/19/threejs-line/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -302,23 +303,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
+            <a href="/2023/06/22/threejs-buffer-attribute/">Buffer Attributes in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/21/linux-du/">File Space usage with Linux du command</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/15/linux-aplay/">Linux aplay command and ALSA</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/13/threejs-extrude-geometry/">Extrude Geometry in threejs</a>
+          </li>
+        
+          <li>
             <a href="/2023/06/09/threejs-vector2/">The Vector2 class for 2D curves, mouse pointers, ect</a>
-          </li>
-        
-          <li>
-            <a href="/2023/06/08/linux-dd/">Linux dd command and files</a>
-          </li>
-        
-          <li>
-            <a href="/2023/06/07/threejs-lathe-geometry/">Lathe Geometry in threejs</a>
-          </li>
-        
-          <li>
-            <a href="/2023/06/06/linux-sysbench/">Linux sysbench command for benchmarking a file system</a>
-          </li>
-        
-          <li>
-            <a href="/2023/06/02/threejs-tube-geometry/">Tube Geometry in threejs</a>
           </li>
         
       </ul>

@@ -113,6 +113,245 @@
       <div class="outer">
         <section id="main">
   
+    <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-grouping-mesh-objects" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/16/threejs-grouping-mesh-objects/" class="article-date"> Published:
+  <time datetime="2018-05-16T15:52:00.000Z" itemprop="datePublished">2018-05-16</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/05/16/threejs-grouping-mesh-objects/" class="article-date"> Modified:
+  <time datetime="2023-05-08T18:07:58.000Z" itemprop="dateModified">2023-05-08</time>
+</a>
+
+    <span class="article-date">V1.45</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/16/threejs-grouping-mesh-objects/">Grouping two or more Mesh Objects together in three.js</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>After writing a lot of demos in <a href="https://threejs.org/">threejs</a> I have arrived at a point where it is time to start getting into some more advanced topics in threejs, or at least something new beyond just the very basics of getting started with the library. So with that said, it might be time for me to get into animation with three.js, but doing so the professional way will prove to be a little complicated, and it will also largely involve the use of an application like blender as a way to create models in the form of external files. </p>
+<p>So another simple way of making some animations is to have Mesh Objects grouped together, and then have it so they are moving in relation to each by moving the position of a group object rather than each individual mesh object. In addition to this a group object also has all kinds of properties that are inherited from object3d that prove to be useful such as the user data object that I can use to park some of my own data about the group that will be used in some additional code.</p>
+<p>Also for one reason or another it is often a good idea to have a way to group two or more objects in general and not just mesh objects. For example I might want to add a light to a camera and then add the camera to a scene object. So this post today will be about the three.js <a href="https://threejs.org/docs/index.html#api/objects/Group">Group</a> constructor, but a whole lot of what a group is about is also a feature of the <a href="https://threejs.org/docs/#api/en/core/Object3D">object3d class</a> in general. So here I will be going over some of the basics when it comes to this sort of thing, but also I will likely touch base on many other related topics what will come up when creating groups of objects that have to do with rotating a geometry just once, and the difference between world space, and space that is relative to a group.</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/05/16/threejs-grouping-mesh-objects/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/05/16/threejs-grouping-mesh-objects/" data-id="clj7de5rg02ts5ov13l413rrd" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/05/16/threejs-grouping-mesh-objects/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-mesh-material-index" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/14/threejs-mesh-material-index/" class="article-date"> Published:
+  <time datetime="2018-05-14T13:54:00.000Z" itemprop="datePublished">2018-05-14</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/05/14/threejs-mesh-material-index/" class="article-date"> Modified:
+  <time datetime="2023-03-17T17:44:54.000Z" itemprop="dateModified">2023-03-17</time>
+</a>
+
+    <span class="article-date">V1.42</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/14/threejs-mesh-material-index/">Using an array of materials, and setting material index values in three.js</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>When working with a <a href="/2018/05/04/threejs-mesh/">Mesh Object</a> in <a href="https://threejs.org/">threejs</a> a single instance of a material can be passed to the mesh constructor as the second argument, after the geometry. This is fine if I am okay with every face in the <a href="/2018/04/14/threejs-geometry/">geometry</a> being skinned with the same material, otherwise I might want to do something else. Often just the use of one material is fine as the state of the <a href="/2021/06/09/threejs-buffer-geometry-attributes-uv/">uv attribute</a> of the <a href="/2021/04/22/threejs-buffer-geometry/">buffered geometry instance</a> is in a state in which it will work well with the textures that I am using with one or more of the material map options. However another option might be to not have just one material, but an array of <a href="/2018/04/30/threejs-materials/">materials</a> and then have a way to set what the material index value is for each face in the geometry.</p>
+<p>When working with an array of materials there is a property of a <a href="/2018/05/11/threejs-face3/">face3</a> instance in the geometry of the mesh that is of interest when setting the material index property of the faces, or at least that was the case with the old Geometry Constructor that was removed in r125 of threejs. So then there is how to go about setting material index values with an instance of the <a href="https://threejs.org/docs/#api/en/core/BufferGeometry.groups">Buffered Geometry constructor</a> that is still part of the core of the three.js library in late versions of threejs. In this post then I will be touching base on this topic of working with an array of materials in a threejs project then, rather than alternatives to doing so such as uv mapping, or having <a href="/2018/05/16/threejs-grouping-mesh-objects/">groups of objects</a> which would be yet another option for this sort of thing.</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/05/14/threejs-mesh-material-index/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/05/14/threejs-mesh-material-index/" data-id="clj7de5yu02uv5ov13erq13wr" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/05/14/threejs-mesh-material-index/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-points-material" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/12/threejs-points-material/" class="article-date"> Published:
+  <time datetime="2018-05-12T14:55:00.000Z" itemprop="datePublished">2018-05-12</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/05/12/threejs-points-material/" class="article-date"> Modified:
+  <time datetime="2023-02-23T16:30:15.000Z" itemprop="dateModified">2023-02-23</time>
+</a>
+
+    <span class="article-date">V1.36</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/12/threejs-points-material/">The Points material as well as creating Points from Vector3 arrays in three.js</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>The use of the <a href="/2018/04/15/threejs-vector3/">Vector3</a> class instances in <a href="https://threejs.org/">threejs</a> is a major part of the process of doing much of anything in threejs. There is not just the geometry used with a material to compose a mesh object when it comes to vectors, the <a href="/2022/04/04/threejs-object3d-position/">position property in the Object3d class</a> is an instance of Vector3. This position property is used to set the position of mesh objects, cameras, and a whole lot of other objects.</p>
+<p>However what if I just want to work with a collection of vectors, and have some kind of way of just displaying some points in space rather than lines, or a solid object. Maybe there is a few ways of going about doing that actually such as just observing the position property of a mesh as a point in space, and just using built in geometry constructors for the mesh such as the Sphere geometry constructor to just serve as some geometry to surround this point of interest. When I think about it for a moment maybe that kind of approach would be a good idea actually, however it would eat up a lot of overhead when it comes to real time performance. However another option would be to the <a href="https://threejs.org/docs/#api/en/objects/Points">Points Constructor</a> that can be used with the Special <a href="https://threejs.org/docs/#api/en/materials/PointsMaterial">Points Material</a> that is put in place just for this purpose of just drawing some points in space.</p>
+<p>In this post I will of course be going over a few examples of the Points Constructor, but I will also be going over some other examples of this sort of thing involving collections of points in space as well. The main focus will be the points material of course, but there are a whole lot of other things that I will need to write about also in the process of doing so while I am at it.</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/05/12/threejs-points-material/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/05/12/threejs-points-material/" data-id="clj7de67y02wg5ov1t5em1vam" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/05/12/threejs-points-material/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-face3" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/11/threejs-face3/" class="article-date"> Published:
+  <time datetime="2018-05-11T16:58:00.000Z" itemprop="datePublished">2018-05-11</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/05/11/threejs-face3/" class="article-date"> Modified:
+  <time datetime="2023-05-10T16:22:09.000Z" itemprop="dateModified">2023-05-10</time>
+</a>
+
+    <span class="article-date">V1.33</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/11/threejs-face3/">The Face3 constructor in three.js</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>The <a href="https://github.com/mrdoob/three.js/pull/21161">Face3 constructor has been removed</a> in <a href="https://threejs.org/">three.js</a> as of <a href="https://github.com/mrdoob/three.js/releases/tag/r126">revision 126</a>. Before that change the Face3 Constructor was used to define a Face when making a custom geometry with the <a href="/2018/04/14/threejs-geometry/">Geometry Constructor</a> which has also been removed as of revision 125. It might still be possible to get the old geometry constructor working on new versions of threejs, but it would be best to make custom geometries with the <a href="/2021/04/22/threejs-buffer-geometry/">Buffered Geometry</a> constructor when it comes to making use of late versions of threejs.</p>
+<p>When using any kind of built in geometry, instances of Face3 are created automatically, or at least they where, and still are if you are using an older version of threejs. So whenever making a custom geometry from code, or trying to figure out some problems that may exist with how faces are being rendered it is necessary to understand a few things about Face3 when using the old Geometry Constructor. One of the main properties of interest with an instance of Face3 is the material index property, this comes into play when it comes to working with an array of materials, rather than just a single material when using a geometry with a Mesh Object. </p>
+<p>In new versions of threejs it is now the groups array of a geometry that would seem to be where these kinds of objects are now, and the use of the add group method is how to create them. This is still an old post on the face3 constructor, but when it comes to this edit, as well as many future edits this is what I am gong to start to write about at the top of the post, and start to push the older face3 stuff to the bottom of this content piece.</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/05/11/threejs-face3/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/05/11/threejs-face3/" data-id="clj7de5ou02td5ov1ushpu1ji" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/05/11/threejs-face3/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-basic-material" class="article article-type-post" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/05/05/threejs-basic-material/" class="article-date"> Published:
@@ -158,249 +397,12 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2018/05/05/threejs-basic-material/" data-id="cliqch07b02dviov1ub7xw2ka" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2018/05/05/threejs-basic-material/" data-id="clj7de3hv023s5ov1x84ioyzo" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2018/05/05/threejs-basic-material/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-mesh" class="article article-type-post" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/05/04/threejs-mesh/" class="article-date"> Published:
-  <time datetime="2018-05-04T16:44:00.000Z" itemprop="datePublished">2018-05-04</time>
-</a>
-
-    <!-- other info (dustin) -->
-    <a href="/2018/05/04/threejs-mesh/" class="article-date"> Modified:
-  <time datetime="2023-05-25T19:18:39.000Z" itemprop="dateModified">2023-05-25</time>
-</a>
-
-    <span class="article-date">V1.45</span>
-
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/three-js/">three.js</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/04/threejs-mesh/">Mesh objects in three.js, position, rotate, scale, skin, ect</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="text">
-      
-        <p>A mesh object in <a href="https://threejs.org/">threejs</a> is used to create an object with a <a href="/2021/04/22/threejs-buffer-geometry/">buffer geometry</a>, and a material such as the <a href="/2018/05/05/threejs-basic-material/">mesh basic material</a>. This resulting mesh object can then be added as a child of a main <a href="/2018/05/03/threejs-scene/">scene object</a>, or any other Object3d class based object.Then the scene object can be used along with a camera to render a view of the scene which will include one or more of these mesh objects. There are a number of other options for having somehting to look at in a scene, such as Points, Lines, and LineSegments. However for the most part it is mesh objects that one will want to create and add to a scene to create some kind of project with threejs.</p>
-<p>The <a href="https://threejs.org/docs/#api/en/objects/Mesh">Mesh Constructor</a> is one of many constructor functions that I find myself using often as I get into making threejs projects. What is great about mesh objects is that they are one of many objects in threejs that have the <a href="https://threejs.org/docs/#api/en/core/Object3D">Object3d class</a> as a base class. So then when it comes to something like learning how to use the <a href="/2022/04/04/threejs-object3d-position/">position property</a> of a mesh object, what one is really learning about is an object3d class feature. Knowledge of this object3d class feature can then also be applied to cameras, groups, and anything else in threejs that is based off of the object3d class. Still there are some things that are just a part of mesh objects alone, mainly the buffer geometry and material properties of such objects.</p>
-        
-          <p class="article-more-link">
-            <a href="/2018/05/04/threejs-mesh/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2018/05/04/threejs-mesh/" data-id="cliqch1p402ngiov1b5i554hw" class="article-share-link">Share</a>
-      
-        <a href="https://dustinpfister.github.io/2018/05/04/threejs-mesh/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-scene" class="article article-type-post" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/05/03/threejs-scene/" class="article-date"> Published:
-  <time datetime="2018-05-03T13:36:00.000Z" itemprop="datePublished">2018-05-03</time>
-</a>
-
-    <!-- other info (dustin) -->
-    <a href="/2018/05/03/threejs-scene/" class="article-date"> Modified:
-  <time datetime="2023-03-21T19:36:46.000Z" itemprop="dateModified">2023-03-21</time>
-</a>
-
-    <span class="article-date">V1.48</span>
-
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/three-js/">three.js</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/03/threejs-scene/">Working with a scene object in three.js</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="text">
-      
-        <p>A <a href="https://threejs.org/docs/index.html#api/scenes/Scene">Scene</a> object in <a href="https://threejs.org/">threejs</a> is an instance of the THREE.Scene constructor that can be used to place everything that makes up an environment in a threejs project. It can contain cameras, lights, mesh objects composed of a geometry and material, along with any other <a href="/2018/04/23/threejs-object3d/">object3d base class</a> object. The scene object can then be passed to the render function of a renderer such as the <a href="/2018/11/24/threejs-webglrenderer/">Webgl renderer</a> along with a <a href="/2018/04/06/threejs-camera/">camera</a> to render a view of the scene from the perspective of the given camera object.</p>
-<p>There is a great deal of other things to cover when it comes to a scene object though, such as the background and fog properties, and the fact that it inherits from the Object3d base class. Because the scene object is yet another object3d based object this allows for things like having a whole scene positioned, rotated, and scaled just like mesh objects, cameras and anything based off of Object3d. So in this post I will be going over at least a few details that revolve around the topic of scene objects.</p>
-        
-          <p class="article-more-link">
-            <a href="/2018/05/03/threejs-scene/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2018/05/03/threejs-scene/" data-id="cliqch26202qgiov1bg5ye58e" class="article-share-link">Share</a>
-      
-        <a href="https://dustinpfister.github.io/2018/05/03/threejs-scene/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-materials" class="article article-type-post" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/04/30/threejs-materials/" class="article-date"> Published:
-  <time datetime="2018-04-30T13:14:00.000Z" itemprop="datePublished">2018-04-30</time>
-</a>
-
-    <!-- other info (dustin) -->
-    <a href="/2018/04/30/threejs-materials/" class="article-date"> Modified:
-  <time datetime="2023-01-14T19:12:27.000Z" itemprop="dateModified">2023-01-14</time>
-</a>
-
-    <span class="article-date">V1.43</span>
-
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/three-js/">three.js</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/30/threejs-materials/">Materials in three.js a general overview of the options</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="text">
-      
-        <p>In <a href="https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene">three.js</a> there are a few materials to choose from to help skin a mesh object that all share the same <a href="https://threejs.org/docs/index.html#api/en/materials/Material">Material base class</a>. There are also additional materials for rendering lines, points, shadows, and sprites that stand out from the various materials that are used to change the look of solid mesh objects.</p>
-<p>There are materials that will respond to a light source, and then there are materials that will not. When it comes to materials that respond to light some will preform a little better than others, but will result in a different look compared to others that are a little more resource heavy. When it comes to mesh materials that will not respond to a light source there are materials like the basic mesh material that is a good choice when it comes to just having a simple color map for the mesh. There are a few other materials that render textures based on the state of the normal property of the geometry used, or based on the depth in terms of a distance from the camera.</p>
-<p>This post will serve as a general overview of the mesh materials in general in three.js then as a starting point for learning what the options are with this. I will give a very basic overview of the base Material class, and get into some of the differences between materials used with a Mesh, as well as the other kinds of materials. I will of course not be getting into every key little detail with each of them, some of these will deserve a full post explaining them in further detail, and I will link to those posts from here as I write them.</p>
-        
-          <p class="article-more-link">
-            <a href="/2018/04/30/threejs-materials/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2018/04/30/threejs-materials/" data-id="cliqch1my02n4iov1rajjb68u" class="article-share-link">Share</a>
-      
-        <a href="https://dustinpfister.github.io/2018/04/30/threejs-materials/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-object3d" class="article article-type-post" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/04/23/threejs-object3d/" class="article-date"> Published:
-  <time datetime="2018-04-23T23:35:00.000Z" itemprop="datePublished">2018-04-23</time>
-</a>
-
-    <!-- other info (dustin) -->
-    <a href="/2018/04/23/threejs-object3d/" class="article-date"> Modified:
-  <time datetime="2023-01-24T13:15:35.000Z" itemprop="dateModified">2023-01-24</time>
-</a>
-
-    <span class="article-date">V1.71</span>
-
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/three-js/">three.js</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/23/threejs-object3d/">Object3D Class in threejs</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="text">
-      
-        <p>The <a href="https://threejs.org/docs/index.html#api/core/Object3D">Object3D</a> base class in <a href="https://threejs.org/">threejs</a> is one of the most important classes to be aware of when making some kind of project. It is the base class of mesh objects, but also just about every other kind of object that would be added to a scene object such as cameras, groups, lights, various helper objects and so forth. So then to learn a thing or two about object3d is also to learn a thing about all of those kinds of objects that I have mentioned. For example to set the position of a mesh object I need to use the the object3d position property to so so and the same is also true of cameras, groups, and so forth.</p>
-<p>In this post I will be going over many of the basics of what the Object3d class is all about in threejs, when it comes to working with the class directly. However more often than not it is a class that I am working with indirectly each time I want to move or rotate a camera, mesh object, or anything to that effect that is based off the the object3d base class. In the process of going over the Object3d class I will also be touching base on many other classes that are important also, such as the <a href="/2018/04/15/threejs-vector3/">Vector3</a> class and the <a href="/2021/04/28/threejs-euler/">Euler Class</a> that are used as the values for many note worthy properties of this major base class.</p>
-        
-          <p class="article-more-link">
-            <a href="/2018/04/23/threejs-object3d/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2018/04/23/threejs-object3d/" data-id="cliqch1wx02oviov1xl817jgt" class="article-share-link">Share</a>
-      
-        <a href="https://dustinpfister.github.io/2018/04/23/threejs-object3d/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
 
     </footer>
   </div>
@@ -465,23 +467,23 @@
       <ul>
         
           <li>
+            <a href="/2023/06/22/threejs-buffer-attribute/">Buffer Attributes in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/21/linux-du/">File Space usage with Linux du command</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/15/linux-aplay/">Linux aplay command and ALSA</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/13/threejs-extrude-geometry/">Extrude Geometry in threejs</a>
+          </li>
+        
+          <li>
             <a href="/2023/06/09/threejs-vector2/">The Vector2 class for 2D curves, mouse pointers, ect</a>
-          </li>
-        
-          <li>
-            <a href="/2023/06/08/linux-dd/">Linux dd command and files</a>
-          </li>
-        
-          <li>
-            <a href="/2023/06/07/threejs-lathe-geometry/">Lathe Geometry in threejs</a>
-          </li>
-        
-          <li>
-            <a href="/2023/06/06/linux-sysbench/">Linux sysbench command for benchmarking a file system</a>
-          </li>
-        
-          <li>
-            <a href="/2023/06/02/threejs-tube-geometry/">Tube Geometry in threejs</a>
           </li>
         
       </ul>

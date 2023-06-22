@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
+  
+  <title>Linux aplay command and ALSA | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2023/06/15/linux-aplay/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="The Linux aplay command of ALSA is pretty cool as it can be used as a tool to play any kind of raw data as sound. This data can be piped into the standard input of the aplay command, or a file can be">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux aplay command and ALSA">
+<meta property="og:url" content="https://dustinpfister.github.io/2023/06/15/linux-aplay/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="The Linux aplay command of ALSA is pretty cool as it can be used as a tool to play any kind of raw data as sound. This data can be piped into the standard input of the aplay command, or a file can be">
+<meta property="og:updated_time" content="2023-06-19T17:19:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux aplay command and ALSA">
+<meta name="twitter:description" content="The Linux aplay command of ALSA is pretty cool as it can be used as a tool to play any kind of raw data as sound. This data can be piped into the standard input of the aplay command, or a file can be">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Google Analytics -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y8XLNG6JRW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y8XLNG6JRW');
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image, as well as the link to my youtube -->
+        <a href="https://www.youtube.com/user/javaweaver"><div class="selfimage"></div></a>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2021/02/19/threejs-examples/">ThreeJS</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas</a>
+        
+          <a class="main-nav-link" href="https://www.youtube.com/user/javaweaver">Youtube</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-linux-aplay" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/06/15/linux-aplay/" class="article-date"> Published:
+  <time datetime="2023-06-15T16:37:00.000Z" itemprop="datePublished">2023-06-15</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2023/06/15/linux-aplay/" class="article-date"> Modified:
+  <time datetime="2023-06-19T17:19:48.000Z" itemprop="dateModified">2023-06-19</time>
+</a>
+
+    <span class="article-date">V1.9</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Linux aplay command and ALSA
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>The <a href="https://linux.die.net/man/1/aplay" target="_blank" rel="external">Linux aplay</a> command of <a href="https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture" target="_blank" rel="external">ALSA</a> is pretty cool as it can be used as a tool to play any kind of raw data as sound. This data can be <a href="/2020/10/09/linux-pipe/">piped</a> into the standard input of the aplay command, or a file can be passed as a positional argument. Any kind of data can be used as sample data, but to really start using aplay by one way or another it would be best to fine ways to generate sample data.</p>
+<a id="more"></a>
+<h2 id="1-Pipe-in-random-data-by-using-cat"><a href="#1-Pipe-in-random-data-by-using-cat" class="headerlink" title="1 - Pipe in random data by using cat"></a>1 - Pipe in random data by using cat</h2><p>Any kind of data can be piped into the standard input of aplay, this includes random data generated by making use of <a href="/2020/11/11/linux-cat/">cat</a>, and dev random. When doing something like this I can use the -d option of aplay to limit the amount of time that this will play to 3 seconds.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cat /dev/random | aplay -d 3</div><div class="line">Playing raw data &apos;stdin&apos; : Unsigned 8 bit, Rate 8000 Hz, Mono</div></pre></td></tr></table></figure>
+<p>I can set -d option to 0, or just not give any -d option at all sense that is the default which will result in aplay just continuing to play random data as sound until I do a control+c or end the process by whatever means.</p>
+<h2 id="2-Formats"><a href="#2-Formats" class="headerlink" title="2 - Formats"></a>2 - Formats</h2><p>By default the format that is used is U8 which is unsigned 8 bit audio. There are a number of other formats that often can be used, however the full list of formats will change from one sound card to another. For the most part thus far I have just been sticking to unsigned 8 bit mono audio</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cat /dev/random | aplay -d 5 -f U8</div><div class="line">$ cat /dev/random | aplay -d 5 -f S32_LE</div></pre></td></tr></table></figure>
+<h2 id="3-Sample-Rates"><a href="#3-Sample-Rates" class="headerlink" title="3 - Sample Rates"></a>3 - Sample Rates</h2><p>The sample rate can also be adjusted by way of the -r option. The main page says that valid values are 2000 through 192000 Hertz, and the default as we can see is 8000 Hertz. The man page also says that if I give a value less than 300 that will be used as a kilohertz which would be that I should be able to give a value like 41 for for 41000 Hertz.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cat /dev/random | aplay -d 5 -f U8 -r 2000</div><div class="line">$ cat /dev/random | aplay -d 5 -f U8 -r 88000</div></pre></td></tr></table></figure>
+<h2 id="4-Using-cat-and-dd-to-generate-8K-bytes-of-random-data-for-just-one-second-of-noise"><a href="#4-Using-cat-and-dd-to-generate-8K-bytes-of-random-data-for-just-one-second-of-noise" class="headerlink" title="4 - Using cat and dd to generate 8K bytes of random data for just one second of noise"></a>4 - Using cat and dd to generate 8K bytes of random data for just one second of noise</h2><p>So far I have been piping in data to aplay by way of using the linux cat command with the use of /dev/random. However another major command I could pipe the random data into would be the <a href="/2023/06/08/linux-dd/">dd command</a> which has the -bs option that can be used to set, say 8000 bytes blocks, and I can do 60 blocks. This would then result in 60 seconds worth of audio data if it is still 8 Bit Sample Size, and 8000 hertz. However when doing so I will want to make sure that I set the iflag option to fullblock else the resulting file will end up being a bit light because of a partial read error.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"> $ cat /dev/random | dd bs=8000 count=60 iflag=fullblock &gt; audiodata</div><div class="line">60+0 records in</div><div class="line">60+0 records out</div><div class="line">480000 bytes (480 kB, 469 KiB) copied, 0.0826348 s, 5.8 MB/s</div><div class="line">$ aplay -f U8 -r 8000 audiodata</div><div class="line">Playing raw data &apos;audiodata&apos; : Unsigned 8 bit, Rate 8000 Hz, Mono</div></pre></td></tr></table></figure>
+<h2 id="5-Start-Using-nodejs-to-create-data-to-then-use-with-aplay"><a href="#5-Start-Using-nodejs-to-create-data-to-then-use-with-aplay" class="headerlink" title="5 - Start Using nodejs to create data to then use with aplay"></a>5 - Start Using nodejs to create data to then use with aplay</h2><p>Piping random data into aplay is a nice start, there is also looking into other ways to pipe in all kinds of other not so random data as well. However there is also getting into at least a little programming in order to start getting into the full, fine grain control when it comes to the idea of generating sample data. For this section then I will be doing just that by making use of <a href="/2017/04/05/nodejs-helloworld/">nodejs and a little javaScript</a> code.</p>
+<h3 id="5-1-The-waves-js-file-to-use-with-nodejs"><a href="#5-1-The-waves-js-file-to-use-with-nodejs" class="headerlink" title="5.1 - The waves.js file to use with nodejs"></a>5.1 - The waves.js file to use with nodejs</h3><p>If I am to use nodejs to create some sample data I will want to use <a href="/2021/03/18/nodejs-process-stdout/">process.stdout.write</a> over that of console.log so that I have control over having an End Of Line or not in the output. I then also make use of a buffer as a way to create an output mode that will be the binary data rather than text data that I will want to then pipe or redirect into aplay. I have found that thus far I mostly want to redirect into a file and then use aplay until I figure out how to address an issue with data that is lost when piping. More on that when we get into the actually usage in the bash prompt.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// POSITIONAL ARGUMENTS</span></div><div class="line"><span class="keyword">const</span> sample_rate = process.argv[<span class="number">2</span>] || <span class="number">8000</span>;</div><div class="line"><span class="keyword">const</span> sample_secs = process.argv[<span class="number">3</span>] || <span class="number">1</span>;</div><div class="line"><span class="keyword">const</span> wave_count = process.argv[<span class="number">4</span>] || <span class="number">80</span>;</div><div class="line"><span class="keyword">const</span> amplitude = <span class="built_in">parseFloat</span>( process.argv[<span class="number">5</span>] || <span class="number">0.45</span> );</div><div class="line"><span class="keyword">const</span> output_mode = process.argv[<span class="number">6</span>] || <span class="string">'binary'</span>;</div><div class="line"><span class="comment">// CREATE DATA</span></div><div class="line"><span class="keyword">const</span> COUNT_SAMPLES = sample_rate * sample_secs;</div><div class="line"><span class="keyword">const</span> SAMPLE_SIZE = <span class="number">1</span>;</div><div class="line"><span class="keyword">let</span> buff = Buffer.alloc(SAMPLE_SIZE);</div><div class="line"><span class="keyword">let</span> i_sample = <span class="number">0</span>;</div><div class="line"><span class="keyword">while</span>(i_sample &lt; COUNT_SAMPLES)&#123;</div><div class="line">    <span class="comment">// figure current sample value</span></div><div class="line">    <span class="keyword">const</span> a_sample = i_sample / COUNT_SAMPLES;</div><div class="line">    <span class="keyword">const</span> a_waves = a_sample * wave_count % <span class="number">1</span>;</div><div class="line">    <span class="keyword">const</span> n = <span class="built_in">Math</span>.round( <span class="number">127.5</span> - <span class="built_in">Math</span>.sin( <span class="built_in">Math</span>.PI * <span class="number">2</span> * a_waves ) * (<span class="number">128</span> * amplitude) );</div><div class="line">    <span class="comment">// write to buffer, and then to standard output if 'binary' output</span></div><div class="line">    <span class="keyword">if</span>(output_mode === <span class="string">'binary'</span>)&#123;</div><div class="line">        buff.write( n.toString(<span class="number">16</span>), <span class="number">0</span>, <span class="string">'hex'</span>);</div><div class="line">        process.stdout.write( buff );</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// also have a plain 'dec' output for debugging as I write more of these</span></div><div class="line">    <span class="keyword">if</span>(output_mode === <span class="string">'dec'</span>)&#123;</div><div class="line">        process.stdout.write( n.toString(<span class="number">10</span>) + <span class="string">'\n'</span> );</div><div class="line">    &#125;</div><div class="line">    i_sample += <span class="number">1</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="5-2-Pipe-into-aplay-with-default-settings"><a href="#5-2-Pipe-into-aplay-with-default-settings" class="headerlink" title="5.2 - Pipe into aplay with default settings"></a>5.2 - Pipe into aplay with default settings</h3><p>One way to get started with this is to just pipe the data that this script generates with default settings into aplay with default settings.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ node wave | aplay</div></pre></td></tr></table></figure>
+<p>This kind of thing will work okay for small use case examples that are about a second or so, but I loose data if I make the tone too long. Not a big deal with this script, but if I really get into this it will become a problem. I am sure that there is a way to address this, must have something to do with the chuck size with the nodejs script maybe. However in any case regardless if I address this or not there are other ways of doing this.</p>
+<h3 id="5-3-Redirection"><a href="#5-3-Redirection" class="headerlink" title="5.3 - Redirection"></a>5.3 - Redirection</h3><p>Thus far I have found that if I want to make a long noise I will want to create a large file, and then play that file with aplay. One way to do this would be to make use of <a href="/2020/10/02/linux-redirection">redirection</a>.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ node wave 8000 10 800 0.5 binary &gt; adata</div><div class="line">$ aplay adata -f U8 -r 8000</div></pre></td></tr></table></figure>
+<h2 id="6-Live-stream-of-sample-data"><a href="#6-Live-stream-of-sample-data" class="headerlink" title="6 - Live stream of sample data"></a>6 - Live stream of sample data</h2><p>The above script that I started out with will work just fine when it comes to using redirection rather than piping. However it would be nice to work out a script that will work okay when it comes to generating data in real time that will then in turn be consumed by aplay. The problem with this is that doing so is a little tricky. I managed to work out something that seems to hold up okay, but this is very much a kind of place holder script that I have in place for now until I lean more about how to work with streams.</p>
+<p>The tricky part with this is making sure that the rate at which the script is generating sample data is on target with the rate at which aplay is consuming this data. Doing so in a way that will not result in underrun, or memory leakage is indeed the tricky part. If the script does not generate data fast enough that will result in an underrun condition in which aplay runs out of data to play resulting in an interuption, however if the rate is to high that will result in problems with eating up memory and drain event related issues.</p>
+<h3 id="6-a-A-high-low-rate-script"><a href="#6-a-A-high-low-rate-script" class="headerlink" title="6.a - A high low rate script"></a>6.a - A high low rate script</h3><p>A script that I have worked out that seems to work okay so far addresses this problem by setting a fast, or slow rate that is used when calling the setTimeout method. Yes this is indeed crude, and over the log run I still run into the occasional problem where the stream needs to drain and I loose audio for a bit. However if I set the fast rate high enough it takes a long time for this to happen, while still avoiding the under run problem  at least for the most part.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// write a single sample to the given buffer</span></div><div class="line"><span class="keyword">const</span> writeSample = <span class="function">(<span class="params">buff, a_sample = <span class="number">0.5</span>, wave_count = <span class="number">1</span>, amplitude = <span class="number">0.3</span></span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">const</span> a_waves = a_sample * wave_count % <span class="number">1</span>;</div><div class="line">    <span class="keyword">const</span> n = <span class="built_in">Math</span>.round( <span class="number">127.5</span> - <span class="built_in">Math</span>.sin( <span class="built_in">Math</span>.PI * <span class="number">2</span> * a_waves ) * (<span class="number">128</span> * amplitude) );</div><div class="line">    buff.write( n.toString(<span class="number">16</span>), <span class="number">0</span>, <span class="string">'hex'</span>);</div><div class="line">    <span class="keyword">return</span> buff;</div><div class="line">&#125;;</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// LOOP</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="keyword">const</span> buff = Buffer.alloc(<span class="number">1</span>);</div><div class="line"><span class="keyword">const</span> frame_count = <span class="number">60</span>;</div><div class="line"><span class="keyword">let</span> i_sample = <span class="number">0</span>;</div><div class="line"><span class="keyword">let</span> i_frame = <span class="number">0</span>;</div><div class="line"><span class="keyword">const</span> count_sample = <span class="number">8000</span>;</div><div class="line"><span class="keyword">let</span> to_high = <span class="literal">false</span>;</div><div class="line"><span class="keyword">let</span> last_time = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"><span class="keyword">const</span> ms_fast = <span class="number">999</span>;</div><div class="line"><span class="keyword">const</span> ms_slow = <span class="number">5000</span>;</div><div class="line"><span class="keyword">const</span> loop = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">const</span> t = setTimeout(loop, to_high ? ms_slow: ms_fast);</div><div class="line">    <span class="keyword">while</span>( i_sample &lt; count_sample)&#123;</div><div class="line">        <span class="comment">// alphas</span></div><div class="line">        <span class="keyword">const</span> a_sample = i_sample / count_sample;</div><div class="line">        <span class="keyword">const</span> a_framecount = (i_frame / frame_count);</div><div class="line">        <span class="keyword">const</span> a3 = a_framecount;</div><div class="line">        <span class="keyword">const</span> a_wavecount = <span class="built_in">Math</span>.sin( <span class="built_in">Math</span>.PI * a3 );</div><div class="line">        <span class="comment">// write sample to buffer</span></div><div class="line">        <span class="keyword">const</span> wave_count = <span class="built_in">Math</span>.floor(<span class="number">75</span> + <span class="number">25</span> * a_wavecount);</div><div class="line">        writeSample(buff, a_sample, wave_count, <span class="number">0.6</span>);</div><div class="line">        to_high = !process.stdout.write(buff);</div><div class="line">        <span class="keyword">if</span>(to_high)&#123;</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">        i_sample += <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">    i_sample %= count_sample;</div><div class="line">    i_frame += <span class="number">1</span>;</div><div class="line">    i_frame %= frame_count;</div><div class="line">&#125;;</div><div class="line"><span class="comment">// drain event</span></div><div class="line">process.stdout.on(<span class="string">'drain'</span>, () =&gt; &#123;</div><div class="line">    <span class="keyword">const</span> now = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line">    <span class="keyword">const</span> time = (now - last_time) / <span class="number">1000</span> / <span class="number">60</span>;</div><div class="line">    last_time = now;</div><div class="line">    process.stderr.write(<span class="string">'\nNeeded to drain.\n'</span>);</div><div class="line">    process.stderr.write(<span class="string">'Went '</span> + time.toFixed(<span class="number">2</span>) + <span class="string">' Minutes.\n\n'</span>);</div><div class="line">&#125;);</div><div class="line">process.stderr.write(<span class="string">'\nScript started: '</span> + last_time + <span class="string">' .\n\n'</span>);</div><div class="line">loop();</div></pre></td></tr></table></figure>
+<h2 id="6-1-Starting-the-script"><a href="#6-1-Starting-the-script" class="headerlink" title="6.1 - Starting the script"></a>6.1 - Starting the script</h2><p>For the most part it would seem that this works okay thus far. When the script first starts I do get an underrun from aplay, and I also also sure that if I let this run long enough it will still need to drain. However until I get a better idea of how to manage this, I would have to go with some code like this.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ node live_highlow | aplay -f U8 -r 8000</div></pre></td></tr></table></figure>
+<p>At least I do understand what the problem is, and it is just the nature of streams which is what I am dealing with. What would be nice is to have a way to monitor what the current state of the standard output stream is, and throttle the rate at which I am generating sample data up and down as needed long before the high water mark is reached.</p>
+<h2 id="7-Converting-JSON-data-into-sample-data-for-aplay"><a href="#7-Converting-JSON-data-into-sample-data-for-aplay" class="headerlink" title="7 - Converting JSON data into sample data for aplay"></a>7 - Converting JSON data into sample data for aplay</h2><p>I am thinking that one way that I might want to get into creating sample data for aplay would involve writing scripts that generate JSON data in the form of arguments that will be used to call a funciton on a frame by frame basis. So then I would have code that generates this JSON data, and then I would also have code that will convert this JSON data to binary data that will then be used to create files that in turn can be played by way of the aplay command.</p>
+<h3 id="7-a-JSON-data-example"><a href="#7-a-JSON-data-example" class="headerlink" title="7.a - JSON data example"></a>7.a - JSON data example</h3><p>An exmaple of some json data that will create one second of sound would then look like this:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="string">"bytes_per_frame"</span> : <span class="number">1400</span>,</div><div class="line">  <span class="string">"frames"</span>: [</div><div class="line">      [<span class="number">1</span>, <span class="number">40</span>, <span class="number">10</span>],</div><div class="line">      [<span class="number">2</span>, <span class="number">40</span>, <span class="number">10</span>],</div><div class="line">      [<span class="number">3</span>, <span class="number">40</span>, <span class="number">10</span>],</div><div class="line">      [<span class="number">4</span>, <span class="number">40</span>, <span class="number">10</span>],</div><div class="line">      [<span class="number">5</span>, <span class="number">40</span>, <span class="number">10</span>],</div><div class="line">      [<span class="number">6</span>, <span class="number">40</span>, <span class="number">10</span>],</div><div class="line">      [<span class="number">7</span>, <span class="number">40</span>, <span class="number">10</span>],</div><div class="line">      [<span class="number">8</span>, <span class="number">40</span>, <span class="number">10</span>],</div><div class="line">      [<span class="number">9</span>, <span class="number">40</span>, <span class="number">10</span>],</div><div class="line">      [<span class="number">10</span>, <span class="number">40</span>, <span class="number">10</span>],</div><div class="line">      [<span class="number">11</span>, <span class="number">40</span>, <span class="number">10</span>],</div><div class="line">      [<span class="number">12</span>, <span class="number">40</span>, <span class="number">10</span>],</div><div class="line">      [<span class="number">13</span>, <span class="number">39</span>, <span class="number">9</span>],</div><div class="line">      [<span class="number">14</span>, <span class="number">38</span>, <span class="number">9</span>],</div><div class="line">      [<span class="number">15</span>, <span class="number">37</span>, <span class="number">9</span>],</div><div class="line">      [<span class="number">16</span>, <span class="number">36</span>, <span class="number">8</span>],</div><div class="line">      [<span class="number">17</span>, <span class="number">35</span>, <span class="number">8</span>],</div><div class="line">      [<span class="number">18</span>, <span class="number">34</span>, <span class="number">8</span>],</div><div class="line">      [<span class="number">19</span>, <span class="number">33</span>, <span class="number">7</span>],</div><div class="line">      [<span class="number">20</span>, <span class="number">32</span>, <span class="number">7</span>],</div><div class="line">      [<span class="number">21</span>, <span class="number">31</span>, <span class="number">7</span>],</div><div class="line">      [<span class="number">22</span>, <span class="number">30</span>, <span class="number">6</span>],</div><div class="line">      [<span class="number">23</span>, <span class="number">29</span>, <span class="number">6</span>],</div><div class="line">      [<span class="number">24</span>, <span class="number">28</span>, <span class="number">6</span>],</div><div class="line">      [<span class="number">25</span>, <span class="number">25</span>, <span class="number">5</span>],</div><div class="line">      [<span class="number">26</span>, <span class="number">22</span>, <span class="number">5</span>],</div><div class="line">      [<span class="number">27</span>, <span class="number">18</span>, <span class="number">5</span>],</div><div class="line">      [<span class="number">28</span>, <span class="number">16</span>, <span class="number">2</span>],</div><div class="line">      [<span class="number">29</span>, <span class="number">10</span>, <span class="number">3</span>],</div><div class="line">      [<span class="number">30</span>, <span class="number">8</span>, <span class="number">2</span>]</div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="7-b-Script-to-convert-JSON-data-to-binary-data"><a href="#7-b-Script-to-convert-JSON-data-to-binary-data" class="headerlink" title="7.b - Script to convert JSON data to binary data"></a>7.b - Script to convert JSON data to binary data</h3><p>The script that I then use to convert this json data to binary data will then maybe look somehting like this:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// file uri, data object, buffer</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="keyword">const</span> file_uri = path.resolve( process.argv[<span class="number">2</span>] );</div><div class="line"><span class="keyword">const</span> data = <span class="built_in">require</span>(file_uri);</div><div class="line"><span class="keyword">const</span> buff = Buffer.alloc(<span class="number">1</span>);</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// BYTES PER FRAME</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// Sample rate  / Frame Rate = Bytes Per Frame</span></div><div class="line"><span class="comment">//  2,010       / 30         =    67</span></div><div class="line"><span class="comment">//  2,100       / 30         =    70</span></div><div class="line"><span class="comment">//  8,100       / 30         =   270</span></div><div class="line"><span class="comment">// 16,200       / 30         =   540</span></div><div class="line"><span class="comment">// 42,000       / 30         = 1,400</span></div><div class="line"><span class="keyword">const</span> bytes_per_frame = data.bytes_per_frame || <span class="number">270</span>;</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// FOR EACH FRAME in data.frames...</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line">data.frames.forEach( <span class="function">(<span class="params"> frameData </span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">let</span> i_byte = <span class="number">0</span>;</div><div class="line">    <span class="keyword">const</span> count_wave = frameData[<span class="number">0</span>];</div><div class="line">    <span class="keyword">const</span> byte_bias = frameData[<span class="number">1</span>];</div><div class="line">    <span class="keyword">const</span> count_bias = frameData[<span class="number">2</span>];</div><div class="line">    <span class="keyword">while</span>(i_byte &lt; bytes_per_frame)&#123;</div><div class="line">        <span class="keyword">const</span> a_bytes = i_byte / bytes_per_frame;</div><div class="line">        <span class="keyword">const</span> a2 = (a_bytes * count_bias % <span class="number">1</span>);</div><div class="line">        <span class="keyword">const</span> a3 = <span class="built_in">Math</span>.sin( <span class="built_in">Math</span>.PI * a2 )</div><div class="line">        <span class="keyword">const</span> a = i_byte / count_wave % <span class="number">1</span>;</div><div class="line">        <span class="keyword">const</span> n = <span class="built_in">Math</span>.round( ( <span class="number">128</span> + <span class="built_in">Math</span>.cos( <span class="built_in">Math</span>.PI * a ) * ( byte_bias * a3 ) ) );</div><div class="line">        buff.write( n.toString(<span class="number">16</span>), <span class="number">0</span>, <span class="string">'hex'</span>);</div><div class="line">        process.stdout.write( buff );</div><div class="line">        i_byte += <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="Using-the-JSON-to-binart-script"><a href="#Using-the-JSON-to-binart-script" class="headerlink" title="Using the JSON to binart script"></a>Using the JSON to binart script</h3><p>I would then call the script and redirect the output into a file. I can then play the file with aplay.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ node sin2-frames.js fd1.json &gt; adata</div><div class="line">$ aplay -f U8 -r 42000 adata</div></pre></td></tr></table></figure>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>The aplay command is then pretty cool as it allows for me to make noise with any kind of binary data, and there might be forms of data that will result in interesting sounds when it comes to just going ahead and using it that way. However if you do know a thing or two about a programming language or two there is doing all kinds of things with everything and anything that there is to work with in that programming environment to generate binary data to then pipe into aplay.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2023/06/15/linux-aplay/" data-id="clj7ddzq0011z5ov160vjjir6" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2023/06/15/linux-aplay/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/06/21/linux-du/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          File Space usage with Linux du command
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/06/13/threejs-extrude-geometry/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Extrude Geometry in threejs</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2023/06/15/linux-aplay/index.html';
+    this.page.identifier = '1052';
+    this.page.title = 'Linux aplay command and ALSA';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/electronjs/">electronjs</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/electronjs/">electronjs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.27px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.45px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.18px;">angular</a> <a href="/tags/animation/" style="font-size: 11.82px;">animation</a> <a href="/tags/automation/" style="font-size: 11.82px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.27px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.45px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.64px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.73px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.91px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.36px;">ejs</a> <a href="/tags/electronjs/" style="font-size: 13.64px;">electronjs</a> <a href="/tags/express/" style="font-size: 16.82px;">express</a> <a href="/tags/games/" style="font-size: 17.27px;">games</a> <a href="/tags/git/" style="font-size: 13.64px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.82px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.55px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.45px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.36px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 17.73px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.64px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.55px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.55px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.18px;">phaser</a> <a href="/tags/python/" style="font-size: 15.91px;">python</a> <a href="/tags/statistics/" style="font-size: 14.09px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 19.09px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16.36px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">June 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">February 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">January 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">December 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">November 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">October 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">September 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">September 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/06/22/threejs-buffer-attribute/">Buffer Attributes in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/21/linux-du/">File Space usage with Linux du command</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/15/linux-aplay/">Linux aplay command and ALSA</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/13/threejs-extrude-geometry/">Extrude Geometry in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/09/threejs-vector2/">The Vector2 class for 2D curves, mouse pointers, ect</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2021/02/19/threejs-examples/" class="mobile-nav-link">ThreeJS</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas</a>
+  
+    <a href="https://www.youtube.com/user/javaweaver" class="mobile-nav-link">Youtube</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2023/06/15/linux-aplay/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

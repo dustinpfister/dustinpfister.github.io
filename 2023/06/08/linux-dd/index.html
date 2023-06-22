@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2023/06/08/linux-dd/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="The man page for the Linux dd command just simply says that it is used to convert and copy files. In a nutshell that is more or less all that it does, but it seems that it comes up all the time when w">
-<meta property="og:updated_time" content="2023-06-08T16:14:44.000Z">
+<meta property="og:updated_time" content="2023-06-16T00:10:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux dd command and files">
 <meta name="twitter:description" content="The man page for the Linux dd command just simply says that it is used to convert and copy files. In a nutshell that is more or less all that it does, but it seems that it comes up all the time when w">
@@ -128,10 +128,10 @@
 
     <!-- other info (dustin) -->
     <a href="/2023/06/08/linux-dd/" class="article-date"> Modified:
-  <time datetime="2023-06-08T16:14:44.000Z" itemprop="dateModified">2023-06-08</time>
+  <time datetime="2023-06-16T00:10:37.000Z" itemprop="dateModified">2023-06-15</time>
 </a>
 
-    <span class="article-date">V1.5</span>
+    <span class="article-date">V1.6</span>
 
     
   <div class="article-category">
@@ -165,6 +165,9 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ echo -n &quot;foobar&quot; | dd bs=3 count=1 status=none</div><div class="line">foo</div></pre></td></tr></table></figure>
 <h2 id="2-Using-dd-to-benchmark-file-io-and-why-not-to"><a href="#2-Using-dd-to-benchmark-file-io-and-why-not-to" class="headerlink" title="2 - Using dd to benchmark file io, and why not to."></a>2 - Using dd to benchmark file io, and why not to.</h2><p>When I was looking into what there is to work with when it comes to file system io benchmark software I saw a lot of blog posts that where outlining the use of dd as a way to do so. As I have covered in the first section of this post there is a output text in the standard error that shows the speed at which the dd operation was preformed. Although using this output as a way to bench file io might be okay with certain file sizes, and with the expectation of just having a sequential file io test, it is not at all a replacement for a decent benchmark program. Sequential read and write speed might be importantly, but depending on how a volume is to be used, often random read and write is of greater concern. For this reason I am not going to go on with examples for use of dd this way in this section. However I will write a thing or two about a program that I like to use thus far for file io bench making called <a href="/2023/06/06/linux-sysbench">sysbench</a>.</p>
 <p>What is great about sysbench is that I can similar results with what I would get if I where to use dd when it comes to a sequential test. However I can also to a random test as well which is far more impotent when it comes to using a volume for a whole bunch of small files that I need to read and wrote to fast, such as a volume that contains an OS Image for example.</p>
+<h2 id="3-Using-cat-and-dev-random-to-create-audio-data-for-aplay"><a href="#3-Using-cat-and-dev-random-to-create-audio-data-for-aplay" class="headerlink" title="3 - Using cat, and \/dev\/random to create audio data for aplay"></a>3 - Using cat, and \/dev\/random to create audio data for aplay</h2><p>The <a href="/2023/06/15/linux-aplay/">aplay command</a> is pretty cool as it will play any binary data as audio sample data. So I can then use say the Linux cat command with the \/dev\/random device to generate random data, then pipe that into dd. I can then set the block size to 8000 and the count of blocks to 60. When doing so I will want to set the -iflag option of the dd command to fullblock to avoid a partial read error with this. After that I can pipe that into aplay, or in this case redirect into a file to play with aplay. When doing so I can make sure that the format is Unsigned 8 bit sample size, and 8000 herts which does mean 8000 samples per second. This is the default but it does not hurt to make it explicit for the sake of this example.</p>
+<p>I have found that this does result in about 60 seconds of random noise. I can then use differing formats, and sample rates to adjust the rate of the noise.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"> $ cat /dev/random | dd bs=8000 count=60 iflag=fullblock &gt; audiodata</div><div class="line">60+0 records in</div><div class="line">60+0 records out</div><div class="line">480000 bytes (480 kB, 469 KiB) copied, 0.0826348 s, 5.8 MB/s</div><div class="line">$ aplay -f U8 -r 8000 audiodata</div><div class="line">Playing raw data &apos;audiodata&apos; : Unsigned 8 bit, Rate 8000 Hz, Mono</div></pre></td></tr></table></figure>
 <h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>There is a great deal more that can be done with the dd command of course beyond what I wrote about in this post. However a lot of what I am reading on other sources are examples that I can not help but thing might be better preformed with a command, tool, or even specialized operating system rather than dd. </p>
 <p>In this post I wrote a bit about using dd for file system io bechmaking, and why it might be better to use a specialized tool such as sysbench. However it does not stop there when it comes to things that can be done with dd, but might be best done with something else. For example I have found posts in which <a href="https://linuxopsys.com/topics/linux-dd-command-with-examples" target="_blank" rel="external">dd is being used to create and restore whole partitions of hard drives</a>. Sure dd might work just fine for that but why not use clonzilla, or an OS recommended disk utility tool for this sort of thing? Lots of posts going on about how dd can be used as a way to not just delete files, but also blank the area where the file was with zeros, or various random patterns over and over again. Sure again dd can be used to do this but there is also <a href="https://en.wikipedia.org/wiki/Darik&#39;s_Boot_and_Nuke" target="_blank" rel="external">DBAN</a> and a <a href="https://en.wikipedia.org/wiki/List_of_data-erasing_software" target="_blank" rel="external">whole lot of other similar tools</a> that might be better for that sort of thing.</p>
 <p>I am sure that dd still has its use case examples that might come in handy though. Also maybe some of the things that I mentioned might still be good ideas if I am in a situation in which I have no alternative. It is just that I think that I am going to be a little more reserved about expanding this post when it comes to any future edits that may or may not come to pass.</p>
@@ -172,7 +175,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2023/06/08/linux-dd/" data-id="cliqcgvok01eziov11cr8q512" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2023/06/08/linux-dd/" data-id="clj7ddzwj014k5ov11pwznpo9" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2023/06/08/linux-dd/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -278,23 +281,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
+            <a href="/2023/06/22/threejs-buffer-attribute/">Buffer Attributes in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/21/linux-du/">File Space usage with Linux du command</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/15/linux-aplay/">Linux aplay command and ALSA</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/13/threejs-extrude-geometry/">Extrude Geometry in threejs</a>
+          </li>
+        
+          <li>
             <a href="/2023/06/09/threejs-vector2/">The Vector2 class for 2D curves, mouse pointers, ect</a>
-          </li>
-        
-          <li>
-            <a href="/2023/06/08/linux-dd/">Linux dd command and files</a>
-          </li>
-        
-          <li>
-            <a href="/2023/06/07/threejs-lathe-geometry/">Lathe Geometry in threejs</a>
-          </li>
-        
-          <li>
-            <a href="/2023/06/06/linux-sysbench/">Linux sysbench command for benchmarking a file system</a>
-          </li>
-        
-          <li>
-            <a href="/2023/06/02/threejs-tube-geometry/">Tube Geometry in threejs</a>
           </li>
         
       </ul>

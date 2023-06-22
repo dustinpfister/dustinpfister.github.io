@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2023/01/13/threejs-shader-material/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="The Shader material in threejs is one way to go about getting started with custom shaders in threejs, the other general option would be to look into the raw shader material. The main difference betwee">
-<meta property="og:updated_time" content="2023-01-14T19:20:05.000Z">
+<meta property="og:updated_time" content="2023-06-21T14:38:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The shader material in threejs and getting started with a little GLSL">
 <meta name="twitter:description" content="The Shader material in threejs is one way to go about getting started with custom shaders in threejs, the other general option would be to look into the raw shader material. The main difference betwee">
@@ -128,10 +128,10 @@
 
     <!-- other info (dustin) -->
     <a href="/2023/01/13/threejs-shader-material/" class="article-date"> Modified:
-  <time datetime="2023-01-14T19:20:05.000Z" itemprop="dateModified">2023-01-14</time>
+  <time datetime="2023-06-21T14:38:57.000Z" itemprop="dateModified">2023-06-21</time>
 </a>
 
-    <span class="article-date">V1.13</span>
+    <span class="article-date">V1.14</span>
 
     
   <div class="article-category">
@@ -155,18 +155,18 @@
     <div class="article-entry" itemprop="text">
       
         <p>The <a href="https://threejs.org/docs/#api/en/materials/ShaderMaterial" target="_blank" rel="external">Shader material</a> in threejs is one way to go about getting started with custom shaders in threejs, the other general option would be to look into the <a href="https://threejs.org/docs/#api/en/materials/RawShaderMaterial" target="_blank" rel="external">raw shader material</a>. The main difference between the two has to do with built-in uniforms and attributes when it comes to the starting state of the GLSL ( <a href="https://en.wikipedia.org/wiki/OpenGL_Shading_Language" target="_blank" rel="external">openGL Shader Language</a> ) code. For this reason it might be best to start out with the Shader material rather than the raw shader material as there are some built in values that I will not have to worry about setting up myself when it comes to the raw shader material. Yet again it is a bit of a toss up with that as if one wants to learn a thing or two about GLSL alone then the raw material might prove to be a better starting point actually.</p>
-<p>In any case the Shader material is what I am starting with, and that will be the main topic of this post today. Using the shader material alone is simple enough, but what is not so simple is coming up with custom GLSL code to use with this material. However one has to start somewhere so this post will start out with some very simply hello world style examples, before moving on into one or more real examples when it comes to the topic of custom shaders.</p>
+<p>In any case the Shader material is what I am starting with, and that will be the main topic of this post today. Using the shader material alone is simple enough, but what is not so simple is coming up with custom GLSL code to use with this material. However one has to start somewhere so this post will start out with some very simply hello world style examples. Before moving on into one or more real examples when it comes to the topic of custom shaders which can end up getting pretty involved.</p>
 <a id="more"></a>
 <iframe class="youtube_video" src="https://www.youtube.com/embed/i8jd1kiNNPk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
-<h2 id="The-Shader-Material-in-threejs-and-what-to-know-first"><a href="#The-Shader-Material-in-threejs-and-what-to-know-first" class="headerlink" title="The Shader Material in threejs and what to know first"></a>The Shader Material in threejs and what to know first</h2><p>This is a post on getting started with making custom GLSL shaders in threejs by way of the THREE.ShaderMaterial class as well as many other core threejs features. This is then not in any way a kind of <a href="/2018/04/04/threejs-getting-started/">getting started post with threejs</a>, <a href="/2018/11/27/js-getting-started/">client side javaScript</a>, and many other skills that are needed before hand. Also on top of the usual set of skills that are needed for doing just about anything with threejs there is one new additional skill that one is going to need to start to scratch the surface with at least. As I mentioned in the opening of this post GLSL is what is used to write the code for these custom shaders. I will then not be getting into great detail about everything that you should know before hand here. However I do as aways use this first opening section to outline some things that you might want to read up more on before reading the rest of this post.</p>
-<h3 id="Start-to-learn-at-least-a-thing-or-two-about-GLSL"><a href="#Start-to-learn-at-least-a-thing-or-two-about-GLSL" class="headerlink" title="Start to learn at least a thing or two about GLSL"></a>Start to learn at least a thing or two about GLSL</h3><p>If you want to write custom shaders you will want to learn at least a little GLSL, and getting into every little thing about that may be outside the scope of this post. Also I am still very new to this specific language anyway, so I would need to study more myself in order to start writing a collection of posts on this language anyway. There is however learning just enough GLSL to start effectively hacking over shaders that have all ready been written though and that is more or less what I am doing in this post.</p>
-<p>Still there is the question of what is the Modzilla Developer Network equivalent site for GLSL? That is indeed a good question and thus far I can not say that I have found that. Thus far I have found the <a href="https://www.khronos.org/opengles/sdk/docs/manglsl/docbook4/" target="_blank" rel="external">khronos group pages</a> to be somewhat helpful, however thus far I have been mainly just looking at the code that is used in the core of threejs itself as an example of core features of this language by looking at the <a href="https://github.com/mrdoob/three.js/tree/r146/src/renderers/shaders/ShaderChunk" target="_blank" rel="external">source code files that compose the THREE.ShaderChunk library</a> as well as just working with this Object in the process of creating a custom shader. Working closely with this object just strikes me as what the THREE.ShaderMaterial is all about as there is also the THREE.RawShaderMaterial class which seems to be what one will want to use when it comes to doing everything from the ground up with GLSL.</p>
-<h3 id="There-is-learning-a-thing-or-two-about-the-built-in-materials-first-of-course"><a href="#There-is-learning-a-thing-or-two-about-the-built-in-materials-first-of-course" class="headerlink" title="There is learning a thing or two about the built in materials first of course"></a>There is learning a thing or two about the built in materials first of course</h3><p>If you are still new to threejs, and also even if you do have a fair amount of experience there is still just sticking with the <a href="/2018/04/30/threejs-materials/">built in materials</a> and moving on with life. Many of the material options will work just fine for just about all typical use case examples. However there are some situations that call for writing a custom shader as doing so with with built in materials will have to involve some kind of very complex trickery using canvas textures, so complex that it might be better to ditch that idea and just write a little GLSL code.</p>
+<h2 id="The-Shader-Material-in-threejs-and-what-to-know-first"><a href="#The-Shader-Material-in-threejs-and-what-to-know-first" class="headerlink" title="The Shader Material in threejs and what to know first"></a>The Shader Material in threejs and what to know first</h2><p>This is a post on getting started with making custom GLSL shaders in threejs by way of the THREE.ShaderMaterial class as well as many other core threejs features. This is then not in any way a kind of <a href="/2018/04/04/threejs-getting-started/">getting started post with threejs</a>, <a href="/2018/11/27/js-getting-started/">client side javaScript</a>, and many other skills that are needed before hand. Also on top of the usual set of skills that are needed for doing just about anything with threejs there is one new additional skill that one is going to need to start to scratch the surface with at least. As I mentioned in the opening of this post GLSL is what is used to write the code for these custom shaders. I will then not be getting into great detail about everything that you should know before hand here. However I do as always use this first opening section to outline some things that you might want to read up more on before reading the rest of this post.</p>
+<h3 id="Start-to-learn-at-least-a-thing-or-two-about-GLSL"><a href="#Start-to-learn-at-least-a-thing-or-two-about-GLSL" class="headerlink" title="Start to learn at least a thing or two about GLSL"></a>Start to learn at least a thing or two about GLSL</h3><p>If you want to write custom shaders you will want to learn at least a little GLSL, and getting into every little thing about that may be outside the scope of this post. There is however learning just enough GLSL to start effectively hacking over shaders that have all ready been written though and that is more or less what I am doing in this post.</p>
+<p>Still there is the question of what is the Modzilla Developer Network equivalent site for GLSL? That is indeed a good question and thus far I can not say that I have found that. What I have found however is the <a href="https://www.khronos.org/opengles/sdk/docs/manglsl/docbook4/" target="_blank" rel="external">khronos group pages</a> that have provedn to be somewhat helpful. Much of what I have learned about GLSL though has been mainly just looking at the code that is used in the core of threejs itself as an example of core features of this language by looking at the <a href="https://github.com/mrdoob/three.js/tree/r146/src/renderers/shaders/ShaderChunk" target="_blank" rel="external">source code files that compose the THREE.ShaderChunk library</a> as well as just working with this Object in the process of creating a custom shader. Working closely with this object just strikes me as what the THREE.ShaderMaterial is all about anway.</p>
+<h3 id="There-is-learning-a-thing-or-two-about-the-built-in-materials-first-of-course"><a href="#There-is-learning-a-thing-or-two-about-the-built-in-materials-first-of-course" class="headerlink" title="There is learning a thing or two about the built in materials first of course"></a>There is learning a thing or two about the built in materials first of course</h3><p>If you are still new to threejs, and also even if you do have a fair amount of experience there is still just sticking with the <a href="/2018/04/30/threejs-materials/">built in materials</a> and moving on with life. Many of the material options will work just fine for just about all typical use case examples with threejs. It is just that there might be a few situations that call for writing a custom shader though as doing so with with built in materials will have to involve some kind of very complex trickery using canvas textures, so complex that it might be better to ditch that idea and just write a little GLSL code.</p>
 <h3 id="Be-aware-of-features-that-have-to-do-with-buffer-geometry"><a href="#Be-aware-of-features-that-have-to-do-with-buffer-geometry" class="headerlink" title="Be aware of features that have to do with buffer geometry"></a>Be aware of features that have to do with buffer geometry</h3><p>There is a lot to be aware of when it comes to the state of <a href="/2021/04/22/threejs-buffer-geometry/">buffer geometry</a> as well of course. Once again this is very much an advanced post on threejs so I assume you know what a <a href="/2021/06/07/threejs-buffer-geometry-attributes-position/">position attribute</a> is, as well as many other such attributes both standard, and not so standard. There is not just getting into making custom shaders, but also custom attributes of geometry as well after all. In some cases I might want to create shaders that will make use of a color attribute, or one or more custom attributes that should be parked in the geometry.</p>
-<h3 id="Source-code-examples-are-also-on-Github"><a href="#Source-code-examples-are-also-on-Github" class="headerlink" title="Source code examples are also on Github"></a>Source code examples are also on Github</h3><p>I also have the source code examples that I am writing about here up on <a href="https://github.com/dustinpfister/test_threejs/tree/master/views/forpost/threejs-shader-material" target="_blank" rel="external">my Github</a>.</p>
-<h3 id="Version-Numbers-matter"><a href="#Version-Numbers-matter" class="headerlink" title="Version Numbers matter"></a>Version Numbers matter</h3><p>When I was first writing this post I was using r146 of threejs.</p>
+<h3 id="Source-code-examples-are-also-on-Github"><a href="#Source-code-examples-are-also-on-Github" class="headerlink" title="Source code examples are also on Github"></a>Source code examples are also on Github</h3><p>I also have the source code examples that I am writing about here up on <a href="https://github.com/dustinpfister/test_threejs/tree/master/views/forpost/threejs-shader-material" target="_blank" rel="external">my Github</a>. This is also where I park the source code examples for the <a href="/categories/three-js/">many other blog posts that I have wrote on threejs</a> over the years as well.</p>
+<h3 id="Version-Numbers-matter"><a href="#Version-Numbers-matter" class="headerlink" title="Version Numbers matter"></a>Version Numbers matter</h3><p>When I was first writing this post I was using <a href="https://github.com/dustinpfister/test_threejs/blob/master/views/demos/r146/README.md" target="_blank" rel="external">r146 of threejs</a> and thus I have followed the style rules I have set with that revision when making these. Threejs is still to this day a very fast moving project, and depending on how wide of a range of devices you want to target the latest is not always the greatest just yet. As of this writing there are a whole lot of code breaking changes up ahead. In any case when it comes to working out issues with code examples on the open web always be mindful of what version is being used on both ends.</p>
 <h2 id="1-Basic-hello-world-exmaples-of-THREE-ShaderMaterial-in-threejs"><a href="#1-Basic-hello-world-exmaples-of-THREE-ShaderMaterial-in-threejs" class="headerlink" title="1 - Basic, hello world exmaples of THREE.ShaderMaterial in threejs"></a>1 - Basic, hello world exmaples of THREE.ShaderMaterial in threejs</h2><p>There is a lot to take in when it comes to even just simply getting started with the THREE.ShaderMaterial. However this is to be expected as this is without question one of the most, if not the most advanced topics there is when it comes to threejs. I have been working with threejs on and off for years and even I still find this to be a little intense for me, however I started taking a swing or two at it now and then because there is not much that remains when it comes to more ground to cover with threejs for me.</p>
 <p>Anyway not just for your sake, but very much for my own sake as well, this will be a collection of very basic, getting started type examples of custom shaders in threejs by way of THREE.ShaderMaterial. This might prove to be an easier alternative to that of the THREE.RawShaderMaterial but that will only help so much of course. Still I have found that if I just want to reproduce the functionally of the <a href="/2018/05/05/threejs-basic-material/">THREE.MeshBasicMatreial</a> with just the color option, that is not so hard of a starting point. With that said these examples will just be focusing one various ways to go about doing that which will just result in a solid blob of color for the object rendered in the scene. Everything else should be something that I get to in more advanced sections.</p>
 <h3 id="1-1-Custom-Shader-hello-world-with-gl-Position-and-gl-FragColor"><a href="#1-1-Custom-Shader-hello-world-with-gl-Position-and-gl-FragColor" class="headerlink" title="1.1 - Custom Shader hello world with gl_Position and gl_FragColor"></a>1.1 - Custom Shader hello world with gl_Position and gl_FragColor</h3><p>To create an instance of the Shader material I will need to pass an object that contains three properties, unifroms, vertexShader, and fragmentShader. The uniforms property contains a set of values that will be the same for for all vertices, for this getting started example I am dealing with just one uniform value that is a diffuse color. Each value of the uniforms object should itself be an object and the value property of this nested object is how to go about setting a value for the uniform value. The vertexShader and fragmentShader properties should both contain string values, and each string value should contain GLSL code for the vertex and fragment shaders that will provide the custom rendering logic.</p>
@@ -196,7 +196,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2023/01/13/threejs-shader-material/" data-id="cliqch22502ppiov1ofm26hkz" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2023/01/13/threejs-shader-material/" data-id="clj7de99b03cf5ov16q7uz9x9" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2023/01/13/threejs-shader-material/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -302,23 +302,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
+            <a href="/2023/06/22/threejs-buffer-attribute/">Buffer Attributes in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/21/linux-du/">File Space usage with Linux du command</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/15/linux-aplay/">Linux aplay command and ALSA</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/13/threejs-extrude-geometry/">Extrude Geometry in threejs</a>
+          </li>
+        
+          <li>
             <a href="/2023/06/09/threejs-vector2/">The Vector2 class for 2D curves, mouse pointers, ect</a>
-          </li>
-        
-          <li>
-            <a href="/2023/06/08/linux-dd/">Linux dd command and files</a>
-          </li>
-        
-          <li>
-            <a href="/2023/06/07/threejs-lathe-geometry/">Lathe Geometry in threejs</a>
-          </li>
-        
-          <li>
-            <a href="/2023/06/06/linux-sysbench/">Linux sysbench command for benchmarking a file system</a>
-          </li>
-        
-          <li>
-            <a href="/2023/06/02/threejs-tube-geometry/">Tube Geometry in threejs</a>
           </li>
         
       </ul>
