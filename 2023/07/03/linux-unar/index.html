@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
+  
+  <title>Extracting rar files with Linux unar command | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2023/07/03/linux-unar/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="The rar file format is a proprietary data compression archive file format. Often I will end up comming accross this kind of archive file and would like to extract it in a Linux system without having t">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Extracting rar files with Linux unar command">
+<meta property="og:url" content="https://dustinpfister.github.io/2023/07/03/linux-unar/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="The rar file format is a proprietary data compression archive file format. Often I will end up comming accross this kind of archive file and would like to extract it in a Linux system without having t">
+<meta property="og:updated_time" content="2023-07-03T13:53:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Extracting rar files with Linux unar command">
+<meta name="twitter:description" content="The rar file format is a proprietary data compression archive file format. Often I will end up comming accross this kind of archive file and would like to extract it in a Linux system without having t">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Google Analytics -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y8XLNG6JRW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y8XLNG6JRW');
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image, as well as the link to my youtube -->
+        <a href="https://www.youtube.com/user/javaweaver"><div class="selfimage"></div></a>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2021/02/19/threejs-examples/">ThreeJS</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas</a>
+        
+          <a class="main-nav-link" href="https://www.youtube.com/user/javaweaver">Youtube</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-linux-unar" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/07/03/linux-unar/" class="article-date"> Published:
+  <time datetime="2023-07-03T13:19:00.000Z" itemprop="datePublished">2023-07-03</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2023/07/03/linux-unar/" class="article-date"> Modified:
+  <time datetime="2023-07-03T13:53:01.000Z" itemprop="dateModified">2023-07-03</time>
+</a>
+
+    <span class="article-date">V1.2</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Extracting rar files with Linux unar command
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>The <a href="https://en.wikipedia.org/wiki/RAR_%28file_format%29" target="_blank" rel="external">rar file format</a> is a proprietary data compression archive file format. Often I will end up comming accross this kind of archive file and would like to extract it in a Linux system without having to boot to windows, or by one means or another using <a href="https://en.wikipedia.org/wiki/WinRAR" target="_blank" rel="external">winrar to do so</a>. The good news here is that there is a popular linux deal that can be used to make quick work of this <a href="https://linux.die.net/man/1/unrar" target="_blank" rel="external">called unar</a>. On the Debian based distros that I work with thus far it would seem that this is not backed into the OS image, however it can easly be added by way of apt.</p>
+<a id="more"></a>
+<h2 id="Install-unar-by-way-of-apt"><a href="#Install-unar-by-way-of-apt" class="headerlink" title="Install unar by way of apt"></a>Install unar by way of apt</h2><p>How to go about installing unar if it is not there to begin with will as always deped on what distro you are using. I like to stick with debian based binary distros such as Debian, Ubuntu, and in late years Raspberry PI OS actaully. So then for me I have found that I can just add this one by the ushual apt install deal. However Often I will use the type command to see of a command is installed at all to begin with. After that I like to use the show sub command of apt to see of the command can be installed by way of apt, and if so what version.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">$ sudo apt show unar</div><div class="line">Package: unar</div><div class="line">Version: 1.10.1-2+b4</div><div class="line">Priority: optional</div><div class="line">Section: utils</div><div class="line">Source: unar (1.10.1-2)</div><div class="line">Maintainer: Matt Kraai &lt;kraai@debian.org&gt;</div><div class="line">Installed-Size: 3,923 kB</div><div class="line">Provides: theunarchiver</div><div class="line">Pre-Depends: dpkg (&gt;= 1.15.6~)</div><div class="line">Depends: gnustep-base-runtime (&gt;= 1.26.0), libbz2-1.0, libc6 (&gt;= 2.11), libgcc1 (&gt;= 1:3.5), libgnustep-base1.26 (&gt;= 1.26.0), libicu63 (&gt;= 63.1-1~), libobjc4 (&gt;= 4.2.1), libstdc++6 (&gt;= 5), libwavpack1 (&gt;= 4.40.0), zlib1g (&gt;= 1:1.2.0)</div><div class="line">Conflicts: theunarchiver</div><div class="line">Replaces: theunarchiver</div><div class="line">Homepage: http://unarchiver.c3.cx/</div><div class="line">Download-Size: 978 kB</div><div class="line">APT-Manual-Installed: yes</div><div class="line">APT-Sources: http://raspbian.raspberrypi.org/raspbian buster/main armhf Packages</div><div class="line">Description: Unarchiver for a variety of file formats</div><div class="line"> The Unarchiver is an archive unpacker program with support for the popular</div><div class="line"> zip, RAR, 7z, tar, gzip, bzip2, LZMA, XZ, CAB, MSI, NSIS, EXE, ISO, BIN, and</div><div class="line"> split file formats, as well as the old Stuffit, Stuffit X, DiskDouble, Compact</div><div class="line"> Pro, Packit, cpio, compress (.Z), ARJ, ARC, PAK, ACE, ZOO, LZH, ADF, DMS, LZX,</div><div class="line"> PowerPacker, LBR, Squeeze, Crunch, and other old formats.</div><div class="line"> .</div><div class="line"> This package contains the lsar tool which lists the contents of archives and</div><div class="line"> the unar tool which extracts those contents.</div></pre></td></tr></table></figure>
+<p>Thus far I have found that I can just install unar by the typical suco apt install line.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo apt install unar</div></pre></td></tr></table></figure>
+<h3 id="Extract-a-file"><a href="#Extract-a-file" class="headerlink" title="Extract a file"></a>Extract a file</h3><p>The main reason why I installed unar is to extract sound font files that I would like to use with MuseScore. The files that I find are often in rar or some other compression format that I can not just extract with an out of the box install of what there is to work with. Anyway once unar is installed all I have to do is just type unar, and then pass the path to the rar file as the first positional argument. After that unar will do its magic and extract what it is that I am after.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">$ ls *.rar</div><div class="line">20-synth-sf.rar</div><div class="line">$ unar 20-synth-sf.rar</div><div class="line">20-synth-sf.rar: RAR</div><div class="line">  20 Synth Soundfonts/Acid SQ Neutral.sf2  (796896 B)... OK.</div><div class="line">  20 Synth Soundfonts/Analog Saw.sf2  (353496 B)... OK.</div><div class="line">  20 Synth Soundfonts/Beeper.sf2  (995340 B)... OK.</div><div class="line">  20 Synth Soundfonts/Candy Bee.sf2  (2595422 B)... OK.</div><div class="line">  20 Synth Soundfonts/Dance Trance.sf2  (1590694 B)... OK.</div><div class="line">  20 Synth Soundfonts/Dirty Sub.sf2  (399990 B)... OK.</div><div class="line">  20 Synth Soundfonts/FM Modulator.sf2  (598404 B)... OK.</div><div class="line">  20 Synth Soundfonts/Happy Mellow.sf2  (399958 B)... OK.</div><div class="line">  20 Synth Soundfonts/Hyper Saw.sf2  (3202672 B)... OK.</div><div class="line">  20 Synth Soundfonts/Kaputt Sine.sf2  (194734 B)... OK.</div><div class="line">  20 Synth Soundfonts/Perfect Sine.sf2  (1139346 B)... OK.</div><div class="line">  20 Synth Soundfonts/Plastic Strings.sf2  (20163902 B)... OK.</div><div class="line">  20 Synth Soundfonts/Poly Special Mono.sf2  (2781398 B)... OK.</div><div class="line">  20 Synth Soundfonts/Pulse Wobbler.sf2  (7801986 B)... OK.</div><div class="line">  20 Synth Soundfonts/Sine Wave.sf2  (1193790 B)... OK.</div><div class="line">  20 Synth Soundfonts/Solar Wind.sf2  (1590692 B)... OK.</div><div class="line">  20 Synth Soundfonts/Super Saw 1.sf2  (4590502 B)... OK.</div><div class="line">  20 Synth Soundfonts/Super Saw 2.sf2  (5507782 B)... OK.</div><div class="line">  20 Synth Soundfonts/Super Saw 3.sf2  (3336852 B)... OK.</div><div class="line">  20 Synth Soundfonts/Synth E.sf2  (1193788 B)... OK.</div><div class="line">  20 Synth Soundfonts/  (dir)... OK.</div><div class="line">Successfully extracted to &quot;./20 Synth Soundfonts&quot;.</div></pre></td></tr></table></figure>
+<p>So that works when it really comes down to it for this one at least. There migth be a few more things to write about with the various options and so forth. However all I wanted is to just extract a rar file, and if that is all I care about this works just fine.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>What is great about unar is that it is pretty brainless to use once installed, so far it does that what I need it to do. So then there might only be so much to write about with this one. I looks like there are a whole lot of other formats that unar will work great for when it comes to extracting at least with with other formats such as 7zip and so forth. </p>
+<p>There might be more to write about when it comes to making a compressed file rather than extracting one in the rar format. With that said there might be some addtional options to look for. There is the general <a href="/2021/11/26/linux-tar">tar command</a> to look into when it comes to making these kinds of files in other fomats.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2023/07/03/linux-unar/" data-id="cljspq48f016308v1k5gh50wf" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2023/07/03/linux-unar/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/07/05/threejs-text-geometry/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Text Geometry in threejs
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/06/29/linux-sudo/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Linux Sudo command</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2023/07/03/linux-unar/index.html';
+    this.page.identifier = '1057';
+    this.page.title = 'Extracting rar files with Linux unar command';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/electronjs/">electronjs</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/electronjs/">electronjs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.27px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.45px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.18px;">angular</a> <a href="/tags/animation/" style="font-size: 11.82px;">animation</a> <a href="/tags/automation/" style="font-size: 11.82px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.27px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.45px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.64px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.73px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.91px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.36px;">ejs</a> <a href="/tags/electronjs/" style="font-size: 13.64px;">electronjs</a> <a href="/tags/express/" style="font-size: 16.82px;">express</a> <a href="/tags/games/" style="font-size: 17.27px;">games</a> <a href="/tags/git/" style="font-size: 13.64px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.82px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.55px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.45px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.36px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 17.73px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.64px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.55px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.55px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.18px;">phaser</a> <a href="/tags/python/" style="font-size: 15.91px;">python</a> <a href="/tags/statistics/" style="font-size: 14.09px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 19.09px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16.36px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">June 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">February 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">January 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">December 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">November 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">October 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">September 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">September 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/07/05/threejs-text-geometry/">Text Geometry in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/07/03/linux-unar/">Extracting rar files with Linux unar command</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/29/linux-sudo/">Linux Sudo command</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/27/threejs-texture/">Textures in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/06/22/threejs-buffer-attribute/">Buffer Attributes in threejs</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2021/02/19/threejs-examples/" class="mobile-nav-link">ThreeJS</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas</a>
+  
+    <a href="https://www.youtube.com/user/javaweaver" class="mobile-nav-link">Youtube</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2023/07/03/linux-unar/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
