@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <!-- disqus image-->
-  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner.jpg">
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner_2023.png">
   
   <title>Linux ps command and scripting with nodejs | Dustin John Pfister at github pages</title>
   
@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://dustinpfister.github.io/2019/08/16/linux-ps/index.html">
 <meta property="og:site_name" content="Dustin John Pfister at github pages">
 <meta property="og:description" content="So today I am taking a look at the Linux ps command. This command can be used to get a snapshot of all the processes running on Linux at the moment that the command is called. Helpful information abou">
-<meta property="og:updated_time" content="2021-06-28T18:22:26.000Z">
+<meta property="og:updated_time" content="2023-07-11T20:30:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux ps command and scripting with nodejs">
 <meta name="twitter:description" content="So today I am taking a look at the Linux ps command. This command can be used to get a snapshot of all the processes running on Linux at the moment that the command is called. Helpful information abou">
@@ -128,10 +128,10 @@
 
     <!-- other info (dustin) -->
     <a href="/2019/08/16/linux-ps/" class="article-date"> Modified:
-  <time datetime="2021-06-28T18:22:26.000Z" itemprop="dateModified">2021-06-28</time>
+  <time datetime="2023-07-11T20:30:35.000Z" itemprop="dateModified">2023-07-11</time>
 </a>
 
-    <span class="article-date">V1.21</span>
+    <span class="article-date">V1.24</span>
 
     
   <div class="article-category">
@@ -154,8 +154,10 @@
     
     <div class="article-entry" itemprop="text">
       
-        <p>So today I am taking a look at the <a href="https://www.tecmint.com/ps-command-examples-for-linux-process-monitoring/" target="_blank" rel="external">Linux ps</a> command. This command can be used to get a snapshot of all the processes running on Linux at the moment that the command is called. Helpful information about each process running in a selection is included in the output including a process id that can be used with other commands such as the kill command to halt a process.</p>
-<p>There are many options for the command that can be used to control selection of which process to print to the standard output, and formating of the output when it comes to what I want to know about processes. In this post I will be going over some typical examples of the Linux ps command, that have to do with selecting all process, processes for a user, and just instances of a single command. I will also be going over some examples that have to do with creating a custom output of the command, and a use case example with nodejs while I am at it.</p>
+        <p>So today I am taking a look at the <a href="https://www.tecmint.com/ps-command-examples-for-linux-process-monitoring/" target="_blank" rel="external">Linux ps</a> command. This command can be used to get a snapshot of all the processes running on Linux at the moment that the command is called. Helpful information about each process running in a selection is included in the output including a process id that can be used with other commands such as the kill command to halt a process. There are also ways of changing what the format of this output, and there are also a number of ways to set what processes to select as well.</p>
+<p>Although the ps command is like that of the task manager in windows it does not have all the functionality that you might expect. For example if you want to kill a process that is hanging you can not do that with the ps command. However you can use the ps command to get a pid that you can then use with the <a href="/2020/10/12/linux-kill/">kill command</a> to end that hanging process.</p>
+<p>The ps command is then a great basic tool to help in the process of learning a thing or two about all of the software that is running on your Linux system. Again just like that of using the task manager in windows to see the names of the process you can then research more on what each of those process dames actually do.</p>
+<p>In this post I will be going over some typical examples of the Linux ps command, that have to do with selecting all process, processes for a user, and just instances of a single command. I will also then want to write about any and all additional topics that might come up while I am at it because this is major deal kind of command.</p>
 <a id="more"></a>
 <h2 id="1-Some-basic-examples-of-the-linux-ps-command"><a href="#1-Some-basic-examples-of-the-linux-ps-command" class="headerlink" title="1 - Some basic examples of the linux ps command"></a>1 - Some basic examples of the linux ps command</h2><p>In this section I will be going over some typical use case examples of the Linux ps command. There are a lot of options and ways of formatting the output, and if you really want to dive deep into it all the best source on that might be the <a href="https://www.man7.org/linux/man-pages/man1/ps.1.html" target="_blank" rel="external">ps command manual page</a> as always. However here I thought I would write about the most typical options and formatting tricks that I find myself using thus far.</p>
 <h2 id="1-1-See-all-process-ruining-on-the-system"><a href="#1-1-See-all-process-ruining-on-the-system" class="headerlink" title="1.1 - See all process ruining on the system"></a>1.1 - See all process ruining on the system</h2><p>So if I just want a list of all processes running at the present moment I will call the ps command with the -e option. If I just give the -e option and nothing else then all processes will be selected and the default formating will be used for each process in the output.</p>
@@ -170,16 +172,19 @@
 <h3 id="1-5-Custom-output-with-memory-percentage"><a href="#1-5-Custom-output-with-memory-percentage" class="headerlink" title="1.5 - Custom output with memory percentage"></a>1.5 - Custom output with memory percentage</h3><p>Often I might want to know how much memory a process might be easting up, when it comes to knowing what the totals are when it comes to what is going on with ram there is the Linux free command. However that command will just gives totals, it will not should be what is going on at a per process level. However with the ps command I can use the \%mem format specifier to know what is going on. </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ps -U pi -o %mem,comm</div></pre></td></tr></table></figure>
 <p>This will give memory usage for each process in a query, but it will do so as percentage values. However the percentage values can be compared to values that are obtained from the Linux fee command to get an idea of how much memory it is in bytes.</p>
-<h2 id="2-Example-1-of-Linux-ps-and-making-a-custom-array-of-command-names-and-process-ids-with-nodejs"><a href="#2-Example-1-of-Linux-ps-and-making-a-custom-array-of-command-names-and-process-ids-with-nodejs" class="headerlink" title="2 - Example 1 of Linux ps and making a custom array of command names and process ids with nodejs"></a>2 - Example 1 of Linux ps and making a custom array of command names and process ids with nodejs</h2><p>In this example I am using the spawn child process module method in nodejs to call the ps command from within a nodejs script. I am using the -o option to change the formating so that it just displays command names alone and then process ids next. I then used event handlers for the data event of the standard output to build a string, and then then end event of that stream to know that the list is done. Once I have the list I then used Array.filter and Array.map to build an array of arrays where each first element is a process name and each second index is a process id.</p>
+<h3 id="1-6-Get-a-count-or-process-running"><a href="#1-6-Get-a-count-or-process-running" class="headerlink" title="1.6 - Get a count or process running"></a>1.6 - Get a count or process running</h3><p>There is the <a href="/2020/10/13/linux-wc/">wc command</a> that can be used to get a word count of things, but it can also be used to count a number of lines also when used with the -l option. So then I can use the ps command with the -e option to selecet all processes and then use custom formatting to make sure that there is no header. There is then just piping the output of that into the wc -l command and the end result will be a count or processes for all users.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ps -e -o &quot;%p%U%c&quot; | wc -l</div><div class="line">180</div></pre></td></tr></table></figure>
+<h2 id="2-Nodejs-scripts"><a href="#2-Nodejs-scripts" class="headerlink" title="2 - Nodejs scripts"></a>2 - Nodejs scripts</h2><p>Although I have found that I can do almost anything that I want to to with bash scripts, there are some situations in which I will need to do something in a more robust programming environment. With that said in this section I will be working out at least one if not more nodejs examples that call the ps command by way of the child process module.</p>
+<h3 id="2-1-Example-1-of-Linux-ps-and-making-a-custom-array-of-command-names-and-process-ids-with-nodejs"><a href="#2-1-Example-1-of-Linux-ps-and-making-a-custom-array-of-command-names-and-process-ids-with-nodejs" class="headerlink" title="2.1 - Example 1 of Linux ps and making a custom array of command names and process ids with nodejs"></a>2.1 - Example 1 of Linux ps and making a custom array of command names and process ids with nodejs</h3><p>In this example I am using the spawn child process module method in nodejs to call the ps command from within a nodejs script. I am using the -o option to change the formating so that it just displays command names alone and then process ids next. I then used event handlers for the data event of the standard output to build a string, and then then end event of that stream to know that the list is done. Once I have the list I then used Array.filter and Array.map to build an array of arrays where each first element is a process name and each second index is a process id.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> spawn = <span class="built_in">require</span>(<span class="string">'child_process'</span>).spawn;</div><div class="line"> </div><div class="line"><span class="keyword">let</span> ps = spawn(<span class="string">'ps'</span>, [<span class="string">'-e'</span>,<span class="string">'--no-headers'</span>, <span class="string">'-o'</span>, <span class="string">'comm,pid'</span>]);</div><div class="line"> </div><div class="line"><span class="keyword">let</span> text = <span class="string">''</span>;</div><div class="line">ps.stdout.on(<span class="string">'data'</span>, (data) =&gt; &#123;</div><div class="line">    text += data.toString();</div><div class="line">&#125;);</div><div class="line"> </div><div class="line">ps.stdout.on(<span class="string">'end'</span>, (data) =&gt; &#123;</div><div class="line">    <span class="keyword">let</span> commands = text.split(<span class="built_in">require</span>(<span class="string">'os'</span>).EOL);</div><div class="line">    commands = commands.filter(<span class="function">(<span class="params">comm</span>)=&gt;</span>&#123;</div><div class="line">        <span class="keyword">return</span> comm.match(<span class="regexp">/^n/</span>)</div><div class="line">    &#125;).map(<span class="function">(<span class="params">comm</span>)=&gt;</span>&#123;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> comm.replace(<span class="regexp">/ +/</span>, <span class="string">':|:'</span>).split(<span class="string">':|:'</span>)</div><div class="line">        </div><div class="line">    &#125;)</div><div class="line">    <span class="built_in">console</span>.log(commands);</div><div class="line">    <span class="comment">// [ [ 'netns', '30' ], [ 'nfsiod', '47' ], [ 'node', '10018' ] ]</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p>Not a practical example at least in its current state, but depending on what it is that I am trying to work out with Shell Scripting something like this could turn into something piratical of course. For example say I want to check if a process is not running first, and if not start it. Also say that I want to count the number of instances of that process that are currently running and if necessary call a kill command. In that case something like this would be a good starting point right?</p>
-<h2 id="3-Conclusion"><a href="#3-Conclusion" class="headerlink" title="3 - Conclusion"></a>3 - Conclusion</h2><p>So the Linux ps command is the basic tool to use when it comes to checking out what is going on with processes. There are a number of other options that might be worth checking out one of which would be the <a href="/2021/06/28/linux-top/">top command</a>. </p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>So the Linux ps command is the basic tool to use when it comes to checking out what is going on with processes. There are a number of other options that might be worth checking out one of which would be the <a href="/2021/06/28/linux-top/">top command</a>. </p>
 <p>There are also a number of task manager like applications that can be used to have a graphical front end for must desktop environments, many of which will come with a given desktop environment as such a program is often a standard application of a desktop environment. One such option that I have come to link thus far is <a href="http://gkrellm.srcbox.net/" target="_blank" rel="external">gkrellm</a>, this allows for me to keep track of CPU usage, memory, disk, and network activity, and do so in a graphical front end which is nice.</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2019/08/16/linux-ps/" data-id="cljspq42s014308v16ktd0vc8" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2019/08/16/linux-ps/" data-id="clkd5dkw801918kv10wumguvw" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2019/08/16/linux-ps/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -285,23 +290,23 @@ s.setAttribute('data-timestamp', +new Date());
       <ul>
         
           <li>
+            <a href="/2023/07/19/threejs-object-loader/">The Object Loader in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/07/13/threejs-animation-mixer/">The Animation Mixer in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/07/11/linux-apt/">Linux apt Debian package manager</a>
+          </li>
+        
+          <li>
             <a href="/2023/07/05/threejs-text-geometry/">Text Geometry in threejs</a>
           </li>
         
           <li>
             <a href="/2023/07/03/linux-unar/">Extracting rar files with Linux unar command</a>
-          </li>
-        
-          <li>
-            <a href="/2023/06/29/linux-sudo/">Linux Sudo command</a>
-          </li>
-        
-          <li>
-            <a href="/2023/06/27/threejs-texture/">Textures in threejs</a>
-          </li>
-        
-          <li>
-            <a href="/2023/06/22/threejs-buffer-attribute/">Buffer Attributes in threejs</a>
           </li>
         
       </ul>
