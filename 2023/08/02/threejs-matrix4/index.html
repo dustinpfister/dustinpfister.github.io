@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner_2023.png">
+  
+  <title>Matrix4 Objects in threejs | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2023/08/02/threejs-matrix4/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="As of late I have wrote a new post on the object loader in threejs, and I noticed that when using the toJSON method of an object3d class based object a matrix key is created. In addition there are no">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Matrix4 Objects in threejs">
+<meta property="og:url" content="https://dustinpfister.github.io/2023/08/02/threejs-matrix4/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="As of late I have wrote a new post on the object loader in threejs, and I noticed that when using the toJSON method of an object3d class based object a matrix key is created. In addition there are no">
+<meta property="og:updated_time" content="2023-08-03T16:45:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Matrix4 Objects in threejs">
+<meta name="twitter:description" content="As of late I have wrote a new post on the object loader in threejs, and I noticed that when using the toJSON method of an object3d class based object a matrix key is created. In addition there are no">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Google Analytics -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y8XLNG6JRW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y8XLNG6JRW');
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image, as well as the link to my youtube -->
+        <a href="https://www.youtube.com/user/javaweaver"><div class="selfimage"></div></a>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2021/02/19/threejs-examples/">ThreeJS</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas</a>
+        
+          <a class="main-nav-link" href="https://www.youtube.com/user/javaweaver">Youtube</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-threejs-matrix4" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/02/threejs-matrix4/" class="article-date"> Published:
+  <time datetime="2023-08-02T15:47:00.000Z" itemprop="datePublished">2023-08-02</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2023/08/02/threejs-matrix4/" class="article-date"> Modified:
+  <time datetime="2023-08-03T16:45:59.000Z" itemprop="dateModified">2023-08-03</time>
+</a>
+
+    <span class="article-date">V1.4</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Matrix4 Objects in threejs
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>As of late I have wrote a new post on the <a href="https://threejs.org/docs/#api/en/loaders/ObjectLoader" target="_blank" rel="external">object loader</a> in threejs, and I noticed that when using the toJSON method of an object3d class based object a matrix key is created. In addition there are no keys for position, rotation, quaternion, or scale in this output. This is because all of this can be stored as a single array value that in turn can be used to create an instance of the <a href="https://threejs.org/docs/#api/en/math/Matrix4" target="_blank" rel="external">Matrix4 class</a> which is the value for the matrix property of an object3d class based object.</p>
+<p>Turns out that I have not played around with these matrix4 objects much just yet, so I thought that it would be good form to at least start a blog post on this subject to start with.</p>
+<a id="more"></a>
+<h2 id="Matrix4-objects-and-what-to-know-before-getting-started"><a href="#Matrix4-objects-and-what-to-know-before-getting-started" class="headerlink" title="Matrix4 objects and what to know before getting started"></a>Matrix4 objects and what to know before getting started</h2><p>In this post I am writing a thing or two just about the Matrix4 class for the most part along with some closely related topics while I am at it. I would say that the subject of Matrix4 objects is a more advanced topic of interest when it comes to the use of threejs, so there are some things that you might want to read up on more before hand if you have not done so. It should go without saying but yes this is not a <a href="/2018/04/04/threejs-getting-started/">post for people that are new to threejs</a>, let along client side javaScript in general</p>
+<h3 id="Vector3-class-Object3d-position-and-Object3d-scale"><a href="#Vector3-class-Object3d-position-and-Object3d-scale" class="headerlink" title="Vector3 class, Object3d.position, and Object3d.scale"></a>Vector3 class, Object3d.position, and Object3d.scale</h3><p>A Matrix4 object can be used to store position and scale of objects and when it comes to the Object3d.position and Object3d.scale properties of Objecrt3d class based objects such as Mesh objects the values of these properties are Vector3 objects. There is a lot that one should be aware of when it comes to <a href="/2018/04/15/threejs-vector3/">Vector3 objects</a> as well as with Vectors in general such as the Vector2 and Vector4 classes.</p>
+<h3 id="Euler-Objects-Quaternion-Object3d-rotation-and-Object3d-quaternion"><a href="#Euler-Objects-Quaternion-Object3d-rotation-and-Object3d-quaternion" class="headerlink" title="Euler Objects, Quaternion, Object3d.rotation, and Object3d.quaternion"></a>Euler Objects, Quaternion, Object3d.rotation, and Object3d.quaternion</h3><p>On top of storing position and scale, Matrix4 objects also store the orientation of objects as well in the form of a Quaternion component. If you have no idea what a Quaternion Object is then it would be a very good idea to <a href="/2023/03/24/threejs-quaternion/">look into the Quaternion class</a> at this point. Also if you experience thus far with setting orientation is just using the <a href="/2021/05/13/threejs-object3d-lookat/">Obejct3d.lookAt method</a>, then it might be best to look into the <a href="/2021/04/28/threejs-euler">Euler class</a> first before reading about Quaternion Objects. This all has to do with setting the local rotation of objects of course and with that said there is the Object3d.rotation property that stores the local rotation of the object in the from of a Euler Object. There is also the Object3d.quaternion property that stores the local rotation in the from of Quaternion as well.</p>
+<h3 id="The-Object-Loader-and-Object3d-toJSON"><a href="#The-Object-Loader-and-Object3d-toJSON" class="headerlink" title="The Object Loader and Object3d.toJSON"></a>The Object Loader and Object3d.toJSON</h3><p>For me what got me into Matrix3 objects is the fact that the toJSON method of the Object3d class will create JSON.stringify friendly objects that have a matrix property, and this property alone. The toJSON method then works that way rather than having a position, scale, and then rotation or quaternion key. So then there is learning a thing or two about matrix4 objects, or writing my own toJSON method that creates the alternative set of keys. The toJSON method of the Object3d class is one way to generate JSON data that will play nice with the <a href="/2023/07/19/threejs-object-loader/">THREE.ObjectLoader class</a>. What I like about this loader is that it is a way to load external data for objects and with that everything else of interest that built into the core of the threejs library itself.</p>
+<h3 id="Source-code-is-also-up-on-Github"><a href="#Source-code-is-also-up-on-Github" class="headerlink" title="Source code is also up on Github"></a>Source code is also up on Github</h3><p>In my <a href="https://github.com/dustinpfister/test_threejs/tree/master/views/forpost/threejs-matrix4" target="_blank" rel="external">test threejs repository on Github</a> there are also copies of the demos that I am writing about in this post. With that said this repo is also where I have all the other demos for every <a href="/categories/three-js/">other threejs post that I have wrote</a> over the last few years. In some cases the versions of the examples there might be more up to date than what is here. In nay case this is also where I place additional notes where I outline plans for future edits of this post if any, and so forth.</p>
+<h3 id="Version-Numbers-matter"><a href="#Version-Numbers-matter" class="headerlink" title="Version Numbers matter"></a>Version Numbers matter</h3><p>When I first wrote the demos for this post I was following my r152 style rules, and with that I was also using that revision alone when testing these out. You can check out my <a href="https://github.com/dustinpfister/test_threejs/blob/master/views/demos/r152/README.md" target="_blank" rel="external">README on the details of my r152</a> style rules, but to save you a click the main thing about this is that I am now using three.module.js and with that module type script tags. It is not to hard to get these working with some older revisions of threejs, but there will be a point at which the examples will break. Also at some point in the future the demos where will also break with new revisions as well as threejs is still a very fast moving project.</p>
+<h2 id="1-Basic-Matrix4-Examples"><a href="#1-Basic-Matrix4-Examples" class="headerlink" title="1 - Basic Matrix4 Examples"></a>1 - Basic Matrix4 Examples</h2><p>One will need to start somewhere when it comes to these Matrix4 objects, and with that said this section will be just that for this general threejs topic. There are just a few methods and features that are needed to get started that I will at least be touching base on here. Also I will be doing my best to keep these examples as simple as possible, leaving more advanced examples for later sections in the post.</p>
+<h3 id="1-1-Directly-mutate-the-matrix-property"><a href="#1-1-Directly-mutate-the-matrix-property" class="headerlink" title="1.1 - Directly mutate the matrix property"></a>1.1 - Directly mutate the matrix property</h3><p>If you directly mutate the matrix property the end result will not be the same as you might expect when it comes to directly mutating other object3d class based objects. To resolve this you just need to set the matrix auto update property of the object to false. If you do not do this then the matrix will be recalculated from the other values, doing away form any manual changes that where made.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// IMPORT - threejs and any addons I want to use</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> THREE <span class="keyword">from</span> <span class="string">'three'</span>;</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// SCENE, CAMERA, RENDERER</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">50</span>, <span class="number">32</span> / <span class="number">24</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line"><span class="keyword">const</span> renderer = <span class="keyword">new</span> THREE.WebGL1Renderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>, <span class="literal">false</span>);</div><div class="line">(<span class="built_in">document</span>.querySelector(<span class="string">'#demo'</span>) || <span class="built_in">document</span>.body).appendChild( renderer.domElement );</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// OBJECTS</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line">scene.add( <span class="keyword">new</span> THREE.GridHelper(<span class="number">10</span>, <span class="number">10</span>) );</div><div class="line"><span class="keyword">const</span> mesh_box = <span class="keyword">new</span> THREE.Mesh( <span class="keyword">new</span> THREE.BoxGeometry( <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span> ), <span class="keyword">new</span> THREE.MeshNormalMaterial() );</div><div class="line">scene.add(mesh_box);</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// MATRIX4</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> v3_pos = <span class="keyword">new</span> THREE.Vector3(<span class="number">0</span>, <span class="number">0.8</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">const</span> q_ori = <span class="keyword">new</span> THREE.Quaternion().setFromEuler( <span class="keyword">new</span> THREE.Euler( <span class="number">1</span>, <span class="number">-0.5</span>, <span class="number">0</span>) );</div><div class="line"><span class="keyword">const</span> v3_scale = <span class="keyword">new</span> THREE.Vector3( <span class="number">1</span>, <span class="number">0.1</span>, <span class="number">1</span> );</div><div class="line">mesh_box.matrix.compose(v3_pos, q_ori, v3_scale);</div><div class="line">mesh_box.matrixAutoUpdate = <span class="literal">false</span>;</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// RENDER</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line">camera.position.set( <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span> );</div><div class="line">camera.lookAt( mesh_box.position );</div><div class="line">renderer.render(scene, camera);</div></pre></td></tr></table></figure>
+<h3 id="1-2-Manually-update-the-Matrix"><a href="#1-2-Manually-update-the-Matrix" class="headerlink" title="1.2 - Manually update the Matrix"></a>1.2 - Manually update the Matrix</h3><p>Another way to update is to do so manually by calling the update matrix method of the object3d class. That is to using the values methods of the various types of objects that are used to store the local position rotation, and scale, then set the matrix auto update boolean to false. At a later point when ready one can then call the update matrix method to apply those changes to the matrix.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// IMPORT - threejs and any addons I want to use</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> THREE <span class="keyword">from</span> <span class="string">'three'</span>;</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// SCENE, CAMERA, RENDERER</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">50</span>, <span class="number">32</span> / <span class="number">24</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line"><span class="keyword">const</span> renderer = <span class="keyword">new</span> THREE.WebGL1Renderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>, <span class="literal">false</span>);</div><div class="line">(<span class="built_in">document</span>.querySelector(<span class="string">'#demo'</span>) || <span class="built_in">document</span>.body).appendChild( renderer.domElement );</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// OBJECTS</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line">scene.add( <span class="keyword">new</span> THREE.GridHelper(<span class="number">10</span>, <span class="number">10</span>) );</div><div class="line"><span class="keyword">const</span> mesh_box = <span class="keyword">new</span> THREE.Mesh( <span class="keyword">new</span> THREE.BoxGeometry( <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span> ), <span class="keyword">new</span> THREE.MeshNormalMaterial() );</div><div class="line">scene.add(mesh_box);</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// RENDER FIRST TIME</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line">camera.position.set( <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span> );</div><div class="line">camera.lookAt( mesh_box.position );</div><div class="line">renderer.render(scene, camera);</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// MATRIX4 UPDATE and RENDER</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line">mesh_box.position.set(<span class="number">-1</span>, <span class="number">0</span>, <span class="number">-1</span>);</div><div class="line">mesh_box.rotation.x = <span class="built_in">Math</span>.PI / <span class="number">180</span> * <span class="number">45</span>;</div><div class="line">mesh_box.scale.set( <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>);</div><div class="line">mesh_box.matrixAutoUpdate = <span class="literal">false</span>;</div><div class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    mesh_box.updateMatrix();</div><div class="line">    camera.lookAt( mesh_box.position );</div><div class="line">    renderer.render(scene, camera);</div><div class="line">&#125;, <span class="number">1000</span>);</div></pre></td></tr></table></figure>
+<h3 id="1-3-Set-Form-new-Matrix4-object-with-Object3d-applyMatrix4"><a href="#1-3-Set-Form-new-Matrix4-object-with-Object3d-applyMatrix4" class="headerlink" title="1.3 - Set Form new Matrix4 object with Object3d.applyMatrix4"></a>1.3 - Set Form new Matrix4 object with Object3d.applyMatrix4</h3><p>Thus far I think the best way to get started with this is to use the compose method of the Matrix4 class. This compose method can be used to set the state of a Matrix4 object by passing a Vector3 object as the first argument that will be the position value, a quaternion object as the second argument that will be orientation, and a final Vector3 object that will be the scale of the object. </p>
+<p>Once I create a new Matrix4 object I can call this compose method and then pass the arguments that I want to set the matrix state that I want. Then I will want to do something with that matrix4 object such as using it to set position, orientation, and scale of an Object3d class based object such as a mesh object. For this task I can use the apply matrix4 method of the object3d class to so just that.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// IMPORT - threejs and any addons I want to use</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> THREE <span class="keyword">from</span> <span class="string">'three'</span>;</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// SCENE, CAMERA, RENDERER</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">50</span>, <span class="number">32</span> / <span class="number">24</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line"><span class="keyword">const</span> renderer = <span class="keyword">new</span> THREE.WebGL1Renderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>, <span class="literal">false</span>);</div><div class="line">(<span class="built_in">document</span>.querySelector(<span class="string">'#demo'</span>) || <span class="built_in">document</span>.body).appendChild( renderer.domElement );</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// OBJECTS</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line">scene.add( <span class="keyword">new</span> THREE.GridHelper(<span class="number">10</span>, <span class="number">10</span>) );</div><div class="line"><span class="keyword">const</span> mesh_box = <span class="keyword">new</span> THREE.Mesh( <span class="keyword">new</span> THREE.BoxGeometry( <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span> ), <span class="keyword">new</span> THREE.MeshNormalMaterial() );</div><div class="line">scene.add(mesh_box);</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// MATRIX4</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> matrix = <span class="keyword">new</span> THREE.Matrix4();</div><div class="line"><span class="comment">// using the compose method, and Object3d.applyMatrix4</span></div><div class="line"><span class="keyword">const</span> v3_pos = <span class="keyword">new</span> THREE.Vector3(<span class="number">0</span>, <span class="number">0.8</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">const</span> q_ori = <span class="keyword">new</span> THREE.Quaternion().setFromEuler( <span class="keyword">new</span> THREE.Euler( <span class="number">1</span>, <span class="number">-0.5</span>, <span class="number">0</span>) );</div><div class="line"><span class="keyword">const</span> v3_scale = <span class="keyword">new</span> THREE.Vector3( <span class="number">1</span>, <span class="number">0.1</span>, <span class="number">1</span> );</div><div class="line">matrix.compose(v3_pos, q_ori, v3_scale);</div><div class="line">mesh_box.applyMatrix4( matrix );</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// RENDER</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line">camera.position.set( <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span> );</div><div class="line">camera.lookAt( mesh_box.position );</div><div class="line">renderer.render(scene, camera);</div></pre></td></tr></table></figure>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>This will be it for now when it comes to Matrix4 objects as one will have to start somewhere with this. Thus far I can see why this is often the preferred way to store an over all transformation of an object. It is nice to store all data that has to do with local position, rotation, and scale in a single array of values.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2023/08/02/threejs-matrix4/" data-id="clkyg76v502b60gv177br2z7e" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2023/08/02/threejs-matrix4/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2023/08/01/linux-folders/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Linux Root Folders</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2023/08/02/threejs-matrix4/index.html';
+    this.page.identifier = '1065';
+    this.page.title = 'Matrix4 Objects in threejs';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/electronjs/">electronjs</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/electronjs/">electronjs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.38px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.48px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.33px;">angular</a> <a href="/tags/animation/" style="font-size: 11.9px;">animation</a> <a href="/tags/automation/" style="font-size: 11.9px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.38px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.71px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.57px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.86px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.95px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.43px;">ejs</a> <a href="/tags/electronjs/" style="font-size: 13.81px;">electronjs</a> <a href="/tags/express/" style="font-size: 17.14px;">express</a> <a href="/tags/games/" style="font-size: 17.62px;">games</a> <a href="/tags/git/" style="font-size: 13.81px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.24px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.9px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.76px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.48px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.43px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 18.1px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.57px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.76px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.52px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.1px;">phaser</a> <a href="/tags/python/" style="font-size: 16.19px;">python</a> <a href="/tags/statistics/" style="font-size: 14.29px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 19.05px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16.67px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">August 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">June 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">February 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">January 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">December 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">November 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">October 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">September 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">September 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/08/02/threejs-matrix4/">Matrix4 Objects in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/01/linux-folders/">Linux Root Folders</a>
+          </li>
+        
+          <li>
+            <a href="/2023/07/27/threejs-materials-loader/">The Matheral Loader in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/07/25/linux-lsb-release/">Linux System Base Release command lsb_release for Distribution info</a>
+          </li>
+        
+          <li>
+            <a href="/2023/07/19/threejs-object-loader/">The Object Loader in threejs</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2021/02/19/threejs-examples/" class="mobile-nav-link">ThreeJS</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas</a>
+  
+    <a href="https://www.youtube.com/user/javaweaver" class="mobile-nav-link">Youtube</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2023/08/02/threejs-matrix4/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
