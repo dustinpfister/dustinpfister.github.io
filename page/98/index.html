@@ -113,6 +113,188 @@
       <div class="outer">
         <section id="main">
   
+    <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-mesh-copy" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/18/threejs-mesh-copy/" class="article-date"> Published:
+  <time datetime="2019-12-18T22:31:00.000Z" itemprop="datePublished">2019-12-18</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2019/12/18/threejs-mesh-copy/" class="article-date"> Modified:
+  <time datetime="2023-07-09T13:33:58.000Z" itemprop="dateModified">2023-07-09</time>
+</a>
+
+    <span class="article-date">V1.44</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/18/threejs-mesh-copy/">Copy a mesh in threejs</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>When I am working on <a href="https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene">threejs</a> demos and simple project examples I will often get into a situation in which I might want to copy a <a href="/2018/05/04/threejs-mesh/">mesh object</a>. When doing so there is the idea of just copying the own properties of the mesh object, but often I will also need clones of all the child objects as well, there is also the <a href="/2021/04/22/threejs-buffer-geometry/">geometry</a>, and <a href="/2018/04/30/threejs-materials/">material</a> that is used by the mesh that I might want to clone while I am at it.</p>
+<p>The process of copying an object in general can be tricky business, as such I have wrote a few posts on this when it comes to <a href="/2017/10/02/lodash_clone/">cloning objects with lodash methods</a> as well as native javaScript by itself such as with my post on <a href="/2020/09/03/js-array-copy/">copying an array</a> with just vanilla javaScript array prototype methods. When doing so there are two general ways of thinking about the process of copying an object, shallow cloning, and deep cloning. </p>
+<p>Shallow cloning is creating an new object where it is more or less just the properties of the object itself that are copied, and not anything when it comes to nested objects that are values of the source object. Deep cloning then is then the general term for getting into the subject of what should and should not be copied when it comes to looping over all the nested properties of an object. Things can prove to get a little complex with that in some situations though, for example some objects I might want to copy, while others I might just want to reference.</p>
+<p>If I am making a threejs project and I want to shallow copy of a mesh object then I just need to use the <a href="https://threejs.org/docs/#api/en/objects/Mesh.clone">clone method of a mesh</a> instance. Once I have a shallow copy it is then a question of what additional steps I might want to take when it comes to cloning additional nested objects of the mesh object. This will then be a post on the mesh clone method, and while I am at it also address some of the issues that might come up when making copies of mesh objects, and cloning objects in general.</p>
+        
+          <p class="article-more-link">
+            <a href="/2019/12/18/threejs-mesh-copy/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2019/12/18/threejs-mesh-copy/" data-id="cllo1cssm02tw60v1m9z7iwou" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2019/12/18/threejs-mesh-copy/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-camera-move" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/17/threejs-camera-move/" class="article-date"> Published:
+  <time datetime="2019-12-18T00:57:00.000Z" itemprop="datePublished">2019-12-17</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2019/12/17/threejs-camera-move/" class="article-date"> Modified:
+  <time datetime="2023-06-22T15:24:45.000Z" itemprop="dateModified">2023-06-22</time>
+</a>
+
+    <span class="article-date">V1.71</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/17/threejs-camera-move/">Moving a camera in threejs over time</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>I work with <a href="https://threejs.org/">threejs</a> a lot, and when doing so I have found that one thing that is fun is working out expressions for handling the movement of a <a href="/2018/04/06/threejs-camera/">camera</a>. There ae a number of options to work with when it comes to cameras but for the most part I end up using a <a href="/2018/04/07/threejs-camera-perspective/">perspective camera</a>. Apart from working out javaScript expressions for the x, y a,d z values of a position there are all kinds of ways to go about moving a camera such as having a camera move around of course, and must of this applies to objects in general actually</p>
+<p>There is also having the position and rotation of a camera be subject to event handlers that are attached for pointer events. In other words to control the camera with a mouse, and or keyboard which is nice when I am working on a project and I would like to see how things look from all kinds of different perspectives. There are some official controls that are in the threejs Github repository for this sort of thing in the form of <a href="https://threejs.org/docs/#examples/en/controls/OrbitControls">orbit controls</a>, and <a href="https://threejs.org/docs/#examples/en/controls/FlyControls">fly controls</a> for example. However there is also of course making ones own custom controls for a project which is often a required part of working out an over all user interface.</p>
+<p>So in this post I will be writing about some threejs examples that have to do with using the position and rotation properties of an instance of a camera along. This can involve working out expressions, but also there are a whole lot of threejs feature to work with also when it comes to this sort of thing as well when it comes to looking into everything there is to work with in the Vector3 class, as well as Curves just to name a few core features to be aware of. </p>
+<p>What I work out here for a camera will also apply to just about anything in threejs that inherits from the <a href="https://threejs.org/docs/#api/en/core/Object3D">Object3d</a> class as well. So much of this is just ways of moving and rotating objects in general actually, but still I will be keeping the emphasis on cameras alone for the most part here.</p>
+        
+          <p class="article-more-link">
+            <a href="/2019/12/17/threejs-camera-move/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2019/12/17/threejs-camera-move/" data-id="cllo1crea02l860v10envyoaf" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2019/12/17/threejs-camera-move/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-examples-clock-basic" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/16/threejs-examples-clock-basic/" class="article-date"> Published:
+  <time datetime="2019-12-16T19:10:00.000Z" itemprop="datePublished">2019-12-16</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2019/12/16/threejs-examples-clock-basic/" class="article-date"> Modified:
+  <time datetime="2022-12-06T17:10:43.000Z" itemprop="dateModified">2022-12-06</time>
+</a>
+
+    <span class="article-date">V1.32</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/16/threejs-examples-clock-basic/">A Three js example of a basic clock</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p><a href="https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene">Threejs</a> is certainly an example of fun and exciting javaScript. Sure there might prove to be many examples of practical application of threejs to write about as well, however I often see it more as something to play with when it comes to making simple animations, games, and toy like projects. </p>
+<p>I often find myself making clocks because they are a quick yet fun thing to make with javaScript and canvas elements. However there is a great deal of room for creativity when it comes to this kind of project as well if I do take a moment to pour some serious time into one of them. However for the sake of this post at least I think I will be starting out with just a basic example of a clock using threejs. With that said this post will be on a <a href="/2021/02/19/threejs-examples/">threejs example</a> that is a javaScript powered basic clock which should prove to be a simple fun little project.</p>
+<p>This is an example type post in which I am making a threejs project where things are updated by way of the local client system time. This is then not to be confused with the <a href="/2021/05/28/threejs-clock">THREE.Clock</a> constructor which is a class that can be used to keep track of time that has elapsed from a starting point. This Clock class often comes into play when making a main animation loop, which is something that is kind of a whole other subject apart from this.</p>
+        
+          <p class="article-more-link">
+            <a href="/2019/12/16/threejs-examples-clock-basic/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2019/12/16/threejs-examples-clock-basic/" data-id="cllo1crxd02on60v1951rb13j" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2019/12/16/threejs-examples-clock-basic/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article itemscope itemtype="http://schema.org/Blog" id="post-canvas-example-clock-basic" class="article article-type-post" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/12/13/canvas-example-clock-basic/" class="article-date"> Published:
@@ -157,7 +339,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2019/12/13/canvas-example-clock-basic/" data-id="clkyg6z5e005z0gv1vuobo0ox" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2019/12/13/canvas-example-clock-basic/" data-id="cllo1cct300e560v17se1ypse" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2019/12/13/canvas-example-clock-basic/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -217,191 +399,12 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2019/12/11/canvas-example-image-limits/" data-id="clkyg6z80007t0gv1ep8h06sf" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2019/12/11/canvas-example-image-limits/" data-id="cllo1ccx000fz60v1tblge1ge" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2019/12/11/canvas-example-image-limits/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/canvas/">canvas</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article itemscope itemtype="http://schema.org/Blog" id="post-js-math-pow" class="article article-type-post" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/12/10/js-math-pow/" class="article-date"> Published:
-  <time datetime="2019-12-11T02:28:00.000Z" itemprop="datePublished">2019-12-10</time>
-</a>
-
-    <!-- other info (dustin) -->
-    <a href="/2019/12/10/js-math-pow/" class="article-date"> Modified:
-  <time datetime="2021-08-12T16:02:50.000Z" itemprop="dateModified">2021-08-12</time>
-</a>
-
-    <span class="article-date">V1.35</span>
-
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/js/">js</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/10/js-math-pow/">Math pow in javaScript</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="text">
-      
-        <p>The <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/pow">Math pow</a> method is what can be used in javaScript to create a number that is a power from a base and an exponent, also know as <a href="https://en.wikipedia.org/wiki/Exponentiation">Exponentiation</a>. The use of this will come up often when working out expressions for things like curves, finding the distance between two points, working out a formula for leveling up a character in a game, and much more. There are many other Math methods that are often used in conjunction with Math.pow, such as Math.sqrt to create all kinds of useful expressions that are often used in creating pure functions that make up a useful module for kind of general task or another.</p>
-<p>So then in this post I will be going over some basic examples of the Math.pow method of course, but from there I will also be getting into some other examples that I find myself using all the time in various projects. That is some usual suspects of sorts when it comes to the use of the Math.pow method in expressions and pure functions. However the focal point here will be the Math pow method and a few other things of interest the revolve around the method as I see it.</p>
-        
-          <p class="article-more-link">
-            <a href="/2019/12/10/js-math-pow/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2019/12/10/js-math-pow/" data-id="clkyg70yx00w80gv1h2p613bo" class="article-share-link">Share</a>
-      
-        <a href="https://dustinpfister.github.io/2019/12/10/js-math-pow/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article itemscope itemtype="http://schema.org/Blog" id="post-canvas-curve" class="article article-type-post" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/12/09/canvas-curve/" class="article-date"> Published:
-  <time datetime="2019-12-09T20:20:00.000Z" itemprop="datePublished">2019-12-09</time>
-</a>
-
-    <!-- other info (dustin) -->
-    <a href="/2019/12/09/canvas-curve/" class="article-date"> Modified:
-  <time datetime="2020-07-06T16:16:07.000Z" itemprop="dateModified">2020-07-06</time>
-</a>
-
-    <span class="article-date">V1.17</span>
-
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/canvas/">canvas</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/09/canvas-curve/">Canvas Curve basics</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="text">
-      
-        <p>So in canvas curves are a topic that one will just get into at one point or another, it just seems to be something that comes naturally when staring to play around with canavs elements and javaScript. There are 2d drawing API methods such as the canvas arc method and well as some others that can be used to draw more complex curves such as the <a href="https://www.w3schools.com/tags/canvas_beziercurveto.asp">bezier curve to</a> method. However these methods do not help when it comes to pulling the state of something away from the process of rendering such a state. </p>
-<p>When it comes to really getting into curves, and starting to have a deep understand and appreciation for drawing curves in canvas, I feel as though I need to do something that involves making methods that create point collections.</p>
-        
-          <p class="article-more-link">
-            <a href="/2019/12/09/canvas-curve/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2019/12/09/canvas-curve/" data-id="clkyg6z43005e0gv11jh6kw8a" class="article-share-link">Share</a>
-      
-        <a href="https://dustinpfister.github.io/2019/12/09/canvas-curve/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/canvas/">canvas</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article itemscope itemtype="http://schema.org/Blog" id="post-lodash_eq" class="article article-type-post" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/12/04/lodash_eq/" class="article-date"> Published:
-  <time datetime="2019-12-04T17:01:00.000Z" itemprop="datePublished">2019-12-04</time>
-</a>
-
-    <!-- other info (dustin) -->
-    <a href="/2019/12/04/lodash_eq/" class="article-date"> Modified:
-  <time datetime="2022-01-06T19:02:20.000Z" itemprop="dateModified">2022-01-06</time>
-</a>
-
-    <span class="article-date">V1.11</span>
-
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/lodash/">lodash</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/04/lodash_eq/">lodash eq method, Object.is, SameValueZero, equality, and identity</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="text">
-      
-        <p>So there is the <a href="https://lodash.com/docs/4.17.15#eq">lodash eq</a> method that is one way of finding out the <a href="http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero">same value zero result</a> of two values. However what is same value zero, and is it all that hard to get the same result in native javaScript itself these days? </p>
-<p>Well in ECMA2015 spec javaScript the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is">Object.is</a> static method was introduced that does indeed do the same thing as the lodash eq method, only not the exact same way, as the Object is method goes by a slightly different standard that handles zero and negative zero a little differently. So then there is the Same Value standard, used by the Object is method, that will return false if positive and negative zero are compared. Then on top of the Same value standard there is also the Same Value Zero standard that will return true which is what the lodahs eq method uses.</p>
-<p>So if this is the only thing that you care about in a project, maybe a simple polyfill will do just fine and you can ditch lodash to the curb. Otherwise the lodash _.eq method can do more or less the same thing if you are still keeping lodash as part of your projects stack becuase of client support concerns, or other method of interest that are not native in any javaScript spec. </p>
-<p>Regardless of what you attitude is with lodash these days I will make this post also about Same Value Zero in general so that this is not just a post on lodash eq alone.</p>
-        
-          <p class="article-more-link">
-            <a href="/2019/12/04/lodash_eq/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2019/12/04/lodash_eq/" data-id="clkyg721z01960gv1ifc9p3db" class="article-share-link">Share</a>
-      
-        <a href="https://dustinpfister.github.io/2019/12/04/lodash_eq/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lodash/">lodash</a></li></ul>
 
     </footer>
   </div>
@@ -466,23 +469,23 @@
       <ul>
         
           <li>
+            <a href="/2023/08/23/threejs-sprite/">Sprite Objects, and 2d overlays in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/17/threejs-buffer-geometry-attributes-tangent/">The tangent attribute of buffer geometry and normal maps in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/10/threejs-matcap-material/">The Matcap material in threejs</a>
+          </li>
+        
+          <li>
             <a href="/2023/08/02/threejs-matrix4/">Matrix4 Objects in threejs</a>
           </li>
         
           <li>
             <a href="/2023/08/01/linux-folders/">Linux Root Folders</a>
-          </li>
-        
-          <li>
-            <a href="/2023/07/27/threejs-materials-loader/">The Matheral Loader in threejs</a>
-          </li>
-        
-          <li>
-            <a href="/2023/07/25/linux-lsb-release/">Linux System Base Release command lsb_release for Distribution info</a>
-          </li>
-        
-          <li>
-            <a href="/2023/07/19/threejs-object-loader/">The Object Loader in threejs</a>
           </li>
         
       </ul>

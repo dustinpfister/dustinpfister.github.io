@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner_2023.png">
+  
+  <title>Sprite Objects, and 2d overlays in threejs | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2023/08/23/threejs-sprite/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="There are Sprite objects in threejs that are a special kind of Object3d class based object that is a simple 2d image that always faces the camera. These kinds of objects will then come into play with">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sprite Objects, and 2d overlays in threejs">
+<meta property="og:url" content="https://dustinpfister.github.io/2023/08/23/threejs-sprite/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="There are Sprite objects in threejs that are a special kind of Object3d class based object that is a simple 2d image that always faces the camera. These kinds of objects will then come into play with">
+<meta property="og:updated_time" content="2023-08-23T16:12:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Sprite Objects, and 2d overlays in threejs">
+<meta name="twitter:description" content="There are Sprite objects in threejs that are a special kind of Object3d class based object that is a simple 2d image that always faces the camera. These kinds of objects will then come into play with">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Google Analytics -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y8XLNG6JRW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y8XLNG6JRW');
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image, as well as the link to my youtube -->
+        <a href="https://www.youtube.com/user/javaweaver"><div class="selfimage"></div></a>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2021/02/19/threejs-examples/">ThreeJS</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas</a>
+        
+          <a class="main-nav-link" href="https://www.youtube.com/user/javaweaver">Youtube</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-threejs-sprite" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/23/threejs-sprite/" class="article-date"> Published:
+  <time datetime="2023-08-23T15:26:00.000Z" itemprop="datePublished">2023-08-23</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2023/08/23/threejs-sprite/" class="article-date"> Modified:
+  <time datetime="2023-08-23T16:12:24.000Z" itemprop="dateModified">2023-08-23</time>
+</a>
+
+    <span class="article-date">V1.2</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Sprite Objects, and 2d overlays in threejs
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>There are <a href="https://threejs.org/docs/#api/en/objects/Sprite" target="_blank" rel="external">Sprite objects</a> in threejs that are a special kind of Object3d class based object that is a simple 2d image that always faces the camera. These kinds of objects will then come into play with certain kinds of tasks in which they might be called for such as making a 2d overlay, or making the lowest resource heavy kind of state of an object when working out Level Of Detail objects. These kinds of objects will not work with the usual mesh materials, as such there is a special kind of material that needs to be used called just simply the sprite material. There are then a lot of little features to be aware of when it comes to using these objects, and with that the material that is used with them. So I thought I would start at least one post on this subject to write about a few things that I have worked out thus far on the topic of sprite objects in threejs.</p>
+<a id="more"></a>
+<h2 id="Sprite-Objects-and-what-to-know-first"><a href="#Sprite-Objects-and-what-to-know-first" class="headerlink" title="Sprite Objects and what to know first"></a>Sprite Objects and what to know first</h2><p>This is  a post in which I am writing about a few source code demos that I have worked out that have to do with sprite objects in the javaScript library known as threejs. I assume that you know at least <a href="/2018/04/04/threejs-getting-started/">a thing or two about threejs</a>, and with that additional skills that are needed when it comes to client side web development in general. As always I will not be getting into every little detail that you shroud know before hand here. However I will write a few things that are closely related to the use of sprite objects to which you might want to read up a bit more on before counting to read the rest of this content.</p>
+<h3 id="Texture-Objects-and-ways-to-obtain-them"><a href="#Texture-Objects-and-ways-to-obtain-them" class="headerlink" title="Texture Objects and ways to obtain them"></a>Texture Objects and ways to obtain them</h3><p>In order to do what most people will typically want to do with sprite objects one will need a texture to use with the map option of the sprite material. With that said there is looking into the common <a href="/2023/06/27/threejs-texture/">texture class</a> a bit more to know how to create these kinds of objects directly and with that also all kinds of features of the base texture class. However there is also the question of how to get, or create, the image data to use with these kinds of objects. With that said there is looking into the <a href="/2021/06/21/threejs-texture-loader/">texture loader</a>, as well as ways to create textures by way of some javaScript code such as with <a href="/2022/04/15/threejs-data-texture/">data textures</a>, and <a href="/2018/04/17/threejs-canvas-texture/">canvas textures</a>.</p>
+<h3 id="Know-a-thing-or-two-about-materials"><a href="#Know-a-thing-or-two-about-materials" class="headerlink" title="Know a thing or two about materials"></a>Know a thing or two about materials</h3><p>Although there is only one material option of concern with sprite objects which is the sprite material, there is still a lot to be aware of when it comes to <a href="/2018/04/30/threejs-materials/">materials in general</a>. There is not just what there is to make use of in the sprite material, but also a great deal in the common base material class from which the sprite material extends from.</p>
+<h3 id="There-is-also-the-common-Object3d-class"><a href="#There-is-also-the-common-Object3d-class" class="headerlink" title="There is also the common Object3d class"></a>There is also the common Object3d class</h3><p>A sprite object is an example of an object that extends from the <a href="/2018/04/23/threejs-object3d/">object3d class</a>. Other examples of this kind of object include mesh, line, point, group, lights, cameras, various helper objects, and even whole scene objects. The point that I am driving at here is that there is a lot to be aware of when it comes to the common object3d class from which all of these objects, including sprites, extend from.</p>
+<h3 id="Other-ways-of-doing-a-2d-overlay"><a href="#Other-ways-of-doing-a-2d-overlay" class="headerlink" title="Other ways of doing a 2d overlay"></a>Other ways of doing a 2d overlay</h3><p>Sprite objects are a great way to go about doing a 2d overlay, and maybe more often then not it is the way that it should be done. There are however a number of other ways to do something to that effect that might also work okay, or even work better for a specific use case. The other two general ways of having a 2d overlay including having a collection of canvas elements, and making use of plan geometry with mesh objects.</p>
+<p>When it comes to using mesh objects with plane geometry I went so far as to start one of my <a href="/2023/03/10/threejs-examples-camera-planes/">threejs project examples around this subject</a>.</p>
+<h3 id="Source-is-up-on-Github-also"><a href="#Source-is-up-on-Github-also" class="headerlink" title="Source is up on Github also"></a>Source is up on Github also</h3><p>The source code examples that I am writing about in this post can also be <a href="https://github.com/dustinpfister/test_threejs/tree/master/views/forpost/threejs-sprite" target="_blank" rel="external">found on Github</a>. This is also where I have the source code exhales for all my <a href="/categories/three-js">other blog posts on threejs</a> as well.</p>
+<h3 id="Version-Numbers-Matter"><a href="#Version-Numbers-Matter" class="headerlink" title="Version Numbers Matter"></a>Version Numbers Matter</h3><p>When I first wrote this blog post I was using <a href="https://github.com/dustinpfister/test_threejs/blob/master/views/demos/r152/README.md" target="_blank" rel="external">r152 of threejs</a>.</p>
+<h2 id="1-Some-Basic-Sprite-Object-demos"><a href="#1-Some-Basic-Sprite-Object-demos" class="headerlink" title="1 - Some Basic Sprite Object demos"></a>1 - Some Basic Sprite Object demos</h2><p>As always I like to start out my blog posts on threejs topics with a basic section at the very least. That is to have a few very simple demos of the subject which in this case is sprite objects. With that said in this first section I will be doing just that, nothing fancy or two complex. Just nice, simple getting started type examples. So then these demos here will mainly just involve a single sprite object, and maybe a few other objects in the scene as well. There is also touching base on at least a few simple features of the sprite material such as the map option, and with that ways to create textures with a little javaScript code rather than loading an external asset.</p>
+<h3 id="1-1-Sprite-Object-Hello-World-with-data-textures"><a href="#1-1-Sprite-Object-Hello-World-with-data-textures" class="headerlink" title="1.1 - Sprite Object Hello World with data textures"></a>1.1 - Sprite Object Hello World with data textures</h3><p>For this first demo I am create a texture by way of Three.DataTexture, and then using that with the map option of a sprite material. I then create the sprite object by just calling THREE.Sprite, and then pass the sprite material as the first and only argument when doing so. I count make this example yet even more basic by just calling the sprite material constructor with no options at all and use just the color option of the material. However I am sure that most people will want to get started with textures right away with these as well and the use of data textures is a nice way to bake th texture into the code examples with something like this.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// IMPORT - threejs and any addons I want to use</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> THREE <span class="keyword">from</span> <span class="string">'three'</span>;</div><div class="line"><span class="keyword">import</span> &#123; OrbitControls &#125; <span class="keyword">from</span> <span class="string">'OrbitControls'</span>;</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// SCENE, CAMERA, RENDERER</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="keyword">const</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">50</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.5</span>, <span class="number">10</span>);</div><div class="line"><span class="keyword">const</span> renderer = <span class="keyword">new</span> THREE.WebGL1Renderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>, <span class="literal">false</span>);</div><div class="line">(<span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>) || <span class="built_in">document</span>.body).appendChild(renderer.domElement);</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// TEXTURE</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="keyword">const</span> data_texture = [</div><div class="line">      <span class="number">0</span>,  <span class="number">0</span>,  <span class="number">0</span>,  <span class="number">0</span>,    <span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">128</span>,    <span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">128</span>,      <span class="number">0</span>,  <span class="number">0</span>,  <span class="number">0</span>,  <span class="number">0</span>,</div><div class="line">    <span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">128</span>,    <span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,    <span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,    <span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">128</span>,</div><div class="line">    <span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,    <span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,    <span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,    <span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,</div><div class="line">    <span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,    <span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,    <span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,    <span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span></div><div class="line">];</div><div class="line"><span class="keyword">const</span> texture = <span class="keyword">new</span> THREE.DataTexture( <span class="keyword">new</span> <span class="built_in">Uint8Array</span>(data_texture), <span class="number">4</span>, <span class="number">4</span> );</div><div class="line">texture.needsUpdate = <span class="literal">true</span>;</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// SPRITE MATERIAL</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="keyword">const</span> material = <span class="keyword">new</span> THREE.SpriteMaterial(&#123;</div><div class="line">    <span class="attr">map</span>: texture</div><div class="line">&#125;);</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// SPRITE</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="keyword">const</span> sprite = <span class="keyword">new</span> THREE.Sprite(  material );</div><div class="line">sprite.scale.set( <span class="number">1.2</span>, <span class="number">0.9</span>, <span class="number">1</span>);</div><div class="line">scene.add(sprite);</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// OTHER OBJECTS</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line">scene.add( <span class="keyword">new</span> THREE.GridHelper(<span class="number">10</span>, <span class="number">10</span>) )</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// RENDER</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line">camera.position.set(<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">renderer.render(scene, camera);</div></pre></td></tr></table></figure>
+<h3 id="1-2-Canvas-Textures-and-depth-test-option-of-the-sprite-material"><a href="#1-2-Canvas-Textures-and-depth-test-option-of-the-sprite-material" class="headerlink" title="1.2 - Canvas Textures and depth test option of the sprite material"></a>1.2 - Canvas Textures and depth test option of the sprite material</h3><p>Another way to go about creating a texture with a little JavaScript code would be to make use of canvas textures. In many ways one might prefer to create textures this was as there is everything to work with in the 2d drawing context of canvas elements to sue to create the state of the texture. However another major part of this demo is the use of the depth test option of the common material class. This is a way to make it so that no depth test is preferred with the object which results in the sprite being rendered on top of everything else in the scene always. This is then useful if for example I want to use sprite objects as a way to define a simple 2d cursor that will always render on top of everything else in the scene.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// IMPORT - threejs and any addons I want to use</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> THREE <span class="keyword">from</span> <span class="string">'three'</span>;</div><div class="line"><span class="keyword">import</span> &#123; OrbitControls &#125; <span class="keyword">from</span> <span class="string">'OrbitControls'</span>;</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// SCENE, CAMERA, RENDERER</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="keyword">const</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">50</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.5</span>, <span class="number">10</span>);</div><div class="line"><span class="keyword">const</span> renderer = <span class="keyword">new</span> THREE.WebGL1Renderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>, <span class="literal">false</span>);</div><div class="line">(<span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>) || <span class="built_in">document</span>.body).appendChild(renderer.domElement);</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// HELPERS</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// create a texture for the sprite</span></div><div class="line"><span class="keyword">const</span> createTexture = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">const</span> canvas = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>);</div><div class="line">    <span class="keyword">const</span> ctx = canvas.getContext(<span class="string">'2d'</span>);</div><div class="line">    <span class="keyword">const</span> w = <span class="number">32</span>, h = <span class="number">32</span>;</div><div class="line">    canvas.width = w; canvas.height = h;</div><div class="line">    ctx.fillStyle = <span class="string">'rgba(0,0,0,0.5)'</span>;</div><div class="line">    ctx.strokeStyle = <span class="string">'#ffff00'</span>;</div><div class="line">    ctx.lineWidth = <span class="number">3</span>;</div><div class="line">    ctx.clearRect(<span class="number">0</span>,<span class="number">0</span>, canvas.width, canvas.height);</div><div class="line">    ctx.beginPath();</div><div class="line">    ctx.arc(w / <span class="number">2</span>, h / <span class="number">2</span>, w / <span class="number">2</span> - <span class="number">2</span>, <span class="number">0</span>, <span class="built_in">Math</span>.PI * <span class="number">2</span>);</div><div class="line">    ctx.stroke();</div><div class="line">    ctx.fill();</div><div class="line">    ctx.strokeStyle = <span class="string">'white'</span>;</div><div class="line">    ctx.lineWidth = <span class="number">3</span>;</div><div class="line">    ctx.beginPath();</div><div class="line">    ctx.moveTo( <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">    ctx.lineTo( w, h);</div><div class="line">    ctx.stroke();</div><div class="line">    ctx.beginPath();</div><div class="line">    ctx.moveTo( w, <span class="number">0</span>);</div><div class="line">    ctx.lineTo( <span class="number">0</span>, h);</div><div class="line">    ctx.stroke();</div><div class="line">    <span class="keyword">const</span> texture = <span class="keyword">new</span> THREE.CanvasTexture( canvas );</div><div class="line">    <span class="keyword">return</span> texture;</div><div class="line">&#125;;</div><div class="line"><span class="comment">// create a sprite object using the THREE.SpriteMaterial</span></div><div class="line"><span class="keyword">const</span> createCursorSprite = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">const</span> material = <span class="keyword">new</span> THREE.SpriteMaterial(&#123;</div><div class="line">        <span class="attr">map</span>: createTexture(),</div><div class="line">        <span class="attr">sizeAttenuation</span>: <span class="literal">false</span>,</div><div class="line">        <span class="attr">depthTest</span>: <span class="literal">false</span>,</div><div class="line">        <span class="attr">transparent</span>: <span class="literal">true</span>,</div><div class="line">        <span class="attr">opacity</span>: <span class="number">1</span></div><div class="line">    &#125;);</div><div class="line">    <span class="keyword">const</span> sprite = <span class="keyword">new</span> THREE.Sprite(  material );</div><div class="line">    <span class="keyword">return</span> sprite;</div><div class="line">&#125;;</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// SCENE CHILD OBJECTS</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="keyword">const</span> sprite = createCursorSprite();</div><div class="line">sprite.scale.set(<span class="number">0.1</span>, <span class="number">0.1</span>, <span class="number">0.1</span>);</div><div class="line">sprite.position.set(<span class="number">0.5</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">scene.add( sprite );</div><div class="line">scene.add( <span class="keyword">new</span> THREE.GridHelper(<span class="number">10</span>, <span class="number">10</span>) );</div><div class="line">scene.add( <span class="keyword">new</span> THREE.Mesh( <span class="keyword">new</span> THREE.BoxGeometry( <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span> ), <span class="keyword">new</span> THREE.MeshNormalMaterial()  ) );</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// RENDER</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line">camera.position.set(<span class="number">1.5</span>, <span class="number">1.5</span>, <span class="number">1.5</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">renderer.render(scene, camera);</div></pre></td></tr></table></figure>
+<h3 id="1-3-Rotation"><a href="#1-3-Rotation" class="headerlink" title="1.3 - Rotation"></a>1.3 - Rotation</h3><p>There is then the question of how to rotate these kinds of objects, with that said there is the rotation option of the sprite material that seems to work well with this kind of task.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// IMPORT - threejs and any addons I want to use</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> THREE <span class="keyword">from</span> <span class="string">'three'</span>;</div><div class="line"><span class="keyword">import</span> &#123; OrbitControls &#125; <span class="keyword">from</span> <span class="string">'OrbitControls'</span>;</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// SCENE, CAMERA, RENDERER</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="keyword">const</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">50</span>, <span class="number">320</span> / <span class="number">240</span>, <span class="number">0.5</span>, <span class="number">10</span>);</div><div class="line"><span class="keyword">const</span> renderer = <span class="keyword">new</span> THREE.WebGL1Renderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>, <span class="literal">false</span>);</div><div class="line">(<span class="built_in">document</span>.getElementById(<span class="string">'demo'</span>) || <span class="built_in">document</span>.body).appendChild(renderer.domElement);</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// HELPERS</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// create a texture for the sprite</span></div><div class="line"><span class="keyword">const</span> createTexture = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">const</span> canvas = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>);</div><div class="line">    <span class="keyword">const</span> ctx = canvas.getContext(<span class="string">'2d'</span>);</div><div class="line">    <span class="keyword">const</span> w = <span class="number">32</span>, h = <span class="number">32</span>;</div><div class="line">    canvas.width = w; canvas.height = h;</div><div class="line">    ctx.strokeStyle = <span class="string">'white'</span>;</div><div class="line">    ctx.lineWidth = <span class="number">3</span>;</div><div class="line">    ctx.beginPath();</div><div class="line">    ctx.moveTo( <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">    ctx.lineTo( w, h);</div><div class="line">    ctx.stroke();</div><div class="line">    ctx.beginPath();</div><div class="line">    ctx.moveTo( w, <span class="number">0</span>);</div><div class="line">    ctx.lineTo( <span class="number">0</span>, h);</div><div class="line">    ctx.stroke();</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> THREE.CanvasTexture( canvas );</div><div class="line">&#125;;</div><div class="line"><span class="keyword">const</span> createSprite = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">const</span> material = <span class="keyword">new</span> THREE.SpriteMaterial(&#123;</div><div class="line">        <span class="attr">map</span>: createTexture(),</div><div class="line">        <span class="attr">sizeAttenuation</span>: <span class="literal">true</span>,</div><div class="line">        <span class="attr">depthTest</span>: <span class="literal">false</span>,</div><div class="line">        <span class="attr">transparent</span>: <span class="literal">true</span>,</div><div class="line">        <span class="attr">rotation</span>: <span class="number">0</span>,</div><div class="line">        <span class="attr">opacity</span>: <span class="number">1</span></div><div class="line">    &#125;);</div><div class="line">    <span class="keyword">const</span> sprite = <span class="keyword">new</span> THREE.Sprite(  material );</div><div class="line">    <span class="keyword">return</span> sprite;</div><div class="line">&#125;;</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// SCENE CHILD OBJECTS</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="keyword">const</span> sprite = createSprite();</div><div class="line">scene.add( sprite );</div><div class="line">scene.add( <span class="keyword">new</span> THREE.GridHelper(<span class="number">10</span>, <span class="number">10</span>) );</div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line"><span class="comment">// RENDER</span></div><div class="line"><span class="comment">//-------- ----------</span></div><div class="line">camera.position.set(<span class="number">1.5</span>, <span class="number">1.5</span>, <span class="number">1.5</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">let</span> deg = <span class="number">0</span>;</div><div class="line"><span class="keyword">const</span> dps = <span class="number">20</span>;  <span class="comment">// degrees per second</span></div><div class="line"><span class="keyword">const</span> fps = <span class="number">12</span>;  <span class="comment">// frames per second</span></div><div class="line"><span class="keyword">let</span> lt = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"><span class="keyword">const</span> loop = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">const</span> now = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line">    <span class="keyword">const</span> secs = (now - lt) / <span class="number">1000</span>;</div><div class="line">    requestAnimationFrame(loop);</div><div class="line">    <span class="keyword">if</span>(secs &gt; <span class="number">1</span> / fps)&#123;</div><div class="line">        deg += dps * secs;</div><div class="line">        deg %= <span class="number">360</span>;</div><div class="line">        sprite.material.rotation = <span class="built_in">Math</span>.PI / <span class="number">180</span> * deg;</div><div class="line">        renderer.render(scene, camera);</div><div class="line">        lt = now;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line">loop();</div></pre></td></tr></table></figure>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>That will have to be it for now when it comes to sprite objects until I come around to expand this post a little if I get to it. I have a lot of other posts on threejs that also need a lot more work in terms of expansion and I do not think that I am going to have the time and energy to give them all the royal treatment. The use of sprite objects might in time to prove to be an example of this though as I  can think of a lot of use cases for this kind of object.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2023/08/23/threejs-sprite/" data-id="cllo1ct6502w260v1qxfox52u" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2023/08/23/threejs-sprite/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2023/08/17/threejs-buffer-geometry-attributes-tangent/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">The tangent attribute of buffer geometry and normal maps in threejs</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2023/08/23/threejs-sprite/index.html';
+    this.page.identifier = '1068';
+    this.page.title = 'Sprite Objects, and 2d overlays in threejs';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/electronjs/">electronjs</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/electronjs/">electronjs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.38px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.48px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.33px;">angular</a> <a href="/tags/animation/" style="font-size: 11.9px;">animation</a> <a href="/tags/automation/" style="font-size: 11.9px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.38px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.71px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.57px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.86px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.95px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.43px;">ejs</a> <a href="/tags/electronjs/" style="font-size: 13.81px;">electronjs</a> <a href="/tags/express/" style="font-size: 17.14px;">express</a> <a href="/tags/games/" style="font-size: 17.62px;">games</a> <a href="/tags/git/" style="font-size: 13.81px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.24px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.9px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.76px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.48px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.43px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 18.1px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.57px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.76px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.52px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.1px;">phaser</a> <a href="/tags/python/" style="font-size: 16.19px;">python</a> <a href="/tags/statistics/" style="font-size: 14.29px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 19.05px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16.67px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">August 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">June 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">February 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">January 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">December 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">November 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">October 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">September 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">September 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/08/23/threejs-sprite/">Sprite Objects, and 2d overlays in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/17/threejs-buffer-geometry-attributes-tangent/">The tangent attribute of buffer geometry and normal maps in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/10/threejs-matcap-material/">The Matcap material in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/threejs-matrix4/">Matrix4 Objects in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/01/linux-folders/">Linux Root Folders</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2021/02/19/threejs-examples/" class="mobile-nav-link">ThreeJS</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas</a>
+  
+    <a href="https://www.youtube.com/user/javaweaver" class="mobile-nav-link">Youtube</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2023/08/23/threejs-sprite/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

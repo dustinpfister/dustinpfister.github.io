@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- disqus image-->
+  <meta property="og:image" content="https://dustinpfister.github.io/css/images/banner_2023.png">
+  
+  <title>The tangent attribute of buffer geometry and normal maps in threejs | Dustin John Pfister at github pages</title>
+  
+  <!-- no index tag or blank here -->
+  
+  
+  <link rel="canonical" href="https://dustinpfister.github.io/2023/08/17/threejs-buffer-geometry-attributes-tangent/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="The tangents attribute of [buffer geometry objects in threejs] can be added to a geometry by calling the compute tangents method of a geometry object instance. I have been piecing together some things">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The tangent attribute of buffer geometry and normal maps in threejs">
+<meta property="og:url" content="https://dustinpfister.github.io/2023/08/17/threejs-buffer-geometry-attributes-tangent/index.html">
+<meta property="og:site_name" content="Dustin John Pfister at github pages">
+<meta property="og:description" content="The tangents attribute of [buffer geometry objects in threejs] can be added to a geometry by calling the compute tangents method of a geometry object instance. I have been piecing together some things">
+<meta property="og:updated_time" content="2023-08-18T15:45:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The tangent attribute of buffer geometry and normal maps in threejs">
+<meta name="twitter:description" content="The tangents attribute of [buffer geometry objects in threejs] can be added to a geometry by calling the compute tangents method of a geometry object instance. I have been piecing together some things">
+  
+    <link rel="alternate" href="/atom.xml" title="Dustin John Pfister at github pages" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Google Analytics -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y8XLNG6JRW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y8XLNG6JRW');
+</script>
+<!-- End Google Analytics -->
+
+
+  <!-- structured data set in structured-data.ejs -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Person",
+    "email": "distin.pfister@gmail.com",
+    "givenName": "Dustin",
+    "familyName" : "Pfister",
+    "additionalName": "John",
+    "name": "Dustin John Pfister",
+    "gender": "Male"
+}
+</script>
+<!-- end structured data -->
+  
+  <!-- adsense if indexed -->
+  
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1658284027672315",
+    enable_page_level_ads: true
+  });
+  </script>
+  
+  
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <!-- added the image, as well as the link to my youtube -->
+        <a href="https://www.youtube.com/user/javaweaver"><div class="selfimage"></div></a>
+        <!--<a href="/" id="logo">Dustin John Pfister at github pages</a>-->
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/2021/02/19/threejs-examples/">ThreeJS</a>
+        
+          <a class="main-nav-link" href="/2020/03/23/canvas-example/">Canvas</a>
+        
+          <a class="main-nav-link" href="https://www.youtube.com/user/javaweaver">Youtube</a>
+        
+          <a class="main-nav-link" href="https://github.com/dustinpfister">Github</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!-- removed rss link-->
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://dustinpfister.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article itemscope itemtype="http://schema.org/Blog" id="post-threejs-buffer-geometry-attributes-tangent" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/17/threejs-buffer-geometry-attributes-tangent/" class="article-date"> Published:
+  <time datetime="2023-08-17T08:30:00.000Z" itemprop="datePublished">2023-08-17</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2023/08/17/threejs-buffer-geometry-attributes-tangent/" class="article-date"> Modified:
+  <time datetime="2023-08-18T15:45:23.000Z" itemprop="dateModified">2023-08-18</time>
+</a>
+
+    <span class="article-date">V1.4</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      The tangent attribute of buffer geometry and normal maps in threejs
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>The tangents attribute of [buffer geometry objects in threejs] can be added to a geometry by calling the compute tangents method of a geometry object instance. I have been piecing together some things as to what this is for, and thus far it would seem that this is something that will come into play when making use of normal maps as a way to address a problem that will come up for indexed geometry. You see when making use of an index to reuse points in the position attribute this will result in also only having as many vertex normals as there are position attribute points. This issue can then result in an typically undesired outcome with shading with materials that use light sources, or materials like the normal material. So then there are two general ways of addressing this, one of which is to not use an index, then other is to use a normal map. So with that said in order to use this normal map I will likely want to have a tangent attribute.</p>
+<p>In this post then I will be going over what it is that I have together thus far in terms of demos that have to do with the subject of these tangent attributes, and with that everything that goes along with it, which thus far would seem to be to make use of the normal map option of various mesh material options.</p>
+<a id="more"></a>
+<h2 id="Tangent-attributes-of-buffer-geometry-objects-and-what-to-know-first"><a href="#Tangent-attributes-of-buffer-geometry-objects-and-what-to-know-first" class="headerlink" title="Tangent attributes of buffer geometry objects and what to know first"></a>Tangent attributes of buffer geometry objects and what to know first</h2><p>This is then a blog post on the subject of tangent attributes in buffer geometry objects in the JavaScript library known as threejs. It should then go without saying that this is not a <a href="/2018/04/04/threejs-getting-started/">post for people that are new to threejs</a> as well as the various underlying skills that are required to even get started with that to begin with. There are a lot of things that you should know about before hand then, much of which I will not be getting into detail with here. However I will still write a few quick things that you might want to read about more before continuing with the rest of this content.</p>
+<h3 id="There-is-the-normal-map-option-and-the-various-other-options-of-mesh-materials"><a href="#There-is-the-normal-map-option-and-the-various-other-options-of-mesh-materials" class="headerlink" title="There is the normal map option, and the various other options of mesh materials"></a>There is the normal map option, and the various other options of mesh materials</h3><p>Thus far it would seem that the use of tangent attributes will come into play when working out <a href="/2021/06/24/threejs-normal-map/">normal maps</a> to be used with one of the mesh materials. Speaking of which there is my <a href="/2018/04/30/threejs-materials/">main blog post on materials in general</a> that you might want to check out if you want to learn more about materials in general. However for the sake of staying on topic, there is just using the <a href="/2021/06/23/threejs-normal-material/">mesh normal material</a> as that supports the features that I want in order to make use of a normal map and with that the tangent attribute of a geometry.</p>
+<h3 id="A-texture-will-be-needed-for-the-normal-map"><a href="#A-texture-will-be-needed-for-the-normal-map" class="headerlink" title="A texture will be needed for the normal map"></a>A texture will be needed for the normal map</h3><p>In order to use the normal map option of a material I will need a texture. There is creating a texture in an image editor and loading it in with the texture loader. However for this posts I typically like to use <a href="/2018/04/17/threejs-canvas-texture/">canvas textures</a> and <a href="/2022/04/15/threejs-data-texture/">data textures</a> as they are a way to create texture with a little javaScript code, or hard coded data that I can work into a nice copy and paste friendly demo.</p>
+<h3 id="Buffer-Geometry-objects-have-a-lot-more-going-on"><a href="#Buffer-Geometry-objects-have-a-lot-more-going-on" class="headerlink" title="Buffer Geometry objects have a lot more going on"></a>Buffer Geometry objects have a lot more going on</h3><p>I assume that you all ready know a fair amount about <a href="/2021/04/22/threejs-buffer-geometry/">buffer geometry objects</a> in general, if not you might want to read up more on this subject then. There is first knowing what the deal is with position, normal, and uv attributes as well as the index that is used to reuse points in the position attribute.</p>
+<h3 id="Source-code-is-on-Github"><a href="#Source-code-is-on-Github" class="headerlink" title="Source code is on Github"></a>Source code is on Github</h3><p>The source code examples that I have made for this post can be found in the <a href="https://github.com/dustinpfister/test_threejs/tree/master/views/forpost/threejs-buffer-geometry-attributes-tangent" target="_blank" rel="external">folder that corresponds to this post in my test threejs repository</a> on Github. With that said there is also a folder for each of the <a href="/categories/three-js/">other posts that I have wrote on threejs</a> thus far on this website as well.</p>
+<h3 id="Version-Numbers-Matter"><a href="#Version-Numbers-Matter" class="headerlink" title="Version Numbers Matter"></a>Version Numbers Matter</h3><p>The revision number that I was using for the demos in this post was <a href="https://github.com/dustinpfister/test_threejs/blob/master/views/demos/r152/README.md" target="_blank" rel="external">r152, and thus followed the style rules</a> I have set for that revision. </p>
+<h2 id="1-Basic-Examples-of-Tangent-attributes"><a href="#1-Basic-Examples-of-Tangent-attributes" class="headerlink" title="1 - Basic Examples of Tangent attributes"></a>1 - Basic Examples of Tangent attributes</h2><p>As always I like to start out my post with at least one if not more basic examples of the main subject of the post. With that said in this section I will be starting out with just that. One way to quickly get started would be to just call the compute tangents method, and if I do so with a built in geometry this will often work as the various attributes are there with maybe a few exceptions. When it comes to custom geometry though I will need a position, normal, uv, and index buffer attributes set up first.</p>
+<h3 id="1-1-A-problem-that-happens-with-indexed-geometry"><a href="#1-1-A-problem-that-happens-with-indexed-geometry" class="headerlink" title="1.1 - A problem that happens with indexed geometry"></a>1.1 - A problem that happens with indexed geometry</h3><p>One problem that seems to happen when making an indexed geometry is that when reusing points this results in less vertex normals compared to what the situation would be with a non indexed geometry. This will then result in shading that will not work the way that one would typically expect. Maybe a good way to just start out with what the situation here is to begin with would be to just start with a TetrahedronGeometry and then a custom geometry in which I am trying to get the same look with shading. Only when making my custom geometry I will be adding an index, where the  TetrahedronGeometry is very much not indexed.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// IMPORT - threejs and any addons I want to use</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> THREE <span class="keyword">from</span> <span class="string">'three'</span>;</div><div class="line"><span class="keyword">import</span> &#123; OrbitControls &#125; <span class="keyword">from</span> <span class="string">'OrbitControls'</span>;</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// SCENE, CAMERA, RENDERER</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">50</span>, <span class="number">32</span> / <span class="number">24</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line"><span class="keyword">const</span> renderer = <span class="keyword">new</span> THREE.WebGL1Renderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>, <span class="literal">false</span>);</div><div class="line">(<span class="built_in">document</span>.querySelector(<span class="string">'#demo'</span>) || <span class="built_in">document</span>.body).appendChild(renderer.domElement);</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// GEOMETRY - TetrahedronGeometry</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> geometry1 = <span class="keyword">new</span> THREE.TetrahedronGeometry(<span class="number">1</span>, <span class="number">0</span>);</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// GEOMETRY - custom</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> geometry2 = <span class="keyword">new</span> THREE.BufferGeometry();</div><div class="line"><span class="keyword">const</span> data_pos = [ <span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,    <span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,    <span class="number">1</span>,<span class="number">0</span>,<span class="number">-1</span>,    <span class="number">-1</span>,<span class="number">0</span>,<span class="number">-1</span> ];</div><div class="line">geometry2.setAttribute(<span class="string">'position'</span>, <span class="keyword">new</span> THREE.BufferAttribute( <span class="keyword">new</span> <span class="built_in">Float32Array</span>( data_pos ), <span class="number">3</span> ) );</div><div class="line">geometry2.setIndex( [<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">0</span>,<span class="number">3</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">2</span>] );</div><div class="line">geometry2.computeVertexNormals();</div><div class="line"><span class="keyword">const</span> data_uv = [ <span class="number">0.5</span>, <span class="number">0.5</span>,    <span class="number">0</span>,<span class="number">0</span>,    <span class="number">1</span>,<span class="number">1</span>,    <span class="number">0</span>,<span class="number">1</span>];</div><div class="line">geometry2.setAttribute(<span class="string">'uv'</span>, <span class="keyword">new</span> THREE.BufferAttribute( <span class="keyword">new</span> <span class="built_in">Float32Array</span>( data_uv ), <span class="number">2</span> ) );</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// MATERIAL</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> material = <span class="keyword">new</span> THREE.MeshNormalMaterial();</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// OBJECTS</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line">scene.add( <span class="keyword">new</span> THREE.GridHelper( <span class="number">10</span>,<span class="number">10</span> ) );</div><div class="line"><span class="keyword">const</span> mesh1 = <span class="keyword">new</span> THREE.Mesh( geometry1, material);</div><div class="line">mesh1.position.x = <span class="number">-3</span>;</div><div class="line">scene.add(mesh1);</div><div class="line"><span class="keyword">const</span> mesh2 = <span class="keyword">new</span> THREE.Mesh( geometry2, material);</div><div class="line">scene.add(mesh2);</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// RENDER</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line">camera.position.set(<span class="number">3</span>, <span class="number">2</span>, <span class="number">5</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">renderer.render(scene, camera);</div></pre></td></tr></table></figure>
+<h3 id="1-2-The-Compute-Tangents-method-to-add-a-tangent-attribute-and-normal-maps"><a href="#1-2-The-Compute-Tangents-method-to-add-a-tangent-attribute-and-normal-maps" class="headerlink" title="1.2 - The Compute Tangents method to add a tangent attribute, and normal maps"></a>1.2 - The Compute Tangents method to add a tangent attribute, and normal maps</h3><p>So then once agian I am working out a kind of Tetrahedron Geometry in that it is just four triangles, but by way of resuing points by adding an index, and thus using the same four points in the position attribute rather than having a non indexed geometry of 12 points. So when I call compute vertex normals I end up with four vertex normals as well, which presents the problem. So then in order to address this I can call the compute tangents method to create a tangent attribute after setting up the uv attribute. Now that I have that I can use a normal map to address this, but first I need a texture. So with that said I set up a data texture to just have somehting to work with to find out what the effect is with this.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// IMPORT - threejs and any addons I want to use</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> THREE <span class="keyword">from</span> <span class="string">'three'</span>;</div><div class="line"><span class="keyword">import</span> &#123; OrbitControls &#125; <span class="keyword">from</span> <span class="string">'OrbitControls'</span>;</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// SCENE, CAMERA, RENDERER</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> scene = <span class="keyword">new</span> THREE.Scene();</div><div class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">50</span>, <span class="number">32</span> / <span class="number">24</span>, <span class="number">0.1</span>, <span class="number">1000</span>);</div><div class="line"><span class="keyword">const</span> renderer = <span class="keyword">new</span> THREE.WebGL1Renderer();</div><div class="line">renderer.setSize(<span class="number">640</span>, <span class="number">480</span>, <span class="literal">false</span>);</div><div class="line">(<span class="built_in">document</span>.querySelector(<span class="string">'#demo'</span>) || <span class="built_in">document</span>.body).appendChild(renderer.domElement);</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// GEOMETRY</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> geometry = <span class="keyword">new</span> THREE.BufferGeometry();</div><div class="line"><span class="keyword">const</span> data_pos = [ <span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,    <span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,    <span class="number">1</span>,<span class="number">0</span>,<span class="number">-1</span>,    <span class="number">-1</span>,<span class="number">0</span>,<span class="number">-1</span> ];</div><div class="line">geometry.setAttribute(<span class="string">'position'</span>, <span class="keyword">new</span> THREE.BufferAttribute( <span class="keyword">new</span> <span class="built_in">Float32Array</span>( data_pos ), <span class="number">3</span> ) );</div><div class="line">geometry.setIndex( [<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">0</span>,<span class="number">3</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">2</span>] );</div><div class="line">geometry.computeVertexNormals();</div><div class="line"><span class="keyword">const</span> data_uv = [ <span class="number">0.5</span>, <span class="number">0.5</span>,    <span class="number">0</span>,<span class="number">0</span>,    <span class="number">1</span>,<span class="number">1</span>,    <span class="number">0</span>,<span class="number">1</span>];</div><div class="line">geometry.setAttribute(<span class="string">'uv'</span>, <span class="keyword">new</span> THREE.BufferAttribute( <span class="keyword">new</span> <span class="built_in">Float32Array</span>( data_uv ), <span class="number">2</span> ) );</div><div class="line">geometry.computeTangents();</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// TEXTURE FOR NORMAL MAP</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> data_normalmap = [</div><div class="line">    <span class="number">255</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">255</span>,    <span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">255</span>,    <span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">255</span>,    <span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">255</span>,</div><div class="line">    <span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>,<span class="number">255</span>,    <span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>,<span class="number">255</span>,  <span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">255</span>,    <span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">255</span>,</div><div class="line">    <span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">255</span>,    <span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>,<span class="number">255</span>,  <span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>,<span class="number">255</span>,  <span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">255</span>,</div><div class="line">    <span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>,<span class="number">255</span>,    <span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>,<span class="number">255</span>,  <span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>,<span class="number">255</span>,  <span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>,<span class="number">255</span></div><div class="line">];</div><div class="line"><span class="keyword">const</span> texture_normal = <span class="keyword">new</span> THREE.DataTexture( <span class="keyword">new</span> <span class="built_in">Uint8Array</span>( data_normalmap ), <span class="number">4</span>,  <span class="number">4</span> );</div><div class="line">texture_normal.needsUpdate = <span class="literal">true</span>;</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// MATERIAL</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> material = <span class="keyword">new</span> THREE.MeshNormalMaterial(&#123;</div><div class="line">    <span class="attr">normalMap</span>: texture_normal</div><div class="line">&#125;);</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// OBJECTS</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line">scene.add( <span class="keyword">new</span> THREE.GridHelper( <span class="number">10</span>,<span class="number">10</span> ) );</div><div class="line"><span class="keyword">const</span> mesh = <span class="keyword">new</span> THREE.Mesh( geometry, material);</div><div class="line">scene.add(mesh);</div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="comment">// LOOP</span></div><div class="line"><span class="comment">// ---------- ----------</span></div><div class="line"><span class="keyword">const</span> contorls = <span class="keyword">new</span> OrbitControls(camera, renderer.domElement);</div><div class="line">camera.position.set(<span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>);</div><div class="line">camera.lookAt(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">const</span> loop = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    requestAnimationFrame(loop);</div><div class="line">    renderer.render(scene, camera);</div><div class="line">&#125;;</div><div class="line">loop();</div></pre></td></tr></table></figure>
+<p>It is then clear that by working out what the propper RGB values are for the texture I can then adjust the shading to get the object to look the way that it should if it where not indexed.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>That will be it then for tangent attributes of buffer geometry objects in threejs for now then. I might get around to expanding this post more at some point if I gain more ground in this area. I do however have a lot of other posts on threejs that I aim to expand on more so, and I can not say that this is something that comes up that much for me thus far. In any case I do at least have the general idea of what this is about worked out to say the least, tangent attributes have a lot to do with normal maps, and normal maps are something of interest when I work out an indexed geometry.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2023/08/17/threejs-buffer-geometry-attributes-tangent/" data-id="cllo1cri602lw60v1v32xie35" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2023/08/17/threejs-buffer-geometry-attributes-tangent/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/08/23/threejs-sprite/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Sprite Objects, and 2d overlays in threejs
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/08/10/threejs-matcap-material/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">The Matcap material in threejs</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+<section id="comments">
+
+<div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+    this.page.url = 'https://dustinpfister.github.io/2023/08/17/threejs-buffer-geometry-attributes-tangent/index.html';
+    this.page.identifier = '1067';
+    this.page.title = 'The tangent attribute of buffer geometry and normal maps in threejs';
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://dustinpfister-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/api/">api</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/backbone/">backbone</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/canvas/">canvas</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/discovery/">discovery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/electronjs/">electronjs</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/express/">express</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/games/">games</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grunt/">grunt</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hapi/">hapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/heroku/">heroku</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jquery/">jquery</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/lodash/">lodash</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/phaser/">phaser</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/statistics/">statistics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/three-js/">three.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JSON/">JSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automation/">automation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/backbone/">backbone</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/corejs/">corejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deterministic/">deterministic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/discovery/">discovery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ejs/">ejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/electronjs/">electronjs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/express/">express</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/games/">games</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grunt/">grunt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapi/">hapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/heroku/">heroku</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jimp/">jimp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js13k/">js13k</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lodash/">lodash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phaser/">phaser</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/statistics/">statistics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/structured-data/">structured-data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/themes/">themes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/three-js/">three.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuejs/">vuejs</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JSON/" style="font-size: 12.38px;">JSON</a> <a href="/tags/SEO/" style="font-size: 10.48px;">SEO</a> <a href="/tags/angular/" style="font-size: 13.33px;">angular</a> <a href="/tags/animation/" style="font-size: 11.9px;">animation</a> <a href="/tags/automation/" style="font-size: 11.9px;">automation</a> <a href="/tags/backbone/" style="font-size: 12.38px;">backbone</a> <a href="/tags/blog/" style="font-size: 15.71px;">blog</a> <a href="/tags/canvas/" style="font-size: 18.57px;">canvas</a> <a href="/tags/corejs/" style="font-size: 12.86px;">corejs</a> <a href="/tags/deterministic/" style="font-size: 10px;">deterministic</a> <a href="/tags/discovery/" style="font-size: 10.95px;">discovery</a> <a href="/tags/ejs/" style="font-size: 11.43px;">ejs</a> <a href="/tags/electronjs/" style="font-size: 13.81px;">electronjs</a> <a href="/tags/express/" style="font-size: 17.14px;">express</a> <a href="/tags/games/" style="font-size: 17.62px;">games</a> <a href="/tags/git/" style="font-size: 13.81px;">git</a> <a href="/tags/grunt/" style="font-size: 10px;">grunt</a> <a href="/tags/hapi/" style="font-size: 15.24px;">hapi</a> <a href="/tags/heroku/" style="font-size: 11.9px;">heroku</a> <a href="/tags/hexo/" style="font-size: 14.76px;">hexo</a> <a href="/tags/jimp/" style="font-size: 10.48px;">jimp</a> <a href="/tags/jquery/" style="font-size: 11.43px;">jquery</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/js13k/" style="font-size: 10px;">js13k</a> <a href="/tags/linux/" style="font-size: 18.1px;">linux</a> <a href="/tags/lodash/" style="font-size: 18.57px;">lodash</a> <a href="/tags/math/" style="font-size: 10px;">math</a> <a href="/tags/mongodb/" style="font-size: 14.76px;">mongodb</a> <a href="/tags/node-js/" style="font-size: 19.52px;">node.js</a> <a href="/tags/phaser/" style="font-size: 18.1px;">phaser</a> <a href="/tags/python/" style="font-size: 16.19px;">python</a> <a href="/tags/statistics/" style="font-size: 14.29px;">statistics</a> <a href="/tags/structured-data/" style="font-size: 10px;">structured-data</a> <a href="/tags/themes/" style="font-size: 10px;">themes</a> <a href="/tags/three-js/" style="font-size: 19.05px;">three.js</a> <a href="/tags/vuejs/" style="font-size: 16.67px;">vuejs</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">August 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">June 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">February 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">January 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">December 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">November 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">October 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">September 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">September 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/08/23/threejs-sprite/">Sprite Objects, and 2d overlays in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/17/threejs-buffer-geometry-attributes-tangent/">The tangent attribute of buffer geometry and normal maps in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/10/threejs-matcap-material/">The Matcap material in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/threejs-matrix4/">Matrix4 Objects in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/01/linux-folders/">Linux Root Folders</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 Dustin Pfister<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+      <br>
+      <a href="/privacy.html" target="_blank">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/2021/02/19/threejs-examples/" class="mobile-nav-link">ThreeJS</a>
+  
+    <a href="/2020/03/23/canvas-example/" class="mobile-nav-link">Canvas</a>
+  
+    <a href="https://www.youtube.com/user/javaweaver" class="mobile-nav-link">Youtube</a>
+  
+    <a href="https://github.com/dustinpfister" class="mobile-nav-link">Github</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'dustinpfister-github-io';
+  
+  var disqus_url = 'https://dustinpfister.github.io/2023/08/17/threejs-buffer-geometry-attributes-tangent/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

@@ -113,6 +113,185 @@
       <div class="outer">
         <section id="main">
   
+    <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-scene" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/03/threejs-scene/" class="article-date"> Published:
+  <time datetime="2018-05-03T13:36:00.000Z" itemprop="datePublished">2018-05-03</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/05/03/threejs-scene/" class="article-date"> Modified:
+  <time datetime="2023-07-17T17:15:48.000Z" itemprop="dateModified">2023-07-17</time>
+</a>
+
+    <span class="article-date">V1.49</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/03/threejs-scene/">Working with a scene object in three.js</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>A <a href="https://threejs.org/docs/index.html#api/scenes/Scene">Scene</a> object in <a href="https://threejs.org/">threejs</a> is an instance of the THREE.Scene constructor that can be used to place everything that makes up an environment in a threejs project. It can contain cameras, lights, mesh objects composed of a geometry and material, along with any other <a href="/2018/04/23/threejs-object3d/">object3d base class</a> object. The scene object can then be passed to the render function of a renderer such as the <a href="/2018/11/24/threejs-webglrenderer/">Webgl renderer</a> along with a <a href="/2018/04/06/threejs-camera/">camera</a> to render a view of the scene from the perspective of the given camera object.</p>
+<p>There is a great deal of other things to cover when it comes to a scene object though, such as the background and fog properties, and the fact that it inherits from the Object3d base class. Because the scene object is yet another object3d based object this allows for things like having a whole scene positioned, rotated, and scaled just like mesh objects, cameras and anything based off of Object3d. So in this post I will be going over at least a few details that revolve around the topic of scene objects.</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/05/03/threejs-scene/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/05/03/threejs-scene/" data-id="cllo1ct4v02vw60v15l6yz947" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/05/03/threejs-scene/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-materials" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/30/threejs-materials/" class="article-date"> Published:
+  <time datetime="2018-04-30T13:14:00.000Z" itemprop="datePublished">2018-04-30</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/04/30/threejs-materials/" class="article-date"> Modified:
+  <time datetime="2023-08-17T18:29:26.000Z" itemprop="dateModified">2023-08-17</time>
+</a>
+
+    <span class="article-date">V1.122</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/30/threejs-materials/">Materials in threejs an overview of options and features</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>In <a href="https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene">threejs</a> there are a few materials to choose from to help skin a mesh object that all share the same common base <a href="https://threejs.org/docs/index.html#api/en/materials/Material">Material class</a>. There are also additional materials for rendering lines, points, and sprites that stand out from the various materials that are used to change the look of of the typical mesh object. There is also the shader material that is a good way to get started with raw GLSL code, but with training wheels thanks to the shader lib of threejs, that is used to author custom shaders, and thus do just about everything that can be done with materials in a web browser by way of full power that is WebGL. There is then also the Raw Shader material in which one will drop kick the shader lib to the curb and just work directly with GLSL by itself.</p>
+<p>There are materials that will respond to a light source, and then there are materials that will not. When it comes to materials that respond to light some will preform a little better than others, but will result in a less than desirable look compared to others that are a little more resource heavy but deliver in the looks department. When it comes to mesh materials that will not respond to a light source there are materials like the basic mesh material that is a good choice when it comes to just having a simple color map for the mesh. There are a few other materials that render textures based on the state of the normal attribute of the geometry used, or based on the depth in terms of a distance from the camera.</p>
+<p>There is a whole lot to take in when it comes to materials, so this post will serve as a general overview of the materials in general in threejs then, not just as a starting point, but also as a fairly comprehensive post on the subject. However this will not be a truly comprehensive post on materials alone in threejs mind you as once one gets into custom shaders you will start to understand that even this post is not a even a drop in the bucket with this subject. As I have stated, just above there is the matter of GLSL code which is short for openGL Shader Language, so in other worlds when it comes to getting into THREE.ShaderMaterial, and THREE.RawShaderMaterial there is a whole language to learn.</p>
+<p>I will start out this post with a whole lot of basic examples that at least touch base on various materials related subjects to be begin with. For example there is just simply having a simple \”I am bender, please insert girder\” type example of just simply adding texture to a material, but then also have a whole section in this post on just the subject of textures alone with materials.</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/04/30/threejs-materials/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/04/30/threejs-materials/" data-id="cllo1cuv503e960v1dzyt0cf2" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/04/30/threejs-materials/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-object3d" class="article article-type-post" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/23/threejs-object3d/" class="article-date"> Published:
+  <time datetime="2018-04-23T23:35:00.000Z" itemprop="datePublished">2018-04-23</time>
+</a>
+
+    <!-- other info (dustin) -->
+    <a href="/2018/04/23/threejs-object3d/" class="article-date"> Modified:
+  <time datetime="2023-06-26T18:05:58.000Z" itemprop="dateModified">2023-06-26</time>
+</a>
+
+    <span class="article-date">V1.73</span>
+
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/three-js/">three.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/23/threejs-object3d/">Object3D Class in threejs</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="text">
+      
+        <p>The <a href="https://threejs.org/docs/index.html#api/core/Object3D">Object3D</a> base class in <a href="https://threejs.org/">threejs</a> is one of the most important classes to be aware of when making some kind of project with the library. It is the base class of mesh objects, but also just about every other kind of object that would be added to a scene object such as cameras, groups, lights, various helper objects and so forth. Also speaking of scene objects they too are based on top of the object3d class as well. So then to learn a thing or two about object3d is also to learn a thing about all of those kinds of objects that I have mentioned. For example to set the position of a mesh object I need to use the the object3d position property to so so and the same is also true of cameras, groups, and so forth.</p>
+<p>In this post I will be going over many of the basics of what the Object3d class is all about in threejs, when it comes to working with the class directly. However more often than not it is a class that I am working with indirectly each time I want to move or rotate a camera, mesh object, or anything to that effect. In the process of going over the Object3d class I will also be touching base on many other classes that are important also, such as the <a href="/2018/04/15/threejs-vector3/">Vector3</a> class and the <a href="/2021/04/28/threejs-euler/">Euler Class</a> that are used as the values for many note worthy properties of this major base class.</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/04/23/threejs-object3d/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dustinpfister.github.io/2018/04/23/threejs-object3d/" data-id="cllo1csyc02uw60v1zs5ur4mr" class="article-share-link">Share</a>
+      
+        <a href="https://dustinpfister.github.io/2018/04/23/threejs-object3d/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-cube-texture" class="article article-type-post" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/04/22/threejs-cube-texture/" class="article-date"> Published:
@@ -158,7 +337,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2018/04/22/threejs-cube-texture/" data-id="clkyg75te02460gv12nfj4vun" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2018/04/22/threejs-cube-texture/" data-id="cllo1crhr02lt60v1qe0lxrgd" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2018/04/22/threejs-cube-texture/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -216,193 +395,12 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2018/04/19/threejs-line/" data-id="clkyg76r902al0gv1wsnb5n90" class="article-share-link">Share</a>
+      <a data-url="https://dustinpfister.github.io/2018/04/19/threejs-line/" data-id="cllo1csmz02sz60v1w939kgt0" class="article-share-link">Share</a>
       
         <a href="https://dustinpfister.github.io/2018/04/19/threejs-line/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/canvas/">canvas</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-canvas-texture" class="article article-type-post" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/04/17/threejs-canvas-texture/" class="article-date"> Published:
-  <time datetime="2018-04-17T13:33:00.000Z" itemprop="datePublished">2018-04-17</time>
-</a>
-
-    <!-- other info (dustin) -->
-    <a href="/2018/04/17/threejs-canvas-texture/" class="article-date"> Modified:
-  <time datetime="2023-07-21T14:34:24.000Z" itemprop="dateModified">2023-07-21</time>
-</a>
-
-    <span class="article-date">V1.112</span>
-
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/three-js/">three.js</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/17/threejs-canvas-texture/">Using a Canvas element as a Texture in three.js</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="text">
-      
-        <p>There are many situations in which I will want to have a texture to work with when it comes to working with materials in <a href="https://threejs.org/">threejs</a>. That is that when it comes to the various kinds of maps there are to work with in a material, such as diffuse maps, <a href="/2019/06/06/threejs-alpha-map/">alpha maps</a>, <a href="/2021/06/22/threejs-emissive-map/">emissive maps</a>, and so forth, one way or another I need to load or create a texture. One way to add a texture to a material would be to use the <a href="https://threejs.org/docs/#api/en/loaders/TextureLoader">built in texture loader</a> in the core of the threejs library, if I have some other preferred way to go about loading external images I can also use the THREE.Texture constructor directly to create a texture object from an Image object. However there is also the question of how to go about generating textures using a little javaScript code, and one way to go about creating a texture this way would be with a <a href="/2017/05/17/canvas-getting-started/">canvas element</a>, the 2d drawing context of such a canvas element, and the <a href="https://threejs.org/docs/#api/en/textures/CanvasTexture">THREE.CanvasTexture</a> constructor</p>
-<p>There is a whole lot of ground to cover when it comes to getting into this sort of thing if you do not have much experience working with canvas elements yet. The process of creating a texture with a canvas element is simple enough when it comes to the fact that I just need to pass the canvas element to a constructor function and the desired texture object is returned. However there are a whole bunch of other topics that branch off from this that have to do with canvas elements in detail, as well as other closely related threejs topics such as the uv attributes of buffer geometry instances that are used in conjunction with one or more materials. In this post I am mainly just going to be writing about using the built in constructors to create a texture with a canvas element. I might not get into detail about the 2d drawing context, but of course I will have to touch base on it to say the least. </p>
-        
-          <p class="article-more-link">
-            <a href="/2018/04/17/threejs-canvas-texture/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2018/04/17/threejs-canvas-texture/" data-id="clkyg7a6i02to0gv1tlsve0lu" class="article-share-link">Share</a>
-      
-        <a href="https://dustinpfister.github.io/2018/04/17/threejs-canvas-texture/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/animation/">animation</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/canvas/">canvas</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-fog" class="article article-type-post" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/04/16/threejs-fog/" class="article-date"> Published:
-  <time datetime="2018-04-16T15:59:00.000Z" itemprop="datePublished">2018-04-16</time>
-</a>
-
-    <!-- other info (dustin) -->
-    <a href="/2018/04/16/threejs-fog/" class="article-date"> Modified:
-  <time datetime="2023-08-03T17:02:30.000Z" itemprop="dateModified">2023-08-03</time>
-</a>
-
-    <span class="article-date">V1.63</span>
-
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/three-js/">three.js</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/16/threejs-fog/">Adding a Fog effect to a threejs project</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="text">
-      
-        <p>Adding fog to a Scene object in <a href="https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene">threejs</a> generally means just creating an instance of <a href="https://threejs.org/docs/#api/en/scenes/Fog">THREE.Fog</a> or <a href="https://threejs.org/docs/#api/en/scenes/FogExp2">THREE.ForExp2</a>, and setting that to the fog property of a <a href="/2018/05/03/threejs-scene/">scene object</a>. However there are still a few basic things that a developer should be aware of when it comes to adding fog, such as the fact that one can not just use any material for example. There are also other basic getting started type things that come up such as making sure that the background color of a scene should be same color used for the color of the fog.</p>
-<p>A Fog is a nice effect to have for most projects as it allows for a more graceful transition from rendering something that is within range of a render distance, to no longer rendering when an object is to far from the camera. Even if I have the far value of the camera set to a high value so that the object is just a single pixel before it is no longer rendered, it can still be a nice additional effect on top of the object just simply getting smaller. </p>
-<p>In this post then, I will be going over a basic example of fog in a three.js project, and after that I will be getting into at least a few more examples also while I am at it. What I am at it I will also be touching base on a few other three.js rated topics such as the nature of the <a href="/2021/04/27/threejs-standard-material/"> mesh standard material </a> which is one option when it comes to <a href="/2018/04/30/threejs-materials/">using a material</a> that will work with fog. There is also writing at least a thing or two about the subject of color, and not just setting the fog color but the background color as well.</p>
-        
-          <p class="article-more-link">
-            <a href="/2018/04/16/threejs-fog/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2018/04/16/threejs-fog/" data-id="clkyg76nc02a00gv1apq37hbm" class="article-share-link">Share</a>
-      
-        <a href="https://dustinpfister.github.io/2018/04/16/threejs-fog/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/canvas/">canvas</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article itemscope itemtype="http://schema.org/Blog" id="post-threejs-vector3" class="article article-type-post" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/04/15/threejs-vector3/" class="article-date"> Published:
-  <time datetime="2018-04-16T00:18:00.000Z" itemprop="datePublished">2018-04-15</time>
-</a>
-
-    <!-- other info (dustin) -->
-    <a href="/2018/04/15/threejs-vector3/" class="article-date"> Modified:
-  <time datetime="2023-06-13T14:51:03.000Z" itemprop="dateModified">2023-06-13</time>
-</a>
-
-    <span class="article-date">V1.64</span>
-
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/three-js/">three.js</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/15/threejs-vector3/">Vector3 in three.js for points in space</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="text">
-      
-        <p>In <a href="https://en.wikipedia.org/wiki/Vector_space">Vector space</a> a Vector can be used to represent position, but they are usually described as having a magnitude and direction component. In <a href="https://threejs.org/">threejs</a> the <a href="https://threejs.org/docs/index.html#api/math/Vector3">Vector3 class</a> is a class that is used to create an instance of a Vector that has three values, x, y, and z. This Vector3 object is then a major class of interest then when it comes to working with all kinds of various other classes, methods, and features of threejs. </p>
-<p>One major feature of interest in the <a href="/2018/04/23/threejs-object3d/">Object3d base class</a> is the position property of that kind of object. The position property stores an instance of Vector3, and that instance can be used to set the position of anything that is based off of Object3d like a Mesh, Camera, Group, or a whole Scene object actually for that matter.</p>
-<p>Although an instance of Vector3 can very much be used to set a position of something it can also very much be used to set the direction of something also. This is where things might be a little confusing because when it comes to setting the orientation of something based off of Object3d there is the rotation property. This rotation property is not an instance of Vector3, but an Instance of the <a href="/2021/04/28/threejs-euler/">Euler class</a>. This Euler class is similar to that of Vector3, but the values given are in radians, and is then a more appropriate way of setting orientation of an object by rotating on the x, y, and z axis by given angles in the from of radian values. However there is also the concept of a <a href="https://en.wikipedia.org/wiki/Unit_vector">unit vector</a> that would be in the form of a normalized instance of Vector3 oddly enough. So then Vector3 can be used to set position, but it can also be used as a way to set orientation in the from of a direction using values between 0 and 1 for each axis.</p>
-<p>This post is then about the Vector3 constructor that is a useful class for various things in a threejs project. A 3d Vector3 Instance is useful for plotting a single point in 3d space, but these values can also be in the range of numbers between 0 and 1 which can then be raised by a multiplier, and in some ways can be translated to angles and directions that have to do with the rotation of an object rather than its position. There are all kinds of use cases that will come up here and there for Vector3 such as finding <a href="https://en.wikipedia.org/wiki/Euclidean_distance">Euclidean distance</a> via the length method of the Vector3 instance, which is the distance from the vector to the origin for example. </p>
-<p>This will be a fairly lengthy post then as there is a lot of ground to cover with this one. There is not just aspects of the class itself, but how it can be applied when it comes to everything else there is to work with in threejs that is related to the use of Vector3.</p>
-        
-          <p class="article-more-link">
-            <a href="/2018/04/15/threejs-vector3/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dustinpfister.github.io/2018/04/15/threejs-vector3/" data-id="clkyg77kc02fi0gv17kn50099" class="article-share-link">Share</a>
-      
-        <a href="https://dustinpfister.github.io/2018/04/15/threejs-vector3/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/three-js/">three.js</a></li></ul>
 
     </footer>
   </div>
@@ -467,23 +465,23 @@
       <ul>
         
           <li>
+            <a href="/2023/08/23/threejs-sprite/">Sprite Objects, and 2d overlays in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/17/threejs-buffer-geometry-attributes-tangent/">The tangent attribute of buffer geometry and normal maps in threejs</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/10/threejs-matcap-material/">The Matcap material in threejs</a>
+          </li>
+        
+          <li>
             <a href="/2023/08/02/threejs-matrix4/">Matrix4 Objects in threejs</a>
           </li>
         
           <li>
             <a href="/2023/08/01/linux-folders/">Linux Root Folders</a>
-          </li>
-        
-          <li>
-            <a href="/2023/07/27/threejs-materials-loader/">The Matheral Loader in threejs</a>
-          </li>
-        
-          <li>
-            <a href="/2023/07/25/linux-lsb-release/">Linux System Base Release command lsb_release for Distribution info</a>
-          </li>
-        
-          <li>
-            <a href="/2023/07/19/threejs-object-loader/">The Object Loader in threejs</a>
           </li>
         
       </ul>
